@@ -6,10 +6,13 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:unit": "jest --config jest.unit.config.js"
   },
   "dependencies": {
-    "vue": "^3.4.21"
+    "github-label-sync": "^2.3.1",
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.2"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
