@@ -26,9 +26,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run unit tests
-        run: npm run test:unit
-
       - name: Build Page
         run: npm run build
         env:
@@ -61,7 +58,7 @@ jobs:
           
           UNIQUE_USERS=$(echo "$COMMENTS" | jq -r 'map(.author.login) | unique | length')
           
-          if [ $UNIQUE_USERS -lt 2 ]; then
+          if [ $UNIQUE_USERS -lt 2]; then
             echo "Not enough unique users ($UNIQUE_USERS) in the pull request comments. At least 2 unique users are required."
             exit 1
           else

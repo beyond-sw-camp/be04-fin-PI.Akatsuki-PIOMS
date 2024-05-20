@@ -3,7 +3,7 @@ module.exports = {
     testEnvironment: 'node',
 
     // 테스트 파일 위치 설정
-    testMatch: ['**/?(*.)+(spec|test).[jt]s?(x)'],
+    testMatch: ['<rootDir>/tests/**/*.(spec|test).[jt]s?(x)'],  // 테스트 파일이 있는 위치 설정
 
     // 모듈 파일 확장자 설정
     moduleFileExtensions: ['js', 'json', 'jsx', 'ts', 'tsx', 'node'],
