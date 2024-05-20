@@ -1,0 +1,76 @@
+name: piomsfe
+
+permissions:
+  contents: write
+  pull-requests: write
+
+on:
+  push:
+    branches: ["main", "develop"]
+  pull_request:
+    branches: ["main", "develop"]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 21.x
+
+      - name: Clear npm cache
+        run: npm cache clean --force
+
+      - name: Remove node_modules and package-lock.json
+        run: |
+          rm -rf node_modules
+          rm -f package-lock.json
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Page
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+
+  check-comments:
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install GitHub CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gh jq
+
+      - name: Check Pull Request Comments
+        id: pr-comments
+        run: |
+          PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+          COMMENTS=$(gh pr view $PR_NUMBER --json comments --jq '.comments')
+          
+          UNIQUE_USERS=$(echo "$COMMENTS" | jq -r 'map(.author.login) | unique | length')
+          
+          if [ $UNIQUE_USERS -lt 2 ]; then
+            echo "Not enough unique users ($UNIQUE_USERS) in the pull request comments. At least 2 unique users are required."
+            exit 1
+          else
+            echo "Sufficient unique users ($UNIQUE_USERS) in the pull request comments."
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
