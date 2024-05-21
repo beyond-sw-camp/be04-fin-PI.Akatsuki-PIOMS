@@ -2,6 +2,7 @@
     <div class="popup-overlay" v-if="writeActive">
       <div class="popup-content">
         <span class="close" @click="showPopup">&times;</span>
+        
         <h2 align="center">발주서 생성</h2>
         <br /><br /><br />
         <div>
@@ -54,6 +55,7 @@
             <tr>
               <th>상품 코드</th>
               <th>상품 이름</th>
+              <th>상품 수량</th>
               <th>수량</th>
               <th>선택</th>
             </tr>
@@ -61,6 +63,7 @@
           <tr v-for="(selectedProduct, index) in selectedProducts" :key="index">
             <td>{{ selectedProduct.productCode }}</td>
             <td>{{ selectedProduct.productName }}</td>
+            <td>{{ selectedProduct.productCount }}</td>
             <td><input type="number" v-model="selectedProduct.quantity" min="1" @change="calculateTotalPrice" /></td>
             <td><button @click="removeProductFromList(index)">취소</button></td>
           </tr>
@@ -169,16 +172,24 @@
       },
       body: JSON.stringify(orderData)
     });
-
+    
+    if (response.status == 406) {
+      alert("생각은 하셨나요? 신청 재고량 너무 많거나, 이미 승인 대기중인 발주가 존재합니다.");
+      props.showPopup();
+      throw new Error("");
+    }
     if (!response.ok) {
+      alert("불가불가불가사리");
+      props.showPopup();
       throw new Error("네트워크 오류 발생");
     }
-
     const result = await response.json();
     console.log("주문 성공:", result);
+    props.showPopup();
   } catch (error) {
     console.error("주문 오류 발생:", error);
   }
+
 };
 
 
