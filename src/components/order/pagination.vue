@@ -92,8 +92,10 @@ const getMemberId = async () => {
 
     const data = await response.json();
     if (data.length > 0) {
-      lists.value = data.map(({ orderProductList, ...rest }) => rest);
+      lists.value = data.map(({  ...rest }) => rest);
+
       filteredLists.value = lists.value;
+      console.log(lists);
     } else {
       lists.value = [];
       filteredLists.value = [];
