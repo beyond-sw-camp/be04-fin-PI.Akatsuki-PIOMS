@@ -1,14 +1,17 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import LogIn from "@/components/logIn/Login.vue";
+import AskMain from "@/components/franchise/ask/AskMain.vue";
+
+const routes = [
+    {
+        path: '/',
+        name: 'AskMain',
+        component: AskMain
+    }
+];
 
 const router = createRouter({
     history: createWebHistory(),
-    routes: [
-        {
-            path: '/login',
-            component: LogIn
-        },
-    ]
+    routes
 });
 
 export default router;
