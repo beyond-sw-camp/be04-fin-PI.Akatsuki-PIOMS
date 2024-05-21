@@ -28,7 +28,7 @@
       </thead>
       <tbody>
         <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex">
-          <td v-for="(header, colIndex) in headers" :key="colIndex" >
+          <td v-for="(header, colIndex) in headers" :key="colIndex">
               {{item[header.key]}}
           </td>
         </tr>
@@ -150,6 +150,7 @@ const prevPage = () => {
 };
 
 getMemberId();
+
 </script>
 
 <style scoped>
