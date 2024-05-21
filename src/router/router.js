@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import LogIn from "@/components/logIn/Login.vue";
+import ProductList from "@/components/amdin/product/aaProductList.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -8,6 +9,10 @@ const router = createRouter({
             path: '/login',
             component: LogIn
         },
+        {
+            path: '/product',
+            component: ProductList
+        }
     ]
 });
 
