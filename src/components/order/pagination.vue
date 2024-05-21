@@ -2,9 +2,10 @@
   <div>
     <div class="create-button">
       <input type="button" value="발주하기" @click="showPopup">
-
     </div>
+
     <popup v-if="createPopup" :showPopup="showPopup" :popupVisible="createPopup"/>
+    <OrderDetail v-if="createDetailPopup" :showDetailPopup="showDetailPopup" :popupVisible="createDetailPopup" :detailItem="detailItem"/>
 
     <div>
       <input v-model="filter" placeholder="검색어를 입력하세요" @input="applyFilter" />
@@ -22,6 +23,7 @@
         <option value="검수완료">검수완료</option>
       </select>
     </div>
+
     <table>
       <thead>
         <tr>
@@ -29,7 +31,12 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex">
+        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex"
+            :id="'row-' + rowIndex"
+            @dblclick="showDetailPopup(item)"
+            @mouseenter="highlightRow(rowIndex)"
+            @mouseleave="resetRowColor(rowIndex)"
+        >
           <td v-for="(header, colIndex) in headers" :key="colIndex">
             {{ item[header.key] }}
           </td>
@@ -46,6 +53,8 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import popup from './orderPopup.vue';
+import OrderDetail from './orderDetail.vue';
 
 const lists = ref([]);
 const headers = ref([
@@ -93,6 +102,7 @@ const getMemberId = async () => {
     console.error('오류 발생:', error);
   }
 };
+
 const applyFilter = () => {
   currentPage.value = 1; // 필터 적용 시 페이지를 초기화합니다.
   
@@ -115,7 +125,6 @@ const applyFilter = () => {
   console.log("Filtered Lists:", filteredLists.value);
 };
 
-
 const compareDate = (orderDateA, orderDateB) => {
   const dateA = new Date(orderDateA);
   const dateB = new Date(orderDateB);
@@ -124,39 +133,51 @@ const compareDate = (orderDateA, orderDateB) => {
 };
 
 const paginatedLists = computed(() => {
-const start = (currentPage.value - 1) * itemsPerPage;
-const end = start + itemsPerPage;
-return filteredLists.value.slice(start, end);
+  const start = (currentPage.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  return filteredLists.value.slice(start, end);
 });
 
 const totalPages = computed(() => {
-return Math.ceil(filteredLists.value.length / itemsPerPage);
+  return Math.ceil(filteredLists.value.length / itemsPerPage);
 });
 
 const nextPage = () => {
-if (currentPage.value < totalPages.value) {
-currentPage.value++;
-}
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+  }
 };
 
 const prevPage = () => {
-if (currentPage.value > 1) {
-currentPage.value--;
-}
+  if (currentPage.value > 1) {
+    currentPage.value--;
+  }
 };
 
 getMemberId();
 
+const createPopup = ref(false);
+const createDetailPopup = ref(false);
 
-import popup from './orderPopup.vue';
+const showPopup = () => {
+  createPopup.value = !createPopup.value;
+};
 
-  const createPopup = ref(false);
+const detailItem = ref(null);
 
-  const showPopup = () => {
-    createPopup.value = !createPopup.value;
-  };
+const showDetailPopup = (item) => {
+  detailItem.value = item;
+  createDetailPopup.value = !createDetailPopup.value;
+};
 
 
+const highlightRow = (index) => {
+  document.querySelector(`#row-${index}`).classList.add('highlighted');
+};
+
+const resetRowColor = (index) => {
+  document.querySelector(`#row-${index}`).classList.remove('highlighted');
+};
 </script>
 
 <style scoped>
@@ -186,5 +207,9 @@ button {
   margin: 0 5px;
   padding: 5px 10px;
   cursor: pointer;
+}
+
+.highlighted {
+  background-color: yellow;
 }
 </style>
