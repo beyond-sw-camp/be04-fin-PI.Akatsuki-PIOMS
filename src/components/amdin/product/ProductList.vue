@@ -204,7 +204,7 @@ const applyFilters = () => {
     const matchesExposureStatus = selectedExposureStatus.value === '전체' || list.productExposureStatus === (selectedExposureStatus.value === '노출');
     const matchesStatus = !filterStatus.value || list.productStatus === filterStatus.value;
     const matchesColor = !filterColor.value || list.productColor === filterColor.value;
-    const matchesSize = !filterSize.value || list.productSize === parseInt(filterSize.value, 10); // Ensure filterSize is parsed as int
+    const matchesSize = !filterSize.value || list.productSize === parseInt(filterSize.value, 10);
     const matchesCategory = !selectedThirdCategory.value || list.categoryThirdCode === selectedThirdCategory.value;
 
     return matchesExposureStatus && matchesStatus && matchesColor && matchesSize && matchesCategory;
@@ -369,16 +369,16 @@ fetchThirdCategories();
   font-weight: bold;
   color: #000;
   width: 100px;
-  height: 30px;
+  height: 10px;
   table-layout: fixed;
 }
 
 .table th,
 .table td {
-  border: 0.5px solid #D9D9D9; /* 각 셀의 테두리를 회색으로 지정합니다. */
-  padding: 8px; /* 각 셀의 안쪽 여백을 지정합니다. */
-  width: 100px;
-  height: 30px;
+  border: 0.5px solid #D9D9D9;
+  padding: 8px;
+  width: 80px;
+  height: 10px;
   table-layout: fixed;
 }
 
