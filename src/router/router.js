@@ -1,8 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
-
-
-import AnswerFormRegister from "@/components/franchise/ask/AnswerFormRegister.vue";
+import AnswerFormRegister from "@/components/amdin/ask/AnswerFormRegister.vue";
 import AdminLogin from "@/components/login/AdminLogin.vue";
 import FranchiseLogin from "@/components/login/FranchiseLogin.vue";
 import DriverLogin from "@/components/login/DriverLogin.vue";
@@ -58,5 +56,8 @@ const routes = [
 ];
 import ProductList from "@/components/amdin/product/ProductList.vue";
 // import CategoryList from "@/components/amdin/Category/CategoryList11.vue";
-
+const router = createRouter({
+    history: createWebHistory(),
+    routes
+});
 export default router;

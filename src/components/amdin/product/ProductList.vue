@@ -12,7 +12,6 @@
           <td class="filter-label">상품상태</td>
           <td class="filter-input">
             <select id="filterStatus" v-model="filterStatus">
-              <option value="전체">전체</option>
               <option value="공급가능">공급가능</option>
               <option value="일시제한">일시제한</option>
               <option value="단종">단종</option>
@@ -22,9 +21,8 @@
           <td class="filter-label">상품노출상태</td>
           <td class="filter-input">
             <select id="selectedExposureStatus" v-model="selectedExposureStatus">
-              <option value="">노출여부</option>
-              <option value="True">노출</option>
-              <option value="False">미노출</option>
+              <option value="노출">노출</option>
+              <option value="미노출">미노출</option>
             </select>
           </td>
         </tr>
@@ -32,20 +30,18 @@
           <td class="filter-label">색상</td>
           <td class="filter-input">
             <select id="filterColor" v-model="filterColor">
-              <option value="">전체</option>
-              <option value="RED">빨간색</option>
-              <option value="ORANGE">주황색</option>
-              <option value="YELLOW">노란색</option>
-              <option value="GREEN">초록색</option>
-              <option value="BLUE">파란색</option>
-              <option value="NAVY">남색</option>
-              <option value="PURPLE">보라색</option>
+              <option value="빨간색">빨간색</option>
+              <option value="주황색">주황색</option>
+              <option value="노란색">노란색</option>
+              <option value="초록색">초록색</option>
+              <option value="파란색">파란색</option>
+              <option value="남색">남색</option>
+              <option value="보라색">보라색</option>
             </select>
           </td>
           <td class="filter-label">사이즈</td>
           <td class="filter-input">
             <select id="filterSize" v-model="filterSize">
-              <option value="">전체</option>
               <option value="90">90</option>
               <option value="95">95</option>
               <option value="100">100</option>
@@ -59,7 +55,7 @@
           <td class="filter-input">
             <select id="firstCategory" v-model="selectedFirstCategory" @change="fetchSecondCategories">
               <option value="">대분류</option>
-              <option v-for="category in firstCategories" :key="category.code" :value="category.name">
+              <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.name">
                 {{ category.name }}
               </option>
             </select>
@@ -87,159 +83,208 @@
         <img src="@/assets/icon/search.png" alt="Search" />
       </button>
     </div>
+    <div>
+      <button @click="postProduct">
+        등록하기
+      </button>
+    </div>
     <div class="table-container">
       <table class="table">
         <thead>
         <tr class="header1">
-          <th>상품코드</th>
-          <th>상품명</th>
-          <th>상품 상태</th>
-          <th>상품 노출 상태</th>
-          <th>본사 보유량</th>
-          <th>본사 폐기량</th>
-          <th>알림 기준 수량</th>
-          <th>색상</th>
-          <th>사이즈</th>
-          <th>카테고리</th>
+          <th v-for="(header, index) in headers" :key="index">{{header.label}}</th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(product) in filteredProducts" :key="product.productCode" class="allpost">
-          <td>{{ product.productCode }}</td>
-          <td class="boardname">{{ product.productName }}</td>
-          <td>{{ product.productStatus }}</td>
-          <td>{{ product.productExposureStatus ? '노출' : '미노출' }}</td>
-          <td>{{ product.productTotalCount }}</td>
-          <td>{{ product.productDisCount }}</td>
-          <td>{{ product.productNoticeCount }}</td>
-          <td>{{ product.productColor }}</td>
-          <td>{{ product.productSize }}</td>
-          <td>{{ product.categoryThird.name }}</td>
-        </tr>
+          <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost">
+            <td v-for="(header, colIndex) in headers" :key="colIndex">
+                {{item[header.key]}}
+            </td>
+          </tr>
+          <tr v-for="row in emptyRows" :key="'empty-' + row">
+            <td v-for="header in headers" :key="header.key"></td>
+          </tr>
         </tbody>
       </table>
     </div>
+      <div class="pagination" >
+        <button @click="prevPage" :disabled="currentPage === 1">이전</button>
+        <span> {{currentPage}} / {{totalPages}} </span>
+        <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
+      </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import { ref, computed } from 'vue';
 
-const products = ref([]);
-const filteredProducts = ref([]);
-const filterProductName = ref('');
-const filterStatus = ref('전체');
+const lists = ref([]);
+const headers = ref([
+  { key: 'productCode', label: '상품 코드'},
+  { key: 'productName', label: '상품명'},
+  { key: 'productCount', label: '본사 보유량'},
+  { key: 'productDisCount', label: '본사 폐기량'},
+  { key: 'productNoticeCount', label: '알림 기준 수량'},
+  { key: 'productStatus', label: '상품 상태'},
+  { key: 'productExposureStatus', label: '상품 노출 상태'},
+  { key: 'productColor', label: '색상'},
+  { key: 'productSize', label: '사이즈'},
+  { key: 'categoryThirdCode', label: '카테고리 코드'},
+]);
+
+const filteredLists = ref([]);
+const currentPage = ref(1);
+const itemsPerPage = 15;
+const selectedExposureStatus = ref('전체');
+const filterStatus = ref('');
 const filterColor = ref('');
 const filterSize = ref('');
-const selectedExposureStatus = ref('');
-const firstCategories = ref([
-  { code: 1, name: '여성의류' },
-  { code: 2, name: '남성의류' },
-  { code: 3, name: '신발' },
-  { code: 4, name: '가방' },
-  { code: 5, name: '이너웨어' },
-  { code: 6, name: '악세서리' },
-]);
-const secondCategories = ref([]);
-const thirdCategories = ref([]);
+
+const firstCategories = ref('');
+const secondCategories = ref('');
+const thirdCategories = ref('');
 const selectedFirstCategory = ref('');
 const selectedSecondCategory = ref('');
 const selectedThirdCategory = ref('');
 
-const fetchProducts = async () => {
-  try {
-    const response = await axios.get('http://localhost:9000/admin/product');
-    console.log('API Response:', response.data); // 추가된 로그
-    products.value = response.data.products || response.data.productDTO || [];
-    filteredProducts.value = products.value;
-    console.log('Products:', products.value); // 추가된 로그
+const fetchFirstCategories = async () => {
+  try{
+    const response = await fetch('/api/admin/category/first', {
+      method: 'GET',
+    });
+    if (!response.ok) {
+      throw new Error('대분류를 불러오는 데 실패했습니다.');
+    }
+    firstCategories.value = await response.json();
   } catch (error) {
-    console.error('Failed to fetch products:', error);
+    console.error('Error:', error);
   }
-};
-
-const applyFilters = () => {
-  console.log('Applying filters...'); // 필터링 시작 로그
-  filteredProducts.value = products.value.filter(product => {
-    const matchesProductName = !filterProductName.value || product.productName.includes(filterProductName.value);
-    const matchesStatus = filterStatus.value === '전체' || product.productStatus === filterStatus.value;
-    const matchesExposureStatus = !selectedExposureStatus.value || product.productExposureStatus.toString() === selectedExposureStatus.value;
-    const matchesColor = !filterColor.value || product.productColor === filterColor.value;
-    const matchesSize = !filterSize.value || product.productSize === filterSize.value;
-    const matchesFirstCategory = !selectedFirstCategory.value || product.categoryThird.categorySecond.categoryFirst.name === selectedFirstCategory.value;
-    const matchesSecondCategory = !selectedSecondCategory.value || product.categoryThird.categorySecond.name === selectedSecondCategory.value;
-    const matchesThirdCategory = !selectedThirdCategory.value || product.categoryThird.name === selectedThirdCategory.value;
-
-    console.log(`Product: ${product.productName}`, {
-      matchesProductName,
-      matchesStatus,
-      matchesExposureStatus,
-      matchesColor,
-      matchesSize,
-      matchesFirstCategory,
-      matchesSecondCategory,
-      matchesThirdCategory
-    }); // 각 조건에 맞는지 확인하는 로그
-
-    return matchesProductName && matchesStatus && matchesExposureStatus && matchesColor && matchesSize && matchesFirstCategory && matchesSecondCategory && matchesThirdCategory;
-  });
-  console.log('Filtered Products:', filteredProducts.value); // 필터 적용 후 결과 로그
-};
-
-const resetFilters = () => {
-  filterProductName.value = '';
-  filterStatus.value = '전체';
-  filterColor.value = '';
-  filterSize.value = '';
-  selectedExposureStatus.value = '';
-  selectedFirstCategory.value = '';
-  selectedSecondCategory.value = '';
-  selectedThirdCategory.value = '';
-  filteredProducts.value = products.value;
 };
 
 const fetchSecondCategories = async () => {
-  if (!selectedFirstCategory.value) {
+  if(selectedFirstCategory.value === '') {
     secondCategories.value = [];
-    thirdCategories.value = [];
-    return;
+    return
   }
   try {
-    const response = await axios.get(`/api/admin/category/second?categoryFirstCode=${selectedFirstCategory.value}`);
-    secondCategories.value = response.data;
+    const response = await fetch(`/api/admin/category/second?categoryFirstCode=${selectedMajorCategory.value}`);
+    if (!response.ok) {
+      throw new Error('중분류를 불러오는 데 실패했습니다.');
+    }
+    secondCategories.value = await  response.json();
     thirdCategories.value = [];
     selectedSecondCategory.value = '';
   } catch (error) {
-    console.error('중분류를 불러오는 데 실패했습니다.', error);
+    console.error('Error:', error);
   }
 };
-
 const fetchThirdCategories = async () => {
-  if (!selectedSecondCategory.value) {
+  if (selectedSecondCategory.value === '') {
     thirdCategories.value = [];
     return;
   }
   try {
-    const response = await axios.get(`/api/admin/category/third?categorySecondCode=${selectedSecondCategory.value}`);
-    thirdCategories.value = response.data;
-    selectedThirdCategory.value = '';
+    const response = await fetch(`/api/admin/category/third?categorySecondCode=${selectedSecondCategory.value}`);
+    if (!response.ok) {
+      throw new Error('소분류를 불러오는 데 실패했습니다.');
+    }
+    thirdCategories.value = await response.json();
   } catch (error) {
-    console.error('소분류를 불러오는 데 실패했습니다.', error);
+    console.error('Error:', error);
   }
 };
 
-const editProduct = (productCode) => {
-  console.log('Edit product with code:', productCode);
-  // 이곳에 상품 수정 로직을 추가할 수 있습니다.
+const postProduct = (productCode) => {
+
+}
+
+const applyFilters = () => {
+  filteredLists.value = lists.value.filter(list => {
+    const matchesExposureStatus = selectedExposureStatus.value === '전체' || list.productExposureStatus === (selectedExposureStatus.value === '노출');
+    const matchesStatus = !filterStatus.value || list.productStatus === filterStatus.value;
+    const matchesColor = !filterColor.value || list.productColor === filterColor.value;
+    const matchesSize = !filterSize.value || list.productSize === parseInt(filterSize.value, 10); // Ensure filterSize is parsed as int
+
+    return matchesExposureStatus && matchesStatus && matchesColor && matchesSize;
+  });
 };
 
-onMounted(() => {
-  fetchProducts();
+const resetFilters = () => {
+  selectedExposureStatus.value = '전체';
+  filterStatus.value = '';
+  filterColor.value = '';
+  filterSize.value = '';
+  filteredLists.value = lists.value;
+};
+
+const getMemberId = async () => {
+  try {
+    const response = await fetch('/api/admin/product', {
+      method: 'GET',
+    });
+
+    if (!response.ok) {
+      throw new Error('네트워크 오류 발생');
+    }
+
+    const data = await response.json();
+    if (data.length > 0) {
+      lists.value = data.map(({ product, ...rest }) => rest);
+      filteredLists.value = lists.value;
+    } else {
+      lists.value = [];
+      filteredLists.value = [];
+    }
+  } catch (error) {
+    console.error('오류 발생:', error);
+  }
+};
+
+const paginatedLists = computed(() => {
+  let items = [];
+  const start = (currentPage.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+
+  if (filteredLists.value.length < itemsPerPage) {
+    const remainingItems = itemsPerPage - filteredLists.value.length;
+    items = [...filteredLists.value, ...Array.from({ length: remainingItems }).map(() => ({}))];
+  } else {
+    items = filteredLists.value.slice(start, end);
+  }
+
+  return items;
 });
+
+const totalPages = computed(() => {
+  return Math.ceil(filteredLists.value.length / itemsPerPage);
+});
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+  }
+};
+
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+  }
+};
+
+getMemberId();
+fetchFirstCategories();
+fetchSecondCategories();
+fetchThirdCategories();
 </script>
 
 <style scoped>
+.pagination {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .filter-section {
   display: flex;
   justify-content: center;
@@ -253,6 +298,7 @@ onMounted(() => {
   border-radius: 5px;
   padding: 10px;
   width: 1200px;
+  margin-top: 2%;
 }
 
 .filter-table td {
@@ -271,6 +317,7 @@ onMounted(() => {
   width: 500px;
   text-align: left;
   border: 1px solid lightgray;
+  border-right: none;
 }
 
 .action-buttons {
@@ -305,7 +352,7 @@ onMounted(() => {
 .table {
   width: 1200px;
   max-width: 1200px;
-  border-collapse: separate;
+  border-collapse: collapse;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -317,11 +364,12 @@ onMounted(() => {
   color: #000;
 }
 
-.boardname {
-  text-decoration: none;
-  color: black;
-  cursor: pointer;
+.table th,
+.table td {
+  border: 0.5px solid #D9D9D9; /* 각 셀의 테두리를 회색으로 지정합니다. */
+  padding: 8px; /* 각 셀의 안쪽 여백을 지정합니다. */
 }
+
 
 .header1 {
   background-color: #D9D9D9;
@@ -331,7 +379,7 @@ onMounted(() => {
   text-align: center;
 }
 
-.header1 .num {
+.header1 {
   width: 5%;
 }
 
@@ -340,25 +388,11 @@ onMounted(() => {
   padding: 10px 0;
 }
 
-.allpost .num {
+.allpost {
   width: 5%;
 }
 
 .allpost td {
   border-right: 1px solid #ddd;
-}
-
-.editbutton {
-  background-color: #ffcc00;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-  border-radius: 5px;
-  color: #fff;
-  font-weight: bold;
-}
-
-.editbutton:hover {
-  background-color: #ffbb00;
 }
 </style>
