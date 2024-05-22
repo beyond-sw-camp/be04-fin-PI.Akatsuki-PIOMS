@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import AskMain from "@/components/franchise/ask/AskMain.vue";
-import AnswerFormEdit from "@/components/franchise/ask/AnswerFormEdit.vue";
-import AnswerFormRegister from "@/components/franchise/ask/AnswerFormRegister.vue";
+import AskMain from "@/components/amdin/ask/AskMain.vue";
+import AnswerFormEdit from "@/components/amdin/ask/AnswerFormEdit.vue";
+import AnswerFormRegister from "@/components/amdin/ask/AnswerFormRegister.vue";
 
 const routes = [
     {

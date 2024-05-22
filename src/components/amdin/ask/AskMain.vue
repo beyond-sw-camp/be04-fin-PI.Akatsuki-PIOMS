@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <!-- Breadcrumb 컴포넌트 추가 -->
+  <div class="container">
     <Breadcrumb :crumbs="breadcrumbs" />
 
     <div class="filter-section">
@@ -50,7 +49,7 @@
           <th>문의상태</th>
           <th>문의제목</th>
           <th>작성자</th>
-          <th>가맹점명</th> <!-- 추가된 부분 -->
+          <th>가맹점명</th>
           <th>등록일</th>
           <th>수정일</th>
           <th>답변일</th>
@@ -58,12 +57,12 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(ask, index) in filteredAsks" :key="ask.askCode" class="allpost">
-          <td class="num">{{ index + 1 }}</td>
+        <tr v-for="(ask, index) in paginatedAsks" :key="ask.askCode" class="allpost">
+          <td class="num">{{ (currentPage - 1) * pageSize + index + 1 }}</td>
           <td>{{ ask.askStatus }}</td>
           <td class="boardname">{{ ask.askTitle }}</td>
           <td>{{ ask.franchiseOwnerName }}</td>
-          <td>{{ ask.franchiseName }}</td> <!-- 추가된 부분 -->
+          <td>{{ ask.franchiseName }}</td>
           <td>{{ formatDate(ask.askEnrollDate) }}</td>
           <td>{{ formatDate(ask.askUpdateDate) }}</td>
           <td>{{ formatDate(ask.askCommentDate) }}</td>
@@ -80,13 +79,18 @@
         </tbody>
       </table>
     </div>
+    <div class="pagination">
+      <button @click="prevPage" :disabled="currentPage === 1">이전</button>
+      <span>{{ currentPage }} / {{ totalPages }}</span>
+      <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
+    </div>
   </div>
 </template>
 
 <script setup>
-import {ref, onMounted} from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
-import Breadcrumb from '@/components/franchise/ask/Breadcrumb.vue'; // Breadcrumb 컴포넌트 임포트
+import Breadcrumb from '@/components/amdin/ask/Breadcrumb.vue'; // Breadcrumb 컴포넌트 임포트
 
 const asks = ref([]);
 const filteredAsks = ref([]);
@@ -94,6 +98,10 @@ const filterStatus = ref('전체');
 const startDate = ref('');
 const endDate = ref('');
 const selectedFranchise = ref('');
+
+const currentPage = ref(1);
+const pageSize = ref(15); // 페이지 당 항목 수
+const totalPages = ref(1);
 
 const breadcrumbs = [
   {label: '공지 및 문의 관리', link: '/notice'},
@@ -114,14 +122,14 @@ const fetchAsks = async () => {
   try {
     const response = await axios.get('http://localhost:9000/admin/ask/list');
     asks.value = response.data.asks || response.data.askDTOs || [];
-    filteredAsks.value = asks.value;
+    applyFilters(); // 필터를 적용하여 초기 데이터를 설정합니다.
   } catch (error) {
     console.error('Failed to fetch asks:', error);
   }
 };
 
 const applyFilters = () => {
-  filteredAsks.value = asks.value.filter(ask => {
+  const filtered = asks.value.filter(ask => {
     const matchesStatus = filterStatus.value === '전체' || ask.askStatus === filterStatus.value;
     const matchesFranchise = !selectedFranchise.value || ask.franchiseName === selectedFranchise.value; // 필터 조건 수정
     const matchesStartDate = !startDate.value || new Date(ask.askEnrollDate[0], ask.askEnrollDate[1] - 1, ask.askEnrollDate[2]) >= new Date(startDate.value);
@@ -129,6 +137,9 @@ const applyFilters = () => {
 
     return matchesStatus && matchesFranchise && matchesStartDate && matchesEndDate;
   });
+  filteredAsks.value = filtered;
+  totalPages.value = Math.ceil(filtered.length / pageSize.value);
+  currentPage.value = 1;
 };
 
 const resetFilters = () => {
@@ -136,7 +147,7 @@ const resetFilters = () => {
   startDate.value = '';
   endDate.value = '';
   selectedFranchise.value = '';
-  filteredAsks.value = asks.value;
+  applyFilters();
 };
 
 const formatDate = (dateArray) => {
@@ -169,12 +180,35 @@ const editAnswer = (askCode) => {
   openAnswerForm(askCode, 'edit');
 };
 
+const paginatedAsks = computed(() => {
+  const start = (currentPage.value - 1) * pageSize.value;
+  const end = start + pageSize.value;
+  return filteredAsks.value.slice(start, end);
+});
+
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+  }
+};
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+  }
+};
+
 onMounted(() => {
   fetchAsks();
 });
 </script>
 
 <style scoped>
+.container {
+  position: relative;
+  min-height: 100vh; /* Ensure the container takes at least the full height of the viewport */
+}
+
 .filter-section {
   display: flex;
   justify-content: center;
@@ -204,7 +238,7 @@ onMounted(() => {
 .filter-input {
   width: 500px;
   text-align: left;
-  border: 1px solid lightgray; /* 테두리 색상 추가 */
+  border: 1px solid lightgray;
 }
 
 .date-range {
@@ -240,7 +274,7 @@ onMounted(() => {
 .table-container {
   width: 100%;
   margin-top: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   display: flex;
   justify-content: center;
 }
@@ -302,7 +336,7 @@ onMounted(() => {
 }
 
 .editbutton-pending {
-  background-color: #ff6285; /* 답변대기 색상 */
+  background-color: #ff6285;
 }
 
 .editbutton:hover {
@@ -312,4 +346,36 @@ onMounted(() => {
 .editbutton-pending:hover {
   background-color: #ff6275;
 }
+
+.pagination {
+  position: absolute;
+  bottom: 60px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+.pagination button {
+  background-color: #fff;
+  color: black;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 8px 16px;
+  font-size: 14px;
+  margin: 0 5px;
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pagination span {
+  margin: 0 10px;
+  font-weight: bold;
+}
+
 </style>
