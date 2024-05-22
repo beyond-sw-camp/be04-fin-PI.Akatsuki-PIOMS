@@ -36,10 +36,10 @@
     </div>
     <div class="action-buttons">
       <button @click="resetFilters" class="reset-btn">
-        <img src="@/assets/icon/reset.png" alt="Reset" />
+        <img src="../../../assets/icon/reset.png" alt="Reset" />
       </button>
       <button @click="applyFilters" class="search-btn">
-        <img src="@/assets/icon/search.png" alt="Search" />
+        <img src="../../../assets/icon/search.png" alt="Search" />
       </button>
     </div>
     <div class="table-container">
@@ -73,7 +73,7 @@
                 :class="{ 'editbutton-pending': ask.askStatus === '답변대기' }"
                 @click="ask.askStatus === '답변대기' ? registerAnswer(ask.askCode) : editAnswer(ask.askCode)"
             >
-              {{ ask.askStatus === '답변대기' ? '답변 작성' : '답변 조회' }}
+              {{ ask.askStatus === '답변대기' ? '답변 작성' : '답변 수정' }}
             </button>
           </td>
         </tr>
@@ -86,7 +86,7 @@
 <script setup>
 import {ref, onMounted} from 'vue';
 import axios from 'axios';
-import Breadcrumb from '@/components/franchise/ask/Breadcrumb.vue'; // Breadcrumb 컴포넌트 임포트
+import Breadcrumb from '@/components/amdin/ask/Breadcrumb.vue'; // Breadcrumb 컴포넌트 임포트
 
 const asks = ref([]);
 const filteredAsks = ref([]);
@@ -104,7 +104,7 @@ const breadcrumbs = [
 const franchises = ref([
   {code: 1, name: 'PIOMS 신사점'},
   {code: 2, name: 'PIOMS 강남점'},
-  {code: 3, name: 'PIOMS 더현대서울점'},
+  {code: 3, name: 'PIOMS 더현대 서울점'},
   {code: 4, name: 'PIOMS 홍대점'},
   {code: 5, name: 'PIOMS 성수점'},
   {code: 6, name: 'PIOMS 논현점'},
@@ -151,12 +151,12 @@ const formatDate = (dateArray) => {
 };
 
 const openAnswerForm = (askCode, mode) => {
-  const width = 800;
-  const height = 600;
+  const width = 1200;
+  const height = 800;
   const left = (window.screen.width / 2) - (width / 2);
   const top = (window.screen.height / 2) - (height / 2);
   const url = `http://localhost:5173/admin/answerform/${mode}?askCode=${askCode}`;
-  window.open(url, 'popup', `width=${width},height=${height},top=${top},left=${left},toolbar=no,scrollbars=no,resizable=no`);
+  window.open(url, '_blank', `width=${width},height=${height},top=${top},left=${left}`);
 };
 
 // 답변 등록 버튼 클릭 시
