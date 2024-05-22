@@ -134,7 +134,29 @@ const headers = ref([
 const filteredLists = ref([]);
 const currentPage = ref(1);
 const itemsPerPage = 15;
+const selectedExposureStatus = ref('전체');
+const filterStatus = ref('');
+const filterColor = ref('');
+const filterSize = ref('');
 
+const applyFilters = () => {
+  filteredLists.value = lists.value.filter(list => {
+    const matchesExposureStatus = selectedExposureStatus.value === '전체' || list.productExposureStatus === filterStatus.value;
+    const matchesStatus = !filterStatus.value || list.productStatus === filterStatus.value;
+    const matchesColor = !filterColor.value || list.productColor === filterColor.value;
+    const matchesSize = !filterSize.value || list.productSize === filterSize.value;
+
+    return matchesExposureStatus && matchesStatus && matchesColor && matchesSize;
+  })
+}
+
+const resetFilters = () => {
+  selectedExposureStatus.value = '전체';
+  filterStatus.value = '';
+  filterColor.value = '';
+  filterSize.value = '';
+  filteredLists.value = lists.value;
+}
 const getMemberId = async () => {
   try {
     const response = await fetch('/api/admin/product', {
@@ -234,6 +256,7 @@ getMemberId();
   width: 500px;
   text-align: left;
   border: 1px solid lightgray;
+  border-right: none;
 }
 
 .action-buttons {
