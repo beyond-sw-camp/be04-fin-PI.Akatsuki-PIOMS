@@ -5,6 +5,7 @@
   "dependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
     "axios": "^1.7.1",
+    "qs": "^6.12.1",
     "vite": "^5.2.11",
     "vue": "^3.4.27",
     "vue-router": "^4.3.2"

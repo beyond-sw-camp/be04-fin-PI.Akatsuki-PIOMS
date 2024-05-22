@@ -1,5 +1,8 @@
 <template>
   <div>
+    <!-- Breadcrumb 컴포넌트 추가 -->
+    <Breadcrumb :crumbs="breadcrumbs" />
+
     <div class="filter-section">
       <table class="filter-table">
         <tr>
@@ -46,7 +49,8 @@
           <th>No</th>
           <th>문의상태</th>
           <th>문의제목</th>
-          <th>가맹점명</th>
+          <th>작성자</th>
+          <th>가맹점명</th> <!-- 추가된 부분 -->
           <th>등록일</th>
           <th>수정일</th>
           <th>답변일</th>
@@ -59,6 +63,7 @@
           <td>{{ ask.askStatus }}</td>
           <td class="boardname">{{ ask.askTitle }}</td>
           <td>{{ ask.franchiseOwnerName }}</td>
+          <td>{{ ask.franchiseName }}</td> <!-- 추가된 부분 -->
           <td>{{ formatDate(ask.askEnrollDate) }}</td>
           <td>{{ formatDate(ask.askUpdateDate) }}</td>
           <td>{{ formatDate(ask.askCommentDate) }}</td>
@@ -66,22 +71,22 @@
             <button
                 class="editbutton"
                 :class="{ 'editbutton-pending': ask.askStatus === '답변대기' }"
-                @click="editAsk(ask.askCode)"
+                @click="ask.askStatus === '답변대기' ? registerAnswer(ask.askCode) : editAnswer(ask.askCode)"
             >
-              {{ ask.askStatus === '답변대기' ? '답변 작성' : '답변 수정' }}
+              {{ ask.askStatus === '답변대기' ? '답변 작성' : '답변 조회' }}
             </button>
           </td>
         </tr>
         </tbody>
       </table>
-      <p v-if="filteredAsks.length === 0">조회된 문의가 없습니다.</p>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import {ref, onMounted} from 'vue';
 import axios from 'axios';
+import Breadcrumb from '@/components/franchise/ask/Breadcrumb.vue'; // Breadcrumb 컴포넌트 임포트
 
 const asks = ref([]);
 const filteredAsks = ref([]);
@@ -90,13 +95,19 @@ const startDate = ref('');
 const endDate = ref('');
 const selectedFranchise = ref('');
 
+const breadcrumbs = [
+  {label: '공지 및 문의 관리', link: '/notice'},
+  {label: '문의사항 관리', link: '/notice/inquiry'},
+  {label: '문의사항 조회 및 관리', link: null},
+];
+
 const franchises = ref([
-  { code: 1, name: 'PIOMS 신사점' },
-  { code: 2, name: 'PIOMS 강남점' },
-  { code: 3, name: 'PIOMS 더현대 서울점' },
-  { code: 4, name: 'PIOMS 홍대점' },
-  { code: 5, name: 'PIOMS 성수점' },
-  { code: 6, name: 'PIOMS 논현점' },
+  {code: 1, name: 'PIOMS 신사점'},
+  {code: 2, name: 'PIOMS 강남점'},
+  {code: 3, name: 'PIOMS 더현대서울점'},
+  {code: 4, name: 'PIOMS 홍대점'},
+  {code: 5, name: 'PIOMS 성수점'},
+  {code: 6, name: 'PIOMS 논현점'},
 ]);
 
 const fetchAsks = async () => {
@@ -112,7 +123,7 @@ const fetchAsks = async () => {
 const applyFilters = () => {
   filteredAsks.value = asks.value.filter(ask => {
     const matchesStatus = filterStatus.value === '전체' || ask.askStatus === filterStatus.value;
-    const matchesFranchise = !selectedFranchise.value || ask.franchiseOwnerName === selectedFranchise.value;
+    const matchesFranchise = !selectedFranchise.value || ask.franchiseName === selectedFranchise.value; // 필터 조건 수정
     const matchesStartDate = !startDate.value || new Date(ask.askEnrollDate[0], ask.askEnrollDate[1] - 1, ask.askEnrollDate[2]) >= new Date(startDate.value);
     const matchesEndDate = !endDate.value || new Date(ask.askEnrollDate[0], ask.askEnrollDate[1] - 1, ask.askEnrollDate[2]) <= new Date(endDate.value);
 
@@ -139,9 +150,23 @@ const formatDate = (dateArray) => {
   });
 };
 
-const editAsk = (askCode) => {
-  console.log(`Edit ask with code: ${askCode}`);
-  // 이곳에 답변 등록 페이지로 이동하는 로직을 추가할 수 있습니다.
+const openAnswerForm = (askCode, mode) => {
+  const width = 800;
+  const height = 600;
+  const left = (window.screen.width / 2) - (width / 2);
+  const top = (window.screen.height / 2) - (height / 2);
+  const url = `http://localhost:5173/admin/answerform/${mode}?askCode=${askCode}`;
+  window.open(url, 'popup', `width=${width},height=${height},top=${top},left=${left},toolbar=no,scrollbars=no,resizable=no`);
+};
+
+// 답변 등록 버튼 클릭 시
+const registerAnswer = (askCode) => {
+  openAnswerForm(askCode, 'register');
+};
+
+// 답변 수정 버튼 클릭 시
+const editAnswer = (askCode) => {
+  openAnswerForm(askCode, 'edit');
 };
 
 onMounted(() => {
@@ -272,7 +297,7 @@ onMounted(() => {
   padding: 5px 10px;
   cursor: pointer;
   border-radius: 5px;
-  color:#fff;
+  color: #fff;
   font-weight: bold;
 }
 
@@ -284,7 +309,7 @@ onMounted(() => {
   background-color: #ffbb00;
 }
 
-.editbutton-pending:hover{
+.editbutton-pending:hover {
   background-color: #ff6275;
 }
 </style>
