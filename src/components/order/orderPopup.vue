@@ -1,7 +1,7 @@
 <template>
     <div class="popup-overlay" v-if="writeActive">
       <div class="popup-content">
-        <span class="close" @click="showPopup">&times;</span>
+        <button class="close" @click="showPopup" >돌아가기</button>
         
         <h2 align="center">발주서 생성</h2>
         <br /><br /><br />

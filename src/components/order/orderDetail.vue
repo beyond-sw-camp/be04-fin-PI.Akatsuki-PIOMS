@@ -1,11 +1,13 @@
 <template>
   <div class="popup-overlay" >
        <div class="popup-content">
-           <span class="close" @click="showDetailPopup">&times;</span>
-           
+           <button class="close" @click="showDetailPopup" >돌아가기</button>
            <br>
+          
+           <br>
+                <h1 align="center">발주서</h1>
+
            <div class="info">
-                <h2 align="center">발주서</h2>
                 <div style="display:flex;" align="center">
                   <div class="divvv-title">
                     수신처      
@@ -37,10 +39,10 @@
                         </div>
                         <div class="divvv2">
                           <div class="divvv3">
-                            sadfsadf 
+                            점주전화번호
                           </div>
                           <div class="divvv3">
-                             asdfsadf
+                             {{item.franchiseOwnerPhone}}
                           </div>
                         </div>
                     </div>
@@ -64,11 +66,10 @@
                         </div>
                         <div class="divvv2">
                           <div class="divvv3">
-                            가맹점주소 
+                            점주전화번호
                           </div>
                           <div class="divvv3">
-                            asdf
-                             <!-- {{ item.franchiseAddress }} -->
+                             {{item.franchiseOwnerPhone}}
                           </div>
                         </div>
                 </div>  
@@ -95,7 +96,7 @@
               </table>
             </div>
             <br><br>
-            <div class="divvv-title">
+            <div class="divvv-title" style="border-top: 2px black solid;">
                 반품상품
             </div>
             <div style="display: block; font-size: 1.5lh; display:flex; justify-content: center; font-weight: 1000; width:100%" align = "center">
@@ -133,12 +134,12 @@
 
                     <div style="display: block; font-size: 1.5lh; display:flex; justify-content: center; font-weight: 1000; width:100%;" align="center">
                       <table>
-                        <thead>
+                        <thead >
                           <tr>
-                            <th v-for="(header, index) in headers" :key="index">{{ header.label }}</th>
+                            <th  v-for="(header, index) in headers" :key="index" >{{ header.label }}</th>
                           </tr>
                         </thead>
-                        <tbody>
+                        <tbody >
                           <tr class="table" v-for="(product, rowIndex) in list" :key="rowIndex">
                             <td v-for="(header, colIndex) in headers" :key="colIndex">
                               <div>{{ product[header.key] }}</div>
@@ -158,7 +159,7 @@
             </div>
             
           </div>
-          배송 예정일 : {{ item.deliveryDate }}
+          발주일자 : {{ item.orderDate }}
            <br>
            주문코드 : {{ item.orderCode }}<br>   
        </div>
@@ -311,14 +312,14 @@ const denyOrder = async () => {
   
   .popup-content button {
     padding: 10px 20px;
-    background-color: #4CAF50;
+    background-color: gray;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
   }
   .popup-content button:hover {
-    background-color: #45a049;
+    background-color: hotpink;
   }
   .but-group {
     display: flex;
@@ -437,6 +438,10 @@ const denyOrder = async () => {
 
   .info{
     border: 3px solid #000000;    
+  }
+
+  thead {
+    border-bottom: 2px solid black;
   }
 
 
