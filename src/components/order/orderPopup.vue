@@ -33,7 +33,9 @@
                   :id="'row-' + index"
                   @dblclick="addProductToList(product)" 
                   @mouseenter="highlightRow(index)"
-                  @mouseleave="resetRowColor(index)">
+                  @mouseleave="resetRowColor(index)"
+                  style="  cursor : pointer;"
+                  >
                 <td>{{ product.productCode }}</td>
                 <td>{{ product.productName }}</td>
                 <td>{{ product.productPrice }}원</td>
@@ -314,6 +316,7 @@
   th, td {
     border: 1px solid #ddd;
     padding: 8px;
+    
   }
   
   th {

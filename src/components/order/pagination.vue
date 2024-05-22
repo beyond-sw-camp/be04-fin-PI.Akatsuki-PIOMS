@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="create-button">
-      <input type="button" value="발주하기" @click="showPopup">
+    <div class="create-button" >
+      <input type="button" value="발주하기" @click="showPopup" style="  cursor : pointer;">
     </div>
 
     <popup v-if="createPopup" :showPopup="showPopup" :popupVisible="createPopup"/>
@@ -57,6 +57,11 @@ import popup from './orderPopup.vue';
 import OrderDetail from './orderDetail.vue';
 
 const lists = ref([]);
+
+// 추후 토큰으로 받을 예정
+const franchiseCode = ref(1);
+const adminCode = ref(2);
+
 const headers = ref([
   { key: 'orderCode', label: '주문 코드' },
   { key: 'orderDate', label: '주문 날짜' },
@@ -82,7 +87,7 @@ const conditionFilter = ref('');
 
 const getMemberId = async () => {
   try {
-    const response = await fetch('/api/admin/1/orders', {
+    const response = await fetch(`/api/admin/orders?adminCode=${adminCode.value}`, {
       method: 'GET',
     });
 
@@ -95,6 +100,7 @@ const getMemberId = async () => {
       lists.value = data.map(({  ...rest }) => rest);
 
       filteredLists.value = lists.value;
+
       console.log(lists);
     } else {
       lists.value = [];
@@ -191,6 +197,7 @@ table {
 th, td {
   border: 1px solid #ddd;
   padding: 8px;
+  cursor : pointer;
 }
 
 th {
