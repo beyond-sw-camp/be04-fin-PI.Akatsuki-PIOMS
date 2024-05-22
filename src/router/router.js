@@ -1,32 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import AskMain from "@/components/franchise/ask/AskMain.vue";
-import LogIn from "@/components/logIn/Login.vue";
-import ProductList from "@/components/amdin/product/aaProductList.vue";
-import CategoryList from "@/components/amdin/Category/CategoryList.vue";
-
-const routes = [
-    {
-        path: '/',
-        name: 'AskMain',
-        component: AskMain
-    }
-];
+import ProductList from "@/components/amdin/product/ProductList.vue";
+// import CategoryList from "@/components/amdin/Category/CategoryList11.vue";
 
 const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
-            path: '/login',
-            component: LogIn
-        },
-        {
-            path: '/product',
+            path: '',
+            name: 'AdminProductList11',
             component: ProductList
-        },
+        }/*,
         {
             path: '/category',
+            name: 'CategoryList',
             component: CategoryList
-        }
+        }*/
     ]
 });
 
