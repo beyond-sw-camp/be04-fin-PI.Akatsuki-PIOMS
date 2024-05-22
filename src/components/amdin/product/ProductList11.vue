@@ -141,7 +141,7 @@ const filterSize = ref('');
 
 const applyFilters = () => {
   filteredLists.value = lists.value.filter(list => {
-    const matchesExposureStatus = selectedExposureStatus.value === '전체' || list.productExposureStatus === filterStatus.value;
+    const matchesExposureStatus = selectedExposureStatus.value === '전체' || list.productExposureStatus === selectedExposureStatus.value;
     const matchesStatus = !filterStatus.value || list.productStatus === filterStatus.value;
     const matchesColor = !filterColor.value || list.productColor === filterColor.value;
     const matchesSize = !filterSize.value || list.productSize === filterSize.value;
@@ -185,7 +185,6 @@ const paginatedLists = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
   const end = start + itemsPerPage;
 
-  // 만약 데이터가 부족하면, 남은 아이템의 개수를 계산해서 추가합니다.
   if (filteredLists.value.length < itemsPerPage) {
     const remainingItems = itemsPerPage - filteredLists.value.length;
     items = [...filteredLists.value, ...Array.from({ length: remainingItems }).map(() => ({}))];
