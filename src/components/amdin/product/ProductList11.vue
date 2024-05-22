@@ -12,7 +12,6 @@
           <td class="filter-label">상품상태</td>
           <td class="filter-input">
             <select id="filterStatus" v-model="filterStatus">
-              <option value="전체">전체</option>
               <option value="공급가능">공급가능</option>
               <option value="일시제한">일시제한</option>
               <option value="단종">단종</option>
@@ -22,9 +21,8 @@
           <td class="filter-label">상품노출상태</td>
           <td class="filter-input">
             <select id="selectedExposureStatus" v-model="selectedExposureStatus">
-              <option value="">노출여부</option>
-              <option value="True">노출</option>
-              <option value="False">미노출</option>
+              <option value="노출">노출</option>
+              <option value="미노출">미노출</option>
             </select>
           </td>
         </tr>
@@ -32,20 +30,18 @@
           <td class="filter-label">색상</td>
           <td class="filter-input">
             <select id="filterColor" v-model="filterColor">
-              <option value="">전체</option>
-              <option value="RED">빨간색</option>
-              <option value="ORANGE">주황색</option>
-              <option value="YELLOW">노란색</option>
-              <option value="GREEN">초록색</option>
-              <option value="BLUE">파란색</option>
-              <option value="NAVY">남색</option>
-              <option value="PURPLE">보라색</option>
+              <option value="빨간색">빨간색</option>
+              <option value="주황색">주황색</option>
+              <option value="노란색">노란색</option>
+              <option value="초록색">초록색</option>
+              <option value="파란색">파란색</option>
+              <option value="남색">남색</option>
+              <option value="보라색">보라색</option>
             </select>
           </td>
           <td class="filter-label">사이즈</td>
           <td class="filter-input">
             <select id="filterSize" v-model="filterSize">
-              <option value="">전체</option>
               <option value="90">90</option>
               <option value="95">95</option>
               <option value="100">100</option>
@@ -59,7 +55,7 @@
           <td class="filter-input">
             <select id="firstCategory" v-model="selectedFirstCategory" @change="fetchSecondCategories">
               <option value="">대분류</option>
-              <option v-for="category in firstCategories" :key="category.code" :value="category.name">
+              <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.name">
                 {{ category.name }}
               </option>
             </select>
@@ -85,6 +81,11 @@
       </button>
       <button @click="applyFilters" class="search-btn">
         <img src="@/assets/icon/search.png" alt="Search" />
+      </button>
+    </div>
+    <div>
+      <button @click="postProduct">
+        등록하기
       </button>
     </div>
     <div class="table-container">
@@ -139,16 +140,74 @@ const filterStatus = ref('');
 const filterColor = ref('');
 const filterSize = ref('');
 
+const firstCategories = ref('');
+const secondCategories = ref('');
+const thirdCategories = ref('');
+const selectedFirstCategory = ref('');
+const selectedSecondCategory = ref('');
+const selectedThirdCategory = ref('');
+
+const fetchFirstCategories = async () => {
+  try{
+    const response = await fetch('/api/admin/category/first', {
+      method: 'GET',
+    });
+    if (!response.ok) {
+      throw new Error('대분류를 불러오는 데 실패했습니다.');
+    }
+    firstCategories.value = await response.json();
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+
+const fetchSecondCategories = async () => {
+  if(selectedFirstCategory.value === '') {
+    secondCategories.value = [];
+    return
+  }
+  try {
+    const response = await fetch(`/api/admin/category/second?categoryFirstCode=${selectedMajorCategory.value}`);
+    if (!response.ok) {
+      throw new Error('중분류를 불러오는 데 실패했습니다.');
+    }
+    secondCategories.value = await  response.json();
+    thirdCategories.value = [];
+    selectedSecondCategory.value = '';
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+const fetchThirdCategories = async () => {
+  if (selectedSecondCategory.value === '') {
+    thirdCategories.value = [];
+    return;
+  }
+  try {
+    const response = await fetch(`/api/admin/category/third?categorySecondCode=${selectedSecondCategory.value}`);
+    if (!response.ok) {
+      throw new Error('소분류를 불러오는 데 실패했습니다.');
+    }
+    thirdCategories.value = await response.json();
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+
+const postProduct = (productCode) => {
+
+}
+
 const applyFilters = () => {
   filteredLists.value = lists.value.filter(list => {
-    const matchesExposureStatus = selectedExposureStatus.value === '전체' || list.productExposureStatus === selectedExposureStatus.value;
+    const matchesExposureStatus = selectedExposureStatus.value === '전체' || list.productExposureStatus === (selectedExposureStatus.value === '노출');
     const matchesStatus = !filterStatus.value || list.productStatus === filterStatus.value;
     const matchesColor = !filterColor.value || list.productColor === filterColor.value;
-    const matchesSize = !filterSize.value || list.productSize === filterSize.value;
+    const matchesSize = !filterSize.value || list.productSize === parseInt(filterSize.value, 10); // Ensure filterSize is parsed as int
 
     return matchesExposureStatus && matchesStatus && matchesColor && matchesSize;
-  })
-}
+  });
+};
 
 const resetFilters = () => {
   selectedExposureStatus.value = '전체';
@@ -156,7 +215,8 @@ const resetFilters = () => {
   filterColor.value = '';
   filterSize.value = '';
   filteredLists.value = lists.value;
-}
+};
+
 const getMemberId = async () => {
   try {
     const response = await fetch('/api/admin/product', {
@@ -212,7 +272,9 @@ const prevPage = () => {
 };
 
 getMemberId();
-
+fetchFirstCategories();
+fetchSecondCategories();
+fetchThirdCategories();
 </script>
 
 <style scoped>
