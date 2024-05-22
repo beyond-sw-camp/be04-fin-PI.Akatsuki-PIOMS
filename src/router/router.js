@@ -1,9 +1,40 @@
 import { createRouter, createWebHistory } from 'vue-router';
+
+
+
+import AnswerFormRegister from "@/components/franchise/ask/AnswerFormRegister.vue";
+import AdminLogin from "@/components/login/AdminLogin.vue";
+import FranchiseLogin from "@/components/login/FranchiseLogin.vue";
+import DriverLogin from "@/components/login/DriverLogin.vue";
+import CommonLogin from "@/components/login/CommonLogin.vue";
+
 import AskMain from "@/components/amdin/ask/AskMain.vue";
 import AnswerFormEdit from "@/components/amdin/ask/AnswerFormEdit.vue";
-import AnswerFormRegister from "@/components/amdin/ask/AnswerFormRegister.vue";
+
+
+
 
 const routes = [
+    {
+        path: '/admin/login',
+        name: 'AdminLogin',
+        component: AdminLogin,
+    },
+    {
+        path: '/franchise/login',
+        name: 'FranchiseLogin',
+        component: FranchiseLogin,
+    },
+    {
+        path: '/driver/login',
+        name: 'DriverLogin',
+        component: DriverLogin,
+    },
+    {
+        path: '/login',
+        name: 'CommonLogin',
+        component: CommonLogin,
+    },
     {
         path: '/',
         name: 'AskMain',
