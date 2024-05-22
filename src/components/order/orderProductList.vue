@@ -42,6 +42,7 @@
       if (data.length > 0 && data[0].orderProductList) {
         // 모든 orderProductList 항목을 합쳐서 lists에 넣습니다.
         lists.value = data.flatMap(order => order.orderProductList);
+        console.log(lists);
       } else {
         lists.value = [];
       }
