@@ -49,7 +49,7 @@ const login = async () => {
     });
 
     if (response.ok) {
-      router.push('/admin/home');
+      await router.push('/admin/home');
     } else {
       errorMessage.value = '로그인 실패. 자격 증명을 확인하세요.';
     }
