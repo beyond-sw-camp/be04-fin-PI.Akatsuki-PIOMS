@@ -5,7 +5,6 @@ import AdminLogin from "@/components/login/AdminLogin.vue";
 import FranchiseLogin from "@/components/login/FranchiseLogin.vue";
 import DriverLogin from "@/components/login/DriverLogin.vue";
 import CommonLogin from "@/components/login/CommonLogin.vue";
-
 import AskMain from "@/components/amdin/ask/AskMain.vue";
 import AnswerFormEdit from "@/components/amdin/ask/AnswerFormEdit.vue";
 
@@ -55,7 +54,7 @@ const routes = [
     }
 ];
 import ProductList from "@/components/amdin/product/ProductList.vue";
-// import CategoryList from "@/components/amdin/Category/CategoryList11.vue";
+
 const router = createRouter({
     history: createWebHistory(),
     routes

@@ -1,5 +1,5 @@
 <template>
-  <router-view></router-view>
+<!--  <router-view></router-view>-->
 
     <main>
 <!--      <Breadcrumb :crumbs="breadcrumbs" />-->
@@ -10,8 +10,8 @@
 </template>
 
 <script setup>
-// import AskMain from "@/components/franchise/ask/AskMain.vue";
-// import Breadcrumb from "@/components/franchise/ask/Breadcrumb.vue";
+// import AskMain from "@/components/amdin/ask/AskMain.vue";
+// import Breadcrumb from "@/components/amdin/ask/Breadcrumb.vue";
 // import CategoryList from "@/components/amdin/Category/CategoryList.vue";
 import ProductList11 from "@/components/amdin/product/ProductList.vue";
 

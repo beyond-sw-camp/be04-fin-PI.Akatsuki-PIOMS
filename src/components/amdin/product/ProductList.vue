@@ -55,18 +55,18 @@
           <td class="filter-input">
             <select id="firstCategory" v-model="selectedFirstCategory" @change="fetchSecondCategories">
               <option value="">대분류</option>
-              <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.name">
+              <option v-for="category in firstCategories" :key="category.code" :value="category.name">
                 {{ category.name }}
               </option>
             </select>
             <select id="secondCategory" v-model="selectedSecondCategory" @change="fetchThirdCategories">
-              <option value="">선택하세요</option>
+              <option value="">중분류</option>
               <option v-for="category in secondCategories" :key="category.code" :value="category.name">
                 {{ category.name }}
               </option>
             </select>
             <select id="thirdCategory" v-model="selectedThirdCategory">
-              <option value="">선택하세요</option>
+              <option value="">소분류</option>
               <option v-for="category in thirdCategories" :key="category.code" :value="category.name">
                 {{ category.name }}
               </option>
@@ -140,7 +140,7 @@ const filterStatus = ref('');
 const filterColor = ref('');
 const filterSize = ref('');
 
-const firstCategories = ref('');
+const firstCategories = ref([]);
 const secondCategories = ref('');
 const thirdCategories = ref('');
 const selectedFirstCategory = ref('');
@@ -167,7 +167,7 @@ const fetchSecondCategories = async () => {
     return
   }
   try {
-    const response = await fetch(`/api/admin/category/second?categoryFirstCode=${selectedMajorCategory.value}`);
+    const response = await fetch(`/api/admin/category/second?categoryFirstCode=${selectedFirstCategory.value}`);
     if (!response.ok) {
       throw new Error('중분류를 불러오는 데 실패했습니다.');
     }
