@@ -1,7 +1,5 @@
 <template>
-  <div>
-dlksjdkld
-  </div>
+  <router-view></router-view>
 </template>
 
 <script setup>
