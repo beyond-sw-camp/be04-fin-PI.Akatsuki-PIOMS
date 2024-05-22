@@ -1,7 +1,6 @@
-<!-- Breadcrumb.vue -->
 <template>
   <div class="breadcrumbs">
-    <img src="@/assets/icon/List.png" alt="List Icon" class="breadcrumb-icon" />
+    <img src="../../../assets/icon/List.png" alt="List Icon" class="breadcrumb-icon" />
     <span v-for="(crumb, index) in crumbs" :key="index">
       <router-link v-if="crumb.link" :to="crumb.link">{{ crumb.label }}</router-link>
       <span v-else>{{ crumb.label }}</span>
@@ -29,15 +28,22 @@ export default {
   display: flex;
   justify-content: left;
   font-weight: bold;
+  padding: 10px;
+  width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
+
 .breadcrumbs span {
   margin: 0 5px;
 }
+
 .breadcrumbs a {
   color: #000;
   text-decoration: none;
   font-weight: bolder;
 }
+
 .breadcrumbs a:hover {
   text-decoration: underline;
 }
