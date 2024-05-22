@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- Breadcrumb 컴포넌트 추가 -->
     <Breadcrumb :crumbs="breadcrumbs" />
 
     <div class="filter-section">
@@ -36,10 +35,10 @@
     </div>
     <div class="action-buttons">
       <button @click="resetFilters" class="reset-btn">
-        <img src="../../../assets/icon/reset.png" alt="Reset" />
+        <img src="@/assets/icon/reset.png" alt="Reset" />
       </button>
       <button @click="applyFilters" class="search-btn">
-        <img src="../../../assets/icon/search.png" alt="Search" />
+        <img src="@/assets/icon/search.png" alt="Search" />
       </button>
     </div>
     <div class="table-container">
@@ -50,7 +49,7 @@
           <th>문의상태</th>
           <th>문의제목</th>
           <th>작성자</th>
-          <th>가맹점명</th> <!-- 추가된 부분 -->
+          <th>가맹점명</th>
           <th>등록일</th>
           <th>수정일</th>
           <th>답변일</th>
@@ -63,7 +62,7 @@
           <td>{{ ask.askStatus }}</td>
           <td class="boardname">{{ ask.askTitle }}</td>
           <td>{{ ask.franchiseOwnerName }}</td>
-          <td>{{ ask.franchiseName }}</td> <!-- 추가된 부분 -->
+          <td>{{ ask.franchiseName }}</td>
           <td>{{ formatDate(ask.askEnrollDate) }}</td>
           <td>{{ formatDate(ask.askUpdateDate) }}</td>
           <td>{{ formatDate(ask.askCommentDate) }}</td>
@@ -73,7 +72,7 @@
                 :class="{ 'editbutton-pending': ask.askStatus === '답변대기' }"
                 @click="ask.askStatus === '답변대기' ? registerAnswer(ask.askCode) : editAnswer(ask.askCode)"
             >
-              {{ ask.askStatus === '답변대기' ? '답변 작성' : '답변 수정' }}
+              {{ ask.askStatus === '답변대기' ? '답변 작성' : '답변 조회' }}
             </button>
           </td>
         </tr>
@@ -104,7 +103,7 @@ const breadcrumbs = [
 const franchises = ref([
   {code: 1, name: 'PIOMS 신사점'},
   {code: 2, name: 'PIOMS 강남점'},
-  {code: 3, name: 'PIOMS 더현대 서울점'},
+  {code: 3, name: 'PIOMS 더현대서울점'},
   {code: 4, name: 'PIOMS 홍대점'},
   {code: 5, name: 'PIOMS 성수점'},
   {code: 6, name: 'PIOMS 논현점'},
@@ -151,12 +150,12 @@ const formatDate = (dateArray) => {
 };
 
 const openAnswerForm = (askCode, mode) => {
-  const width = 1200;
-  const height = 800;
+  const width = 800;
+  const height = 600;
   const left = (window.screen.width / 2) - (width / 2);
   const top = (window.screen.height / 2) - (height / 2);
   const url = `http://localhost:5173/admin/answerform/${mode}?askCode=${askCode}`;
-  window.open(url, '_blank', `width=${width},height=${height},top=${top},left=${left}`);
+  window.open(url, 'popup', `width=${width},height=${height},top=${top},left=${left},toolbar=no,scrollbars=no,resizable=no`);
 };
 
 // 답변 등록 버튼 클릭 시

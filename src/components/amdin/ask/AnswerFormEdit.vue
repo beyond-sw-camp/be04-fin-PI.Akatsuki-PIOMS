@@ -117,12 +117,12 @@ export default {
 }
 
 .form-wrapper {
-  width: 120%;
+  width: 860px;
   max-width: 1200px;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+  //padding: 20px;
   box-sizing: border-box;
 }
 
@@ -158,16 +158,17 @@ export default {
 }
 
 textarea {
-  width: 860px;
+  width: 838px;
   height: 210px;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
   resize: vertical;
+  font-size: large;
 }
 
 .action-buttons {
-  width: 860px;
+  width: 850px;
   display: flex;
   gap: 10px;
   justify-content: flex-end;
