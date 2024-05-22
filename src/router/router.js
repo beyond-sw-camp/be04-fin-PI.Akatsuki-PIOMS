@@ -10,6 +10,8 @@ import CommonLogin from "@/components/login/CommonLogin.vue";
 import AskMain from "@/components/amdin/ask/AskMain.vue";
 import AnswerFormEdit from "@/components/amdin/ask/AnswerFormEdit.vue";
 
+import Pagination from '@/components/order/pagination.vue';
+
 
 
 
@@ -48,7 +50,14 @@ const routes = [
         path: '/admin/answerform/edit',
         name: 'AnswerFormEdit',
         component: AnswerFormEdit
+    },
+    {
+        path: '/order/list',
+        name: 'orderList',
+        component: Pagination
     }
+
+
 ];
 
 const router = createRouter({
