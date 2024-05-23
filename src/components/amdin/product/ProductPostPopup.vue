@@ -2,7 +2,7 @@
   <div class="popup-overlay" @click.self="closePopup">
     <div class="popup-content">
       <div class="popup-header">
-      <button class="close-button" @click="closePopup">×</button>
+        <button class="close-button" @click="closePopup">×</button>
         <h4>상품 등록</h4>
       </div>
       <div class="popup-body">
@@ -18,24 +18,9 @@
                 <td class="insert-input">
                   <input type="number" id="numberInput" v-model="insertProductCount">
                 </td>
-                <td class="insert-label">최소 알림 수량</td>
-                <td class="insert-input">
-                  <input type="number" id="numberInput" v-model="insertProductCount">
-                </td>
-              </tr>
-              <tr>
-                <td class="insert-label">폐기량</td>
-                <td class="insert-input">
-                  <input type="number" id="numberInput" v-model="insertProductCount">
-                </td>
                 <td class="insert-label">가격</td>
                 <td class="insert-input">
                   <input type="number" id="numberInput" v-model="insertProductPrice">
-                </td>
-
-                <td class="insert-label">본사 총수량</td>
-                <td class="insert-input">
-                  <input type="number" id="numberInput" v-model="insertProductCount">
                 </td>
               </tr>
               <tr>
@@ -83,13 +68,13 @@
               <tr>
                 <td class="second-insert-label">카테고리 구분</td>
                 <td class="second-insert-input">
-                  <select id="firstCategory" v-model="selectedFirstCategory" @change="fetchSecondCategories">
+                  <select id="firstCategory" v-model="selectedFirstCategory" @change="fetchCategories('second')">
                     <option value="">대분류</option>
                     <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">
                       {{ category.categoryFirstName }}
                     </option>
                   </select>
-                  <select class="categories" id="secondCategory" v-model="selectedSecondCategory" @change="fetchThirdCategories">
+                  <select class="categories" id="secondCategory" v-model="selectedSecondCategory" @change="fetchCategories('third')">
                     <option value="">중분류</option>
                     <option v-for="category in secondCategories" :key="category.categorySecondCode" :value="category.categorySecondCode">
                       {{ category.categorySecondName }}
@@ -106,13 +91,13 @@
               <tr>
                 <td class="second-insert-label">상세정보</td>
                 <td class="second-insert-input">
-                  <input type="text" style="width: 100%; height: 100px">
+                  <input type="text" style="width: 99%; height: 150px">
                 </td>
               </tr>
               <tr>
                 <td class="second-insert-label1">
                   <div class="label-content">
-                  이미지<br><h6>(최대 3장)</h6>
+                    이미지<br><h6>(최대 3장)</h6>
                   </div>
                 </td>
                 <td class="second-insert-input1">
@@ -121,8 +106,8 @@
                       <input id="imgUpload" type="file" @change="previewImage" hidden/> <!-- @change 이벤트를 사용하여 파일 선택 시 previewImage 메서드 호출 -->
                       <button v-if="imagePreview !== imageSrc && imgOn" @click="resetImage" class="img-close-button">X</button>
                       <label for="imgUpload">
-                        <img class="img" v-if="!imgOn" src="@/assets/icon/picture.png" />
-                        <img class="img" :src="imagePreview" /> <!-- 이미지 미리보기 -->
+                        <img class="img" v-if="!imgOn" :src="imageSrc" />
+                        <img class="img" v-if="imgOn" :src="imagePreview" /> <!-- 이미지 미리보기 -->
                       </label>
                       <br/>
                     </form>
@@ -133,85 +118,180 @@
           </div>
         </div>
         <button class="action-button" @click="closePopup">취소</button>
+        <button class="post-button" @click="uploadImage">등록</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import {onMounted, defineEmits, ref} from 'vue';
+import { onMounted, defineEmits, ref } from 'vue';
 import imageSrc from '@/assets/icon/picture.png';
 
 const emit = defineEmits(['close']);
+const imagePreview = ref(imageSrc); // 이미지 미리보기 URL
+const imgOn = ref(false);
+const insertProductName = ref('');
+const insertProductCount = ref('');
+const insertProductPrice = ref('');
+const insertStatus = ref('');
+const selectedExposureStatus = ref('');
+const insertColor = ref('');
+const insertSize = ref('');
+const firstCategories = ref([]);
+const secondCategories = ref([]);
+const thirdCategories = ref([]);
+const selectedFirstCategory = ref('');
+const selectedSecondCategory = ref('');
+const selectedThirdCategory = ref('');
 
+const fetchCategories = async (level) => {
+  let url = '';
+  switch (level) {
+    case 'first':
+      url = '/api/admin/category/first';
+      break;
+    case 'second':
+      url = `/api/admin/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`;
+      break;
+    case 'third':
+      url = `/api/admin/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`;
+      break;
+  }
+
+  try {
+    const response = await fetch(url, { method: 'GET' });
+    if (!response.ok) {
+      throw new Error(`${level} 카테고리를 불러오는 데 실패했습니다.`);
+    }
+    const data = await response.json();
+    switch (level) {
+      case 'first':
+        firstCategories.value = data;
+        break;
+      case 'second':
+        secondCategories.value = data;
+        thirdCategories.value = [];
+        selectedSecondCategory.value = '';
+        break;
+      case 'third':
+        thirdCategories.value = data;
+        break;
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+
+// 이미지 초기화 함수
 const resetImage = () => {
   imagePreview.value = imageSrc;
+  imgOn.value = false;
 };
-const imagePreview = ref(null); // 이미지 미리보기 URL
-const imgOn = ref(false);
+
+// 이미지 미리보기 함수
 const previewImage = (event) => {
   const file = event.target.files[0];
   if (file) {
     const reader = new FileReader();
     reader.onload = () => {
       imagePreview.value = reader.result;
+      imgOn.value = true;
     };
     reader.readAsDataURL(file);
-    imgOn.value = true;
   }
 };
 
-const uploadImage = async(status) => {
+// 이미지 업로드 함수
+const uploadImage = async () => {
   const fileInput = document.querySelector('input[type="file"]');
   const file = fileInput.files[0];
-  if(file ==null) {
-    saveEditedFeed("",status);
+  if (!file) {
+    await saveProduct('');
     return;
   }
+
   const formData = new FormData();
   formData.append('file', file);
 
-  await fetch(`/api/admin/product/image`, {
-    method: 'POST',
-    credentials: 'include',
-    body: formData
-  })
-      .then(response => {
-        // 서버 응답을 JSON으로 파싱하지 않음
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        // 응답 반환
-        return response.json();
-      })
-      .then(data => {
-        console.log('Image URL:', data);
-        saveEditedFeed(data.imgUrl,status);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+  try {
+    const response = await fetch(`/api/admin/product/image`, {
+      method: 'POST',
+      credentials: 'include',
+      body: formData
+    });
+
+    if (!response.ok) {
+      throw new Error('이미지 업로드에 실패했습니다.');
+    }
+
+    const data = await response.json();
+    console.log('이미지 URL:', data);
+    await saveProduct(data.imgUrl);
+  } catch (error) {
+    console.error('오류:', error);
+  }
 };
-function closePopup() {
+
+// 상품 저장 함수
+const saveProduct = async (imageUrl) => {
+  const requestData = {
+    productName: insertProductName.value,
+    productCount: insertProductCount.value,
+    productPrice: insertProductPrice.value,
+    productStatus: insertStatus.value,
+    productExposureStatus: selectedExposureStatus.value,
+    productColor: insertColor.value,
+    productSize: insertSize.value,
+    categoryFirstCode: selectedFirstCategory.value,
+    categorySecondCode: selectedSecondCategory.value,
+    categoryThirdCode: selectedThirdCategory.value,
+    imageUrl: imageUrl
+  };
+
+  try {
+    const response = await fetch('/api/admin/product/create?requesterAdminCode=1', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestData)
+    });
+
+    if (!response.ok) {
+      throw new Error('상품 등록에 실패했습니다.');
+    }
+
+    console.log('상품이 성공적으로 등록되었습니다.');
+    emit('close'); // 팝업 닫기
+  } catch (error) {
+    console.error('오류:', error);
+  }
+};
+
+// 팝업 닫기 함수
+const closePopup = () => {
   emit('close');
-}
+};
 
-
+// 숫자 입력 제약 설정
 onMounted(() => {
-  const numberInput = document.getElementById('numberInput');
-  if (numberInput) {
-    numberInput.addEventListener('keypress', (event) => {
+  const numberInputs = document.querySelectorAll('input[type="number"]');
+  numberInputs.forEach(input => {
+    input.addEventListener('keypress', (event) => {
       if (event.key.length === 1 && !/\d/.test(event.key)) {
         event.preventDefault();
       }
     });
 
-    numberInput.addEventListener('input', (event) => {
-      numberInput.value = numberInput.value.replace(/[^0-9]/g, '');
+    input.addEventListener('input', (event) => {
+      input.value = input.value.replace(/[^0-9]/g, '');
     });
-  }
-});
+  });
 
+  // 최초 카테고리 로드
+  fetchCategories('first');
+});
 </script>
 
 <style scoped>
@@ -325,6 +405,7 @@ h2 {
   text-align: left;
   border: 1px solid lightgray;
   border-right: none;
+  height: 30px;
 
 }
 .second-insert-table {
