@@ -95,8 +95,8 @@
         </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost">
-            <td v-for="(header, colIndex) in headers" :key="colIndex" @click="showDetailPopup(item[header.key])">
+          <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost" @click="openDetailPopup(item)">
+            <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">
               {{item[header.key]}}
             </td>
           </tr>
@@ -195,8 +195,6 @@ const fetchThirdCategories = async () => {
   }
 };
 
-import { defineEmits } from 'vue';
-
 const applyFilters = () => {
   filteredLists.value = lists.value.filter(list => {
     const matchesExposureStatus = selectedExposureStatus.value === '전체' || list.productExposureStatus === (selectedExposureStatus.value === '노출');
@@ -221,6 +219,13 @@ const resetFilters = () => {
 };
 
 const showPostPopup = ref(false);
+const openDetailPopup = (item) => {
+  // 클릭한 아이템 정보 확인을 위한 예시
+  console.log(item);
+
+  // 팝업을 열기 위해 showPostPopup 변수를 true로 변경
+  openDetailPopup.value = true;
+};
 const getMemberId = async () => {
   try {
     const response = await fetch('/api/admin/product', {
@@ -395,7 +400,6 @@ fetchThirdCategories();
   table-layout: fixed;
 }
 
-
 .header1 {
   background-color: #D9D9D9;
   font-weight: bold;
@@ -411,10 +415,11 @@ fetchThirdCategories();
 .allpost {
   text-align: center;
   padding: 10px 0;
+  width: 5%;
 }
 
-.allpost {
-  width: 5%;
+.allpost:hover {
+  background-color: #f2f2f2;
 }
 
 .allpost td {

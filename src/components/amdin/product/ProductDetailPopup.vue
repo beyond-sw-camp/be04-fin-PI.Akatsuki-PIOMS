@@ -1,14 +1,20 @@
 <template>
-  <!-- 팝업을 표시할 div 요소 -->
-  <div v-if="showPopup" class="popup-container">
-    <!-- 팝업 내용 -->
-    <div class="popup-content">
-      <!-- 팝업 내용 -->
-      <h2>팝업 내용</h2>
-      <p>팝업에 표시할 내용을 여기에 추가하세요.</p>
-
-      <!-- 닫기 버튼 -->
-      <button @click="closePopup">닫기</button>
-    </div>
-  </div>
+    <ProductPostPopup v-if="openDetailPopup" @close="openDetailPopup = false" :item="selectedItem" />
 </template>
+
+<script setup>
+// 기존 코드는 여기에 있음
+
+import ProductPostPopup from "@/components/amdin/product/ProductPostPopup.vue";
+
+const selectedItem = ref(null);
+
+const openDetailPopup = (item) => {
+  // 클릭한 아이템 정보 확인을 위한 예시
+  console.log(item);
+
+  // 팝업을 열기 위해 showPostPopup 변수를 true로 변경
+  selectedItem.value = item;
+  openDetailPopup.value = true;
+};
+</script>
