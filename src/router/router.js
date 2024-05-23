@@ -11,6 +11,7 @@ import AnswerFormEdit from "@/components/amdin/ask/AnswerFormEdit.vue";
 
 import OrderPage from '@/components/order/orderPage.vue';
 
+import ExchangePage from '@/components/exchange/exchangePage.vue';
 
 
 
@@ -59,9 +60,12 @@ const routes = [
         path: '',
         name: 'AdminProductList11',
         component: ProductList
+    },
+    {
+        path: '/exchange/list',
+        name: 'exchangeList',
+        component: ExchangePage
     }
-
-
 ];
 import ProductList from "@/components/amdin/product/ProductList.vue";
 

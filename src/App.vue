@@ -2,7 +2,7 @@
  <router-view></router-view>
 
     <main>
-  <ProductList11/>
+  <!-- <ProductList11/> -->
     </main>
 </template>
 
