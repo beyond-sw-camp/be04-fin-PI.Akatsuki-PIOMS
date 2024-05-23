@@ -16,17 +16,17 @@
                 </td>
                 <td class="insert-label">재고량</td>
                 <td class="insert-input">
-                  <input type="number" id="numberInput" v-model="insertProductCount">
+                  <input type="number" v-model="insertProductCount">
                 </td>
                 <td class="insert-label">가격</td>
                 <td class="insert-input">
-                  <input type="number" id="numberInput" v-model="insertProductPrice">
+                  <input type="number" v-model="insertProductPrice">
                 </td>
               </tr>
               <tr>
                 <td class="insert-label">상품상태</td>
                 <td class="insert-input">
-                  <select id="insertStatus" v-model="insertStatus">
+                  <select v-model="insertStatus">
                     <option value="공급가능">공급가능</option>
                     <option value="일시제한">일시제한</option>
                     <option value="단종">단종</option>
@@ -35,14 +35,14 @@
                 </td>
                 <td class="insert-label">상품노출상태</td>
                 <td class="insert-input">
-                  <select id="selectedExposureStatus" v-model="selectedExposureStatus">
-                    <option value="노출">노출</option>
-                    <option value="미노출">미노출</option>
+                  <select v-model="selectedExposureStatus">
+                    <option value="true">노출</option>
+                    <option value="false">미노출</option>
                   </select>
                 </td>
                 <td class="insert-label">색상</td>
                 <td class="insert-input">
-                  <select id="insertColor" v-model="insertColor">
+                  <select v-model="insertColor">
                     <option value="빨간색">빨간색</option>
                     <option value="주황색">주황색</option>
                     <option value="노란색">노란색</option>
@@ -54,7 +54,7 @@
                 </td>
                 <td class="insert-label">사이즈</td>
                 <td class="insert-input">
-                  <select id="insertSize" v-model="insertSize">
+                  <select v-model="insertSize">
                     <option value="90">90</option>
                     <option value="95">95</option>
                     <option value="100">100</option>
@@ -68,19 +68,19 @@
               <tr>
                 <td class="second-insert-label">카테고리 구분</td>
                 <td class="second-insert-input">
-                  <select id="firstCategory" v-model="selectedFirstCategory" @change="fetchCategories('second')">
+                  <select v-model="selectedFirstCategory" @change="fetchCategories('second')">
                     <option value="">대분류</option>
                     <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">
                       {{ category.categoryFirstName }}
                     </option>
                   </select>
-                  <select class="categories" id="secondCategory" v-model="selectedSecondCategory" @change="fetchCategories('third')">
+                  <select class="categories" v-model="selectedSecondCategory" @change="fetchCategories('third')">
                     <option value="">중분류</option>
                     <option v-for="category in secondCategories" :key="category.categorySecondCode" :value="category.categorySecondCode">
                       {{ category.categorySecondName }}
                     </option>
                   </select>
-                  <select class="categories" id="thirdCategory" v-model="selectedThirdCategory">
+                  <select class="categories" v-model="selectedThirdCategory">
                     <option value="">소분류</option>
                     <option v-for="category in thirdCategories" :key="category.categoryThirdCode" :value="category.categoryThirdCode">
                       {{ category.categoryThirdName }}
@@ -91,25 +91,26 @@
               <tr>
                 <td class="second-insert-label">상세정보</td>
                 <td class="second-insert-input">
-                  <input type="text" style="width: 99%; height: 150px">
+                  <input type="text" style="width: 99%; height: 150px" v-model="insertContent">
                 </td>
               </tr>
               <tr>
                 <td class="second-insert-label1">
                   <div class="label-content">
-                    이미지<br><h6>(최대 3장)</h6>
+                    이미지<br>
+                    <h6>(최대 3장)</h6>
                   </div>
                 </td>
                 <td class="second-insert-input1">
                   <div class="imgForm">
                     <form @submit.prevent="uploadImage">
-                      <input id="imgUpload" type="file" @change="previewImage" hidden/> <!-- @change 이벤트를 사용하여 파일 선택 시 previewImage 메서드 호출 -->
+                      <input id="imgUpload" type="file" @change="previewImage" hidden /> <!-- @change 이벤트를 사용하여 파일 선택 시 previewImage 메서드 호출 -->
                       <button v-if="imagePreview !== imageSrc && imgOn" @click="resetImage" class="img-close-button">X</button>
                       <label for="imgUpload">
                         <img class="img" v-if="!imgOn" :src="imageSrc" />
                         <img class="img" v-if="imgOn" :src="imagePreview" /> <!-- 이미지 미리보기 -->
                       </label>
-                      <br/>
+                      <br />
                     </form>
                   </div>
                 </td>
@@ -118,7 +119,7 @@
           </div>
         </div>
         <button class="action-button" @click="closePopup">취소</button>
-        <button class="post-button" @click="uploadImage">등록</button>
+        <button class="post-button" @click="saveProduct">등록</button>
       </div>
     </div>
   </div>
@@ -129,22 +130,23 @@ import { onMounted, defineEmits, ref } from 'vue';
 import imageSrc from '@/assets/icon/picture.png';
 
 const emit = defineEmits(['close']);
-const imagePreview = ref(imageSrc); // 이미지 미리보기 URL
+const imagePreview = ref(imageSrc);
 const imgOn = ref(false);
 const insertProductName = ref('');
 const insertProductCount = ref('');
 const insertProductPrice = ref('');
 const insertStatus = ref('');
-const selectedExposureStatus = ref('');
+const selectedExposureStatus = ref('true'); // 초기값을 boolean으로 설정
 const insertColor = ref('');
 const insertSize = ref('');
+const insertContent = ref('');
 const firstCategories = ref([]);
 const secondCategories = ref([]);
 const thirdCategories = ref([]);
 const selectedFirstCategory = ref('');
 const selectedSecondCategory = ref('');
 const selectedThirdCategory = ref('');
-
+let imageUrl = ''; // 이미지 URL을 저장할 변수 추가
 const fetchCategories = async (level) => {
   let url = '';
   switch (level) {
@@ -182,17 +184,14 @@ const fetchCategories = async (level) => {
     console.error('Error:', error);
   }
 };
-
-// 이미지 초기화 함수
 const resetImage = () => {
   imagePreview.value = imageSrc;
   imgOn.value = false;
 };
 
-// 이미지 미리보기 함수
 const previewImage = (event) => {
   const file = event.target.files[0];
-  if (file) {
+  if(file) {
     const reader = new FileReader();
     reader.onload = () => {
       imagePreview.value = reader.result;
@@ -201,13 +200,11 @@ const previewImage = (event) => {
     reader.readAsDataURL(file);
   }
 };
-
-// 이미지 업로드 함수
 const uploadImage = async () => {
   const fileInput = document.querySelector('input[type="file"]');
   const file = fileInput.files[0];
   if (!file) {
-    await saveProduct('');
+    await saveProduct(''); // 이미지가 없는 경우 saveProduct 호출
     return;
   }
 
@@ -227,12 +224,14 @@ const uploadImage = async () => {
 
     const data = await response.json();
     console.log('이미지 URL:', data);
-    await saveProduct(data.imgUrl);
+    imageUrl = data.imgUrl; // 이미지 URL 저장
+    await saveProduct(imageUrl); // saveProduct 호출 시 이미지 URL 전달
   } catch (error) {
     console.error('오류:', error);
   }
 };
 
+// 상품 저장 함수
 // 상품 저장 함수
 const saveProduct = async (imageUrl) => {
   const requestData = {
@@ -240,14 +239,17 @@ const saveProduct = async (imageUrl) => {
     productCount: insertProductCount.value,
     productPrice: insertProductPrice.value,
     productStatus: insertStatus.value,
-    productExposureStatus: selectedExposureStatus.value,
+    productExposureStatus: selectedExposureStatus.value === 'true', // 문자열을 boolean으로 변환
     productColor: insertColor.value,
     productSize: insertSize.value,
+    productContent: insertContent.value,
     categoryFirstCode: selectedFirstCategory.value,
     categorySecondCode: selectedSecondCategory.value,
     categoryThirdCode: selectedThirdCategory.value,
-    imageUrl: imageUrl
+    url: imageUrl // 이미지 URL 추가
   };
+
+  console.log('Request Data:', requestData);
 
   try {
     const response = await fetch('/api/admin/product/create?requesterAdminCode=1', {
@@ -259,7 +261,8 @@ const saveProduct = async (imageUrl) => {
     });
 
     if (!response.ok) {
-      throw new Error('상품 등록에 실패했습니다.');
+      const errorText = await response.text();
+      throw new Error(`상품 등록에 실패했습니다. 상태 코드: ${response.status}, 메시지: ${errorText}`);
     }
 
     console.log('상품이 성공적으로 등록되었습니다.');
@@ -437,7 +440,7 @@ h2 {
 
 }
 .second-insert-input {
-  width: 500px;
+  width: 1400px;
   border: 1px solid lightgray;
   border-right: none;
 }
