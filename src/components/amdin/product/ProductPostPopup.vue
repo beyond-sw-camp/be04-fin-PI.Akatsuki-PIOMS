@@ -18,6 +18,27 @@
                 <td class="insert-input">
                   <input type="number" id="numberInput" v-model="insertProductCount">
                 </td>
+                <td class="insert-label">최소 알림 수량</td>
+                <td class="insert-input">
+                  <input type="number" id="numberInput" v-model="insertProductCount">
+                </td>
+              </tr>
+              <tr>
+                <td class="insert-label">폐기량</td>
+                <td class="insert-input">
+                  <input type="number" id="numberInput" v-model="insertProductCount">
+                </td>
+                <td class="insert-label">가격</td>
+                <td class="insert-input">
+                  <input type="number" id="numberInput" v-model="insertProductPrice">
+                </td>
+
+                <td class="insert-label">본사 총수량</td>
+                <td class="insert-input">
+                  <input type="number" id="numberInput" v-model="insertProductCount">
+                </td>
+              </tr>
+              <tr>
                 <td class="insert-label">상품상태</td>
                 <td class="insert-input">
                   <select id="insertStatus" v-model="insertStatus">
@@ -27,9 +48,6 @@
                     <option value="품절">품절</option>
                   </select>
                 </td>
-
-              </tr>
-              <tr>
                 <td class="insert-label">상품노출상태</td>
                 <td class="insert-input">
                   <select id="selectedExposureStatus" v-model="selectedExposureStatus">
@@ -58,30 +76,6 @@
                     <option value="105">105</option>
                     <option value="110">110</option>
                   </select>
-                </td>
-              </tr>
-              <tr>
-                <td class="insert-label">재고량</td>
-                <td class="insert-input">
-                  <input type="number" id="numberInput" v-model="insertProductCount">
-                </td>
-                <td class="insert-label">재고량</td>
-                <td class="insert-input">
-                  <input type="number" id="numberInput" v-model="insertProductCount">
-                </td>
-                <td class="insert-label">재고량</td>
-                <td class="insert-input">
-                  <input type="number" id="numberInput" v-model="insertProductCount">
-                </td>
-              </tr>
-              <tr>
-                <td class="insert-label">재고량</td>
-                <td class="insert-input">
-                  <input type="number" id="numberInput" v-model="insertProductCount">
-                </td>
-                <td class="insert-label">재고량</td>
-                <td class="insert-input">
-                  <input type="number" id="numberInput" v-model="insertProductCount">
                 </td>
               </tr>
             </table>
@@ -201,6 +195,7 @@ const uploadImage = async(status) => {
 function closePopup() {
   emit('close');
 }
+
 
 onMounted(() => {
   const numberInput = document.getElementById('numberInput');
@@ -365,10 +360,7 @@ h2 {
   border: 1px solid lightgray;
   border-right: none;
 }
-.insert-photo-btn {
-  width: 200px;
-  height: 100px;
-}
+
 .label-content h6 {
   margin: 0;
 }
