@@ -59,13 +59,13 @@
                 {{ category.categoryFirstName }}
               </option>
             </select>
-            <select id="secondCategory" v-model="selectedSecondCategory" @change="fetchThirdCategories">
+            <select class="categories" id="secondCategory" v-model="selectedSecondCategory" @change="fetchThirdCategories">
               <option value="">중분류</option>
               <option v-for="category in secondCategories" :key="category.categorySecondCode" :value="category.categorySecondCode">
                 {{ category.categorySecondName }}
               </option>
             </select>
-            <select id="thirdCategory" v-model="selectedThirdCategory">
+            <select class="categories" id="thirdCategory" v-model="selectedThirdCategory">
               <option value="">소분류</option>
               <option v-for="category in thirdCategories" :key="category.categoryThirdCode" :value="category.categoryThirdCode">
                 {{ category.categoryThirdName }}
@@ -83,10 +83,9 @@
         <img src="@/assets/icon/search.png" alt="Search" />
       </button>
     </div>
-    <div>
-      <button @click="postProduct">
-        등록하기
-      </button>
+    <div id="app">
+      <button @click="showPopup = true">등록하기</button>
+      <ProductDetailPopup v-if="showPopup" @close="showPopup = false" />
     </div>
     <div class="table-container">
       <table class="table">
@@ -117,6 +116,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import ProductDetailPopup from "@/components/amdin/product/ProductPostPopup.vue";
 
 const lists = ref([]);
 const headers = ref([
@@ -195,9 +195,7 @@ const fetchThirdCategories = async () => {
   }
 };
 
-const postProduct = (productCode) => {
-
-}
+import { defineEmits } from 'vue';
 
 const applyFilters = () => {
   filteredLists.value = lists.value.filter(list => {
@@ -221,6 +219,8 @@ const resetFilters = () => {
   selectedThirdCategory.value = '';
   filteredLists.value = lists.value;
 };
+
+const showPopup = ref(false);
 
 const getMemberId = async () => {
   try {
@@ -406,5 +406,9 @@ fetchThirdCategories();
 
 .allpost td {
   border-right: 1px solid #ddd;
+}
+
+.categories {
+  margin-left: 2%;
 }
 </style>
