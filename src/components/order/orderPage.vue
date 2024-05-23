@@ -21,6 +21,15 @@
           오래된순 <input type="radio" value="old" name="dateOrder" v-model="dateFilter" @change="applyFilter">
         </label>
       </div>
+      <div class="radio-group">
+        <div class="title"><label>날짜</label></div>
+        <label> 승인대기 <input type="radio" value="승인대기" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
+        <label> 승인완료 <input type="radio" value="승인완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
+        <label> 승인거부 <input type="radio" value="승인거부" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
+        <label> 검수대기 <input type="radio" value="검수대기" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
+        <label> 검수완료 <input type="radio" value="검수완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
+      </div>
+
       <!-- <select v-model="dateFilter" @change="applyFilter">
         <option value="">날짜 순서</option>
         <option value="recent">최근순</option>
