@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="create-button" >
-      <input type="button" value="발주하기" @click="showPopup" style="  cursor : pointer;">
-    </div>
+
+    <input class="create-button" type="button" value="발주하기" @click="showPopup" style="  cursor : pointer;">
+
 
     <popup v-if="createPopup" :showPopup="showPopup" :popupVisible="createPopup"/>
     <OrderDetail v-if="createDetailPopup" :showDetailPopup="showDetailPopup" :popupVisible="createDetailPopup" :detailItem="detailItem"/>
@@ -221,4 +221,16 @@ button {
 .highlighted {
   background-color: yellow;
 }
+
+
+.create-button{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100px;
+  height: 50px;
+  background-color: #d9d9d9;
+}
+
+
+
 </style>

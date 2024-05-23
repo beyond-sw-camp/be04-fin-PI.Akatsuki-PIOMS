@@ -5,8 +5,8 @@
         
         <h2 align="center">발주서 생성</h2>
         <br /><br /><br />
-        <div>
-          <input v-model="filter" placeholder="검색어를 입력하세요" @input="applyFilter" />
+        
+      <input v-model="filter" placeholder="검색어를 입력하세요" @input="applyFilter" />
           <select v-model="conditionFilter" @change="applyFilter">
             <option value="">주문 상태</option>
             <option value="공급가능">공급가능</option>
@@ -14,28 +14,22 @@
             <option value="단종">단종</option>
             <option value="품절">품절</option>
           </select>
+
+      <div class="table-wrapper">
           <table>
             <thead>
               <tr>
-                <th>상품 코드</th>
-                <th>상품 이름</th>
-                <th>상품 가격</th>
-                <th>본사 수량</th>
-                <th>상품 상태</th>
-                <th>색상</th>
-                <th>상품 설명</th>
-                <th>상품카테고리</th>
-                <th>성별</th>
+                <th>상품 코드</th><th>상품 이름</th><th>상품 가격</th><th>본사 수량</th><th>상품 상태</th><th>색상</th><th>상품 설명</th><th>상품카테고리</th><th>성별</th>
               </tr>
             </thead>
+
             <tbody>
               <tr v-for="(product, index) in filteredLists" :key="index" 
                   :id="'row-' + index"
                   @dblclick="addProductToList(product)" 
                   @mouseenter="highlightRow(index)"
                   @mouseleave="resetRowColor(index)"
-                  style="  cursor : pointer;"
-                  >
+                  style="cursor: pointer;">
                 <td>{{ product.productCode }}</td>
                 <td>{{ product.productName }}</td>
                 <td>{{ product.productPrice }}원</td>
@@ -49,9 +43,9 @@
             </tbody>
           </table>
         </div>
-        <br />
+        <br>
         <h3>선택된 상품 리스트</h3>
-        <div></div>
+        <div class="table-wrapper2">
         <table>
           <thead>
             <tr>
@@ -70,15 +64,16 @@
             <td><button @click="removeProductFromList(index)">취소</button></td>
           </tr>
         </table>
-        <p v-if="totalPrice > 0">총 가격: {{ totalPrice }}원</p>
       </div>
+        <p v-if="totalPrice > 0">총 가격: {{ totalPrice }}원</p>
       <button @click="exportOrder">발주신청하기</button>
+      </div>
     </div>
     
 
   </template>
   
-  <script setup>
+<script setup>
   import { ref } from "vue";
   
   const props = defineProps({
@@ -111,6 +106,7 @@
   
   const getProducts = async () => {
     try {
+
       const response = await fetch("/api/franchise/product", {
         method: "GET",
       });
@@ -121,6 +117,7 @@
       products.value = data.map(({ orderProductList, ...rest }) => ({ ...rest, quantity: 1 }));
       filteredLists.value = products.value;
       console.log(products);
+      
     } catch (error) {
       console.error("오류 발생:", error);
     }
@@ -162,19 +159,20 @@
     acc[product.productCode] = product.quantity;
     return acc;
   }, {});
+
   const orderData = {
     products: productsData,
     franchiseCode: 1 // 실제 프랜차이즈 코드를 사용 예정
   };
+
   try {
     const response = await fetch("/api/franchise/1/order", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(orderData)
-    });
-    
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(orderData)
+      });
     if (response.status == 406) {
       alert("생각은 하셨나요? 신청 재고량 너무 많거나, 이미 승인 대기중인 발주가 존재합니다.");
       props.showPopup();
@@ -198,7 +196,7 @@
   </script>
   
   <style scoped>
-  /* 수정 팝업 스타일 */
+  
   .popup-overlay {
     position: fixed;
     top: 0;
@@ -339,6 +337,21 @@
   
   .highlighted {
     background-color: hotpink;
+  }
+
+  .table-wrapper {
+    width: 80%;
+    max-height: 500px; /* 원하는 높이로 설정 */
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+  .table-wrapper2 {
+    width: 80%;
+    max-height: 200px; /* 원하는 높이로 설정 */
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
   }
   </style>
   
