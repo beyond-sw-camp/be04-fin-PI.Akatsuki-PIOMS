@@ -99,9 +99,24 @@
                   </div>
                 </td>
                 <td class="second-insert-input1">
-                  <!-- 파일 업로드를 위한 파일 입력(input type="file") -->
-                  <input type="file" ref="fileInput" style="display: none" @change="handleFileUpload">
-                  <button class="insert-photo-btn" @click="openFileInput">사진 업로드</button>
+<!--                  <div class="div-image">-->
+<!--                    <label for="imageInput">-->
+<!--                      <img :src="imageUrl" alt="Select Image">-->
+<!--                    </label>-->
+<!--                    <input type="file" id="imageInput" style="display: none" @change="handleImageChange">-->
+<!--                  </div>-->
+                  <div class="imgForm">
+                    <form @submit.prevent="uploadImage">
+                      <input id="imgUpload" type="file" @change="previewImage" hidden/> <!-- @change 이벤트를 사용하여 파일 선택 시 previewImage 메서드 호출 -->
+                      <button v-if="imagePreview !== imageSrc" @click="resetImage">X</button>
+                      <label for="imgUpload">
+                        <img class="img" v-if="!imgOn" src="@/assets/icon/picture.png" />
+                        <img class="img" :src="imagePreview" /> <!-- 이미지 미리보기 -->
+                      </label>
+                      <!-- <img class="imgPrev" :src="imagePreview" /> 이미지 미리보기 -->
+                      <br/>
+                    </form>
+                  </div>
                 </td>
               </tr>
             </table>
@@ -114,10 +129,72 @@
 </template>
 
 <script setup>
-import { onMounted, defineEmits } from 'vue';
+import {onMounted, defineEmits, ref} from 'vue';
+import imageSrc from '@/assets/icon/picture.png';
 
 const emit = defineEmits(['close']);
+//
+// let selectedImage = null;
+//
+// const handleImageChange = (event) => {
+//   const file = event.target.files[0];
+//   if (file) {
+//     const reader = new FileReader();
+//     reader.onload = () => {
+//       imageUrl.value = reader.result;
+//       selectedImage = file;
+//     };
+//     reader.readAsDataURL(file);
+//   }
+// };
+const resetImage = () => {
+  imagePreview.value = imageSrc;
+};
+const imagePreview = ref(null); // 이미지 미리보기 URL
+const imgOn = ref(false);
+const previewImage = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      imagePreview.value = reader.result;
+    };
+    reader.readAsDataURL(file);
+    imgOn.value = true;
+  }
+};
 
+const uploadImage = async(status) => {
+  const fileInput = document.querySelector('input[type="file"]');
+  const file = fileInput.files[0];
+  if(file ==null) {
+    saveEditedFeed("",status);
+    return;
+  }
+  const formData = new FormData();
+  formData.append('file', file);
+
+  await fetch(`/api/admin/product/image`, {
+    method: 'POST',
+    credentials: 'include',
+    body: formData
+  })
+      .then(response => {
+        // 서버 응답을 JSON으로 파싱하지 않음
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        // 응답 반환
+        return response.json();
+      })
+      .then(data => {
+        console.log('Image URL:', data);
+        saveEditedFeed(data.imgUrl,status);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+};
 function closePopup() {
   emit('close');
 }
@@ -266,6 +343,7 @@ h2 {
 }
 .second-insert-table td {
   padding: 5px 10px;
+  text-align: left;
 }
 .categories {
   margin-left: 2%;
@@ -282,7 +360,6 @@ h2 {
   width: 500px;
   border: 1px solid lightgray;
   border-right: none;
-  text-align: center;
 }
 .insert-photo-btn {
   width: 200px;
@@ -298,5 +375,8 @@ h2 {
   height: 300px;
   background-color: #D9D9D9;
   border: 1px solid #ddd;
+}
+.imgForm {
+  text-align: center;
 }
 </style>
