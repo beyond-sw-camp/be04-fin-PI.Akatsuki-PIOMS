@@ -192,7 +192,7 @@
   }, {});
 
   const orderData = {
-    products: productsData,
+    // products: productsData,
     franchiseCode: 1 // 실제 프랜차이즈 코드를 사용 예정
   };
 
