@@ -5,7 +5,7 @@
 <!--      <Breadcrumb :crumbs="breadcrumbs" />-->
 <!--      <AskMain/>-->
 <!--<CategoryList/>-->
-  <ProductList11/>
+  <ProductList/>
     </main>
 </template>
 
@@ -13,7 +13,7 @@
 // import AskMain from "@/components/amdin/ask/AskMain.vue";
 // import Breadcrumb from "@/components/amdin/ask/Breadcrumb.vue";
 // import CategoryList from "@/components/amdin/Category/CategoryList.vue";
-import ProductList11 from "@/components/amdin/product/ProductList.vue";
+import ProductList from "@/components/amdin/product/ProductList.vue";
 
 </script>
 
