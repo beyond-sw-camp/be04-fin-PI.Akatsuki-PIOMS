@@ -51,7 +51,6 @@ const routes = [
         component: AnswerFormEdit
     },
     {
-
         path: '/order/list',
         name: 'orderList',
         component: OrderPage
