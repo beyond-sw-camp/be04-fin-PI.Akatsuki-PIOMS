@@ -104,11 +104,11 @@
                 <td class="second-insert-input1">
                   <div class="imgForm">
                     <form @submit.prevent="uploadImage">
-                      <input id="imgUpload" type="file" @change="previewImage" hidden /> <!-- @change 이벤트를 사용하여 파일 선택 시 previewImage 메서드 호출 -->
+                      <input id="imgUpload" type="file" @change="previewImage" hidden />
                       <button v-if="imagePreview !== imageSrc && imgOn" @click="resetImage" class="img-close-button">X</button>
                       <label for="imgUpload">
                         <img class="img" v-if="!imgOn" :src="imageSrc" />
-                        <img class="img" v-if="imgOn" :src="imagePreview" /> <!-- 이미지 미리보기 -->
+                        <img class="img" v-if="imgOn" :src="imagePreview" />
                       </label>
                       <br />
                     </form>
@@ -136,7 +136,7 @@ const insertProductName = ref('');
 const insertProductCount = ref('');
 const insertProductPrice = ref('');
 const insertStatus = ref('');
-const selectedExposureStatus = ref('true'); // 초기값을 boolean으로 설정
+const selectedExposureStatus = ref('true');
 const insertColor = ref('');
 const insertSize = ref('');
 const insertContent = ref('');
@@ -146,7 +146,7 @@ const thirdCategories = ref([]);
 const selectedFirstCategory = ref('');
 const selectedSecondCategory = ref('');
 const selectedThirdCategory = ref('');
-let imageUrl = ''; // 이미지 URL을 저장할 변수 추가
+let imageUrl = '';
 const fetchCategories = async (level) => {
   let url = '';
   switch (level) {
@@ -204,7 +204,7 @@ const uploadImage = async () => {
   const fileInput = document.querySelector('input[type="file"]');
   const file = fileInput.files[0];
   if (!file) {
-    await saveProduct(''); // 이미지가 없는 경우 saveProduct 호출
+    await saveProduct('');
     return;
   }
 
@@ -224,29 +224,27 @@ const uploadImage = async () => {
 
     const data = await response.json();
     console.log('이미지 URL:', data);
-    imageUrl = data.imgUrl; // 이미지 URL 저장
-    await saveProduct(imageUrl); // saveProduct 호출 시 이미지 URL 전달
+    imageUrl = data.imgUrl;
+    await saveProduct(imageUrl);
   } catch (error) {
     console.error('오류:', error);
   }
 };
 
-// 상품 저장 함수
-// 상품 저장 함수
 const saveProduct = async (imageUrl) => {
   const requestData = {
     productName: insertProductName.value,
     productCount: insertProductCount.value,
     productPrice: insertProductPrice.value,
     productStatus: insertStatus.value,
-    productExposureStatus: selectedExposureStatus.value === 'true', // 문자열을 boolean으로 변환
+    productExposureStatus: selectedExposureStatus.value === 'true',
     productColor: insertColor.value,
     productSize: insertSize.value,
     productContent: insertContent.value,
     categoryFirstCode: selectedFirstCategory.value,
     categorySecondCode: selectedSecondCategory.value,
     categoryThirdCode: selectedThirdCategory.value,
-    url: imageUrl // 이미지 URL 추가
+    url: imageUrl
   };
 
   console.log('Request Data:', requestData);
@@ -266,18 +264,16 @@ const saveProduct = async (imageUrl) => {
     }
 
     console.log('상품이 성공적으로 등록되었습니다.');
-    emit('close'); // 팝업 닫기
+    emit('close');
   } catch (error) {
     console.error('오류:', error);
   }
 };
 
-// 팝업 닫기 함수
 const closePopup = () => {
   emit('close');
 };
 
-// 숫자 입력 제약 설정
 onMounted(() => {
   const numberInputs = document.querySelectorAll('input[type="number"]');
   numberInputs.forEach(input => {
@@ -292,7 +288,6 @@ onMounted(() => {
     });
   });
 
-  // 최초 카테고리 로드
   fetchCategories('first');
 });
 </script>
