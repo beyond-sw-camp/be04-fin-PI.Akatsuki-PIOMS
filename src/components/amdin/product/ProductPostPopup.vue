@@ -204,7 +204,7 @@ const uploadImage = async () => {
   const fileInput = document.querySelector('input[type="file"]');
   const file = fileInput.files[0];
   if (!file) {
-    await saveProduct('');
+    await saveProduct(''); // 이미지가 없는 경우 saveProduct 호출
     return;
   }
 
@@ -224,8 +224,8 @@ const uploadImage = async () => {
 
     const data = await response.json();
     console.log('이미지 URL:', data);
-    imageUrl = data.imgUrl;
-    await saveProduct(imageUrl);
+    imageUrl = data.imgUrl; // 이미지 URL 저장
+    await saveProduct(imageUrl); // saveProduct 호출 시 이미지 URL 전달
   } catch (error) {
     console.error('오류:', error);
   }
@@ -244,7 +244,7 @@ const saveProduct = async (imageUrl) => {
     categoryFirstCode: selectedFirstCategory.value,
     categorySecondCode: selectedSecondCategory.value,
     categoryThirdCode: selectedThirdCategory.value,
-    url: imageUrl
+    url: imageUrl // 이미지 URL 추가
   };
 
   console.log('Request Data:', requestData);
