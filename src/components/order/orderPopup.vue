@@ -15,14 +15,18 @@
 
           <div class="radio-group">
             <div class="title"><label>상품상태</label></div>
+
             <label>
-              공급가능 <input type="radio" value="공급가능" name="dateOrder" v-model="conditionFilter" @change="applyFilter" checked>
+              전체 <input type="radio" value="" name="dateOrder" v-model="conditionFilter" @change="applyFilter" checked>
             </label>
             <label>
-              일시제한 <input type="radio" value="일시제한" name="dateOrder" v-model="conditionFilter" @change="applyFilter" checked>
+              공급가능 <input type="radio" value="공급가능" name="dateOrder" v-model="conditionFilter" @change="applyFilter" >
             </label>
             <label>
-              단종 <input type="radio" value="단종" name="dateOrder" v-model="conditionFilter" @change="applyFilter" checked>
+              일시제한 <input type="radio" value="일시제한" name="dateOrder" v-model="conditionFilter" @change="applyFilter" >
+            </label>
+            <label>
+              단종 <input type="radio" value="단종" name="dateOrder" v-model="conditionFilter" @change="applyFilter" >
             </label>
             <label>
               품절 <input type="radio" value="품절" name="dateOrder" v-model="conditionFilter" @change="applyFilter">
@@ -111,6 +115,10 @@
   const filteredLists = ref([]);
   
   const applyFilter = () => {
+    if(conditionFilter.value == ""){
+      filteredLists.value = products.value;
+      return;
+    }
     filteredLists.value = products.value.filter((item) => {
       const matchesFilter = filter.value
         ? item.productName.toLowerCase().includes(filter.value.toLowerCase()) ||

@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    <input class="create-button" type="button" value="발주하기" @click="showPopup" style="  cursor : pointer;">
+    <input class="create-button" type="button" value="발주하기" @click="showPopup" style="  cursor : pointer; border:0; ">
 
 
     <popup v-if="createPopup" :showPopup="showPopup" :popupVisible="createPopup"/>
@@ -15,14 +15,15 @@
       <div class="radio-group">
         <div class="title"><label>날짜</label></div>
         <label>
-          최신순 <input type="radio" value="recent" name="dateOrder" v-model="dateFilter" @change="applyFilter" checked>
+          최신순 <input checked type="radio" value="recent" name="dateOrder" v-model="dateFilter" @change="applyFilter" >
         </label>
         <label>
-          오래된순 <input type="radio" value="old" name="dateOrder" v-model="dateFilter" @change="applyFilter">
+          오래된순 <input type="radio" value="old" name="dateOrder" v-model="dateFilter" @change="applyFilter" >
         </label>
       </div>
       <div class="radio-group">
         <div class="title"><label>날짜</label></div>
+        <label> 전체 <input type="radio" value="" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter" checked></label>
         <label> 승인대기 <input type="radio" value="승인대기" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
         <label> 승인완료 <input type="radio" value="승인완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
         <label> 승인거부 <input type="radio" value="승인거부" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
@@ -117,7 +118,6 @@ const getMemberId = async () => {
     if (!response.ok) {
       throw new Error('네트워크 오류 발생');
     }
-
     const data = await response.json();
     if (data.length > 0) {
       lists.value = data.map(({  ...rest }) => rest);
@@ -134,17 +134,22 @@ const getMemberId = async () => {
   }
 };
 
+
+
 const applyFilter = () => {
   currentPage.value = 1; // 필터 적용 시 페이지를 초기화합니다.
+  if(conditionFilter.value == ""){
+    filteredLists.value = lists.value;
+  }else{
+    filteredLists.value = lists.value.filter(item =>
+      (Object.values(item).some(val =>
+        String(val).toLowerCase().includes(filter.value.toLowerCase())
+      )) &&
+      (dateFilter.value ? true : true) && 
+      (conditionFilter.value ? item['orderCondition'] === conditionFilter.value : true)
+    );
+  }
   
-  filteredLists.value = lists.value.filter(item =>
-    (Object.values(item).some(val =>
-      String(val).toLowerCase().includes(filter.value.toLowerCase())
-    )) &&
-    (dateFilter.value ? true : true) && // 날짜 필터는 따로 처리하지 않습니다.
-    (conditionFilter.value ? item['orderCondition'] === conditionFilter.value : true)
-  );
-
   // 날짜를 오래된 순으로 정렬합니다.
   if (dateFilter.value === 'old') {
     filteredLists.value.sort((a, b) => compareDate(a.orderDate, b.orderDate));
