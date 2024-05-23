@@ -9,12 +9,12 @@
 
       <div class="filter-container">
           <div class="radio-group">
-            <div class="title"><label>검색 </label></div>
+            <div class="title"><label style="width:100px">검색 </label></div>
             <input v-model="filter" placeholder="검색어를 입력하세요" @input="applyFilter" />
           </div>
 
           <div class="radio-group">
-            <div class="title"><label>상품상태</label></div>
+            <div class="title"><label style="width:100px">상품상태</label></div>
 
             <label>
               전체 <input type="radio" value="" name="dateOrder" v-model="conditionFilter" @change="applyFilter" checked>

@@ -9,11 +9,12 @@
 
     <div class="filter-container">
       <div class="radio-group">
-        <div class="title"><label>검색 </label></div>
+        <div class="title">
+        <label style="width:100px">검색 </label></div>
         <input v-model="filter" placeholder="검색어를 입력하세요" @input="applyFilter" />
       </div>
       <div class="radio-group">
-        <div class="title"><label>날짜</label></div>
+        <div class="title"><label style="width:100px">날짜</label></div>
         <label>
           최신순 <input checked type="radio" value="recent" name="dateOrder" v-model="dateFilter" @change="applyFilter" >
         </label>
@@ -22,29 +23,15 @@
         </label>
       </div>
       <div class="radio-group">
-        <div class="title"><label>날짜</label></div>
+        <div class="title">
+        <label style="width:100px">발주상태</label></div>
         <label> 전체 <input type="radio" value="" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter" checked></label>
         <label> 승인대기 <input type="radio" value="승인대기" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
-        <label> 승인완료 <input type="radio" value="승인완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
-        <label> 승인거부 <input type="radio" value="승인거부" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
+        <label> 발주승인 <input type="radio" value="승인완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
+        <label> 발주반려 <input type="radio" value="승인거부" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
         <label> 검수대기 <input type="radio" value="검수대기" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
         <label> 검수완료 <input type="radio" value="검수완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
       </div>
-
-      <!-- <select v-model="dateFilter" @change="applyFilter">
-        <option value="">날짜 순서</option>
-        <option value="recent">최근순</option>
-        <option value="old">오래된순</option>
-
-      </select>
-      <select v-model="conditionFilter" @change="applyFilter">
-        <option value="">주문 상태</option>
-        <option value="승인대기">승인대기</option>
-        <option value="승인완료">승인완료</option>
-        <option value="승인거부">승인거부</option>
-        <option value="검수대기">검수대기</option>
-        <option value="검수완료">검수완료</option>
-      </select> -->
     </div>
 
     <table>
