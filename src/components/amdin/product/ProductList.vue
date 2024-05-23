@@ -95,28 +95,33 @@
         </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost" @click="openDetailPopup(item)">
-            <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">
-              {{item[header.key]}}
-            </td>
-          </tr>
-          <tr v-for="row in emptyRows" :key="'empty-' + row">
-            <td v-for="header in headers" :key="header.key"></td>
-          </tr>
+        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost">
+          <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">
+            <button v-if="header.key === 'productName'" @click="showModifyPopup(item.productCode)" class="button-as-text">
+              {{ item[header.key] }}
+            </button>
+            <span v-else>{{ item[header.key] }}</span>
+          </td>
+        </tr>
+        <tr v-for="row in emptyRows" :key="'empty-' + row">
+          <td v-for="header in headers" :key="header.key"></td>
+        </tr>
         </tbody>
       </table>
     </div>
-      <div class="pagination" >
-        <button @click="prevPage" :disabled="currentPage === 1">이전</button>
-        <span> {{currentPage}} / {{totalPages}} </span>
-        <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
-      </div>
+    <div class="pagination">
+      <button @click="prevPage" :disabled="currentPage === 1">이전</button>
+      <span> {{currentPage}} / {{totalPages}} </span>
+      <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
+    </div>
+    <ProductDetailPopup v-if="currentProductCode" :productCode="currentProductCode" @close="currentProductCode = null" />
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
-import ProductPostPopup from "@/components/amdin/product/ProductPostPopup.vue";
+import ProductPostPopup from "@/components/amdin/product/ProductPostPopup.vue"
+import ProductDetailPopup from "@/components/amdin/product/ProductDetailPopup.vue";
 
 const lists = ref([]);
 const headers = ref([
@@ -219,13 +224,12 @@ const resetFilters = () => {
 };
 
 const showPostPopup = ref(false);
-const openDetailPopup = (item) => {
-  // 클릭한 아이템 정보 확인을 위한 예시
-  console.log(item);
+const currentProductCode = ref(null);
 
-  // 팝업을 열기 위해 showPostPopup 변수를 true로 변경
-  openDetailPopup.value = true;
+const showModifyPopup = (productCode) => {
+  currentProductCode.value = productCode;
 };
+
 const getMemberId = async () => {
   try {
     const response = await fetch('/api/admin/product', {
@@ -428,5 +432,16 @@ fetchThirdCategories();
 
 .categories {
   margin-left: 2%;
+}
+.button-as-text {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  text-align: left; /* 텍스트 정렬을 위해 필요시 사용 */
 }
 </style>
