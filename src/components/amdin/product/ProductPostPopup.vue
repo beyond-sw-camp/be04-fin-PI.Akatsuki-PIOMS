@@ -244,7 +244,7 @@ const saveProduct = async (imageUrl) => {
     categoryFirstCode: selectedFirstCategory.value,
     categorySecondCode: selectedSecondCategory.value,
     categoryThirdCode: selectedThirdCategory.value,
-    url: imageUrl // 이미지 URL 추가
+    url: imageUrl
   };
 
   console.log('Request Data:', requestData);

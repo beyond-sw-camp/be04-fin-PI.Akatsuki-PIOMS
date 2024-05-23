@@ -83,9 +83,9 @@
         <img src="@/assets/icon/search.png" alt="Search" />
       </button>
     </div>
-    <div id="app">
-      <button @click="showPopup = true">등록하기</button>
-      <ProductDetailPopup v-if="showPopup" @close="showPopup = false" />
+    <div class="post-btn" id="app">
+      <button @click="showPostPopup = true" class="postBtn">등록하기</button>
+      <ProductPostPopup v-if="showPostPopup" @close="showPostPopup = false" />
     </div>
     <div class="table-container">
       <table class="table">
@@ -96,8 +96,8 @@
         </thead>
         <tbody>
           <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost">
-            <td v-for="(header, colIndex) in headers" :key="colIndex">
-                {{item[header.key]}}
+            <td v-for="(header, colIndex) in headers" :key="colIndex" @click="showDetailPopup(item[header.key])">
+              {{item[header.key]}}
             </td>
           </tr>
           <tr v-for="row in emptyRows" :key="'empty-' + row">
@@ -116,7 +116,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import ProductDetailPopup from "@/components/amdin/product/ProductPostPopup.vue";
+import ProductPostPopup from "@/components/amdin/product/ProductPostPopup.vue";
 
 const lists = ref([]);
 const headers = ref([
@@ -220,8 +220,7 @@ const resetFilters = () => {
   filteredLists.value = lists.value;
 };
 
-const showPopup = ref(false);
-
+const showPostPopup = ref(false);
 const getMemberId = async () => {
   try {
     const response = await fetch('/api/admin/product', {
@@ -329,6 +328,20 @@ fetchThirdCategories();
   display: flex;
   justify-content: center;
   margin-top: 10px;
+}
+.post-btn {
+  display: flex;
+  flex-direction: row;
+  margin-right: 18.2%;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+.postBtn {
+  width: 80px;
+  height: 30px;
+  border: none;
+  background-color: #D9D9D9;
+  cursor: pointer;
 }
 
 .reset-btn, .search-btn {
