@@ -18,8 +18,6 @@
                 <td class="insert-input">
                   <input type="number" id="numberInput" v-model="insertProductCount">
                 </td>
-              </tr>
-              <tr>
                 <td class="insert-label">상품상태</td>
                 <td class="insert-input">
                   <select id="insertStatus" v-model="insertStatus">
@@ -29,6 +27,9 @@
                     <option value="품절">품절</option>
                   </select>
                 </td>
+
+              </tr>
+              <tr>
                 <td class="insert-label">상품노출상태</td>
                 <td class="insert-input">
                   <select id="selectedExposureStatus" v-model="selectedExposureStatus">
@@ -36,8 +37,6 @@
                     <option value="미노출">미노출</option>
                   </select>
                 </td>
-              </tr>
-              <tr>
                 <td class="insert-label">색상</td>
                 <td class="insert-input">
                   <select id="insertColor" v-model="insertColor">
@@ -59,6 +58,30 @@
                     <option value="105">105</option>
                     <option value="110">110</option>
                   </select>
+                </td>
+              </tr>
+              <tr>
+                <td class="insert-label">재고량</td>
+                <td class="insert-input">
+                  <input type="number" id="numberInput" v-model="insertProductCount">
+                </td>
+                <td class="insert-label">재고량</td>
+                <td class="insert-input">
+                  <input type="number" id="numberInput" v-model="insertProductCount">
+                </td>
+                <td class="insert-label">재고량</td>
+                <td class="insert-input">
+                  <input type="number" id="numberInput" v-model="insertProductCount">
+                </td>
+              </tr>
+              <tr>
+                <td class="insert-label">재고량</td>
+                <td class="insert-input">
+                  <input type="number" id="numberInput" v-model="insertProductCount">
+                </td>
+                <td class="insert-label">재고량</td>
+                <td class="insert-input">
+                  <input type="number" id="numberInput" v-model="insertProductCount">
                 </td>
               </tr>
             </table>
@@ -99,21 +122,14 @@
                   </div>
                 </td>
                 <td class="second-insert-input1">
-<!--                  <div class="div-image">-->
-<!--                    <label for="imageInput">-->
-<!--                      <img :src="imageUrl" alt="Select Image">-->
-<!--                    </label>-->
-<!--                    <input type="file" id="imageInput" style="display: none" @change="handleImageChange">-->
-<!--                  </div>-->
                   <div class="imgForm">
                     <form @submit.prevent="uploadImage">
                       <input id="imgUpload" type="file" @change="previewImage" hidden/> <!-- @change 이벤트를 사용하여 파일 선택 시 previewImage 메서드 호출 -->
-                      <button v-if="imagePreview !== imageSrc" @click="resetImage">X</button>
+                      <button v-if="imagePreview !== imageSrc && imgOn" @click="resetImage" class="img-close-button">X</button>
                       <label for="imgUpload">
                         <img class="img" v-if="!imgOn" src="@/assets/icon/picture.png" />
                         <img class="img" :src="imagePreview" /> <!-- 이미지 미리보기 -->
                       </label>
-                      <!-- <img class="imgPrev" :src="imagePreview" /> 이미지 미리보기 -->
                       <br/>
                     </form>
                   </div>
@@ -133,20 +149,7 @@ import {onMounted, defineEmits, ref} from 'vue';
 import imageSrc from '@/assets/icon/picture.png';
 
 const emit = defineEmits(['close']);
-//
-// let selectedImage = null;
-//
-// const handleImageChange = (event) => {
-//   const file = event.target.files[0];
-//   if (file) {
-//     const reader = new FileReader();
-//     reader.onload = () => {
-//       imageUrl.value = reader.result;
-//       selectedImage = file;
-//     };
-//     reader.readAsDataURL(file);
-//   }
-// };
+
 const resetImage = () => {
   imagePreview.value = imageSrc;
 };
@@ -317,7 +320,7 @@ h2 {
 .insert-label {
   font-weight: bold;
   text-align: center;
-  width: 100px;
+  width: 10%;
   background-color: #D9D9D9;
   border: 1px solid #ddd;
 }
@@ -351,9 +354,10 @@ h2 {
 .second-insert-label {
   font-weight: bold;
   text-align: center;
-  width: 33px;
+  width: 10%;
   background-color: #D9D9D9;
   border: 1px solid #ddd;
+  font-size: small;
 
 }
 .second-insert-input {
@@ -363,7 +367,7 @@ h2 {
 }
 .insert-photo-btn {
   width: 200px;
-  height: 200px;
+  height: 100px;
 }
 .label-content h6 {
   margin: 0;
@@ -378,5 +382,17 @@ h2 {
 }
 .imgForm {
   text-align: center;
+}
+
+.img-close-button {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: #333;
+}
+
+.img-close-button:hover {
+  color: #f00;
 }
 </style>
