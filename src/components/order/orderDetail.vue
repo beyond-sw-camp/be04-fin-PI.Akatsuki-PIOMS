@@ -233,7 +233,7 @@ const clickDeny = () =>{
 const denyOrder = async () => {
   console.log(item.orderCode);
     try {
-      const response = await fetch(`/api/admin/${adminCode}/order/${item.orderCode}/deny?adminCode=${adminCode.valueOf}&denyMessage=${reason.value}`, {
+      const response = await fetch(`/api/admin/order/${item.orderCode}/deny?adminCode=${adminCode}&denyMessage=${reason.value}`, {
         method: 'PUT',
       });
       if(response.status ==406){
