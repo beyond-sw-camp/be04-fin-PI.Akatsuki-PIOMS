@@ -10,7 +10,7 @@ import CommonLogin from "@/components/login/CommonLogin.vue";
 import AskMain from "@/components/amdin/ask/AskMain.vue";
 import AnswerFormEdit from "@/components/amdin/ask/AnswerFormEdit.vue";
 
-import Pagination from '@/components/order/pagination.vue';
+import OrderPage from '@/components/order/orderPage.vue';
 
 
 
@@ -54,7 +54,7 @@ const routes = [
     {
         path: '/order/list',
         name: 'orderList',
-        component: Pagination
+        component: OrderPage
     }
 
 

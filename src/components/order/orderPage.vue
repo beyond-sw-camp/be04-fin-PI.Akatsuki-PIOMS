@@ -7,12 +7,25 @@
     <popup v-if="createPopup" :showPopup="showPopup" :popupVisible="createPopup"/>
     <OrderDetail v-if="createDetailPopup" :showDetailPopup="showDetailPopup" :popupVisible="createDetailPopup" :detailItem="detailItem"/>
 
-    <div>
-      <input v-model="filter" placeholder="검색어를 입력하세요" @input="applyFilter" />
-      <select v-model="dateFilter" @change="applyFilter">
+    <div class="filter-container">
+      <div class="radio-group">
+        <div class="title"><label>검색 </label></div>
+        <input v-model="filter" placeholder="검색어를 입력하세요" @input="applyFilter" />
+      </div>
+      <div class="radio-group">
+        <div class="title"><label>날짜</label></div>
+        <label>
+          최신순 <input type="radio" value="recent" name="dateOrder" v-model="dateFilter" @change="applyFilter" checked>
+        </label>
+        <label>
+          오래된순 <input type="radio" value="old" name="dateOrder" v-model="dateFilter" @change="applyFilter">
+        </label>
+      </div>
+      <!-- <select v-model="dateFilter" @change="applyFilter">
         <option value="">날짜 순서</option>
         <option value="recent">최근순</option>
         <option value="old">오래된순</option>
+
       </select>
       <select v-model="conditionFilter" @change="applyFilter">
         <option value="">주문 상태</option>
@@ -21,7 +34,7 @@
         <option value="승인거부">승인거부</option>
         <option value="검수대기">검수대기</option>
         <option value="검수완료">검수완료</option>
-      </select>
+      </select> -->
     </div>
 
     <table>
@@ -55,6 +68,7 @@
 import { ref, computed } from 'vue';
 import popup from './orderPopup.vue';
 import OrderDetail from './orderDetail.vue';
+
 
 const lists = ref([]);
 
@@ -188,49 +202,9 @@ const resetRowColor = (index) => {
 };
 </script>
 
-<style scoped>
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th, td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  cursor : pointer;
-}
-
-th {
-  background-color: #f2f2f2;
-  text-align: left;
-}
-
-.pagination {
-  margin-top: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-button {
-  margin: 0 5px;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-.highlighted {
-  background-color: yellow;
-}
 
 
-.create-button{
-  margin-top: 10px;
-  margin-bottom: 10px;
-  width: 100px;
-  height: 50px;
-  background-color: #d9d9d9;
-}
-
-
+<style>
+  @import "../../assets/css/order.css" ;
 
 </style>
