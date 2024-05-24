@@ -15,6 +15,9 @@ import AskFRMain from "@/components/franchise/ask/AskFRMain.vue";
 import AskFormEdit from "@/components/franchise/ask/AskFormEdit.vue";
 import ProductList from "@/components/amdin/product/ProductList.vue";
 
+import OrderPage from '@/components/order/orderPage.vue';
+
+import ExchangePage from '@/components/exchange/exchangePage.vue';
 
 
 
@@ -76,9 +79,19 @@ const routes = [
         component: AskFormCreate
     },
     {
+        path: '/order/list',
+        name: 'orderList',
+        component: OrderPage
+    },
+    {
         path: '',
         name: 'AdminProductList',
         component: ProductList
+    },
+    {
+        path: '/exchange/list',
+        name: 'exchangeList',
+        component: ExchangePage
     }
 ];
 

@@ -22,20 +22,10 @@
   
   const lists = ref([]);
   const headers = ref([
-    { key: 'orderCode', label: '주문 코드' },
-    { key: 'orderDate', label: '주문 날짜' },
-    { key: 'orderTotalPrice', label: '총 가격' },
-    { key: 'orderCondition', label: '주문 상태' },
-    { key: 'orderReason', label: '주문 사유' },
-    { key: 'franchiseCode', label: '가맹점 코드' },
-    { key: 'franchiseName', label: '가맹점 이름' },
-    { key: 'deliveryDate', label: '배송 날짜' },
-    { key: 'franchiseOwnerCode', label: '가맹점주 코드' },
-    { key: 'franchiseOwnerName', label: '가맹점주 이름' },
-    { key: 'franchiseAddress', label: '가맹점 주소' },
-    { key: 'exchange', label: '교환 코드' },
-    /*{ key: 'adminCode', label: '관리자 코드' },*/
-    { key: 'adminName', label: '관리자 이름' },
+    /*{ key: 'requestProductCode', label: '상품 코드' },*/
+    { key: 'productName', label: '상품명' },
+    { key: 'requestProductCount', label: '요청 수량' },
+    { key: 'requestProductGetCount', label: '수령 수량' },
   ]);
   
   const getMemberId = async () => {
@@ -49,9 +39,10 @@
       }
   
       const data = await response.json();
-      if (data.length > 0) {
-        // orderProductList를 제외한 나머지 데이터를 lists에 넣습니다.
-        lists.value = data.map(({ orderProductList, ...rest }) => rest);
+      if (data.length > 0 && data[0].orderProductList) {
+        // 모든 orderProductList 항목을 합쳐서 lists에 넣습니다.
+        lists.value = data.flatMap(order => order.orderProductList);
+        console.log(lists);
       } else {
         lists.value = [];
       }
