@@ -61,7 +61,7 @@ document.querySelectorAll('.submenu > li').forEach(item => {
   <!-- 카테고리 nav -->
   <nav class="header_rootAdmin">
     <ul class="nav_header">
-      <li><a href="#" class="dashboard" style="display: flex;"><img src="/PIOMS_image/png/root/dashboard.png"></a></li>
+      <li><a href="#" class="dashboard" style= "display: flex;"><img src="/PIOMS_image/png/root/dashboard.png"></a></li>
 
       <li><a href="#" class="label">가맹점 및 직원 관리</a>
         <ul class="submenu">
@@ -186,29 +186,11 @@ document.querySelectorAll('.submenu > li').forEach(item => {
         </ul>
       </li>
     </ul>
+
   </nav>
-  <hr class="hr2"/>
-
-  <!-- 사이드바 -->
-  <article id="sidebar">
-    <section class="sidebar_content">
-      <div class="sidebar_title_Box">
-        <img class="sider_dashBoard" src="/PIOMS_image/png/root/dashboard.png">
-        <h2 class="sidebar_title">Dash Board</h2>
-      </div>
-    </section>
-  </article>
-
-  <!-- footer -->
-  <footer class="footer">
-    <p class="footer_text">
-      회사명: PIOMS 솔루션 | 대표명: 김용승 | 사업자등록번호: 478-34-23344 | 주소: 서울특별시 동작구 보라매로 87, 3~5층 플레이데이터 © FORBIZKOREA x NAVER Cloud
-      CO.LTD. All Rights Reserved.
-    </p>
-  </footer>
 </template>
 
-<style scoped>
+  <style scoped>
 header {
   display: flex;
   justify-content: space-between;

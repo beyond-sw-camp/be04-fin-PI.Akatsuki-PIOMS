@@ -1,12 +1,17 @@
 <template>
 <!--  <router-view></router-view>-->
-
+  <header>
+    <RootAdmin/>
+  </header>
     <main>
 <!--      <Breadcrumb :crumbs="breadcrumbs" />-->
 <!--      <AskMain/>-->
 <!--<CategoryList/>-->
   <ProductList11/>
     </main>
+  <footer>
+    <Footer/>
+  </footer>
 </template>
 
 <script setup>
@@ -14,6 +19,8 @@
 // import Breadcrumb from "@/components/amdin/ask/Breadcrumb.vue";
 // import CategoryList from "@/components/amdin/Category/CategoryList.vue";
 import ProductList11 from "@/components/amdin/product/ProductList.vue";
+import RootAdmin from "@/components/config/header/RootAdmin.vue";
+import Footer from "@/components/config/footer/Footer.vue";
 
 </script>
 
