@@ -1,11 +1,10 @@
 <template>
-<!--  <router-view></router-view>-->
+ <router-view></router-view>
 
     <main>
 <!--      <Breadcrumb :crumbs="breadcrumbs" />-->
 <!--      <AskMain/>-->
 <!--<CategoryList/>-->
-  <ProductList/>
     </main>
 </template>
 

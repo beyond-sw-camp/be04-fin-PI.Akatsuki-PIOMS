@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
+
 import AnswerFormRegister from "@/components/amdin/ask/AnswerFormRegister.vue";
 import AdminLogin from "@/components/login/AdminLogin.vue";
 import FranchiseLogin from "@/components/login/FranchiseLogin.vue";
@@ -9,6 +10,9 @@ import AskMain from "@/components/amdin/ask/AskMain.vue";
 import AnswerFormEdit from "@/components/amdin/ask/AnswerFormEdit.vue";
 import ProductList from "@/components/amdin/product/ProductList.vue";
 
+import OrderPage from '@/components/order/orderPage.vue';
+
+import ExchangePage from '@/components/exchange/exchangePage.vue';
 
 
 
@@ -49,9 +53,19 @@ const routes = [
         component: AnswerFormEdit
     },
     {
+        path: '/order/list',
+        name: 'orderList',
+        component: OrderPage
+    },
+    {
         path: '',
         name: 'AdminProductList',
         component: ProductList
+    },
+    {
+        path: '/exchange/list',
+        name: 'exchangeList',
+        component: ExchangePage
     }
 ];
 
