@@ -10,11 +10,12 @@
     <div class="filter-container">
       <div class="radio-group">
         <div class="title">
-        <label style="width:100px">검색 </label></div>
-        <input v-model="filter" placeholder="검색어를 입력하세요" @input="applyFilter" />
+          <label  class="left">검색 </label></div>
+          <input v-model="filter" placeholder="검색어를 입력하세요" @input="applyFilter" />
       </div>
       <div class="radio-group">
-        <div class="title"><label style="width:100px">날짜</label></div>
+        <div class="title">
+          <label class="left" >날짜</label></div>
         <label>
           최신순 <input checked type="radio" value="recent" name="dateOrder" v-model="dateFilter" @change="applyFilter" >
         </label>
@@ -24,7 +25,7 @@
       </div>
       <div class="radio-group">
         <div class="title">
-        <label style="width:100px">발주상태</label></div>
+        <label class="left">발주상태</label></div>
         <label> 전체 <input type="radio" value="" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter" checked></label>
         <label> 승인대기 <input type="radio" value="승인대기" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
         <label> 발주승인 <input type="radio" value="승인완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
@@ -34,7 +35,12 @@
       </div>
     </div>
 
-    <table>
+    <div align="center" style="margin-top: 2%;">
+      <button>초기화</button>
+      <button>검색</button>
+    </div>
+    
+    <table style=" margin-top: 5%;">
       <thead>
         <tr>
           <th v-for="(header, index) in headers" :key="index">{{ header.label }}</th>
@@ -59,6 +65,7 @@
       <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
     </div>
   </div>
+
 </template>
 
 <script setup>

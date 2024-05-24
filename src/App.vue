@@ -1,23 +1,18 @@
 <template>
-
-<!--  <router-view></router-view>-->
   <header>
-    <RootAdmin/>
-<!--    <AdminHeader/>-->
+    <!-- <RootAdmin/> -->
+   <AdminHeader/>
 <!--    <FranchiseHeader/>-->
 <!--    <DriverHeader/>-->
   </header>
   
   <main>
-<!--      <Breadcrumb :crumbs="breadcrumbs" />-->
-<!--      <AskMain/>-->
-<!--<CategoryList/>-->
-
-  <ProductList/>
+  <router-view></router-view>
+  <!-- <ProductList/> -->
   </main>
 
   <footer>
-    <Footer/>
+    <!-- <Footer/> -->
   </footer>
 </template>
 
