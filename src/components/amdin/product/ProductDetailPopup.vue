@@ -12,21 +12,21 @@
               <tr>
                 <td class="insert-label">상품명</td>
                 <td class="insert-input">
-                  <input type="text" v-model="updateProductName"/>
+                  <input type="text" v-model="updateProductName" class="textInput"/>
                 </td>
                 <td class="insert-label">재고량</td>
                 <td class="insert-input">
-                  <input type="number" v-model="updateProductCount">
+                  <input type="number" v-model="updateProductCount" class="textInput"/>
                 </td>
                 <td class="insert-label">가격</td>
                 <td class="insert-input">
-                  <input type="number" v-model="updateProductPrice">
+                  <input type="number" v-model="updateProductPrice" class="textInput"/>
                 </td>
               </tr>
               <tr>
                 <td class="insert-label">상품상태</td>
                 <td class="insert-input">
-                  <select v-model="updateStatus">
+                  <select v-model="updateStatus" class="textInput">
                     <option value="공급가능">공급가능</option>
                     <option value="일시제한">일시제한</option>
                     <option value="단종">단종</option>
@@ -35,14 +35,14 @@
                 </td>
                 <td class="insert-label">상품노출상태</td>
                 <td class="insert-input">
-                  <select v-model="updateExposureStatus">
+                  <select v-model="updateExposureStatus" class="textInput">
                     <option value="true">노출</option>
                     <option value="false">미노출</option>
                   </select>
                 </td>
                 <td class="insert-label">색상</td>
                 <td class="insert-input">
-                  <select v-model="updateColor">
+                  <select v-model="updateColor" class="textInput">
                     <option value="빨간색">빨간색</option>
                     <option value="주황색">주황색</option>
                     <option value="노란색">노란색</option>
@@ -54,7 +54,7 @@
                 </td>
                 <td class="insert-label">사이즈</td>
                 <td class="insert-input">
-                  <select v-model="updateSize">
+                  <select v-model="updateSize" class="textInput">
                     <option value="90">90</option>
                     <option value="95">95</option>
                     <option value="100">100</option>
@@ -66,21 +66,21 @@
             </table>
             <table class="second-insert-table">
               <tr>
-                <td class="second-insert-label">카테고리 구분</td>
+                <td class="second-insert-label"><div class="second-insert-label0">카테고리 구분</div></td>
                 <td class="second-insert-input">
-                  <select v-model="updateFirstCategory" @change="fetchCategories('second')">
+                  <select v-model="updateFirstCategory" @change="fetchCategories('second')" class="categories">
                     <option value="">대분류</option>
                     <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">
                       {{ category.categoryFirstName }}
                     </option>
                   </select>
-                  <select class="categories" v-model="updateSecondCategory" @change="fetchCategories('third')">
+                  <select class="categories-g" v-model="updateSecondCategory" @change="fetchCategories('third')">
                     <option value="">중분류</option>
                     <option v-for="category in secondCategories" :key="category.categorySecondCode" :value="category.categorySecondCode">
                       {{ category.categorySecondName }}
                     </option>
                   </select>
-                  <select class="categories" v-model="updateThirdCategory">
+                  <select class="categories-g" v-model="updateThirdCategory">
                     <option value="">소분류</option>
                     <option v-for="category in thirdCategories" :key="category.categoryThirdCode" :value="category.categoryThirdCode">
                       {{ category.categoryThirdName }}
@@ -89,16 +89,16 @@
                 </td>
               </tr>
               <tr>
-                <td class="second-insert-label">상세정보</td>
+                <td class="second-insert-label"><div class="second-insert-label0">상세정보</div></td>
                 <td class="second-insert-input">
-                  <input type="text" style="width: 99%; height: 150px" v-model="updateContent">
+                  <input type="text" style="width: 99%; height: 150px" v-model="updateContent" class="textInput">
                 </td>
               </tr>
               <tr>
                 <td class="second-insert-label1">
                   <div class="label-content">
                     이미지<br>
-                    <h6>(최대 3장)</h6>
+                    (최대 3장)
                   </div>
                 </td>
                 <td class="second-insert-input1">
@@ -119,7 +119,7 @@
           </div>
         </div>
         <button class="action-button" @click="closePopup">취소</button>
-        <button class="post-button" @click="saveProduct">등록</button>
+        <button class="post-button" @click="saveProduct">수정</button>
       </div>
     </div>
   </div>
@@ -230,6 +230,9 @@ const uploadImage = async () => {
     console.error('오류:', error);
   }
 };
+
+
+
 const props = defineProps({
   currentProductCode: {
     type: String,
@@ -404,6 +407,7 @@ h2 {
   width: 10%;
   background-color: #D9D9D9;
   border: 1px solid #ddd;
+  font-size: 12px;
 }
 
 .insert-input {
@@ -434,10 +438,6 @@ h2 {
   text-align: left;
 }
 
-.categories {
-  margin-left: 2%;
-}
-
 .second-insert-label {
   font-weight: bold;
   text-align: center;
@@ -454,8 +454,9 @@ h2 {
   border-right: none;
 }
 
-.label-content h6 {
-  margin: 0;
+.label-content {
+  text-align: center;
+  font-size: 12px;
 }
 
 .second-insert-label1 {
@@ -481,5 +482,46 @@ h2 {
 
 .img-close-button:hover {
   color: #f00;
+}
+.textInput {
+  border: 1px solid rgba(217, 217, 217, 0.7);
+  border-radius: 5px;
+}
+.categories {
+  border: 1px solid rgba(217, 217, 217, 0.7);
+  border-radius: 5px;
+}
+.categories-g {
+  border: 1px solid rgba(217, 217, 217, 0.7);
+  border-radius: 5px;
+  margin-left: 1%;
+}
+.post-button {
+  background-color: rgba(220, 20, 60, 0.8);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  margin-left: 2%;
+}
+.action-button {
+  background-color: #D9D9D9;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  margin-left: 85%;
+}
+
+.action-button:hover {
+  background-color: gray;
+}
+.second-insert-label0 {
+  text-align: center;
+  font-size: 12px;
 }
 </style>

@@ -12,21 +12,22 @@
               <tr>
                 <td class="insert-label">상품명</td>
                 <td class="insert-input">
-                  <input type="text" v-model="insertProductName" class="textInput"/>
+                  <input type="text" v-model="insertProductName" class="textInput" placeholder="상품명을 입력하세요."/>
                 </td>
                 <td class="insert-label">재고량</td>
                 <td class="insert-input">
-                  <input type="number" v-model="insertProductCount" class="textInput">
+                  <input type="number" v-model="insertProductCount" class="textInput" placeholder="재고량을 입력하세요.">
                 </td>
                 <td class="insert-label">가격</td>
                 <td class="insert-input">
-                  <input type="number" v-model="insertProductPrice" class="textInput">
+                  <input type="number" v-model="insertProductPrice" class="textInput" placeholder="상품 가격을 입력하세요.">
                 </td>
               </tr>
               <tr>
                 <td class="insert-label">상품상태</td>
                 <td class="insert-input">
                   <select v-model="insertStatus" class="textInput">
+                    <option value="">전체 상태</option>
                     <option value="공급가능">공급가능</option>
                     <option value="일시제한">일시제한</option>
                     <option value="단종">단종</option>
@@ -43,6 +44,7 @@
                 <td class="insert-label">색상</td>
                 <td class="insert-input">
                   <select v-model="insertColor" class="textInput">
+                    <option value="">전체 색상</option>
                     <option value="빨간색">빨간색</option>
                     <option value="주황색">주황색</option>
                     <option value="노란색">노란색</option>
@@ -55,6 +57,7 @@
                 <td class="insert-label">사이즈</td>
                 <td class="insert-input">
                   <select v-model="insertSize" class="textInput">
+                    <option value="">전체 사이즈</option>
                     <option value="90">90</option>
                     <option value="95">95</option>
                     <option value="100">100</option>
@@ -91,7 +94,7 @@
               <tr>
                 <td class="second-insert-label"><div class="second-insert-label0">상세정보</div></td>
                 <td class="second-insert-input">
-                  <input type="text" style="width: 99%; height: 150px" v-model="insertContent" class="textInput">
+                  <input type="text" style="width: 99%; height: 150px" v-model="insertContent" class="textInput" placeholder="상품의 상세 정보를 입력해주세요.">
                 </td>
               </tr>
               <tr>
@@ -354,22 +357,6 @@ h2 {
   font-size: 1.5em;
 }
 
-
-.action-button {
-  background-color: #D9D9D9;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1em;
-  margin-left: 85%;
-}
-
-.action-button:hover {
-  background-color: gray;
-}
-
 .insert-section {
   display: flex;
   justify-content: center;
@@ -480,7 +467,20 @@ h2 {
   font-size: 1em;
   margin-left: 2%;
 }
+.action-button {
+  background-color: #D9D9D9;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  margin-left: 85%;
+}
 
+.action-button:hover {
+  background-color: gray;
+}
 .textInput {
   border: 1px solid rgba(217, 217, 217, 0.7);
   border-radius: 5px;
