@@ -86,6 +86,7 @@
     <div class="post-btn" id="app">
       <button @click="showPostPopup = true" class="postBtn">등록하기</button>
       <ProductPostPopup v-if="showPostPopup" @close="showPostPopup = false" />
+      <button @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
     </div>
     <div class="table-container">
       <table class="table">
@@ -95,28 +96,34 @@
         </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost">
-            <td v-for="(header, colIndex) in headers" :key="colIndex" @click="showDetailPopup(item[header.key])">
-              {{item[header.key]}}
-            </td>
-          </tr>
-          <tr v-for="row in emptyRows" :key="'empty-' + row">
-            <td v-for="header in headers" :key="header.key"></td>
-          </tr>
+        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost">
+          <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">
+            <button v-if="header.key === 'productName'" @click="showModifyPopup(item.productCode)" class="button-as-text">
+              {{ item[header.key] }}
+            </button>
+            <span v-else>{{ item[header.key] }}</span>
+          </td>
+        </tr>
+        <tr v-for="row in emptyRows" :key="'empty-' + row">
+          <td v-for="header in headers" :key="header.key"></td>
+        </tr>
         </tbody>
       </table>
     </div>
-      <div class="pagination" >
-        <button @click="prevPage" :disabled="currentPage === 1">이전</button>
-        <span> {{currentPage}} / {{totalPages}} </span>
-        <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
-      </div>
+    <div class="pagination">
+      <button @click="prevPage" :disabled="currentPage === 1">이전</button>
+      <span> {{currentPage}} / {{totalPages}} </span>
+      <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
+    </div>
+    <ProductDetailPopup v-if="currentProductCode" :currentProductCode="currentProductCode" @close="currentProductCode = null" />
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
-import ProductPostPopup from "@/components/amdin/product/ProductPostPopup.vue";
+import ProductPostPopup from "@/components/amdin/product/ProductPostPopup.vue"
+import ProductDetailPopup from "@/components/amdin/product/ProductDetailPopup.vue";
+import axios from "axios";
 
 const lists = ref([]);
 const headers = ref([
@@ -195,8 +202,6 @@ const fetchThirdCategories = async () => {
   }
 };
 
-import { defineEmits } from 'vue';
-
 const applyFilters = () => {
   filteredLists.value = lists.value.filter(list => {
     const matchesExposureStatus = selectedExposureStatus.value === '전체' || list.productExposureStatus === (selectedExposureStatus.value === '노출');
@@ -221,6 +226,15 @@ const resetFilters = () => {
 };
 
 const showPostPopup = ref(false);
+const currentProductCode = ref('');
+const setCurrentProductCode = (productCode) => {
+  currentProductCode.value = productCode;
+};
+
+const showModifyPopup = (productCode) => {
+  setCurrentProductCode(productCode);
+};
+
 const getMemberId = async () => {
   try {
     const response = await fetch('/api/admin/product', {
@@ -242,6 +256,23 @@ const getMemberId = async () => {
   } catch (error) {
     console.error('오류 발생:', error);
   }
+};
+
+const downloadExcel = () => {
+  axios({
+    url: 'http://localhost:9000/admin/exceldownload/product-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
+    method: 'GET',
+    responseType: 'blob', // 서버에서 반환되는 데이터의 형식을 명시
+  }).then((response) => {
+    const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'productList.xlsx'); // 원하는 파일 이름 설정
+    document.body.appendChild(link);
+    link.click();
+  }).catch((error) => {
+    console.error('Excel 다운로드 중 오류 발생:', error);
+  });
 };
 
 const paginatedLists = computed(() => {
@@ -276,6 +307,7 @@ const prevPage = () => {
 };
 
 getMemberId();
+downloadExcel();
 fetchFirstCategories();
 fetchSecondCategories();
 fetchThirdCategories();
@@ -329,19 +361,22 @@ fetchThirdCategories();
   justify-content: center;
   margin-top: 10px;
 }
-.post-btn {
-  display: flex;
-  flex-direction: row;
-  margin-right: 18.2%;
-  justify-content: flex-end;
-  margin-top: 10px;
-}
 .postBtn {
-  width: 80px;
+  width: 67px;
   height: 30px;
   border: none;
   background-color: #D9D9D9;
   cursor: pointer;
+  text-align: center;
+  align-items: center;
+}
+.excelBtn {
+  width: 100px;
+  height: 26px;
+  border: none;
+  background-color: white;
+  cursor: pointer;
+  margin-right: 0.5%;
 }
 
 .reset-btn, .search-btn {
@@ -353,6 +388,25 @@ fetchThirdCategories();
   padding: 8px 8px;
   font-size: 14px;
   margin: 0 5px;
+}
+.post-btn {
+  display: flex;
+  justify-content: space-between; /* 양 끝에 정렬 */
+  align-items: center; /* 수직 가운데 정렬 */
+  position: absolute; /* 절대 위치 설정 */
+  left: 18.5%; /* 좌측 정렬 */
+  transform: translateY(-50%); /* 수직 중앙 정렬 */
+  width: 1200px;
+}
+
+.post-btn .postBtn {
+  order: 1; /* 왼쪽에 배치 */
+  flex: 0 0 auto; /* 고정된 너비 */
+}
+
+.post-btn .excelBtn {
+  order: 2; /* 오른쪽에 배치 */
+  flex: 0 0 auto; /* 고정된 너비 */
 }
 
 .reset-btn:hover, .search-btn:hover {
@@ -395,7 +449,6 @@ fetchThirdCategories();
   table-layout: fixed;
 }
 
-
 .header1 {
   background-color: #D9D9D9;
   font-weight: bold;
@@ -411,10 +464,11 @@ fetchThirdCategories();
 .allpost {
   text-align: center;
   padding: 10px 0;
+  width: 5%;
 }
 
-.allpost {
-  width: 5%;
+.allpost:hover {
+  background-color: #f2f2f2;
 }
 
 .allpost td {
@@ -423,5 +477,16 @@ fetchThirdCategories();
 
 .categories {
   margin-left: 2%;
+}
+.button-as-text {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  text-align: left; /* 텍스트 정렬을 위해 필요시 사용 */
 }
 </style>
