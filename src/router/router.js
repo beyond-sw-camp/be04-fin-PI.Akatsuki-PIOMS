@@ -8,6 +8,7 @@ import DriverLogin from "@/components/login/DriverLogin.vue";
 import CommonLogin from "@/components/login/CommonLogin.vue";
 import AskMain from "@/components/amdin/ask/AskMain.vue";
 import AnswerFormEdit from "@/components/amdin/ask/AnswerFormEdit.vue";
+import ProductList from "@/components/amdin/product/ProductList.vue";
 
 import OrderPage from '@/components/order/orderPage.vue';
 
@@ -58,7 +59,7 @@ const routes = [
     },
     {
         path: '',
-        name: 'AdminProductList11',
+        name: 'AdminProductList',
         component: ProductList
     },
     {
@@ -67,7 +68,6 @@ const routes = [
         component: ExchangePage
     }
 ];
-import ProductList from "@/components/amdin/product/ProductList.vue";
 
 const router = createRouter({
     history: createWebHistory(),
