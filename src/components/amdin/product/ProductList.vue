@@ -307,7 +307,6 @@ const prevPage = () => {
 };
 
 getMemberId();
-downloadExcel();
 fetchFirstCategories();
 fetchSecondCategories();
 fetchThirdCategories();
