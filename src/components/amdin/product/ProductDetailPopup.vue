@@ -250,8 +250,8 @@ const saveProduct = async (imageUrl) => {
   console.log('Request Data:', requestData);
 
   try {
-    const response = await fetch('/api/admin/product/update?requesterAdminCode=1', {
-      method: 'POST',
+    const response = await fetch('/api/admin/product/update/{}?requesterAdminCode=1', {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
