@@ -1,20 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router';
-
-
-
 import AnswerFormRegister from "@/components/amdin/ask/AnswerFormRegister.vue";
-
+import AnswerFormRegister from "@/components/amdin/ask/AnswerFormRegister.vue";
+import AdminLogin from "@/components/login/AdminLogin.vue";
 import FranchiseLogin from "@/components/login/FranchiseLogin.vue";
 import DriverLogin from "@/components/login/DriverLogin.vue";
 import CommonLogin from "@/components/login/CommonLogin.vue";
-
 import AskMain from "@/components/amdin/ask/AskMain.vue";
 import AnswerFormEdit from "@/components/amdin/ask/AnswerFormEdit.vue";
+
 import AdminLogin from "@/components/login/AdminLogin.vue";
 import AskFormCreate from "@/components/franchise/ask/AskFormCreate.vue";
 import AskFormView from "@/components/franchise/ask/AskFormView.vue";
 import AskFRMain from "@/components/franchise/ask/AskFRMain.vue";
 import AskFormEdit from "@/components/franchise/ask/AskFormEdit.vue";
+import ProductList from "@/components/amdin/product/ProductList.vue";
+
 
 
 
@@ -48,7 +48,7 @@ const routes = [
     {
         path: '/admin/answerform/register',
         name: 'AnswerFormRegister',
-        component: AnswerFormRegister // 답변 작성 폼 경로 설정
+        component: AnswerFormRegister 
     },
     {
         path: '/admin/answerform/edit',
@@ -74,6 +74,11 @@ const routes = [
         path: '/franchise/askform/create',
         name: 'AskFormCreate',
         component: AskFormCreate
+    },
+    {
+        path: '',
+        name: 'AdminProductList',
+        component: ProductList
     }
 ];
 
@@ -81,5 +86,4 @@ const router = createRouter({
     history: createWebHistory(),
     routes
 });
-
 export default router;
