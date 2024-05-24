@@ -1,4 +1,5 @@
 <template>
+
 <!--  <router-view></router-view>-->
   <header>
     <RootAdmin/>
@@ -6,17 +7,19 @@
 <!--    <FranchiseHeader/>-->
 <!--    <DriverHeader/>-->
   </header>
-
+  
   <main>
 <!--      <Breadcrumb :crumbs="breadcrumbs" />-->
 <!--      <AskMain/>-->
 <!--<CategoryList/>-->
+
   <ProductList/>
   </main>
 
   <footer>
     <Footer/>
   </footer>
+
 </template>
 
 <script setup>
