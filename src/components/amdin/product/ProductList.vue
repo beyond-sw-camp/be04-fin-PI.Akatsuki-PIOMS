@@ -114,7 +114,7 @@
       <span> {{currentPage}} / {{totalPages}} </span>
       <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
     </div>
-    <ProductDetailPopup v-if="currentProductCode" :productCode="currentProductCode" @close="currentProductCode = null" />
+    <ProductDetailPopup v-if="currentProductCode" :currentProductCode="currentProductCode" @close="currentProductCode = null" />
   </div>
 </template>
 
@@ -224,10 +224,13 @@ const resetFilters = () => {
 };
 
 const showPostPopup = ref(false);
-const currentProductCode = ref(null);
+const currentProductCode = ref('');
+const setCurrentProductCode = (productCode) => {
+  currentProductCode.value = productCode;
+};
 
 const showModifyPopup = (productCode) => {
-  currentProductCode.value = productCode;
+  setCurrentProductCode(productCode);
 };
 
 const getMemberId = async () => {

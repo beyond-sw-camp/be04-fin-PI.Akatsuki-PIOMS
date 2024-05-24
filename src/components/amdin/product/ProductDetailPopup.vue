@@ -12,21 +12,21 @@
               <tr>
                 <td class="insert-label">상품명</td>
                 <td class="insert-input">
-                  <input type="text" v-model="insertProductName" />
+                  <input type="text" v-model="updateProductName"/>
                 </td>
                 <td class="insert-label">재고량</td>
                 <td class="insert-input">
-                  <input type="number" v-model="insertProductCount">
+                  <input type="number" v-model="updateProductCount">
                 </td>
                 <td class="insert-label">가격</td>
                 <td class="insert-input">
-                  <input type="number" v-model="insertProductPrice">
+                  <input type="number" v-model="updateProductPrice">
                 </td>
               </tr>
               <tr>
                 <td class="insert-label">상품상태</td>
                 <td class="insert-input">
-                  <select v-model="insertStatus">
+                  <select v-model="updateStatus">
                     <option value="공급가능">공급가능</option>
                     <option value="일시제한">일시제한</option>
                     <option value="단종">단종</option>
@@ -35,14 +35,14 @@
                 </td>
                 <td class="insert-label">상품노출상태</td>
                 <td class="insert-input">
-                  <select v-model="selectedExposureStatus">
+                  <select v-model="updateExposureStatus">
                     <option value="true">노출</option>
                     <option value="false">미노출</option>
                   </select>
                 </td>
                 <td class="insert-label">색상</td>
                 <td class="insert-input">
-                  <select v-model="insertColor">
+                  <select v-model="updateColor">
                     <option value="빨간색">빨간색</option>
                     <option value="주황색">주황색</option>
                     <option value="노란색">노란색</option>
@@ -54,7 +54,7 @@
                 </td>
                 <td class="insert-label">사이즈</td>
                 <td class="insert-input">
-                  <select v-model="insertSize">
+                  <select v-model="updateSize">
                     <option value="90">90</option>
                     <option value="95">95</option>
                     <option value="100">100</option>
@@ -68,19 +68,19 @@
               <tr>
                 <td class="second-insert-label">카테고리 구분</td>
                 <td class="second-insert-input">
-                  <select v-model="selectedFirstCategory" @change="fetchCategories('second')">
+                  <select v-model="updateFirstCategory" @change="fetchCategories('second')">
                     <option value="">대분류</option>
                     <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">
                       {{ category.categoryFirstName }}
                     </option>
                   </select>
-                  <select class="categories" v-model="selectedSecondCategory" @change="fetchCategories('third')">
+                  <select class="categories" v-model="updateSecondCategory" @change="fetchCategories('third')">
                     <option value="">중분류</option>
                     <option v-for="category in secondCategories" :key="category.categorySecondCode" :value="category.categorySecondCode">
                       {{ category.categorySecondName }}
                     </option>
                   </select>
-                  <select class="categories" v-model="selectedThirdCategory">
+                  <select class="categories" v-model="updateThirdCategory">
                     <option value="">소분류</option>
                     <option v-for="category in thirdCategories" :key="category.categoryThirdCode" :value="category.categoryThirdCode">
                       {{ category.categoryThirdName }}
@@ -91,7 +91,7 @@
               <tr>
                 <td class="second-insert-label">상세정보</td>
                 <td class="second-insert-input">
-                  <input type="text" style="width: 99%; height: 150px" v-model="insertContent">
+                  <input type="text" style="width: 99%; height: 150px" v-model="updateContent">
                 </td>
               </tr>
               <tr>
@@ -126,26 +126,26 @@
 </template>
 
 <script setup>
-import {onMounted, defineEmits, ref} from 'vue';
+import {onMounted, defineEmits, ref, defineProps} from 'vue';
 import imageSrc from '@/assets/icon/picture.png';
 
 const emit = defineEmits(['close']);
 const imagePreview = ref(imageSrc);
 const imgOn = ref(false);
-const insertProductName = ref('');
-const insertProductCount = ref('');
-const insertProductPrice = ref('');
-const insertStatus = ref('');
-const selectedExposureStatus = ref('true');
-const insertColor = ref('');
-const insertSize = ref('');
-const insertContent = ref('');
+const updateProductName = ref('');
+const updateProductCount = ref('');
+const updateProductPrice = ref('');
+const updateStatus = ref('');
+const updateExposureStatus = ref('true');
+const updateColor = ref('');
+const updateSize = ref('');
+const updateContent = ref('');
 const firstCategories = ref([]);
 const secondCategories = ref([]);
 const thirdCategories = ref([]);
-const selectedFirstCategory = ref('');
-const selectedSecondCategory = ref('');
-const selectedThirdCategory = ref('');
+const updateFirstCategory = ref('');
+const updateSecondCategory = ref('');
+const updateThirdCategory = ref('');
 let imageUrl = '';
 const fetchCategories = async (level) => {
   let url = '';
@@ -154,10 +154,10 @@ const fetchCategories = async (level) => {
       url = '/api/admin/category/first';
       break;
     case 'second':
-      url = `/api/admin/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`;
+      url = `/api/admin/category/second/list/detail/categoryfirst/${updateFirstCategory.value}`;
       break;
     case 'third':
-      url = `/api/admin/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`;
+      url = `/api/admin/category/third/list/detail/categorysecond/${updateSecondCategory.value}`;
       break;
   }
 
@@ -230,27 +230,33 @@ const uploadImage = async () => {
     console.error('오류:', error);
   }
 };
-
+const props = defineProps({
+  currentProductCode: {
+    type: String,
+    required: true
+  }
+});
 const saveProduct = async (imageUrl) => {
   const requestData = {
-    productName: insertProductName.value,
-    productCount: insertProductCount.value,
-    productPrice: insertProductPrice.value,
-    productStatus: insertStatus.value,
-    productExposureStatus: selectedExposureStatus.value === 'true',
-    productColor: insertColor.value,
-    productSize: insertSize.value,
-    productContent: insertContent.value,
-    categoryFirstCode: selectedFirstCategory.value,
-    categorySecondCode: selectedSecondCategory.value,
-    categoryThirdCode: selectedThirdCategory.value,
+    productName: updateProductName.value,
+    productCount: updateProductCount.value,
+    productPrice: updateProductPrice.value,
+    productStatus: updateStatus.value,
+    productExposureStatus: updateExposureStatus.value === 'true',
+    productColor: updateColor.value,
+    productSize: updateSize.value,
+    productContent: updateContent.value,
+    categoryFirstCode: updateFirstCategory.value,
+    categorySecondCode: updateSecondCategory.value,
+    categoryThirdCode: updateThirdCategory.value,
     url: imageUrl
+
   };
 
   console.log('Request Data:', requestData);
 
   try {
-    const response = await fetch('/api/admin/product/update/{}?requesterAdminCode=1', {
+    const response = await fetch(`/api/admin/product/update/${props.currentProductCode}?requesterAdminCode=1`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -260,7 +266,7 @@ const saveProduct = async (imageUrl) => {
 
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(`상품 등록에 실패했습니다. 상태 코드: ${response.status}, 메시지: ${errorText}`);
+      throw new Error(`상품 수정에 실패했습니다. 상태 코드: ${response.status}, 메시지: ${errorText}`);
     }
 
     console.log('상품이 성공적으로 수정되었습니다.');
