@@ -1,17 +1,25 @@
 <template>
   <div>
+    <div class="headerTitle">
+        <h3 class="product-title"><img src="@/assets/icon/Cloth.png">상품 및 상품 카테고리 관리 > 상품 관리 > 상품 전체 조회 및 관리</h3>
+    <h6 class="product-sub-title">조회할 상품의 조건을 선택 후
+      <img src="@/assets/icon/reset.png">초기화 또는 <img src="@/assets/icon/search.png">검색을 눌러주세요.
+    </h6>
+    </div>
     <div class="filter-section">
+      <div>
+      </div>
       <table class="filter-table">
         <tr>
           <td class="filter-label">상품명</td>
           <td class="filter-input">
-            <input type="text" v-model="filterProductName" />
+            <input type="text" v-model="filterProductName" class="textInput"/>
           </td>
         </tr>
         <tr>
           <td class="filter-label">상품상태</td>
           <td class="filter-input">
-            <select id="filterStatus" v-model="filterStatus">
+            <select id="filterStatus" v-model="filterStatus" class="textInput">
               <option value="공급가능">공급가능</option>
               <option value="일시제한">일시제한</option>
               <option value="단종">단종</option>
@@ -20,7 +28,7 @@
           </td>
           <td class="filter-label">상품노출상태</td>
           <td class="filter-input">
-            <select id="selectedExposureStatus" v-model="selectedExposureStatus">
+            <select id="selectedExposureStatus" v-model="selectedExposureStatus" class="textInput">
               <option value="노출">노출</option>
               <option value="미노출">미노출</option>
             </select>
@@ -29,7 +37,7 @@
         <tr>
           <td class="filter-label">색상</td>
           <td class="filter-input">
-            <select id="filterColor" v-model="filterColor">
+            <select id="filterColor" v-model="filterColor" class="textInput">
               <option value="빨간색">빨간색</option>
               <option value="주황색">주황색</option>
               <option value="노란색">노란색</option>
@@ -41,7 +49,7 @@
           </td>
           <td class="filter-label">사이즈</td>
           <td class="filter-input">
-            <select id="filterSize" v-model="filterSize">
+            <select id="filterSize" v-model="filterSize" class="textInput">
               <option value="90">90</option>
               <option value="95">95</option>
               <option value="100">100</option>
@@ -53,7 +61,7 @@
         <tr>
           <td class="filter-label">카테고리 구분</td>
           <td class="filter-input">
-            <select id="firstCategory" v-model="selectedFirstCategory" @change="fetchSecondCategories">
+            <select id="firstCategory" v-model="selectedFirstCategory" @change="fetchSecondCategories" class="categories">
               <option value="">대분류</option>
               <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">
                 {{ category.categoryFirstName }}
@@ -315,6 +323,7 @@ fetchThirdCategories();
 <style scoped>
 .pagination {
   margin-top: 10px;
+  margin-bottom: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -323,7 +332,7 @@ fetchThirdCategories();
 .filter-section {
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
+  margin: 0;
 }
 
 .filter-table {
@@ -333,7 +342,6 @@ fetchThirdCategories();
   border-radius: 5px;
   padding: 10px;
   width: 1200px;
-  margin-top: 2%;
 }
 
 .filter-table td {
@@ -343,6 +351,7 @@ fetchThirdCategories();
 .filter-label {
   font-weight: bold;
   text-align: center;
+  font-size: 12px;
   width: 100px;
   background-color: #D9D9D9;
   border: 1px solid #ddd;
@@ -394,18 +403,7 @@ fetchThirdCategories();
   align-items: center; /* 수직 가운데 정렬 */
   position: absolute; /* 절대 위치 설정 */
   left: 18.5%; /* 좌측 정렬 */
-  transform: translateY(-50%); /* 수직 중앙 정렬 */
   width: 1200px;
-}
-
-.post-btn .postBtn {
-  order: 1; /* 왼쪽에 배치 */
-  flex: 0 0 auto; /* 고정된 너비 */
-}
-
-.post-btn .excelBtn {
-  order: 2; /* 오른쪽에 배치 */
-  flex: 0 0 auto; /* 고정된 너비 */
 }
 
 .reset-btn:hover, .search-btn:hover {
@@ -414,7 +412,7 @@ fetchThirdCategories();
 
 .table-container {
   width: 100%;
-  margin-top: 20px;
+  margin-top: 40px;
   margin-bottom: 20px;
   display: flex;
   justify-content: center;
@@ -474,9 +472,6 @@ fetchThirdCategories();
   border-right: 1px solid #ddd;
 }
 
-.categories {
-  margin-left: 2%;
-}
 .button-as-text {
   background: none;
   border: none;
@@ -487,5 +482,32 @@ fetchThirdCategories();
   cursor: pointer;
   outline: inherit;
   text-align: left; /* 텍스트 정렬을 위해 필요시 사용 */
+}
+.textInput {
+  border: 1px solid rgba(217, 217, 217, 0.7);
+}
+.categories {
+  border: 1px solid rgba(217, 217, 217, 0.7);
+}
+.product-title {
+  margin-left: 18%;
+}
+.headerTitle {
+  text-align: left;
+  margin-left: 18.3%;
+}
+.product-sub-title {
+  margin-left: 18%;
+}
+.product-sub-title img {
+  width: 20px;
+  height: 20px;
+}
+.headerTitle h6 {
+  margin-bottom: 5%;
+}
+.headerTitle h3,
+.headerTitle h6 {
+  margin: 0
 }
 </style>
