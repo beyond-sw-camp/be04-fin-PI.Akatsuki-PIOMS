@@ -7,7 +7,7 @@
 <!--      <Breadcrumb :crumbs="breadcrumbs" />-->
 <!--      <AskMain/>-->
 <!--<CategoryList/>-->
-  <ProductList11/>
+  <ProductList/>
     </main>
   <footer>
     <Footer/>
@@ -21,6 +21,7 @@
 import ProductList11 from "@/components/amdin/product/ProductList.vue";
 import RootAdmin from "@/components/config/header/RootAdmin.vue";
 import Footer from "@/components/config/footer/Footer.vue";
+import ProductList from "@/components/amdin/product/ProductList.vue";
 
 </script>
 

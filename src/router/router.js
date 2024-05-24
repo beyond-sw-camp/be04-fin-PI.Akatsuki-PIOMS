@@ -7,6 +7,7 @@ import DriverLogin from "@/components/login/DriverLogin.vue";
 import CommonLogin from "@/components/login/CommonLogin.vue";
 import AskMain from "@/components/amdin/ask/AskMain.vue";
 import AnswerFormEdit from "@/components/amdin/ask/AnswerFormEdit.vue";
+import ProductList from "@/components/amdin/product/ProductList.vue";
 
 
 
@@ -49,11 +50,10 @@ const routes = [
     },
     {
         path: '',
-        name: 'AdminProductList11',
+        name: 'AdminProductList',
         component: ProductList
     }
 ];
-import ProductList from "@/components/amdin/product/ProductList.vue";
 
 const router = createRouter({
     history: createWebHistory(),

@@ -55,20 +55,20 @@
           <td class="filter-input">
             <select id="firstCategory" v-model="selectedFirstCategory" @change="fetchSecondCategories">
               <option value="">대분류</option>
-              <option v-for="category in firstCategories" :key="category.code" :value="category.name">
-                {{ category.name }}
+              <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">
+                {{ category.categoryFirstName }}
               </option>
             </select>
-            <select id="secondCategory" v-model="selectedSecondCategory" @change="fetchThirdCategories">
+            <select class="categories" id="secondCategory" v-model="selectedSecondCategory" @change="fetchThirdCategories">
               <option value="">중분류</option>
-              <option v-for="category in secondCategories" :key="category.code" :value="category.name">
-                {{ category.name }}
+              <option v-for="category in secondCategories" :key="category.categorySecondCode" :value="category.categorySecondCode">
+                {{ category.categorySecondName }}
               </option>
             </select>
-            <select id="thirdCategory" v-model="selectedThirdCategory">
+            <select class="categories" id="thirdCategory" v-model="selectedThirdCategory">
               <option value="">소분류</option>
-              <option v-for="category in thirdCategories" :key="category.code" :value="category.name">
-                {{ category.name }}
+              <option v-for="category in thirdCategories" :key="category.categoryThirdCode" :value="category.categoryThirdCode">
+                {{ category.categoryThirdName }}
               </option>
             </select>
           </td>
@@ -83,10 +83,9 @@
         <img src="@/assets/icon/search.png" alt="Search" />
       </button>
     </div>
-    <div>
-      <button @click="postProduct">
-        등록하기
-      </button>
+    <div class="post-btn" id="app">
+      <button @click="showPostPopup = true" class="postBtn">등록하기</button>
+      <ProductPostPopup v-if="showPostPopup" @close="showPostPopup = false" />
     </div>
     <div class="table-container">
       <table class="table">
@@ -97,8 +96,8 @@
         </thead>
         <tbody>
           <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost">
-            <td v-for="(header, colIndex) in headers" :key="colIndex">
-                {{item[header.key]}}
+            <td v-for="(header, colIndex) in headers" :key="colIndex" @click="showDetailPopup(item[header.key])">
+              {{item[header.key]}}
             </td>
           </tr>
           <tr v-for="row in emptyRows" :key="'empty-' + row">
@@ -117,13 +116,14 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import ProductPostPopup from "@/components/amdin/product/ProductPostPopup.vue";
 
 const lists = ref([]);
 const headers = ref([
   { key: 'productCode', label: '상품 코드'},
   { key: 'productName', label: '상품명'},
   { key: 'productCount', label: '본사 보유량'},
-  { key: 'productDisCount', label: '본사 폐기량'},
+  { key: 'productDiscount', label: '본사 폐기량'},
   { key: 'productNoticeCount', label: '알림 기준 수량'},
   { key: 'productStatus', label: '상품 상태'},
   { key: 'productExposureStatus', label: '상품 노출 상태'},
@@ -141,14 +141,14 @@ const filterColor = ref('');
 const filterSize = ref('');
 
 const firstCategories = ref([]);
-const secondCategories = ref('');
-const thirdCategories = ref('');
+const secondCategories = ref([]);
+const thirdCategories = ref([]);
 const selectedFirstCategory = ref('');
 const selectedSecondCategory = ref('');
 const selectedThirdCategory = ref('');
 
 const fetchFirstCategories = async () => {
-  try{
+  try {
     const response = await fetch('/api/admin/category/first', {
       method: 'GET',
     });
@@ -162,29 +162,30 @@ const fetchFirstCategories = async () => {
 };
 
 const fetchSecondCategories = async () => {
-  if(selectedFirstCategory.value === '') {
+  if (selectedFirstCategory.value === '') {
     secondCategories.value = [];
-    return
+    return;
   }
   try {
-    const response = await fetch(`/api/admin/category/second?categoryFirstCode=${selectedFirstCategory.value}`);
+    const response = await fetch(`/api/admin/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`);
     if (!response.ok) {
       throw new Error('중분류를 불러오는 데 실패했습니다.');
     }
-    secondCategories.value = await  response.json();
+    secondCategories.value = await response.json();
     thirdCategories.value = [];
     selectedSecondCategory.value = '';
   } catch (error) {
     console.error('Error:', error);
   }
 };
+
 const fetchThirdCategories = async () => {
   if (selectedSecondCategory.value === '') {
     thirdCategories.value = [];
     return;
   }
   try {
-    const response = await fetch(`/api/admin/category/third?categorySecondCode=${selectedSecondCategory.value}`);
+    const response = await fetch(`/api/admin/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`);
     if (!response.ok) {
       throw new Error('소분류를 불러오는 데 실패했습니다.');
     }
@@ -194,18 +195,17 @@ const fetchThirdCategories = async () => {
   }
 };
 
-const postProduct = (productCode) => {
-
-}
+import { defineEmits } from 'vue';
 
 const applyFilters = () => {
   filteredLists.value = lists.value.filter(list => {
     const matchesExposureStatus = selectedExposureStatus.value === '전체' || list.productExposureStatus === (selectedExposureStatus.value === '노출');
     const matchesStatus = !filterStatus.value || list.productStatus === filterStatus.value;
     const matchesColor = !filterColor.value || list.productColor === filterColor.value;
-    const matchesSize = !filterSize.value || list.productSize === parseInt(filterSize.value, 10); // Ensure filterSize is parsed as int
+    const matchesSize = !filterSize.value || list.productSize === parseInt(filterSize.value, 10);
+    const matchesCategory = !selectedThirdCategory.value || list.categoryThirdCode === selectedThirdCategory.value;
 
-    return matchesExposureStatus && matchesStatus && matchesColor && matchesSize;
+    return matchesExposureStatus && matchesStatus && matchesColor && matchesSize && matchesCategory;
   });
 };
 
@@ -214,9 +214,13 @@ const resetFilters = () => {
   filterStatus.value = '';
   filterColor.value = '';
   filterSize.value = '';
+  selectedFirstCategory.value = '';
+  selectedSecondCategory.value = '';
+  selectedThirdCategory.value = '';
   filteredLists.value = lists.value;
 };
 
+const showPostPopup = ref(false);
 const getMemberId = async () => {
   try {
     const response = await fetch('/api/admin/product', {
@@ -325,6 +329,20 @@ fetchThirdCategories();
   justify-content: center;
   margin-top: 10px;
 }
+.post-btn {
+  display: flex;
+  flex-direction: row;
+  margin-right: 18.2%;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+.postBtn {
+  width: 80px;
+  height: 30px;
+  border: none;
+  background-color: #D9D9D9;
+  cursor: pointer;
+}
 
 .reset-btn, .search-btn {
   background-color: #fff;
@@ -357,17 +375,24 @@ fetchThirdCategories();
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-spacing: 0 10px;
+  table-layout: fixed;
 }
 
 .table th {
   font-weight: bold;
   color: #000;
+  width: 100px;
+  height: 10px;
+  table-layout: fixed;
 }
 
 .table th,
 .table td {
-  border: 0.5px solid #D9D9D9; /* 각 셀의 테두리를 회색으로 지정합니다. */
-  padding: 8px; /* 각 셀의 안쪽 여백을 지정합니다. */
+  border: 0.5px solid #D9D9D9;
+  padding: 8px;
+  width: 80px;
+  height: 10px;
+  table-layout: fixed;
 }
 
 
@@ -394,5 +419,9 @@ fetchThirdCategories();
 
 .allpost td {
   border-right: 1px solid #ddd;
+}
+
+.categories {
+  margin-left: 2%;
 }
 </style>
