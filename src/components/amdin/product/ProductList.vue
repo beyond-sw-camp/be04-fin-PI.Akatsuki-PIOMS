@@ -123,6 +123,7 @@
 import { ref, computed } from 'vue';
 import ProductPostPopup from "@/components/amdin/product/ProductPostPopup.vue"
 import ProductDetailPopup from "@/components/amdin/product/ProductDetailPopup.vue";
+import axios from "axios";
 
 const lists = ref([]);
 const headers = ref([
@@ -257,6 +258,23 @@ const getMemberId = async () => {
   }
 };
 
+const downloadExcel = () => {
+  axios({
+    url: 'http://localhost:9000/admin/exceldownload/product-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
+    method: 'GET',
+    responseType: 'blob', // 서버에서 반환되는 데이터의 형식을 명시
+  }).then((response) => {
+    const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'productList.xlsx'); // 원하는 파일 이름 설정
+    document.body.appendChild(link);
+    link.click();
+  }).catch((error) => {
+    console.error('Excel 다운로드 중 오류 발생:', error);
+  });
+};
+
 const paginatedLists = computed(() => {
   let items = [];
   const start = (currentPage.value - 1) * itemsPerPage;
@@ -289,6 +307,7 @@ const prevPage = () => {
 };
 
 getMemberId();
+downloadExcel();
 fetchFirstCategories();
 fetchSecondCategories();
 fetchThirdCategories();
