@@ -12,7 +12,7 @@
         <p class="tip">Franchise</p>
         <p class="second-text">Login</p>
       </div>
-      <div class="card yellow" @click="changeRouter('delivery/login')">
+      <div class="card yellow" @click="changeRouter('driver/login')">
         <p class="tip">Delivery</p>
         <p class="second-text">Login</p>
       </div>

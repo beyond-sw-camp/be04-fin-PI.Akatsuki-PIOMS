@@ -2,14 +2,19 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 
 
-import AnswerFormRegister from "@/components/franchise/ask/AnswerFormRegister.vue";
-import AdminLogin from "@/components/login/AdminLogin.vue";
+import AnswerFormRegister from "@/components/amdin/ask/AnswerFormRegister.vue";
+
 import FranchiseLogin from "@/components/login/FranchiseLogin.vue";
 import DriverLogin from "@/components/login/DriverLogin.vue";
 import CommonLogin from "@/components/login/CommonLogin.vue";
 
 import AskMain from "@/components/amdin/ask/AskMain.vue";
 import AnswerFormEdit from "@/components/amdin/ask/AnswerFormEdit.vue";
+import AdminLogin from "@/components/login/AdminLogin.vue";
+import AskFormCreate from "@/components/franchise/ask/AskFormCreate.vue";
+import AskFormView from "@/components/franchise/ask/AskFormView.vue";
+import AskFRMain from "@/components/franchise/ask/AskFRMain.vue";
+import AskFormEdit from "@/components/franchise/ask/AskFormEdit.vue";
 
 
 
@@ -36,7 +41,7 @@ const routes = [
         component: CommonLogin,
     },
     {
-        path: '/',
+        path: '/admin/ask',
         name: 'AskMain',
         component: AskMain
     },
@@ -49,6 +54,26 @@ const routes = [
         path: '/admin/answerform/edit',
         name: 'AnswerFormEdit',
         component: AnswerFormEdit
+    },
+    {
+        path: '/franchise/ask',
+        name: 'AskFRMain',
+        component: AskFRMain
+    },
+    {
+        path: '/franchise/askform/edit',
+        name: 'AskFromEdit',
+        component: AskFormEdit
+    },
+    {
+        path: '/franchise/askform/view',
+        name: 'AskFormView',
+        component: AskFormView
+    },
+    {
+        path: '/franchise/askform/create',
+        name: 'AskFormCreate',
+        component: AskFormCreate
     }
 ];
 
