@@ -119,7 +119,7 @@
           </div>
         </div>
         <button class="action-button" @click="closePopup">취소</button>
-        <button class="post-button" @click="saveProduct">등록</button>
+        <button class="post-button" @click="uploadAndSaveProduct">등록</button>
       </div>
     </div>
   </div>
@@ -231,6 +231,7 @@ const uploadImage = async () => {
   }
 };
 
+
 const saveProduct = async (imageUrl) => {
   const requestData = {
     productName: insertProductName.value,
@@ -270,6 +271,8 @@ const saveProduct = async (imageUrl) => {
   }
 };
 
+
+
 const closePopup = () => {
   emit('close');
 };
@@ -290,6 +293,53 @@ onMounted(() => {
 
   fetchCategories('first');
 });
+
+
+const uploadAndSaveProduct = async () => {
+  const fileInput = document.querySelector('input[type="file"]');
+  const file = fileInput.files[0];
+
+  const formData = new FormData();
+
+  // 이미지 파일 추가
+  if (file) {
+    formData.append('file', file);
+  }
+
+  // 상품 정보 추가
+  formData.append('productName', insertProductName.value);
+  formData.append('productCount', insertProductCount.value);
+  formData.append('productPrice', insertProductPrice.value);
+  formData.append('productStatus', insertStatus.value);
+  formData.append('productExposureStatus', selectedExposureStatus.value === 'true');
+  formData.append('productColor', insertColor.value);
+  formData.append('productSize', insertSize.value);
+  formData.append('productContent', insertContent.value);
+  formData.append('categoryFirstCode', selectedFirstCategory.value);
+  formData.append('categorySecondCode', selectedSecondCategory.value);
+  formData.append('categoryThirdCode', selectedThirdCategory.value);
+
+  try {
+    const response = await fetch('/api/admin/product/image', {
+      method: 'POST',
+      credentials: 'include',
+      body: formData
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`상품 등록에 실패했습니다. 상태 코드: ${response.status}, 메시지: ${errorText}`);
+    }
+
+    const data = await response.json();
+    console.log('상품이 성공적으로 등록되었습니다:', data);
+    emit('close');
+  } catch (error) {
+    console.error('오류:', error);
+  }
+};
+
+
 </script>
 
 <style scoped>
