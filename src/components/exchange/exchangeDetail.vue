@@ -22,7 +22,7 @@
                 
                     <div class="divvv">
                         <div class="divvv2" >
-                          <div class="divvv3-title">
+                          <div class="divvv3">
                             관리자
                           </div>
                           <div class="divvv3">
@@ -30,7 +30,7 @@
                           </div>
                         </div>
                         <div class="divvv2">
-                          <div class="divvv3-title">
+                          <div class="divvv3">
                               관리자명 
                           </div>
                           <div class="divvv3">
@@ -38,7 +38,7 @@
                           </div>
                         </div>
                         <div class="divvv2">
-                          <div class="divvv3-title">
+                          <div class="divvv3">
                             점주전화번호
                           </div>
                           <div class="divvv3">
@@ -49,7 +49,7 @@
 
                     <div class="divvv">
                       <div class="divvv2" >
-                          <div class="divvv3-title">
+                          <div class="divvv3">
                             가맹점
                           </div>
                           <div class="divvv3">
@@ -57,7 +57,7 @@
                           </div>
                         </div>
                         <div class="divvv2">
-                          <div class="divvv3-title">
+                          <div class="divvv3">
                               점주명 
                           </div>
                           <div class="divvv3">
@@ -65,7 +65,7 @@
                           </div>
                         </div>
                         <div class="divvv2">
-                          <div class="divvv3-title">
+                          <div class="divvv3">
                             점주전화번호
                           </div>
                           <div class="divvv3">
