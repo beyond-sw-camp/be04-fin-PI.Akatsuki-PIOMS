@@ -14,15 +14,6 @@
               <option value="답변완료">답변완료</option>
             </select>
           </td>
-          <td class="filter-label">가맹점명</td>
-          <td class="filter-input">
-            <select id="selectedFranchise" v-model="selectedFranchise" title="가맹점명 선택">
-              <option value="">가맹점명</option>
-              <option v-for="franchise in franchises" :key="franchise.code" :value="franchise.name">
-                {{ franchise.name }}
-              </option>
-            </select>
-          </td>
         </tr>
         <tr>
           <td class="filter-label">등록일</td>
@@ -34,6 +25,7 @@
         </tr>
       </table>
     </div>
+
     <div class="action-buttons">
       <button @click="resetFilters" class="reset-btn">
         <img src="@/assets/icon/reset.png" alt="Reset" />
@@ -42,6 +34,11 @@
         <img src="@/assets/icon/search.png" alt="Search" />
       </button>
     </div>
+
+    <div class="table-header">
+      <button @click="createAsk" class="create-btn">문의작성</button>
+    </div>
+
     <div class="table-container">
       <table class="table">
         <thead>
@@ -50,7 +47,6 @@
           <th>문의상태</th>
           <th>문의제목</th>
           <th>작성자</th>
-          <th>가맹점명</th> <!-- 추가된 부분 -->
           <th>등록일</th>
           <th>수정일</th>
           <th>답변일</th>
@@ -63,7 +59,6 @@
           <td>{{ ask.askStatus }}</td>
           <td class="boardname">{{ ask.askTitle }}</td>
           <td>{{ ask.franchiseOwnerName }}</td>
-          <td>{{ ask.franchiseName }}</td> <!-- 추가된 부분 -->
           <td>{{ formatDate(ask.askEnrollDate) }}</td>
           <td>{{ formatDate(ask.askUpdateDate) }}</td>
           <td>{{ formatDate(ask.askCommentDate) }}</td>
@@ -71,9 +66,9 @@
             <button
                 class="editbutton"
                 :class="{ 'editbutton-pending': ask.askStatus === '답변대기' }"
-                @click="ask.askStatus === '답변대기' ? registerAnswer(ask.askCode) : editAnswer(ask.askCode)"
+                @click="ask.askStatus === '답변대기' ? editAsk(ask.askCode) : viewAsk(ask.askCode)"
             >
-              {{ ask.askStatus === '답변대기' ? '답변 작성' : '답변 조회' }}
+              {{ ask.askStatus === '답변대기' ? '문의 수정' : '문의 조회' }}
             </button>
           </td>
         </tr>
@@ -97,7 +92,6 @@ const filteredAsks = ref([]);
 const filterStatus = ref('전체');
 const startDate = ref('');
 const endDate = ref('');
-const selectedFranchise = ref('');
 
 const currentPage = ref(1);
 const itemsPerPage = 15;
@@ -106,18 +100,11 @@ const breadcrumbs = [
   { label: '문의사항 조회 및 관리', link: null },
 ];
 
-const franchises = ref([
-  { code: 1, name: 'PIOMS 신사점' },
-  { code: 2, name: 'PIOMS 강남점' },
-  { code: 3, name: 'PIOMS 더현대서울점' },
-  { code: 4, name: 'PIOMS 홍대점' },
-  { code: 5, name: 'PIOMS 성수점' },
-  { code: 6, name: 'PIOMS 논현점' },
-]);
+const franchiseOwnerId = 1; // 점주 ID를 하드코딩합니다. 실제 구현에서는 로그인 시 세션이나 로컬스토리지에서 가져옵니다.
 
 const fetchAsks = async () => {
   try {
-    const response = await fetch('http://localhost:9000/admin/ask/list', {
+    const response = await fetch(`http://localhost:9000/franchise/asklist/${franchiseOwnerId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -138,11 +125,9 @@ const fetchAsks = async () => {
 const applyFilters = () => {
   filteredAsks.value = asks.value.filter(ask => {
     const matchesStatus = filterStatus.value === '전체' || ask.askStatus === filterStatus.value;
-    const matchesFranchise = !selectedFranchise.value || ask.franchiseName === selectedFranchise.value; // 필터 조건 수정
     const matchesStartDate = !startDate.value || new Date(ask.askEnrollDate[0], ask.askEnrollDate[1] - 1, ask.askEnrollDate[2]) >= new Date(startDate.value);
     const matchesEndDate = !endDate.value || new Date(ask.askEnrollDate[0], ask.askEnrollDate[1] - 1, ask.askEnrollDate[2]) <= new Date(endDate.value);
-
-    return matchesStatus && matchesFranchise && matchesStartDate && matchesEndDate;
+    return matchesStatus && matchesStartDate && matchesEndDate;
   });
 };
 
@@ -150,7 +135,6 @@ const resetFilters = () => {
   filterStatus.value = '전체';
   startDate.value = '';
   endDate.value = '';
-  selectedFranchise.value = '';
   filteredAsks.value = asks.value;
   currentPage.value = 1; // 페이지 리셋
 };
@@ -188,23 +172,28 @@ const nextPage = () => {
   }
 };
 
-const openAnswerForm = (askCode, mode) => {
+const openAskForm = (askCode, mode) => {
   const width = 800;
-  const height = 600;
+  const height = 650;
   const left = (window.screen.width / 2) - (width / 2);
   const top = (window.screen.height / 2) - (height / 2);
-  const url = `http://localhost:5173/admin/answerform/${mode}?askCode=${askCode}`;
+  const url = `http://localhost:5173/franchise/askform/${mode}?askCode=${askCode}`;
   window.open(url, 'popup', `width=${width},height=${height},top=${top},left=${left},toolbar=no,scrollbars=no,resizable=no`);
 };
 
+// 문의 작성 버튼 클릭 시
+const createAsk = () => {
+  openAskForm(null, 'create');
+};
+
 // 답변 등록 버튼 클릭 시
-const registerAnswer = (askCode) => {
-  openAnswerForm(askCode, 'register');
+const editAsk = (askCode) => {
+  openAskForm(askCode, 'edit');
 };
 
 // 답변 수정 버튼 클릭 시
-const editAnswer = (askCode) => {
-  openAnswerForm(askCode, 'edit');
+const viewAsk = (askCode) => {
+  openAskForm(askCode, 'view');
 };
 
 onMounted(() => {
@@ -215,7 +204,7 @@ onMounted(() => {
 <style scoped>
 .container {
   position: relative;
-  min-height: 100vh; /* Ensure the container takes at least the full height of the viewport */
+  min-height: 100vh;
 }
 
 .filter-section {
@@ -250,13 +239,18 @@ onMounted(() => {
   border: 1px solid lightgray;
 }
 
+.date-range {
+  display: flex;
+  align-items: center;
+}
+
 .date-range span {
   margin: 0 5px;
 }
 
 .action-buttons {
   display: flex;
-  justify-content: center;
+  justify-content: center; /* 가운데 정렬 */
   margin-top: 10px;
 }
 
@@ -275,8 +269,33 @@ onMounted(() => {
   background-color: #f0f0f0;
 }
 
+.table-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.create-btn {
+  background-color: #fff;
+  color: black;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 8px 16px;
+  font-size: 14px;
+  margin: 0 5px;
+  position: relative;
+  top: 10px; /* 원하는 위치로 이동 */
+  right: 346px; /* 원하는 위치로 이동 */
+}
+
+.create-btn:hover {
+  background-color: #f0f0f0;
+}
+
 .table-container {
   width: 100%;
+  margin-top: 10px; /* 리스트와의 간격 조정 */
   margin-bottom: 10px;
   display: flex;
   justify-content: center;
@@ -378,3 +397,4 @@ onMounted(() => {
   font-weight: bold;
 }
 </style>
+ 

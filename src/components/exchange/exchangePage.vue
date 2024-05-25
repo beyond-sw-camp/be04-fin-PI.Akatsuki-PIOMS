@@ -1,27 +1,37 @@
 <template>
   <div>
-    <div class="create-button">
-      <input type="button" value="발주하기" @click="showPopup">
-    </div>
+
+    <input class="create-button" type="button" value="발주하기" @click="showPopup" style="  cursor : pointer; border:0; ">
+
 
     <popup v-if="createPopup" :showPopup="showPopup" :popupVisible="createPopup"/>
     <OrderDetail v-if="createDetailPopup" :showDetailPopup="showDetailPopup" :popupVisible="createDetailPopup" :detailItem="detailItem"/>
 
-    <div>
-      <input v-model="filter" placeholder="검색어를 입력하세요" @input="applyFilter" />
-      <select v-model="dateFilter" @change="applyFilter">
-        <option value="">날짜 순서</option>
-        <option value="recent">최근순</option>
-        <option value="old">오래된순</option>
-      </select>
-      <select v-model="conditionFilter" @change="applyFilter">
-        <option value="">주문 상태</option>
-        <option value="승인대기">승인대기</option>
-        <option value="승인완료">승인완료</option>
-        <option value="승인거부">승인거부</option>
-        <option value="검수대기">검수대기</option>
-        <option value="검수완료">검수완료</option>
-      </select>
+    <div class="filter-container">
+      <div class="radio-group">
+        <div class="title">
+        <label style="width:100px">검색 </label></div>
+        <input v-model="filter" placeholder="검색어를 입력하세요" @input="applyFilter" />
+      </div>
+      <div class="radio-group">
+        <div class="title"><label style="width:100px">날짜</label></div>
+        <label>
+          최신순 <input checked type="radio" value="recent" name="dateOrder" v-model="dateFilter" @change="applyFilter" >
+        </label>
+        <label>
+          오래된순 <input type="radio" value="old" name="dateOrder" v-model="dateFilter" @change="applyFilter" >
+        </label>
+      </div>
+      <div class="radio-group">
+        <div class="title">
+        <label style="width:100px">발주상태</label></div>
+        <label> 전체 <input type="radio" value="" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter" checked></label>
+        <label> 승인대기 <input type="radio" value="승인대기" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
+        <label> 발주승인 <input type="radio" value="승인완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
+        <label> 발주반려 <input type="radio" value="승인거부" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
+        <label> 검수대기 <input type="radio" value="검수대기" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
+        <label> 검수완료 <input type="radio" value="검수완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
+      </div>
     </div>
 
     <table>
@@ -53,20 +63,22 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import popup from './orderPopup.vue';
-import OrderDetail from './orderDetail.vue';
+import popup from './exchangePopup.vue';
+import OrderDetail from './exchangeDetail.vue';
+
 
 const lists = ref([]);
+
+// 추후 토큰으로 받을 예정
+const franchiseCode = ref(1);
+const adminCode = ref(2);
+
 const headers = ref([
-  { key: 'orderCode', label: '주문 코드' },
-  { key: 'orderDate', label: '주문 날짜' },
-  { key: 'orderTotalPrice', label: '총 가격' },
-  { key: 'orderCondition', label: '주문 상태' },
-  { key: 'orderReason', label: '주문 사유' },
+  { key: 'exchangeCode', label: '주문 코드' },
+  { key: 'exchangeDate', label: '주문 날짜' },
+  { key: 'exchangeStatus', label: '주문 상태' },
   { key: 'franchiseCode', label: '가맹점 코드' },
   { key: 'franchiseName', label: '가맹점 이름' },
-  { key: 'deliveryDate', label: '배송 날짜' },
-  { key: 'franchiseOwnerCode', label: '가맹점주 코드' },
   { key: 'franchiseOwnerName', label: '가맹점주 이름' },
   { key: 'franchiseAddress', label: '가맹점 주소' },
   { key: 'exchange', label: '교환 코드' },
@@ -82,19 +94,19 @@ const conditionFilter = ref('');
 
 const getMemberId = async () => {
   try {
-    const response = await fetch('/api/admin/1/orders', {
+    const response = await fetch(`/api/admin/exchanges?adminCode=${adminCode.value}`, {
       method: 'GET',
     });
 
     if (!response.ok) {
       throw new Error('네트워크 오류 발생');
     }
-
     const data = await response.json();
     if (data.length > 0) {
       lists.value = data.map(({  ...rest }) => rest);
 
       filteredLists.value = lists.value;
+
       console.log(lists);
     } else {
       lists.value = [];
@@ -105,17 +117,22 @@ const getMemberId = async () => {
   }
 };
 
+
+
 const applyFilter = () => {
   currentPage.value = 1; // 필터 적용 시 페이지를 초기화합니다.
+  if(conditionFilter.value == ""){
+    filteredLists.value = lists.value;
+  }else{
+    filteredLists.value = lists.value.filter(item =>
+      (Object.values(item).some(val =>
+        String(val).toLowerCase().includes(filter.value.toLowerCase())
+      )) &&
+      (dateFilter.value ? true : true) && 
+      (conditionFilter.value ? item['orderCondition'] === conditionFilter.value : true)
+    );
+  }
   
-  filteredLists.value = lists.value.filter(item =>
-    (Object.values(item).some(val =>
-      String(val).toLowerCase().includes(filter.value.toLowerCase())
-    )) &&
-    (dateFilter.value ? true : true) && // 날짜 필터는 따로 처리하지 않습니다.
-    (conditionFilter.value ? item['orderCondition'] === conditionFilter.value : true)
-  );
-
   // 날짜를 오래된 순으로 정렬합니다.
   if (dateFilter.value === 'old') {
     filteredLists.value.sort((a, b) => compareDate(a.orderDate, b.orderDate));
@@ -182,36 +199,9 @@ const resetRowColor = (index) => {
 };
 </script>
 
-<style scoped>
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
 
-th, td {
-  border: 1px solid #ddd;
-  padding: 8px;
-}
 
-th {
-  background-color: #f2f2f2;
-  text-align: left;
-}
+<style>
+  @import "../../assets/css/order.css" ;
 
-.pagination {
-  margin-top: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-button {
-  margin: 0 5px;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-.highlighted {
-  background-color: yellow;
-}
 </style>
