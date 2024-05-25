@@ -1,8 +1,6 @@
 <template>
     <div class="popup-overlay" v-if="writeActive">
       <div class="popup-content">
-        
-        
         <div class="info">
         <h2 align="center">발주서 생성</h2>
         <br /><br /><br />
@@ -12,26 +10,6 @@
             <div class="title"><label style="width:100px">검색 </label></div>
             <input v-model="filter" placeholder="검색어를 입력하세요" @input="applyFilter" />
           </div>
-
-          <div class="radio-group">
-            <div class="title"><label style="width:100px">상품상태</label></div>
-
-            <label>
-              전체 <input type="radio" value="" name="dateOrder" v-model="conditionFilter" @change="applyFilter" checked>
-            </label>
-            <label>
-              공급가능 <input type="radio" value="공급가능" name="dateOrder" v-model="conditionFilter" @change="applyFilter" >
-            </label>
-            <label>
-              일시제한 <input type="radio" value="일시제한" name="dateOrder" v-model="conditionFilter" @change="applyFilter" >
-            </label>
-            <label>
-              단종 <input type="radio" value="단종" name="dateOrder" v-model="conditionFilter" @change="applyFilter" >
-            </label>
-            <label>
-              품절 <input type="radio" value="품절" name="dateOrder" v-model="conditionFilter" @change="applyFilter">
-            </label>
-          </div>
       </div>
 
     <div align="center">
@@ -40,7 +18,7 @@
           <table>
             <thead>
               <tr>
-                <th>상품 코드</th><th>상품 이름</th><th>상품 가격</th><th>본사 수량</th><th>상품 상태</th><th>색상</th><th>상품 설명</th><th>상품카테고리</th><th>성별</th>
+                <th>가맹상품 코드</th><th>상품 이름</th><th>누적량</th> <th>보유량</th><th>판매가능수량</th>
               </tr>
             </thead>
 
@@ -50,16 +28,13 @@
                   @dblclick="addProductToList(product)" 
                   @mouseenter="highlightRow(index)"
                   @mouseleave="resetRowColor(index)"
-                  style="cursor: pointer;">
-                <td>{{ product.productCode }}</td>
-                <td>{{ product.productName }}</td>
-                <td>{{ product.productPrice }}원</td>
-                <td>{{ product.productCount }}개</td>
-                <td>{{ product.productStatus }}</td>
-                <td>{{ product.productColor }}</td>
-                <td>{{ product.productContent }}</td>
-                <td>{{ product.categoryThirdCode }}</td>
-                <td>{{ product.productGender }}</td>
+                  style="cursor: pointer;"
+                  align="center">
+                <td>{{ product.franchiseWarehouseCode }}</td>
+                <td>{{ product.product.productName }}</td>
+                <td>{{ product.franchiseWarehouseTotal }}</td>
+                <td>{{ product.franchiseWarehouseEnable }}</td>
+                <td>{{ product.franchiseWarehouseCount }}</td>
               </tr>
             </tbody>
           </table>
@@ -71,18 +46,25 @@
         <div class="table-wrapper2">
         <table>
           <thead>
-            <tr>
+            <tr align="center">
               <th>상품 코드</th>
               <th>상품 이름</th>
               <th>상품 수량</th>
+              <th>반품/폐기</th>
               <th>수량</th>
               <th>선택</th>
             </tr>
           </thead>
-          <tr v-for="(selectedProduct, index) in selectedProducts" :key="index">
-            <td>{{ selectedProduct.productCode }}</td>
-            <td>{{ selectedProduct.productName }}</td>
-            <td>{{ selectedProduct.productCount }}</td>
+          <tr v-for="(selectedProduct, index) in selectedProducts" :key="index" align="center">
+            <td>{{ selectedProduct.franchiseWarehouseCode }}</td>
+            <td>{{ selectedProduct.product.productName }}</td>
+            <td>{{ selectedProduct.franchiseWarehouseEnable }}</td>
+            <td align="center">
+            <select>
+              <option value="교환">교환</option>
+              <option value="폐기">폐기</option>
+            </select>
+          </td>
             <td><input type="number" v-model="selectedProduct.quantity" min="1" @change="calculateTotalPrice" /></td>
             <td><button class="button2" @click="removeProductFromList(index)">취소</button></td>
           </tr>
@@ -121,14 +103,9 @@
     }
     filteredLists.value = products.value.filter((item) => {
       const matchesFilter = filter.value
-        ? item.productName.toLowerCase().includes(filter.value.toLowerCase()) ||
-          item.productPrice.toString().includes(filter.value)
+        ? item.productName.toLowerCase().includes(filter.value.toLowerCase())
         : true;
-      const matchesCondition = conditionFilter.value
-        ? item.productStatus === conditionFilter.value
-        : true;
-
-      return matchesFilter && matchesCondition;
+      return matchesFilter;
     });
     console.log("Filtered Lists:", filteredLists.value);
   };
@@ -138,16 +115,18 @@
   const getProducts = async () => {
     try {
 
-      const response = await fetch("/api/franchise/product", {
+      const response = await fetch("/api/warehouse/list?franchiseOwnerCode=1", {
         method: "GET",
       });
       if (!response.ok) {
         throw new Error("네트워크 오류 발생");
       }
       const data = await response.json();
-      products.value = data.map(({ orderProductList, ...rest }) => ({ ...rest, quantity: 1 }));
+
+      products.value = data;
       filteredLists.value = products.value;
-      console.log(products);
+      console.log(products.value);
+      console.log(filteredLists.value);
       
     } catch (error) {
       console.error("오류 발생:", error);
@@ -159,7 +138,7 @@
   const totalPrice = ref(0);
   
   const addProductToList = (product) => {
-    if (!selectedProducts.value.some((p) => p.productCode === product.productCode)) {
+    if (!selectedProducts.value.some((p) => p.franchiseWarehouseCode === product.franchiseWarehouseCode)) {
       selectedProducts.value.push(product);
       calculateTotalPrice();
     }

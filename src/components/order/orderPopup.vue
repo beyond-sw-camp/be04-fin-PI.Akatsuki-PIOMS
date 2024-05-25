@@ -197,7 +197,7 @@
   };
 
   try {
-    const response = await fetch("/api/franchise/1/order", {
+    const response = await fetch("http://localhost:5000/franchise/order?franchiseCode=1", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
