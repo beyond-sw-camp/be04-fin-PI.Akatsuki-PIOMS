@@ -347,18 +347,17 @@ const uploadAndSaveProduct = async () => {
 
 <style scoped>
 .popup-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.1);
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  display: flex;
-  justify-content: center;
-  padding-top: 40px;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: 20%; /*가로길이 설정은 여기서*/
+  margin-left: -10%; /*width의 반만큼 음수로*/
+  height: 300px; /*세로길이 설정은 여기서*/
+  margin-top: -150px; /*height의 반만큼 음수로*/
   z-index: 1000;
-  width: 100%;
+  background: white;
+  border: 1px solid #d1d8dd;
+  box-shadow: 0 0 6px 1px rgb(0 0 0 / 30%);
 }
 
 .popup-content {
