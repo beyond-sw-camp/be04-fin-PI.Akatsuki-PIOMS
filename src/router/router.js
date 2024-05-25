@@ -58,7 +58,7 @@ const routes = [
         component: OrderPage
     },
     {
-        path: '',
+        path: '/admin/product/list',
         name: 'AdminProductList',
         component: ProductList
     },
