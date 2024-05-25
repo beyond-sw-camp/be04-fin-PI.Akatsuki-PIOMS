@@ -237,6 +237,9 @@ const props = defineProps({
     required: true
   }
 });
+
+const item = ref({});
+
 const saveProduct = async (imageUrl) => {
   const requestData = {
     productName: updateProductName.value,
@@ -282,6 +285,8 @@ const closePopup = () => {
 };
 
 onMounted(() => {
+  updateProductName.value = item.value.productName;
+  updateProductCount.value = item.value.productCount;
   const numberInputs = document.querySelectorAll('input[type="number"]');
   numberInputs.forEach(input => {
     input.addEventListener('keypress', (event) => {
