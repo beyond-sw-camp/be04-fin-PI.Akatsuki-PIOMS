@@ -446,7 +446,8 @@ h2 {
 
 }
 
-
+.insert-input input {
+}
 .second-insert-table {
   border-collapse: collapse;
   background-color: #f9f9f9;
