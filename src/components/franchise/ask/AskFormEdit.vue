@@ -53,7 +53,7 @@ export default {
         return;
       }
       try {
-        const response = await axios.get(`http://localhost:9000/franchise/ask/${askCode}`);
+        const response = await axios.get(`http://localhost:5000/franchise/ask/${askCode}`);
         askData.value = response.data;
       } catch (error) {
         console.error('Failed to fetch ask data:', error);
@@ -82,7 +82,7 @@ export default {
         return;
       }
       try {
-        const response = await fetch(`http://localhost:9000/franchise/update/${askCode}`, {
+        const response = await fetch(`http://localhost:5000/franchise/update/${askCode}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',

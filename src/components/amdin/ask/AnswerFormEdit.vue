@@ -54,7 +54,7 @@ export default {
         return;
       }
       try {
-        const response = await axios.get(`http://localhost:9000/admin/ask/${askCode}`);
+        const response = await axios.get(`http://localhost:5000/admin/ask/${askCode}`);
         askData.value = response.data;
         answer.value = response.data.askAnswer || ''; // 이미 작성된 답변을 불러옵니다.
       } catch (error) {
@@ -85,7 +85,7 @@ export default {
         return;
       }
       try {
-        await axios.post(`http://localhost:9000/admin/ask/answer/${askCode}`, {
+        await axios.post(`http://localhost:5000/admin/ask/answer/${askCode}`, {
           answer: answer.value,
         });
         window.close();

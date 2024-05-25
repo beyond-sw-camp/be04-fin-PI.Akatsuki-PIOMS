@@ -49,7 +49,7 @@ const routes = [
     {
         path: '/admin/answerform/register',
         name: 'AnswerFormRegister',
-        component: AnswerFormRegister 
+        component: AnswerFormRegister
     },
     {
         path: '/admin/answerform/edit',
