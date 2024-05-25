@@ -54,7 +54,7 @@ export default {
         return;
       }
       try {
-        const response = await axios.get(`http://localhost:9000/admin/ask/${askCode}`);
+        const response = await axios.get(`http://localhost:5000/admin/ask/${askCode}`);
         askData.value = response.data;
       } catch (error) {
         console.error('Failed to fetch ask data:', error);
@@ -83,7 +83,7 @@ export default {
         return;
       }
       try {
-        await axios.post(`http://localhost:9000/admin/ask/answer/${askCode}`, {
+        await axios.post(`http://localhost:5000/admin/ask/answer/${askCode}`, {
           answer: answer.value,
         });
         window.close();

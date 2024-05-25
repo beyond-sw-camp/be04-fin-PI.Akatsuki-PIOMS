@@ -39,7 +39,7 @@ export default {
 
     const fetchFranchiseOwnerData = async () => {
       try {
-        const response = await fetch(`http://localhost:9000/franchise/owner/${franchiseOwnerCode}`, {
+        const response = await fetch(`http://localhost:5000/franchise/owner/${franchiseOwnerCode}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ export default {
     };
     const submitAsk = async () => {
       try {
-        const response = await fetch(`http://localhost:9000/franchise/ask/create/${franchiseOwnerCode}`, {
+        const response = await fetch(`http://localhost:5000/franchise/ask/create/${franchiseOwnerCode}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
