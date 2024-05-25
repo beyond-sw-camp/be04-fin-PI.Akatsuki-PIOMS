@@ -1,14 +1,14 @@
 <template>
   <!-- root 관리자 header -->
   <header class="header">
-    <img class="logo" src="@/assets/icon/PIOMS_로고.png" alt="Logo"/>
+<!--    <img class="logo" src="@/assets/icon/PIOMS_로고.png" alt="Logo"/>-->
     <section class="header_info">
       <div class="crown">
-        <img class="crown_icon" src="@/assets/icon/root/Crown.png" alt="Crown"/>
+<!--        <img class="crown_icon" src="@/assets/icon/root/Crown.png" alt="Crown"/>-->
         <h5><u>Akatsuki</u>님 정보</h5>
       </div>
       <div class="dictionary">
-        <img class="dictionary_icon" src="@/assets/icon/Dictionary.png" alt="Dictionary"/>
+<!--        <img class="dictionary_icon" src="@/assets/icon/Dictionary.png" alt="Dictionary"/>-->
         <h5>관리자 메뉴얼</h5>
       </div>
       <div>
@@ -27,7 +27,7 @@
   <!-- 카테고리 -->
   <nav class="header_rootAdmin">
     <ul class="nav_header">
-      <li><a href="#" class="dashboard" style= "display: flex;"><img src="@/assets/icon/dashboard.png"></a></li>
+<!--      <li><a href="#" class="dashboard" style= "display: flex;"><img src="@/assets/icon/dashboard.png"></a></li>-->
 
       <li><a href="#" class="label">가맹점 및 직원 관리</a>
         <container class="submenu_box">
