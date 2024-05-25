@@ -1,4 +1,4 @@
-name: piomsfe
+name: PIOMSF2
 
 on:
   push:
@@ -37,8 +37,8 @@ jobs:
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: PIOMSFE
-          environment_name: PIOMSFE-env
+          application_name: PIOMSF2
+          environment_name: PIOMSF2-env
           version_label: deploy-${{ github.run_number }}
           region: ap-northeast-2
           deployment_package: deploy.zip
@@ -47,7 +47,7 @@ jobs:
 
       - name: Check deployment status
         run: |
-          STATUS=$(aws elasticbeanstalk describe-environments --environment-names PIOMSFE-env --query 'Environments[0].Health' --output text)
+          STATUS=$(aws elasticbeanstalk describe-environments --environment-names PIOMSF2-env --query 'Environments[0].Health' --output text)
           if [ "$STATUS" != "Green" ]; then
             echo "Deployment failed. Environment health is $STATUS."
             exit 1
@@ -62,7 +62,7 @@ jobs:
       - name: Retrieve EB Engine Log
         if: failure()
         run: |
-          EB_LOG=$(aws elasticbeanstalk describe-environment-resources --environment-name PIOMSFE-env --query 'EnvironmentResources.Instances[0].Id' --output text)
+          EB_LOG=$(aws elasticbeanstalk describe-environment-resources --environment-name PIOMSF2-env --query 'EnvironmentResources.Instances[0].Id' --output text)
           echo "Instance ID: $EB_LOG"
           COMMAND_ID=$(aws ssm send-command --document-name "AWS-RunShellScript" --targets "Key=InstanceIds,Values=$EB_LOG" --parameters 'commands=["sudo cat /var/log/eb-engine.log"]' --query 'Command.CommandId' --output text)
           sleep 10

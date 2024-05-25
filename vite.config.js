@@ -19,9 +19,5 @@ export default defineConfig({
         rewrite: path => path.replace(/^\/api/, ''),
       },
     },
-    // https: {
-    //   key: fs.readFileSync('/Users/duck/Desktop/Keys/localhost-key.pem'),
-    //   cert: fs.readFileSync('/Users/duck/Desktop/Keys/localhost.pem')
-    // }
   }
 })
