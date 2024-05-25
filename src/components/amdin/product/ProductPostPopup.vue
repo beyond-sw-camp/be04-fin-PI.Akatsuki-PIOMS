@@ -363,7 +363,6 @@ const uploadAndSaveProduct = async () => {
 
 .popup-content {
   background: #fff;
-  padding: 0;
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
   position: relative;
@@ -421,7 +420,6 @@ h2 {
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 10px;
-  width: 1200px;
 }
 .insert-table tr {
   text-align: center;
@@ -447,13 +445,14 @@ h2 {
   height: 30px;
 
 }
+
+
 .second-insert-table {
   border-collapse: collapse;
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 10px;
-  width: 1200px;
   border-top: none;
 }
 .second-insert-table tr {
