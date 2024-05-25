@@ -260,7 +260,7 @@ const getMemberId = async () => {
 
 const downloadExcel = () => {
   axios({
-    url: 'http://localhost:9000/admin/exceldownload/product-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
+    url: 'http://localhost:5000/admin/exceldownload/product-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
     method: 'GET',
     responseType: 'blob', // 서버에서 반환되는 데이터의 형식을 명시
   }).then((response) => {
