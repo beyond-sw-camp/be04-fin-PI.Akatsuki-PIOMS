@@ -26,8 +26,11 @@ jobs:
 
       - name: Zip the build artifacts
         run: |
-          cd dist
-          zip -r ../deploy.zip .
+          mkdir -p deploy
+          cp -r dist/* deploy/
+          cp server.js package.json Procfile deploy/
+          cd deploy && zip -r ../deploy.zip .
+        shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
 
       - name: Deploy to AWS Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
@@ -39,6 +42,8 @@ jobs:
           version_label: deploy-${{ github.run_number }}
           region: ap-northeast-2
           deployment_package: deploy.zip
+          wait_for_environment_recovery: 180
+
 
       - name: Check deployment status
         run: |
