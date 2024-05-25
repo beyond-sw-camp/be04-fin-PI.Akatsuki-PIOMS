@@ -400,9 +400,7 @@ const uploadAndSaveProduct = async () => {
 .popup-body {
   padding: 10px;
   padding-top: unset;
-  height: 1200px;
 }
-
 
 h2 {
   margin-top: 0;
@@ -417,6 +415,7 @@ h2 {
 
 .table-wrapper {
   border-radius: 0 !important;
+  height: 100%;
 }
 
 .insert-table {
@@ -515,9 +514,12 @@ h2 {
   cursor: pointer;
   color: #333;
 }
-
+.close-button:hover{
+  background-color: #00ff0000;
+}
 .img-close-button:hover {
-  color: #f00;
+  background-color: #00ff0000;
+  color: #ff0000;
 }
 
 .post-button {
@@ -539,6 +541,7 @@ h2 {
   cursor: pointer;
   font-size: 1em;
   margin-left: 80%;
+  margin-top: 2%;
 }
 
 .action-button:hover {
@@ -548,6 +551,7 @@ h2 {
 .textInput-name {
   border: 1px solid rgba(217, 217, 217, 0.7);
   border-radius: 5px;
+  height: 20px;
 }
 
 .textInput {

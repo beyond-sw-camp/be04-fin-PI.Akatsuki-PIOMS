@@ -304,10 +304,10 @@ onMounted(() => {
   position: fixed;
   left: 50%;
   top: 50%;
-  width: 20%; /*가로길이 설정은 여기서*/
-  margin-left: -10%; /*width의 반만큼 음수로*/
-  height: 300px; /*세로길이 설정은 여기서*/
-  margin-top: -150px; /*height의 반만큼 음수로*/
+  width: 50%;
+  margin-left: -25%;
+  height: 300px;
+  margin-top: -150px;
   z-index: 1000;
   background: white;
   border: 1px solid #d1d8dd;
@@ -320,19 +320,22 @@ onMounted(() => {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
   position: relative;
   width: 1200px;
-  height: 800px;
+  height: 1200px;
   text-align: center;
+  overflow-y: auto; /* 내용이 많을 경우 스크롤 추가 */
 }
 
 .close-button {
   position: absolute;
-  top: 15px;
-  right: 15px;
+  top: 32px;
+  right: 80px;
   background: none;
   border: none;
-  font-size: 1.5em;
+  font-size: 2em;
   cursor: pointer;
   color: #333;
+  padding: 0; /* 추가 */
+  margin: 0; /* 추가 */
 }
 
 .popup-header {
@@ -344,15 +347,17 @@ onMounted(() => {
   background-color: #D9D9D9;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+  width: 1063px;
+  margin-left: 3.2%;
 }
 
 .popup-body {
-  padding: 30px;
-  text-align: center;
+  padding: 10px;
+  padding-top: unset;
 }
 
 .close-button:hover {
-  color: #f00;
+  background-color: #00ff0000;
 }
 
 h2 {
@@ -379,18 +384,16 @@ h2 {
 .insert-section {
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
 }
 
 .insert-table {
   border-collapse: collapse;
-  background-color: #f9f9f9;
   border: 1px solid #ddd;
-  border-radius: 5px;
   padding: 10px;
-  width: 1200px;
 }
-
+.table-wrapper {
+  border-radius: 0 !important;
+}
 .insert-table tr {
   text-align: center;
 }
@@ -402,10 +405,10 @@ h2 {
 .insert-label {
   font-weight: bold;
   text-align: center;
+  font-size: 12px;
   width: 10%;
   background-color: #D9D9D9;
   border: 1px solid #ddd;
-  font-size: 12px;
 }
 
 .insert-input {
@@ -423,7 +426,6 @@ h2 {
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 10px;
-  width: 1200px;
   border-top: none;
 }
 
@@ -439,10 +441,10 @@ h2 {
 .second-insert-label {
   font-weight: bold;
   text-align: center;
+  font-size: 12px;
   width: 10%;
   background-color: #D9D9D9;
   border: 1px solid #ddd;
-  font-size: small;
 
 }
 
@@ -479,7 +481,8 @@ h2 {
 }
 
 .img-close-button:hover {
-  color: #f00;
+  background-color: #00ff0000;
+  color: #ff0000;
 }
 .textInput {
   border: 1px solid rgba(217, 217, 217, 0.7);
@@ -502,7 +505,6 @@ h2 {
   border-radius: 5px;
   cursor: pointer;
   font-size: 1em;
-  margin-left: 2%;
 }
 .action-button {
   background-color: #D9D9D9;
@@ -512,7 +514,9 @@ h2 {
   border-radius: 5px;
   cursor: pointer;
   font-size: 1em;
-  margin-left: 85%;
+  margin-left: 80%;
+  margin-top: 2%;
+
 }
 
 .action-button:hover {
