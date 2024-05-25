@@ -46,11 +46,22 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr class="table" v-for="(product, rowIndex) in list" :key="rowIndex">
-                    <td v-for="(header, colIndex) in headers" :key="colIndex">
-                      <div >{{ product[header.key] }}</div>
+                  <tr class="table" v-for="(product, rowIndex) in list" :key="rowIndex" v-if="item.exchangeStatus=='반송중'">
+                    <td>{{product.productName}}</td>
+                    <td>{{product.exchangeProductStatus}}</td>
+                    <td>{{product.exchangeProductCount}}</td>
+                    <td><input type="number"/></td>
+                    <td><input type="number"/></td>
+                  </tr>
+
+                  <tr class="table" 
+                    v-for="(product, rowIndex) in list" 
+                    v-else >
+                    <td v-for="(header, colIndex) in headers" :key="colIndex" >
+                      <div>{{ product[header.key] }}</div>
                     </td>
                   </tr>
+                  
                 </tbody>
               </table>
             </div>
