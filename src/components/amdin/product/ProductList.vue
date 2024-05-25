@@ -92,7 +92,7 @@
       </button>
     </div>
     <div class="post-btn" id="app">
-      <button @click="showPostPopup = true" class="postBtn">등록하기</button>
+      <button @click="showPostPopup = true" class="postBtn"><img src="@/assets/icon/new%20Item.png" alt="postProduct"></button>
       <ProductPostPopup v-if="showPostPopup" @close="showPostPopup = false" />
       <button @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
     </div>
@@ -370,13 +370,11 @@ fetchThirdCategories();
   margin-top: 10px;
 }
 .postBtn {
-  width: 67px;
-  height: 30px;
+  width: 100px;
+  height: 26px;
   border: none;
-  background-color: #D9D9D9;
+  background-color: white;
   cursor: pointer;
-  text-align: center;
-  align-items: center;
 }
 .excelBtn {
   width: 100px;
@@ -402,8 +400,8 @@ fetchThirdCategories();
   justify-content: space-between; /* 양 끝에 정렬 */
   align-items: center; /* 수직 가운데 정렬 */
   position: absolute; /* 절대 위치 설정 */
-  left: 18.5%; /* 좌측 정렬 */
-  width: 1200px;
+  left: 17.6%; /* 좌측 정렬 */
+  width: 1210px;
 }
 
 .reset-btn:hover, .search-btn:hover {
@@ -452,10 +450,12 @@ fetchThirdCategories();
   height: 50px;
   font-size: 12px;
   text-align: center;
+  width: 5%;
 }
 
-.header1 {
-  width: 5%;
+.header1 th{
+  font-size: 15px;
+  text-align: center;
 }
 
 .allpost {
@@ -470,6 +470,7 @@ fetchThirdCategories();
 
 .allpost td {
   border-right: 1px solid #ddd;
+  font-size: 12px;
 }
 
 .button-as-text {

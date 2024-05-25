@@ -1,7 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import AnswerFormRegister from "@/components/amdin/ask/AnswerFormRegister.vue";
-import AnswerFormRegister from "@/components/amdin/ask/AnswerFormRegister.vue";
-import AdminLogin from "@/components/login/AdminLogin.vue";
 import FranchiseLogin from "@/components/login/FranchiseLogin.vue";
 import DriverLogin from "@/components/login/DriverLogin.vue";
 import CommonLogin from "@/components/login/CommonLogin.vue";

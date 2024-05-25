@@ -1,14 +1,14 @@
 <template>
   <header>
-    <!-- <RootAdmin/> -->
-   <AdminHeader/>
+     <RootAdmin/>
+<!--   <AdminHeader/>-->
 <!--    <FranchiseHeader/>-->
 <!--    <DriverHeader/>-->
   </header>
   
   <main>
   <router-view></router-view>
-  <!-- <ProductList/> -->
+   <ProductList/>
   </main>
 
   <footer>

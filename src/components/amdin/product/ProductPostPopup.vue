@@ -12,7 +12,7 @@
               <tr>
                 <td class="insert-label">상품명</td>
                 <td class="insert-input">
-                  <input type="text" v-model="insertProductName" class="textInput" placeholder="상품명을 입력하세요."/>
+                  <input type="text" v-model="insertProductName" class="textInput-name" placeholder="상품명을 입력하세요."/>
                 </td>
                 <td class="insert-label">재고량</td>
                 <td class="insert-input">
@@ -347,16 +347,18 @@ const uploadAndSaveProduct = async () => {
 
 <style scoped>
 .popup-overlay {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
   display: flex;
   justify-content: center;
   padding-top: 40px;
   z-index: 1000;
+  width: 100%;
 }
 
 .popup-content {
@@ -530,6 +532,10 @@ h2 {
 
 .action-button:hover {
   background-color: gray;
+}
+.textInput-name {
+  border: 1px solid rgba(217, 217, 217, 0.7);
+  border-radius: 5px;
 }
 .textInput {
   border: 1px solid rgba(217, 217, 217, 0.7);
