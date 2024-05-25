@@ -42,6 +42,8 @@ jobs:
           version_label: deploy-${{ github.run_number }}
           region: ap-northeast-2
           deployment_package: deploy.zip
+          wait_for_environment_recovery: 180
+
 
       - name: Check deployment status
         run: |
