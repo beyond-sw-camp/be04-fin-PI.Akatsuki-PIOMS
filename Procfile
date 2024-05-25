@@ -1,1 +1,1 @@
-web: appstart
+web: node server.js
