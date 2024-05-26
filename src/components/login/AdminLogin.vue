@@ -100,6 +100,7 @@ const login = async () => {
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
+  width: 300px; /* 폼의 고정된 너비를 설정 */
 }
 
 .login-form h2 {
