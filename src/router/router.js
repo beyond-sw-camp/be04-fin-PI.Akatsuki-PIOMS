@@ -17,6 +17,7 @@ import CategoryList from "@/components/amdin/Category/CategoryList.vue";
 import OrderPage from '@/components/order/orderPage.vue';
 
 import ExchangePage from '@/components/exchange/exchangePage.vue';
+import PostCategory from "@/components/amdin/Category/PostCategory.vue";
 
 
 
@@ -96,6 +97,11 @@ const routes = [
         path: '/admin/category/list',
         name: 'AdminProductCategoryList',
         component: CategoryList
+    },
+    {
+        path: '/admin/category/post',
+        name: 'AdminProductCategoryPost',
+        component: PostCategory
     },
     {
         path: '/exchange/list',
