@@ -7,7 +7,7 @@
       <h2>Admin 로그인</h2>
       <div class="input-group">
         <i class="fas fa-user"></i>
-        <input type="text" v-model="username" placeholder="ID" />
+        <input type="text" v-model="username" placeholder="아이디" />
       </div>
       <div class="input-group">
         <i class="fas fa-key"></i>
@@ -36,7 +36,7 @@ const router = useRouter();
 
 const login = async () => {
   try {
-    const response = await fetch('http://localhost:9000/admin/login', {
+    const response = await fetch('http://localhost:5000/admin/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
