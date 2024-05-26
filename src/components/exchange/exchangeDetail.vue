@@ -46,7 +46,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr class="table" v-for="(product, rowIndex) in list" :key="rowIndex" v-if="item.exchangeStatus=='반송중'">
+                  <tr class="table" v-for="(product, rowIndex) in list" :key="rowIndex" v-if="item.exchangeStatus=='처리대기'">
                     <td>{{product.productName}}</td>
                     <td>{{product.exchangeProductStatus}}</td>
                     <td>{{product.exchangeProductCount}}</td>

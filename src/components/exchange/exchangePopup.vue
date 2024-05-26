@@ -60,7 +60,7 @@
             <td>{{ selectedProduct.product.productName }}</td>
             <td>{{ selectedProduct.franchiseWarehouseEnable }}</td>
             <td align="center">
-            <select>
+              <select v-model="selectedProduct.exchangeProductStatus">
               <option value="교환">교환</option>
               <option value="폐기">폐기</option>
             </select>
@@ -73,7 +73,7 @@
     </div>
       <div style="display: flex; justify-content: right;">
         <p v-if="totalPrice > 0">총 가격: {{ totalPrice }}원</p>
-        <button @click="exportOrder">발주신청하기</button>
+        <button @click="exportExchange">반품신청하기</button>
         <button class="close" @click="showPopup" >돌아가기</button>
       </div>
       </div>
@@ -161,28 +161,33 @@
     document.querySelector(`#row-${index}`).classList.remove('highlighted');
   };
 
+  const franchiseCode = ref(1);
+  const franchiseOwnerCode = ref(2);
+  const exportExchange = async () => {
+  console.log("exportExchange");
 
-  const exportOrder = async () => {
-  console.log("exportOrder");
+  // selectedProducts 배열에서 필요한 데이터 추출
+  const productsData = selectedProducts.value.map((product) => ({
+    productCode: product.product.productCode,
+    exchangeProductCount: product.quantity,
+    exchangeProductStatus: product.exchangeProductStatus
+  }));
 
-  const productsData = selectedProducts.value.reduce((acc, product) => {
-    acc[product.productCode] = product.quantity;
-    return acc;
-  }, {});
-
-  const orderData = {
-    // products: productsData,
-    franchiseCode: 1 // 실제 프랜차이즈 코드를 사용 예정
+  const exchangeData = {
+    franchiseCode: 1, // 실제 프랜차이즈 코드를 사용 예정
+    exchangeStatus: "반송신청",
+    products: productsData
   };
 
   try {
-    const response = await fetch("/api/franchise/1/order", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(orderData)
-      });
+    const response = await fetch(`/api/franchise/exchange?franchiseOwnerCode=${franchiseOwnerCode.value}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(exchangeData)
+    });
+
     if (response.status == 406) {
       alert("생각은 하셨나요? 신청 재고량 너무 많거나, 이미 승인 대기중인 발주가 존재합니다.");
       props.showPopup();
@@ -193,13 +198,13 @@
       props.showPopup();
       throw new Error("네트워크 오류 발생");
     }
+
     const result = await response.json();
     console.log("주문 성공:", result);
     props.showPopup();
   } catch (error) {
     console.error("주문 오류 발생:", error);
   }
-
 };
 
 
