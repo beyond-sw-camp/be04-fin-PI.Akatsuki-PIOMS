@@ -137,6 +137,7 @@ const lists = ref([]);
 const headers = ref([
   { key: 'productCode', label: '상품 코드'},
   { key: 'productName', label: '상품명'},
+  { key: 'url', label: '상품 이미지'},
   { key: 'productCount', label: '본사 보유량'},
   { key: 'productDiscount', label: '본사 폐기량'},
   { key: 'productNoticeCount', label: '알림 기준 수량'},
@@ -221,6 +222,7 @@ const applyFilters = () => {
     return matchesExposureStatus && matchesStatus && matchesColor && matchesSize && matchesCategory;
   });
 };
+
 
 const resetFilters = () => {
   selectedExposureStatus.value = '전체';
@@ -400,7 +402,7 @@ fetchThirdCategories();
   justify-content: space-between; /* 양 끝에 정렬 */
   align-items: center; /* 수직 가운데 정렬 */
   position: absolute; /* 절대 위치 설정 */
-  left: 17.6%; /* 좌측 정렬 */
+  left: 24.1%; /* 좌측 정렬 */
   width: 1210px;
 }
 
@@ -495,8 +497,10 @@ fetchThirdCategories();
 }
 .headerTitle {
   text-align: left;
-  margin-left: 18.3%;
+  margin-left: 24.7%;
+  margin-bottom: 0.5%;
 }
+
 .product-sub-title {
   margin-left: 18%;
 }
@@ -511,4 +515,5 @@ fetchThirdCategories();
 .headerTitle h6 {
   margin: 0
 }
+
 </style>
