@@ -1,6 +1,6 @@
 <template>
   <div class="category-top">
-    <img src="@/assets/icon/Cloth.png" alt="" style="width: 50px; height: 50px">
+    <img src="@/assets/icon/Cloth.png" alt="" style="width: 40px; height: 40px">
     <span>
     상품 및 상품 카테고리 관리 > 상품 카테고리 관리 > 상품 카테고리 전체 조회
     </span>
