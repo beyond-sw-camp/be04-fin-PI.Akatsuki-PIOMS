@@ -14,7 +14,7 @@
         <input type="password" v-model="password" placeholder="비밀번호" />
       </div>
       <div class="input-group">
-        <i class="fas fa-key"></i>
+        <i class="fas fa-lock"></i>
         <input type="password" v-model="accessNumber" placeholder="Access Number" />
       </div>
       <button class="login-button" @click="login">로그인</button>
