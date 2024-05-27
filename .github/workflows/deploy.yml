@@ -37,7 +37,7 @@ jobs:
 
       - name: Upload build artifacts to S3
         run: |
-          aws s3 cp deploy.zip s3://your-s3-bucket-name/deploy/deploy-${{ github.run_number }}-${{ github.sha }}.zip
+          aws s3 cp deploy.zip s3://elasticbeanstalk-ap-northeast-2-730335325274 /deploy/deploy-${{ github.run_number }}-${{ github.sha }}.zip
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
