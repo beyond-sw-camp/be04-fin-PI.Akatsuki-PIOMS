@@ -2,7 +2,7 @@
   <div class="modal" @click.self="closePopup">
     <div class="modal-content">
       <h3>대분류 카테고리 수정</h3>
-      <p>카테고리 코드: {{ currentSecondCode }}</p>
+      <p>카테고리 코드: {{ currentThirdCode }}</p>
       <button @click="closePopup">닫기</button>
     </div>
   </div>
@@ -12,7 +12,7 @@
 import { defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
-  currentSecondCode: String,
+  currentThirdCode: String,
 });
 
 const emits = defineEmits(['close']);

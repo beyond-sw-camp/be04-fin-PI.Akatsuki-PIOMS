@@ -58,13 +58,16 @@
       </ul>
     </div>
     <CategoryFirstPopup v-if="editCategoryFirstVisible" :currentFirstCode="currentFirstCode" @close="editCategoryFirstVisible = false"/>
-
+    <CategorySecondPopup v-if="editCategorySecondVisible" :currentSecondCode="currentSecondCode" @close="editCategorySecondVisible = false"/>
+    <CategoryThirdPopup v-if="editCategoryThirdVisible" :currentThirdCode="currentThirdCode" @close="editCategoryThirdVisible = false"/>
   </div>
 </template>
 
 <script setup>
 import {ref} from 'vue';
 import CategoryFirstPopup from "@/components/amdin/Category/CategoryFirstPopup.vue";
+import CategorySecondPopup from "@/components/amdin/Category/CategorySecondPopup.vue";
+import CategoryThirdPopup from "@/components/amdin/Category/CategoryThirdPopup.vue";
 
 const firstCategories = ref([]);
 const secondCategories = ref([]);
@@ -74,7 +77,11 @@ const selectedSecondCategory = ref('');
 const filteredLists = ref([]);
 const lists = ref([]);
 const editCategoryFirstVisible = ref(false);
+const editCategorySecondVisible = ref(false);
+const editCategoryThirdVisible = ref(false);
 const currentFirstCode = ref('');
+const currentSecondCode = ref('');
+const currentThirdCode = ref('');
 
 const getCategoryFirstId = async () => {
   try {
@@ -156,6 +163,10 @@ const setCurrentSecondCode = (categorySecondCode) => {
   currentSecondCode.value = categorySecondCode;
 }
 
+const setCurrentThirdCode = (categoryThirdCode) => {
+  currentThirdCode.value = categoryThirdCode;
+}
+
 const editCategoryFirst = (categoryFirstCode) => {
   setCurrentFirstCode(categoryFirstCode);
   editCategoryFirstVisible.value = true;
@@ -164,6 +175,11 @@ const editCategorySecond = (categorySecondCode) => {
   setCurrentSecondCode(categorySecondCode);
   editCategorySecondVisible.value = true;
 };
+
+const editCategoryThird = (categoryThirdCode) => {
+  setCurrentThirdCode(categoryThirdCode);
+  editCategoryThirdVisible.value = true;
+}
 
 const deleteCategoryFirst = (categoryFirstCode) => {
   // 대분류 카테고리 삭제 로직
@@ -174,11 +190,6 @@ const deleteCategoryFirst = (categoryFirstCode) => {
 const deleteCategorySecond = (categorySecondCode) => {
   // 중분류 카테고리 삭제 로직
   alert(`중분류 카테고리 삭제: ${categorySecondCode}`);
-};
-
-const editCategoryThird = (categoryThirdCode) => {
-  // 소분류 카테고리 수정 로직
-  alert(`소분류 카테고리 수정: ${categoryThirdCode}`);
 };
 
 const deleteCategoryThird = (categoryThirdCode) => {
