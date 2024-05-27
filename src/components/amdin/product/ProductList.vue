@@ -92,7 +92,9 @@
       </button>
     </div>
     <div class="post-btn" id="app">
-      <button @click="showPostPopup = true" class="postBtn"><img src="@/assets/icon/new%20Item.png" alt="postProduct"></button>
+      <button @click="showPostPopup = true" class="postBtn">
+        <img src="@/assets/icon/new%20Item.png" alt="postProduct">
+      </button>
       <ProductPostPopup v-if="showPostPopup" @close="showPostPopup = false" />
       <button @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
     </div>
@@ -106,7 +108,20 @@
         <tbody>
         <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost">
           <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">
-            <button v-if="header.key === 'productName'" @click="showModifyPopup(item.productCode)" class="button-as-text">
+            <button v-if="header.key === 'productName'"
+                    class="button-as-text"
+                    @click="showModifyPopup(
+                        item.productCode,
+                        item.productName,
+                        item.productCount,
+                        item.productPrice,
+                        item.productStatus,
+                        item.productExposureStatus,
+                        item.productColor,
+                        item.productSize,
+                        item.productContent
+                        )"
+            >
               {{ item[header.key] }}
             </button>
             <span v-else>{{ item[header.key] }}</span>
@@ -123,7 +138,17 @@
       <span> {{currentPage}} / {{totalPages}} </span>
       <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
     </div>
-    <ProductDetailPopup v-if="currentProductCode" :currentProductCode="currentProductCode" @close="currentProductCode = null" />
+    <ProductDetailPopup v-if="currentProductCode"
+                        :currentProductCode="currentProductCode"
+                        :currentProductName="currentProductName"
+                        :currentProductCount="currentProductCount"
+                        :currentProductPrice="currentProductPrice"
+                        :currentProductStatus="currentProductStatus"
+                        :currentProductExposure="currentProductExposureStatus"
+                        :currentProductColor="currentProductColor"
+                        :currentProductSize="currentProductSize"
+                        :currentProductContent="currentProductContent"
+                        @close="currentProductCode = null"/>
   </div>
 </template>
 
@@ -162,6 +187,17 @@ const thirdCategories = ref([]);
 const selectedFirstCategory = ref('');
 const selectedSecondCategory = ref('');
 const selectedThirdCategory = ref('');
+
+const showPostPopup = ref(false);
+const currentProductCode = ref('');
+const currentProductName = ref('');
+const currentProductCount = ref('');
+const currentProductPrice = ref('');
+const currentProductStatus = ref('');
+const currentProductExposureStatus = ref('');
+const currentProductColor = ref('');
+const currentProductSize = ref('');
+const currentProductContent = ref('');
 
 const fetchFirstCategories = async () => {
   try {
@@ -234,14 +270,52 @@ const resetFilters = () => {
   filteredLists.value = lists.value;
 };
 
-const showPostPopup = ref(false);
-const currentProductCode = ref('');
 const setCurrentProductCode = (productCode) => {
   currentProductCode.value = productCode;
 };
+const setCurrentProductName = (productName) => {
+  currentProductName.value = productName;
+}
 
-const showModifyPopup = (productCode) => {
+const setCurrentProductCount = (productCount) => {
+  currentProductCount.value = productCount;
+}
+const setCurrentProductPrice = (productPrice) => {
+  currentProductPrice.value = productPrice;
+}
+const setCurrentProductStatus = (productStatus) => {
+  currentProductStatus.value = productStatus;
+}
+const setCurrentProductExposureStatus = (productExposureStatus) => {
+  currentProductExposureStatus.value = productExposureStatus;
+}
+const setCurrentProductColor = (productColor) => {
+  currentProductColor.value = productColor;
+}
+const setCurrentProductSize = (productSize) => {
+  currentProductSize.value = productSize;
+}
+const setCurrentProductContent = (productContent) => {
+  currentProductContent.value = productContent;
+}
+const showModifyPopup = (productCode,
+                         productName,
+                         productCount,
+                         productPrice,
+                         productStatus,
+                         productExposureStatus,
+                         productColor,
+                         productSize,
+                         productContent) => {
   setCurrentProductCode(productCode);
+  setCurrentProductName(productName);
+  setCurrentProductCount(productCount);
+  setCurrentProductPrice(productPrice);
+  setCurrentProductStatus(productStatus);
+  setCurrentProductExposureStatus(productExposureStatus);
+  setCurrentProductColor(productColor);
+  setCurrentProductSize(productSize);
+  setCurrentProductContent(productContent);
 };
 
 const getMemberId = async () => {
