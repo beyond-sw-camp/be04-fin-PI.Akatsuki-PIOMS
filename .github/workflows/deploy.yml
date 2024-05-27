@@ -17,7 +17,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '21.x'
+          node-version: '20.x'
 
       - name: Install dependencies
         run: npm install
@@ -33,7 +33,7 @@ jobs:
           cp -r dist/* deploy/
           cp vite.config.js package.json Procfile server.js deploy/
           cp -r .ebextensions deploy/.ebextensions
-          cp .platform/nginx.config deploy/.platform/nginx.config
+          cp .platform/nginx.config deploy/.platform/nginx.config || true
           cd deploy && zip -r ../deploy.zip .
         shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
 
