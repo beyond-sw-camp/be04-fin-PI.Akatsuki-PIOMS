@@ -234,7 +234,6 @@ const uploadImage = async () => {
   }
 };
 
-
 const saveProduct = async (imageUrl) => {
   const requestData = {
     productName: insertProductName.value,
@@ -273,8 +272,6 @@ const saveProduct = async (imageUrl) => {
     console.error('오류:', error);
   }
 };
-
-
 
 const closePopup = () => {
   emit('close');
