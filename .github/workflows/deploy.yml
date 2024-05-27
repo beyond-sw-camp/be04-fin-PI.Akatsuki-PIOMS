@@ -31,14 +31,58 @@ jobs:
         run: |
           mkdir -p deploy/.platform
           mkdir -p deploy/dist
-          cp -r dist/* deploy/dist
-          cp vite.config.js package.json Procfile server.js deploy/
-          cp -r .ebextensions deploy/.ebextensions
+          
+          if [ -d dist ]; then
+            cp -r dist/* deploy/dist
+          else
+            echo "Dist directory not found!"
+            exit 1
+          fi
+
+          if [ -f vite.config.js ]; then
+            cp vite.config.js deploy/vite.config.js
+          else
+            echo "vite.config.js not found!"
+            exit 1
+          fi
+          
+          if [ -f package.json ]; then
+            cp package.json deploy/package.json
+          else
+            echo "package.json not found!"
+            exit 1
+          fi
+
+          if [ -f Procfile ]; then
+            cp Procfile deploy/Procfile
+          else
+            echo "Procfile not found!"
+            exit 1
+          fi
+
+          if [ -f server.js ]; then
+            cp server.js deploy/server.js
+          else
+            echo "server.js not found!"
+            exit 1
+          fi
+
+          if [ -d .ebextensions ]; then
+            cp -r .ebextensions deploy/.ebextensions
+          else
+            echo ".ebextensions directory not found!"
+            exit 1
+          fi
+          
           if [ -f .platform/nginx.config ]; then
             cp .platform/nginx.config deploy/.platform/nginx.config
+          else
+            echo ".platform/nginx.config not found!"
+            exit 1
           fi
+          
           cd deploy && zip -r ../deploy.zip .
-        shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+        shell: bash
 
       - name: Upload build artifacts to S3
         run: |
