@@ -28,7 +28,7 @@ jobs:
 
       - name: Zip the build artifacts
         run: |
-          mkdir -p deploy
+          mkdir -p deploy/.platform
           cp -r dist/* deploy/
           cp server.js package.json Procfile deploy/
           cp -r .ebextensions deploy/.ebextensions
