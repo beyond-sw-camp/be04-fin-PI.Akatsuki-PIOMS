@@ -31,9 +31,17 @@ jobs:
           mkdir -p deploy
           cp -r dist/* deploy/
           cp server.js package.json Procfile deploy/
-          cp -r .ebextensions deploy/ # Include .ebextensions
+          cp -r .ebextensions deploy/
           cd deploy && zip -r ../deploy.zip .
         shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+
+      - name: Upload build artifacts to S3
+        run: |
+          aws s3 cp deploy.zip s3://your-s3-bucket-name/deploy/deploy-${{ github.run_number }}-${{ github.sha }}.zip
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-northeast-2
 
       - name: Deploy to AWS Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
