@@ -8,36 +8,52 @@
   <div class="category-select">
     <div class="categoryFirst-select">
       <ul>
-        <li v-for="category in firstCategories" :key="category.categoryFirstCode">
-          <div>
-            <button class="category-button">
-              <span class="category-text" @click="fetchSecondCategories(category.categoryFirstCode)">
+        <li v-for="category in firstCategories" :key="category.categoryFirstCode" class="category-item">
+          <div class="category-content">
+            <button style="width: 300px">
+              <span @click="fetchSecondCategories(category.categoryFirstCode)">
                 {{ category.categoryFirstName }}
               </span>
             </button>
+            <div class="category-actions">
+              <button @click="editCategoryFirst(category.categoryFirstCode)" class="MD-btn">수정</button>
+              <button @click="deleteCategoryFirst(category.categoryFirstCode)" class="MD-btn">삭제</button>
+            </div>
           </div>
         </li>
       </ul>
     </div>
     <div class="categorySecond-select">
       <ul>
-        <li v-for="category in secondCategories" :key="category.categorySecondCode">
-          <button class="category-button">
-            <span class="category-text" @click="fetchThirdCategories(category.categorySecondCode)">
-              {{ category.categorySecondName }}
-            </span>
-          </button>
+        <li v-for="category in secondCategories" :key="category.categorySecondCode" class="category-item">
+          <div class="category-content">
+            <button style="width: 300px">
+              <span @click="fetchThirdCategories(category.categorySecondCode)">
+                {{ category.categorySecondName }}
+              </span>
+            </button>
+            <div class="category-actions">
+              <button @click="editCategorySecond(category.categorySecondCode)" class="MD-btn">수정</button>
+              <button @click="deleteCategorySecond(category.categorySecondCode)" class="MD-btn">삭제</button>
+            </div>
+          </div>
         </li>
       </ul>
     </div>
     <div class="categoryThird-select">
       <ul>
-        <li v-for="category in thirdCategories" :key="category.categoryThirdCode">
-          <button class="category-button">
-            <span class="category-text" @click="fetchThirdCategories(category.categoryThirdCode)">
-              {{ category.categoryThirdName }}
-            </span>
-          </button>
+        <li v-for="category in thirdCategories" :key="category.categoryThirdCode" class="category-item">
+          <div class="category-content">
+            <button style="width: 300px">
+              <span>
+                {{ category.categoryThirdName }}
+              </span>
+            </button>
+            <div class="category-actions">
+              <button @click="editCategoryThird(category.categoryThirdCode)" class="MD-btn">수정</button>
+              <button @click="deleteCategoryThird(category.categoryThirdCode)" class="MD-btn">삭제</button>
+            </div>
+          </div>
         </li>
       </ul>
     </div>
@@ -128,6 +144,36 @@ const fetchThirdCategories = async (categorySecondCode) => {
   }
 };
 
+const editCategoryFirst = (categoryFirstCode) => {
+  // 대분류 카테고리 수정 로직
+  alert(`대분류 카테고리 수정: ${categoryFirstCode}`);
+};
+
+const deleteCategoryFirst = (categoryFirstCode) => {
+  // 대분류 카테고리 삭제 로직
+  alert(`대분류 카테고리 삭제: ${categoryFirstCode}`);
+};
+
+const editCategorySecond = (categorySecondCode) => {
+  // 중분류 카테고리 수정 로직
+  alert(`중분류 카테고리 수정: ${categorySecondCode}`);
+};
+
+const deleteCategorySecond = (categorySecondCode) => {
+  // 중분류 카테고리 삭제 로직
+  alert(`중분류 카테고리 삭제: ${categorySecondCode}`);
+};
+
+const editCategoryThird = (categoryThirdCode) => {
+  // 소분류 카테고리 수정 로직
+  alert(`소분류 카테고리 수정: ${categoryThirdCode}`);
+};
+
+const deleteCategoryThird = (categoryThirdCode) => {
+  // 소분류 카테고리 삭제 로직
+  alert(`소분류 카테고리 삭제: ${categoryThirdCode}`);
+};
+
 getCategoryFirstId();
 fetchFirstCategories();
 fetchSecondCategories();
@@ -146,18 +192,28 @@ fetchThirdCategories();
 .category-top span {
   vertical-align: middle;
 }
-.category-button {
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: default;
-}
 
-.category-text {
-  cursor: pointer;
-}
 .filter-category select {
   margin-right: 10px;
+}
+.category-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.category-content {
+  display: flex;
+
+  flex-grow: 1;
+}
+.category-content button {
+  width: 50px;
+}
+.category-actions {
+  display: flex;
+  gap: 8px;
 }
 
 .filter-categoryName input {
@@ -171,7 +227,7 @@ fetchThirdCategories();
 
 .category-select {
   margin-top: 3%;
-  width: 1350px;
+  width: 1500px;
   display: flex;
   justify-content: space-between;
   align-items: flex-start; /* Align items to the top */
@@ -181,7 +237,7 @@ fetchThirdCategories();
 
 .categoryFirst-select, .categorySecond-select, .categoryThird-select {
   border: 1px solid black;
-  width: 400px;
+  width: 450px;
   min-height: 400px; /* Set a minimum height */
   padding: 10px;
   overflow-y: auto; /* Enable vertical scrolling */
@@ -202,7 +258,6 @@ fetchThirdCategories();
 
 .categoryFirst-select button, .categorySecond-select button, .categoryThird-select button {
   width: 100%;
-  padding: 10px;
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   cursor: pointer;
@@ -211,6 +266,9 @@ fetchThirdCategories();
 
 .categoryFirst-select button:hover, .categorySecond-select button:hover, .categoryThird-select button:hover {
   background-color: #ddd;
+}
+.MD-btn {
+
 }
 </style>
 <!--<table class="filter-table">-->
