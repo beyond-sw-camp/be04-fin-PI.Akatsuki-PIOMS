@@ -138,13 +138,20 @@ const saveCategoryFirst = async () => {
     }
 
     console.log('카테고리 대분류 등록에 성공했습니다.');
-    fetchFirstCategories();
+    const newCategory = await responseFirst.json();
+    firstCategories.value.push(newCategory);  // Add the new category to the list
+    insertCategoryFirstName.value = '';  // Clear the input
   } catch (error) {
     console.error('오류: ', error);
   }
 };
 
 const saveCategorySecond = async () => {
+  if (!selectedFirstCategory.value) {
+    alert('대분류 카테고리를 선택해주세요.');
+    return;
+  }
+
   const savedSecondData = {
     categorySecondName: insertCategorySecondName.value,
     categoryFirstCode: selectedFirstCategory.value
@@ -153,7 +160,7 @@ const saveCategorySecond = async () => {
   console.log('savedSecondData: ', savedSecondData);
 
   try {
-    const responseSecond = await fetch(`/api/admin/category/second/post?requesterAdminCode=1`, {
+    const responseSecond = await fetch(`/api/admin/category/second/create?requesterAdminCode=1`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -167,13 +174,20 @@ const saveCategorySecond = async () => {
     }
 
     console.log('카테고리 중분류 등록에 성공했습니다.');
-    fetchSecondCategories();
+    const newCategory = await responseSecond.json();
+    secondCategories.value.push(newCategory);  // Add the new category to the list
+    insertCategorySecondName.value = '';  // Clear the input
   } catch (error) {
     console.error('오류: ', error);
   }
 };
 
 const saveCategoryThird = async () => {
+  if (!selectedSecondCategory.value) {
+    alert('중분류 카테고리를 선택해주세요.');
+    return;
+  }
+
   const savedThirdData = {
     categoryThirdName: insertCategoryThirdName.value,
     categorySecondCode: selectedSecondCategory.value
@@ -182,7 +196,7 @@ const saveCategoryThird = async () => {
   console.log('savedThirdData: ', savedThirdData);
 
   try {
-    const responseFirst = await fetch(`/api/admin/category/third/post?requesterAdminCode=1`, {
+    const responseFirst = await fetch(`/api/admin/category/third/create?requesterAdminCode=1`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
