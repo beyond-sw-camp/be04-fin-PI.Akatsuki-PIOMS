@@ -16,6 +16,8 @@ import ProductList from "@/components/amdin/product/ProductList.vue";
 import OrderPage from '@/components/order/orderPage.vue';
 
 import ExchangePage from '@/components/exchange/exchangePage.vue';
+import FavoriteRegister from "@/components/franchise/favorite/FavoriteRegister.vue";
+import FavoriteList from "@/components/franchise/favorite/FavoriteList.vue";
 
 
 
@@ -90,6 +92,16 @@ const routes = [
         path: '/exchange/list',
         name: 'exchangeList',
         component: ExchangePage
+    },
+    {
+        path: '/franchise/favorite/register',
+        name: 'FranchiseFavoriteRegister',
+        component: FavoriteRegister
+    },
+    {
+        path: '/franchise/favorite/list',
+        name: 'FranchiseFavoriteList',
+        component: FavoriteList
     }
 ];
 
