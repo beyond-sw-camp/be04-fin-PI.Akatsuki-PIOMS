@@ -7,36 +7,34 @@
       <h2>Admin 로그인</h2>
       <div class="input-group">
         <i class="fas fa-user"></i>
-        <input type="text" v-model="username" placeholder="ID" />
+        <input type="text" v-model="username" placeholder="아이디" @keydown.enter="login" />
       </div>
       <div class="input-group">
         <i class="fas fa-key"></i>
-        <input type="password" v-model="password" placeholder="비밀번호" />
+        <input type="password" v-model="password" placeholder="비밀번호" @keydown.enter="login" />
       </div>
       <div class="input-group">
-        <i class="fas fa-key"></i>
-        <input type="password" v-model="accessNumber" placeholder="Access Number" />
+        <i class="fas fa-lock"></i>
+        <input type="password" v-model="accessNumber" placeholder="Access Number" @keydown.enter="login" />
       </div>
       <button class="login-button" @click="login">로그인</button>
-      <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
     </div>
   </div>
 </template>
 
-
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import Swal from 'sweetalert2';
 
 const username = ref('');
 const password = ref('');
 const accessNumber = ref('');
-const errorMessage = ref('');
 const router = useRouter();
 
 const login = async () => {
   try {
-    const response = await fetch('http://localhost:9000/admin/login', {
+    const response = await fetch('http://localhost:5000/admin/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -51,14 +49,21 @@ const login = async () => {
     if (response.ok) {
       await router.push('/admin/home');
     } else {
-      errorMessage.value = '로그인 실패. 자격 증명을 확인하세요.';
+      Swal.fire({
+        icon: 'error',
+        title: '로그인 실패',
+        text: '자격 증명을 확인하세요.',
+      });
     }
   } catch (error) {
-    errorMessage.value = '오류가 발생했습니다. 다시 시도하세요.';
+    Swal.fire({
+      icon: 'error',
+      title: '오류 발생',
+      text: '오류가 발생했습니다. 다시 시도하세요.',
+    });
   }
 };
 </script>
-
 
 <style scoped>
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
@@ -95,6 +100,7 @@ const login = async () => {
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
+  width: 300px; /* 폼의 고정된 너비를 설정 */
 }
 
 .login-form h2 {

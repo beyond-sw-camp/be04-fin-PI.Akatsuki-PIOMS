@@ -10,11 +10,15 @@
         </tr>
         <tr>
           <td class="label">제목:</td>
-          <td colspan="3">{{ askData.askTitle }}</td>
+          <td colspan="3">
+            <input v-model="askData.askTitle" placeholder="제목을 입력하세요" />
+          </td>
         </tr>
         <tr>
           <td class="label">내용:</td>
-          <td colspan="3" class="content-td">{{ askData.askContent }}</td>
+          <td colspan="3" class="content-td">
+            <textarea v-model="askData.askContent" placeholder="내용을 입력하세요"></textarea>
+          </td>
         </tr>
         <tr>
           <td class="label">등록일:</td>
@@ -23,13 +27,9 @@
           <td>{{ formatDate(askData.askUpdateDate) }}</td>
         </tr>
       </table>
-      <div class="answer-section">
-        <label for="answer">관리자 답변</label>
-        <textarea id="answer" v-model="answer" placeholder="문의에 대한 답변을 작성해주세요."></textarea>
-        <div class="action-buttons">
-          <button @click="closeForm" class="cancel-btn">취소</button>
-          <button @click="submitAnswer" class="submit-btn">수정</button>
-        </div>
+      <div class="action-buttons">
+        <button @click="closeForm" class="cancel-btn">취소</button>
+        <button @click="submitUpdate" class="submit-btn">수정</button>
       </div>
     </div>
   </div>
@@ -41,10 +41,9 @@ import axios from 'axios';
 import { useRoute } from 'vue-router';
 
 export default {
-  name: 'AnswerFormEdit',
+  name: 'AskFormEdit',
   setup() {
     const askData = ref(null);
-    const answer = ref('');
     const route = useRoute();
 
     const fetchAskData = async () => {
@@ -54,9 +53,8 @@ export default {
         return;
       }
       try {
-        const response = await axios.get(`http://localhost:5000/admin/ask/${askCode}`);
+        const response = await axios.get(`http://localhost:5000/franchise/ask/${askCode}`);
         askData.value = response.data;
-        answer.value = response.data.askAnswer || ''; // 이미 작성된 답변을 불러옵니다.
       } catch (error) {
         console.error('Failed to fetch ask data:', error);
       }
@@ -77,20 +75,30 @@ export default {
       window.close();
     };
 
-    const submitAnswer = async () => {
-      console.log('Answer submitted:', answer.value);
+    const submitUpdate = async () => {
       const askCode = route.query.askCode || route.params.askCode;
       if (!askCode) {
         console.error('askCode is not defined');
         return;
       }
       try {
-        await axios.post(`http://localhost:5000/admin/ask/answer/${askCode}`, {
-          answer: answer.value,
+        const response = await fetch(`http://localhost:5000/franchise/update/${askCode}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            title: askData.value.askTitle,
+            content: askData.value.askContent,
+          }),
+          credentials: 'include',
         });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         window.close();
       } catch (error) {
-        console.error('Failed to submit answer:', error);
+        console.error('Failed to submit update:', error);
       }
     };
 
@@ -98,10 +106,9 @@ export default {
 
     return {
       askData,
-      answer,
       formatDate,
       closeForm,
-      submitAnswer
+      submitUpdate
     };
   }
 };
@@ -117,21 +124,21 @@ export default {
 }
 
 .form-wrapper {
-  width: 860px;
+  width: 100%;
   max-width: 1200px;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  //padding: 20px;
   box-sizing: border-box;
 }
 
 .detail-table {
-  width: 860px;
+  width: 100%;
   border-collapse: collapse;
   align-content: center;
   justify-content: center;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
+  border-radius: 8px;
 }
 
 .detail-table td {
@@ -139,8 +146,17 @@ export default {
   padding: 15px;
 }
 
+.detail-table input {
+  width:800px;
+  height:40px;
+  border: 1px solid #ddd;
+  font-size: large;
+  font-weight: bold;
+  border-radius: 4px;
+}
+
 .detail-table .content-td {
-  height: 270px; /* 여기에서 원하는 높이를 설정합니다 */
+  //height: 30px;
   vertical-align: top;
 }
 
@@ -150,16 +166,9 @@ export default {
   width: 150px;
 }
 
-.answer-section {
-  display: flex;
-  flex-direction: column;
-  padding-top: 10px;
-  background-color: #D9D9D9;
-}
-
 textarea {
-  width: 838px;
-  height: 210px;
+  width: 98%;
+  height: 460px;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -168,7 +177,7 @@ textarea {
 }
 
 .action-buttons {
-  width: 850px;
+  width: 98%;
   display: flex;
   gap: 10px;
   justify-content: flex-end;
@@ -188,7 +197,7 @@ textarea {
 }
 
 .submit-btn {
-  background-color: #FD6F87;
+  background-color: #FFCD4B;
   color: black;
   border: none;
   border-radius: 4px;
@@ -203,6 +212,6 @@ textarea {
 }
 
 .submit-btn:hover {
-  background-color: rgba(253, 111, 135, 0.63);
+  background-color: rgba(255, 205, 75, 0.69);
 }
 </style>

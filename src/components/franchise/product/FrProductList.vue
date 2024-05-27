@@ -92,8 +92,6 @@
       </button>
     </div>
     <div class="post-btn" id="app">
-      <button @click="showPostPopup = true" class="postBtn"><img src="@/assets/icon/new%20Item.png" alt="postProduct"></button>
-      <ProductPostPopup v-if="showPostPopup" @close="showPostPopup = false" />
       <button @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
     </div>
     <div class="table-container">
@@ -371,13 +369,7 @@ fetchThirdCategories();
   justify-content: center;
   margin-top: 10px;
 }
-.postBtn {
-  width: 100px;
-  height: 26px;
-  border: none;
-  background-color: white;
-  cursor: pointer;
-}
+
 .excelBtn {
   width: 100px;
   height: 26px;
