@@ -31,6 +31,8 @@ jobs:
           mkdir -p deploy
           cp -r dist/* deploy/
           cp server.js package.json Procfile deploy/
+          cp -r .ebextensions deploy/.ebextensions
+          cp .platform/nginx.config deploy/.platform/nginx.config
           cd deploy && zip -r ../deploy.zip .
         shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
 
@@ -42,6 +44,10 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ap-northeast-2
 
+      - name: Get current time
+        id: current-time
+        run: echo "CURRENT_TIME=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+
       - name: Deploy to AWS Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
         with:
@@ -49,7 +55,7 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: AkatsukiFE
           environment_name: AkatsukiFE-env
-          version_label: deploy-${{ github.run_number }}-${{ github.sha }}
+          version_label: deploy-${{ github.run_number }}-${{ github.sha }}-${{ env.CURRENT_TIME }}
           region: ap-northeast-2
           deployment_package: deploy.zip
           wait_for_environment_recovery: 180
