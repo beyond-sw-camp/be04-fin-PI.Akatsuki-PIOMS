@@ -1,49 +1,66 @@
 <template>
   <div>
+    <div class="filter-section">
+      <table class="filter-table">
+        <tr>
+          <td class="filter-label">승인상태</td>
+          <td class="filter-input">
+            <div class="radio-group">
+              <label> 승인대기 <input type="radio" value="승인대기" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
+              <label> 발주승인 <input type="radio" value="승인완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
+              <label> 발주반려 <input type="radio" value="승인거부" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
+              <label> 검수대기 <input type="radio" value="검수대기" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
+              <label> 검수완료 <input type="radio" value="검수완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
+            </div>
+          </td>
+
+          <td class="filter-label">주문(발주)번호</td>
+          <td class="filter-input">
+            <input type="text" v-model="filterOrderCode" />
+          </td>
+        </tr>
+        <tr>
+          <td class="filter-label">가맹점명</td>
+          <td class="filter-input">
+            <input type="text" v-model="filterFranchiseName" />
+          </td>
+          <td class="filter-label">배송(송장)번호</td>
+          <td class="filter-input">
+            <input type="text" v-model="filterInvoiceCode" />
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="filter-label">점주명</td>
+          <td class="filter-input">
+            <input type="text" v-model="filterFranchiseOwnerName" />
+          </td>
+          <td class="filter-label">주문(발주)일</td>
+          <td class="filter-input">
+            <input type="date" v-model="filterOrderDate" />
+          </td>
+        </tr>
+        
+      </table>
+    </div>
+    <div class="action-buttons">
+      <button @click="resetFilters" class="reset-btn">
+        <img src="@/assets/icon/reset.png" alt="Reset" />
+      </button>
+      <button @click="applyFilter" class="search-btn">
+        <img src="@/assets/icon/search.png" alt="Search" />
+      </button>
+    </div>
 
     <input class="create-button" type="button" value="발주하기" @click="showPopup" style="  cursor : pointer; border:0; ">
-
 
     <popup v-if="createPopup" :showPopup="showPopup" :popupVisible="createPopup"/>
     <OrderDetail v-if="createDetailPopup" :showDetailPopup="showDetailPopup" :popupVisible="createDetailPopup" :detailItem="detailItem"/>
 
-    <div class="filter-container">
-      <div class="radio-group">
-        <div class="title">
-          <label  class="left">검색 </label></div>
-          <input v-model="filter" placeholder="검색어를 입력하세요" @input="applyFilter" />
-      </div>
-      <div class="radio-group">
-        <div class="title">
-          <label class="left" >날짜</label></div>
-        <label>
-          최신순 <input checked type="radio" value="recent" name="dateOrder" v-model="dateFilter" @change="applyFilter" >
-        </label>
-        <label>
-          오래된순 <input type="radio" value="old" name="dateOrder" v-model="dateFilter" @change="applyFilter" >
-        </label>
-      </div>
-      <div class="radio-group">
-        <div class="title">
-        <label class="left">발주상태</label></div>
-        <label> 전체 <input type="radio" value="" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter" checked></label>
-        <label> 승인대기 <input type="radio" value="승인대기" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
-        <label> 발주승인 <input type="radio" value="승인완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
-        <label> 발주반려 <input type="radio" value="승인거부" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
-        <label> 검수대기 <input type="radio" value="검수대기" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
-        <label> 검수완료 <input type="radio" value="검수완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
-      </div>
-    </div>
-
-    <div align="center" style="margin-top: 2%;">
-      <button>초기화</button>
-      <button>검색</button>
-    </div>
-    
     <table style=" margin-top: 5%;">
-      <thead>
-        <tr>
-          <th v-for="(header, index) in headers" :key="index">{{ header.label }}</th>
+      <thead >
+        <tr >
+          <th v-for="(header, index) in headers" :key="index" > <div align="center">{{ header.label }}</div></th>
         </tr>
       </thead>
       <tbody>
@@ -53,7 +70,7 @@
             @mouseenter="highlightRow(rowIndex)"
             @mouseleave="resetRowColor(rowIndex)"
         >
-          <td v-for="(header, colIndex) in headers" :key="colIndex">
+          <td v-for="(header, colIndex) in headers" :key="colIndex" align="center">
             {{ item[header.key] }}
           </td>
         </tr>
@@ -65,14 +82,14 @@
       <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
     </div>
   </div>
-
 </template>
+
+
 
 <script setup>
 import { ref, computed } from 'vue';
 import popup from './orderPopup.vue';
 import OrderDetail from './orderDetail.vue';
-
 
 const lists = ref([]);
 
@@ -82,18 +99,12 @@ const adminCode = ref(2);
 
 const headers = ref([
   { key: 'orderCode', label: '주문 코드' },
-  { key: 'orderDate', label: '주문 날짜' },
-  { key: 'orderTotalPrice', label: '총 가격' },
   { key: 'orderCondition', label: '주문 상태' },
-  { key: 'orderReason', label: '주문 사유' },
-  { key: 'franchiseCode', label: '가맹점 코드' },
   { key: 'franchiseName', label: '가맹점 이름' },
-  { key: 'deliveryDate', label: '배송 날짜' },
-  { key: 'franchiseOwnerCode', label: '가맹점주 코드' },
+  { key: 'orderDate', label: '주문 날짜' },
+  { key: 'invoiceCode', label: '배송 코드' },
+  { key: 'invoiceDate', label: '배송 예정일' },
   { key: 'franchiseOwnerName', label: '가맹점주 이름' },
-  { key: 'franchiseAddress', label: '가맹점 주소' },
-  { key: 'exchange', label: '교환 코드' },
-  { key: 'adminName', label: '관리자 이름' },
 ]);
 
 const filter = ref('');
@@ -103,7 +114,13 @@ const itemsPerPage = 15;
 const dateFilter = ref('');
 const conditionFilter = ref('');
 
-const getMemberId = async () => {
+const filterOrderCode = ref('');
+const filterFranchiseName = ref('');
+const filterFranchiseOwnerName = ref('');
+const filterInvoiceCode = ref('');
+const filterOrderDate = ref('');
+
+const getOrderList = async () => {
   try {
     const response = await fetch(`/api/admin/orders?adminCode=${adminCode.value}`, {
       method: 'GET',
@@ -114,10 +131,8 @@ const getMemberId = async () => {
     }
     const data = await response.json();
     if (data.length > 0) {
-      lists.value = data.map(({  ...rest }) => rest);
-
+      lists.value = data.map(({ ...rest }) => rest);
       filteredLists.value = lists.value;
-
       console.log(lists);
     } else {
       lists.value = [];
@@ -128,22 +143,27 @@ const getMemberId = async () => {
   }
 };
 
-
+const resetFilters = () => {
+  conditionFilter.value = "";
+  filterOrderCode.value = "";
+  filterFranchiseName.value = "";
+  filterFranchiseOwnerName.value = "";
+  filterInvoiceCode.value = "";
+  filterOrderDate.value = "";
+  filteredLists.value = lists.value;
+};
 
 const applyFilter = () => {
   currentPage.value = 1; // 필터 적용 시 페이지를 초기화합니다.
-  if(conditionFilter.value == ""){
-    filteredLists.value = lists.value;
-  }else{
-    filteredLists.value = lists.value.filter(item =>
-      (Object.values(item).some(val =>
-        String(val).toLowerCase().includes(filter.value.toLowerCase())
-      )) &&
-      (dateFilter.value ? true : true) && 
-      (conditionFilter.value ? item['orderCondition'] === conditionFilter.value : true)
-    );
-  }
-  
+  filteredLists.value = lists.value.filter(item =>
+    (conditionFilter.value ? item.orderCondition === conditionFilter.value : true) &&
+    (filterOrderCode.value ? String(item.orderCode).includes(filterOrderCode.value) : true) &&
+    (filterFranchiseName.value ? String(item.franchiseName).includes(filterFranchiseName.value) : true) &&
+    (filterFranchiseOwnerName.value ? String(item.franchiseOwnerName).includes(filterFranchiseOwnerName.value) : true) &&
+    (filterInvoiceCode.value ? String(item.invoiceCode).includes(filterInvoiceCode.value) : true) &&
+    (filterOrderDate.value ? String(item.orderDate).includes(filterOrderDate.value) : true)
+  );
+
   // 날짜를 오래된 순으로 정렬합니다.
   if (dateFilter.value === 'old') {
     filteredLists.value.sort((a, b) => compareDate(a.orderDate, b.orderDate));
@@ -158,7 +178,6 @@ const applyFilter = () => {
 const compareDate = (orderDateA, orderDateB) => {
   const dateA = new Date(orderDateA);
   const dateB = new Date(orderDateB);
-  
   return dateA - dateB; // 오래된 순으로 정렬
 };
 
@@ -184,7 +203,7 @@ const prevPage = () => {
   }
 };
 
-getMemberId();
+getOrderList();
 
 const createPopup = ref(false);
 const createDetailPopup = ref(false);
@@ -200,7 +219,6 @@ const showDetailPopup = (item) => {
   createDetailPopup.value = !createDetailPopup.value;
 };
 
-
 const highlightRow = (index) => {
   document.querySelector(`#row-${index}`).classList.add('highlighted');
 };
@@ -214,5 +232,4 @@ const resetRowColor = (index) => {
 
 <style>
   @import "../../assets/css/order.css" ;
-
 </style>
