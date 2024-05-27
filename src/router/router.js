@@ -12,12 +12,17 @@ import AskFormView from "@/components/franchise/ask/AskFormView.vue";
 import AskFRMain from "@/components/franchise/ask/AskFRMain.vue";
 import AskFormEdit from "@/components/franchise/ask/AskFormEdit.vue";
 import ProductList from "@/components/amdin/product/ProductList.vue";
-
+import FrProductList from "@/components/franchise/product/FrProductList.vue";
+import CategoryList from "@/components/amdin/Category/CategoryList.vue";
 import OrderPage from '@/components/order/orderPage.vue';
 
 import ExchangePage from '@/components/exchange/exchangePage.vue';
+
+import PostCategory from "@/components/amdin/Category/PostCategory.vue";
+
 import FavoriteRegister from "@/components/franchise/favorite/FavoriteRegister.vue";
 import FavoriteList from "@/components/franchise/favorite/FavoriteList.vue";
+
 
 
 
@@ -87,6 +92,21 @@ const routes = [
         path: '/admin/product/list',
         name: 'AdminProductList',
         component: ProductList
+    },
+    {
+        path: '/franchise/product/list',
+        name: 'FranchiseProductList',
+        component: FrProductList
+    },
+    {
+        path: '/admin/category/list',
+        name: 'AdminProductCategoryList',
+        component: CategoryList
+    },
+    {
+        path: '/admin/category/post',
+        name: 'AdminProductCategoryPost',
+        component: PostCategory
     },
     {
         path: '/exchange/list',
