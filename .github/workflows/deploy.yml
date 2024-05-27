@@ -30,7 +30,8 @@ jobs:
       - name: Generate deployment package
         run: |
           mkdir -p deploy/.platform
-          cp -r dist/* deploy/
+          mkdir -p deploy/dist
+          cp -r dist/* deploy/dist
           cp vite.config.js package.json Procfile server.js deploy/
           cp -r .ebextensions deploy/.ebextensions
           if [ -f .platform/nginx.config ]; then
