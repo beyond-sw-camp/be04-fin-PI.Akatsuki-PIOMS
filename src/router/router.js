@@ -107,26 +107,6 @@ const routes = [
         component: CategoryList
     },
     {
-        path: '/admin/category/post',
-        name: 'AdminProductCategoryPost',
-        component: PostCategory
-    },
-    {
-        path: '/admin/category/first/update',
-        name: 'AdminProductCategoryFirstUpdate',
-        component: CategoryFirstPopup
-    },
-    {
-        path: '/admin/category/second/update',
-        name: 'AdminProductCategorySecondUpdate',
-        component: CategorySecondPopup
-    },
-    {
-        path: '/admin/category/third/update',
-        name: 'AdminProductCategoryThirdUpdate',
-        component: CategoryThirdPopup
-    },
-    {
         path: '/exchange/list',
         name: 'exchangeList',
         component: ExchangePage

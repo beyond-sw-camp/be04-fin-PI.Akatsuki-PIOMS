@@ -4,21 +4,50 @@
       <h3>대분류 카테고리 수정</h3>
       <p>카테고리 코드: {{ currentThirdCode }}</p>
       <p>카테고리 이름: {{ currentThirdName}}</p>
-      <input type="text" :value="currentThirdName">
-      <button @click="closePopup" class="close-button">닫기</button>
+      <input type="text" v-bind:value="currentThirdName" v-on:input="updateThirdName= $event.target.value">
+      <button @click="closePopup" class="close-button">X</button>
+      <button @click="saveCategoryThird">수정</button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue';
+import { defineProps, defineEmits, ref } from 'vue';
 
 const props = defineProps({
   currentThirdCode: String,
   currentThirdName: String,
 });
-
+const updateThirdName = ref('');
 const emits = defineEmits(['close']);
+
+const saveCategoryThird = async () => {
+  const requestData = {
+    categoryThirdName: updateThirdName.value
+  };
+
+  console.log('Request Data:', requestData);
+
+  try {
+    const response = await fetch(`api/admin/category/third/update/${props.currentThirdCode}?requesterAdminCode=1`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestData)
+    });
+
+    if(!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`카테고리 소분류 수정에 실패했습니다. 상태 코드: ${response.status}, 메시지: ${errorText}`);
+    }
+
+    console.log('카테고리 소분류가 성공적으로 수정되었습니다.');
+    emits('close');
+  } catch (error) {
+    console.error('오류:', error);
+  }
+};
 
 const closePopup = () => {
   emits('close');
