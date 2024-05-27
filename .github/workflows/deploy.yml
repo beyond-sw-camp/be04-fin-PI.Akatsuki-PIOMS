@@ -33,7 +33,9 @@ jobs:
           cp -r dist/* deploy/
           cp vite.config.js package.json Procfile server.js deploy/
           cp -r .ebextensions deploy/.ebextensions
-          cp .platform/nginx.config deploy/.platform/nginx.config || true
+          if [ -f .platform/nginx.config ]; then
+            cp .platform/nginx.config deploy/.platform/nginx.config
+          fi
           cd deploy && zip -r ../deploy.zip .
         shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
 
