@@ -23,14 +23,14 @@ jobs:
 
       - name: Build the project
         env:
-          VUE_APP_BACKEND_URL: ${{ secrets.BACKEND_URL }}
+          VITE_APP_BACKEND_URL: ${{ secrets.BACKEND_URL }}
         run: npm run build
 
       - name: Zip the build artifacts
         run: |
           mkdir -p deploy/.platform
           cp -r dist/* deploy/
-          cp server.js package.json Procfile deploy/
+          cp vite.config.js package.json Procfile server.js deploy/
           cp -r .ebextensions deploy/.ebextensions
           cp .platform/nginx.config deploy/.platform/nginx.config
           cd deploy && zip -r ../deploy.zip .
@@ -108,7 +108,7 @@ jobs:
           
           UNIQUE_USERS=$(echo "$COMMENTS" | jq -r 'map(.author.login) | unique | length')
           
-          if [ $UNIQUE_USERS -lt 2 ]; then
+          if [ $UNIQUE_USERS -lt 2]; then
             echo "Not enough unique users ($UNIQUE_USERS) in the pull request comments. At least 2 unique users are required."
             exit 1
           else
