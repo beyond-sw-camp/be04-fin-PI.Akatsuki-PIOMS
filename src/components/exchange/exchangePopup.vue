@@ -69,7 +69,7 @@
             <td><button class="button2" @click="removeProductFromList(index)">취소</button></td>
           </tr>
         </table>
-      </div >
+      </div>
     </div>
       <div style="display: flex; justify-content: right;">
         <p v-if="totalPrice > 0">총 가격: {{ totalPrice }}원</p>
@@ -162,7 +162,7 @@
   };
 
   const franchiseCode = ref(1);
-  const franchiseOwnerCode = ref(2);
+  const franchiseOwnerCode = ref(1);
   const exportExchange = async () => {
   console.log("exportExchange");
 
