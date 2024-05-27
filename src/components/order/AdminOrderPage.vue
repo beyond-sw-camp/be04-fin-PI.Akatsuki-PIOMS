@@ -51,10 +51,6 @@
         <img src="@/assets/icon/search.png" alt="Search" />
       </button>
     </div>
-
-    <input class="create-button" type="button" value="발주하기" @click="showPopup" style="  cursor : pointer; border:0; ">
-
-    <popup v-if="createPopup" :showPopup="showPopup" :popupVisible="createPopup"/>
     <OrderDetail v-if="createDetailPopup" :showDetailPopup="showDetailPopup" :popupVisible="createDetailPopup" :detailItem="detailItem"/>
 
     <table style=" margin-top: 5%;">
@@ -88,8 +84,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import popup from './orderPopup.vue';
-import OrderDetail from './orderDetail.vue';
+import OrderDetail from './AdminOrderDetail.vue';
 
 const lists = ref([]);
 

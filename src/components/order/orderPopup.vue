@@ -104,6 +104,8 @@
   
 <script setup>
   import { ref } from "vue";
+  const franchiseOwnerCode = ref(1);
+  const franchiseCode = ref(1);
   
   const props = defineProps({
     showPopup: Function,
@@ -139,7 +141,6 @@
   
   const getProducts = async () => {
     try {
-
       const response = await fetch("/api/franchise/product", {
         method: "GET",
       });
@@ -192,14 +193,16 @@
     acc[product.productCode] = product.quantity;
     return acc;
   }, {});
+  
 
   const orderData = {
+    orderTotalPrice: totalPrice.value,
     products: productsData,
-    franchiseCode: 1 // 실제 프랜차이즈 코드를 사용 예정
+    franchiseCode: franchiseCode.value
   };
 
   try {
-    const response = await fetch("http://localhost:5000/franchise/order?franchiseCode=1", {
+    const response = await fetch(`http://localhost:5000/franchise/order?franchiseOwnerCode=${franchiseOwnerCode.value}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

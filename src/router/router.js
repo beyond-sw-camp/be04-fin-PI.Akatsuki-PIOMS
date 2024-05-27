@@ -14,7 +14,8 @@ import AskFormEdit from "@/components/franchise/ask/AskFormEdit.vue";
 import ProductList from "@/components/amdin/product/ProductList.vue";
 import FrProductList from "@/components/franchise/product/FrProductList.vue";
 import CategoryList from "@/components/amdin/Category/CategoryList.vue";
-import OrderPage from '@/components/order/orderPage.vue';
+import AdminOrderPage from '@/components/order/AdminOrderPage.vue';
+import FranchiseOrderPage from '@/components/order/FranchiseOrderPage.vue';
 
 import AdminExchangePage from '@/components/exchange/AdminExchangePage.vue';
 import FranchiseExchangePage from '@/components/exchange/FranchiseExchangePage.vue';
@@ -85,9 +86,14 @@ const routes = [
         component: AskFormCreate
     },
     {
-        path: '/order/list',
-        name: 'orderList',
-        component: OrderPage
+        path: '/admin/order/list',
+        name: 'AdminOrderList',
+        component: AdminOrderPage
+    },
+    {
+        path: '/franchise/order/list',
+        name: 'FranchiseOrderList',
+        component: FranchiseOrderPage
     },
     {
         path: '/admin/product/list',
