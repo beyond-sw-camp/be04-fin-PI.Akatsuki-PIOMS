@@ -138,9 +138,11 @@ const saveCategoryFirst = async () => {
     }
 
     console.log('카테고리 대분류 등록에 성공했습니다.');
-    const newCategory = await responseFirst.json();
-    firstCategories.value.push(newCategory);  // Add the new category to the list
-    insertCategoryFirstName.value = '';  // Clear the input
+
+    // 데이터를 새로고침하고 화면을 갱신합니다.
+    fetchFirstCategories();
+    insertCategoryFirstName.value = ''; // 입력 필드 초기화
+
   } catch (error) {
     console.error('오류: ', error);
   }
@@ -174,9 +176,11 @@ const saveCategorySecond = async () => {
     }
 
     console.log('카테고리 중분류 등록에 성공했습니다.');
-    const newCategory = await responseSecond.json();
-    secondCategories.value.push(newCategory);  // Add the new category to the list
-    insertCategorySecondName.value = '';  // Clear the input
+
+    // 데이터를 새로고침하고 화면을 갱신합니다.
+    fetchSecondCategories(selectedFirstCategory.value);
+    insertCategorySecondName.value = ''; // 입력 필드 초기화
+
   } catch (error) {
     console.error('오류: ', error);
   }
@@ -196,7 +200,7 @@ const saveCategoryThird = async () => {
   console.log('savedThirdData: ', savedThirdData);
 
   try {
-    const responseFirst = await fetch(`/api/admin/category/third/create?requesterAdminCode=1`, {
+    const responseThird = await fetch(`/api/admin/category/third/create?requesterAdminCode=1`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -210,7 +214,11 @@ const saveCategoryThird = async () => {
     }
 
     console.log('카테고리 소분류 등록에 성공했습니다.');
+
+    // 데이터를 새로고침하고 화면을 갱신합니다.
     fetchThirdCategories(selectedSecondCategory.value);
+    insertCategoryThirdName.value = ''; // 입력 필드 초기화
+
   } catch (error) {
     console.error('오류: ', error);
   }
