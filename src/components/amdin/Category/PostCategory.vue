@@ -2,7 +2,7 @@
   <div class="category-top">
     <img src="@/assets/icon/Cloth.png" alt="" style="width: 40px; height: 40px">
     <span>
-    상품 및 상품 카테고리 관리 > 상품 카테고리 관리 > 상품 카테고리 등록
+    상품 및 상품 카테고리 관리 > 상품 카테고리 관리 > 상품 카테고리 조회 및 등록
     </span>
   </div>
   <div class="category-select">
@@ -211,6 +211,11 @@ const saveCategoryThird = async () => {
   }
   if (!insertCategoryThirdName.value.trim()) {
     alert('소분류 카테고리명을 입력해주세요.');
+    return;
+  }
+  const existingThirdNames = thirdCategories.value.map(category => category.categoryThirdName);
+  if (existingThirdNames.includes(insertCategoryThirdName.value.trim())) {
+    alert('이미 존재하는 중분류 카테고리명입니다.');
     return;
   }
   const savedThirdData = {

@@ -5,46 +5,16 @@
     상품 및 상품 카테고리 관리 > 상품 카테고리 관리 > 상품 카테고리 전체 조회
     </span>
   </div>
-  <table class="filter-table">
-    <tr>
-      <td class="filter-label">카테고리 조회</td>
-      <td class="filter-input">
-        <div class="filter-category">
-          <select id="firstCategory" v-model="selectedFirstCategory" @change="fetchSecondCategories" class="categories">
-            <option value="">대분류</option>
-            <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">
-              {{ category.categoryFirstName }}
-            </option>
-          </select>
-          <select class="categories" id="secondCategory" v-model="selectedSecondCategory" @change="fetchThirdCategories">
-            <option value="">중분류</option>
-            <option v-for="category in secondCategories" :key="category.categorySecondCode" :value="category.categorySecondCode">
-              {{ category.categorySecondName }}
-            </option>
-          </select>
-          <select class="categories" id="thirdCategory" v-model="selectedThirdCategory">
-            <option value="">소분류</option>
-            <option v-for="category in thirdCategories" :key="category.categoryThirdCode" :value="category.categoryThirdCode">
-              {{ category.categoryThirdName }}
-            </option>
-          </select>
-        </div>
-        <div class="filter-categoryName">
-          <input type="text" v-model="filterProductName" class="textInput" placeholder="카테고리명을 입력하세요."/>
-          <button @click="applyFilters">
-            <img src="@/assets/icon/search.png" alt="" style="width: 30px; height: 30px">
-          </button>
-        </div>
-      </td>
-    </tr>
-  </table>
   <div class="category-select">
     <div class="categoryFirst-select">
       <ul>
         <li v-for="category in firstCategories" :key="category.categoryFirstCode">
           <div>
-          <button @click="fetchSecondCategories(category.categoryFirstCode)">{{ category.categoryFirstName }}</button>
-
+            <button class="category-button">
+              <span class="category-text" @click="fetchSecondCategories(category.categoryFirstCode)">
+                {{ category.categoryFirstName }}
+              </span>
+            </button>
           </div>
         </li>
       </ul>
@@ -52,14 +22,22 @@
     <div class="categorySecond-select">
       <ul>
         <li v-for="category in secondCategories" :key="category.categorySecondCode">
-          <button @click="fetchThirdCategories(category.categorySecondCode)">{{ category.categorySecondName }}</button>
+          <button class="category-button">
+            <span class="category-text" @click="fetchThirdCategories(category.categorySecondCode)">
+              {{ category.categorySecondName }}
+            </span>
+          </button>
         </li>
       </ul>
     </div>
     <div class="categoryThird-select">
       <ul>
         <li v-for="category in thirdCategories" :key="category.categoryThirdCode">
-          <button>{{ category.categoryThirdName }}</button>
+          <button class="category-button">
+            <span class="category-text" @click="fetchThirdCategories(category.categoryThirdCode)">
+              {{ category.categoryThirdName }}
+            </span>
+          </button>
         </li>
       </ul>
     </div>
@@ -150,12 +128,6 @@ const fetchThirdCategories = async (categorySecondCode) => {
   }
 };
 
-const applyFilters = () => {
-  filteredLists.value = lists.value.filter(list => {
-    return !selectedThirdCategory.value || list.categoryThirdCode === selectedThirdCategory.value;
-  });
-}
-
 getCategoryFirstId();
 fetchFirstCategories();
 fetchSecondCategories();
@@ -174,31 +146,16 @@ fetchThirdCategories();
 .category-top span {
   vertical-align: middle;
 }
-.filter-label {
-  font-weight: bold;
-  text-align: center;
-  font-size: 12px;
-  width: 100px;
-  background-color: #D9D9D9;
-  border: 1px solid #ddd;
+.category-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: default;
 }
 
-.filter-input {
-  text-align: center;
-  border: 1px solid lightgray;
-  border-right: none;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
+.category-text {
+  cursor: pointer;
 }
-
-.filter-category,
-.filter-categoryName {
-  display: flex;
-  align-items: center;
-}
-
 .filter-category select {
   margin-right: 10px;
 }
@@ -207,26 +164,12 @@ fetchThirdCategories();
   margin-right: 10px;
 }
 
-.categories {
-  border: 1px solid rgba(217, 217, 217, 0.7);
-  margin-left: 2%;
-}
-
-.filter-table {
-  border-collapse: collapse;
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  width: 1400px;
-}
-
 .filter-table tr {
   width: 100%;
   table-layout: fixed;
 }
 
 .category-select {
-  border: 1px solid black;
   margin-top: 3%;
   width: 1350px;
   display: flex;
@@ -270,3 +213,36 @@ fetchThirdCategories();
   background-color: #ddd;
 }
 </style>
+<!--<table class="filter-table">-->
+<!--<tr>-->
+<!--  <td class="filter-label">카테고리 조회</td>-->
+<!--  <td class="filter-input">-->
+<!--    <div class="filter-category">-->
+<!--      <select id="firstCategory" v-model="selectedFirstCategory" @change="fetchSecondCategories" class="categories">-->
+<!--        <option value="">대분류</option>-->
+<!--        <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">-->
+<!--          {{ category.categoryFirstName }}-->
+<!--        </option>-->
+<!--      </select>-->
+<!--      <select class="categories" id="secondCategory" v-model="selectedSecondCategory" @change="fetchThirdCategories">-->
+<!--        <option value="">중분류</option>-->
+<!--        <option v-for="category in secondCategories" :key="category.categorySecondCode" :value="category.categorySecondCode">-->
+<!--          {{ category.categorySecondName }}-->
+<!--        </option>-->
+<!--      </select>-->
+<!--      <select class="categories" id="thirdCategory" v-model="selectedThirdCategory">-->
+<!--        <option value="">소분류</option>-->
+<!--        <option v-for="category in thirdCategories" :key="category.categoryThirdCode" :value="category.categoryThirdCode">-->
+<!--          {{ category.categoryThirdName }}-->
+<!--        </option>-->
+<!--      </select>-->
+<!--    </div>-->
+<!--    <div class="filter-categoryName">-->
+<!--      <input type="text" v-model="filterProductName" class="textInput" placeholder="카테고리명을 입력하세요."/>-->
+<!--      <button @click="applyFilters">-->
+<!--        <img src="@/assets/icon/search.png" alt="" style="width: 30px; height: 30px">-->
+<!--      </button>-->
+<!--    </div>-->
+<!--  </td>-->
+<!--</tr>-->
+<!--</table>-->
