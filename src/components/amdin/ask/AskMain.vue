@@ -71,7 +71,7 @@
             <button
                 class="editbutton"
                 :class="{ 'editbutton-pending': ask.askStatus === '답변대기' }"
-                @click="ask.askStatus === '답변대기' ? registerAnswer(ask.askCode) : editAnswer(ask.askCode)"
+                @click="ask.askStatus === '답변대기' ? showRegist(ask) : showEdit(ask)"
             >
               {{ ask.askStatus === '답변대기' ? '답변 작성' : '답변 조회' }}
             </button>
@@ -86,10 +86,14 @@
       <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
     </div>
   </div>
+  <Register v-if = "registPopup" :askCode="askCode" :closeRegist="closeRegist"/>
+  <Edit v-if = "editPopup" :askCode="askCode" :closeEdit="closeEdit"/>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
+import Register from './AnswerFormRegister.vue';
+import Edit from './AnswerFormEdit.vue';
 import Breadcrumb from '@/components/amdin/ask/Breadcrumb.vue'; // Breadcrumb 컴포넌트 임포트
 
 const asks = ref([]);
@@ -188,28 +192,50 @@ const nextPage = () => {
   }
 };
 
-const openAnswerForm = (askCode, mode) => {
-  const width = 800;
-  const height = 600;
-  const left = (window.screen.width / 2) - (width / 2);
-  const top = (window.screen.height / 2) - (height / 2);
-  const url = `http://localhost:5173/admin/answerform/${mode}?askCode=${askCode}`;
-  window.open(url, 'popup', `width=${width},height=${height},top=${top},left=${left},toolbar=no,scrollbars=no,resizable=no`);
-};
+// const openAnswerForm = (askCode, mode) => {
+//   const width = 800;
+//   const height = 600;
+//   const left = (window.screen.width / 2) - (width / 2);
+//   const top = (window.screen.height / 2) - (height / 2);
+//   const url = `http://localhost:5173/admin/answerform/${mode}?askCode=${askCode}`;
+//   window.open(url, 'popup', `width=${width},height=${height},top=${top},left=${left},toolbar=no,scrollbars=no,resizable=no`);
+// };
 
 // 답변 등록 버튼 클릭 시
-const registerAnswer = (askCode) => {
-  openAnswerForm(askCode, 'register');
-};
-
-// 답변 수정 버튼 클릭 시
-const editAnswer = (askCode) => {
-  openAnswerForm(askCode, 'edit');
-};
+// const registerAnswer = (askCode) => {
+//   openAnswerForm(askCode, 'register');
+// };
+//
+// // 답변 수정 버튼 클릭 시
+// const editAnswer = (askCode) => {
+//   openAnswerForm(askCode, 'edit');
+// };
 
 onMounted(() => {
   fetchAsks();
 });
+
+const registPopup = ref(false);
+const askCode = ref(null);
+const editPopup = ref(false);
+
+const showRegist = (askCode1) =>{
+  registPopup.value = !registPopup.value;
+  askCode.value = askCode1;
+}
+
+const showEdit = (askCode2) => {
+  editPopup.value = !editPopup.value;
+  askCode.value = askCode2;
+}
+const closeRegist = () =>{
+  registPopup.value = !registPopup.value;
+}
+
+const closeEdit = () =>{
+  editPopup.value = !editPopup.value;
+}
+
 </script>
 
 <style scoped>
