@@ -16,7 +16,7 @@
               </span>
             </button>
             <div class="category-actions">
-              <button @click="editCategoryFirst(category.categoryFirstCode)" class="MD-btn">수정</button>
+              <button @click="editCategoryFirst(category.categoryFirstCode,category.categoryFirstName)" class="MD-btn">수정</button>
               <button @click="deleteCategoryFirst(category.categoryFirstCode)" class="MD-btn">삭제</button>
             </div>
           </div>
@@ -33,7 +33,7 @@
               </span>
             </button>
             <div class="category-actions">
-              <button @click="editCategorySecond(category.categorySecondCode)" class="MD-btn">수정</button>
+              <button @click="editCategorySecond(category.categorySecondCode, category.categorySecondName)" class="MD-btn">수정</button>
               <button @click="deleteCategorySecond(category.categorySecondCode)" class="MD-btn">삭제</button>
             </div>
           </div>
@@ -50,16 +50,16 @@
               </span>
             </button>
             <div class="category-actions">
-              <button @click="editCategoryThird(category.categoryThirdCode)" class="MD-btn">수정</button>
+              <button @click="editCategoryThird(category.categoryThirdCode, category.categoryThirdName)" class="MD-btn">수정</button>
               <button @click="deleteCategoryThird(category.categoryThirdCode)" class="MD-btn">삭제</button>
             </div>
           </div>
         </li>
       </ul>
     </div>
-    <CategoryFirstPopup v-if="editCategoryFirstVisible" :currentFirstCode="currentFirstCode" @close="editCategoryFirstVisible = false"/>
-    <CategorySecondPopup v-if="editCategorySecondVisible" :currentSecondCode="currentSecondCode" @close="editCategorySecondVisible = false"/>
-    <CategoryThirdPopup v-if="editCategoryThirdVisible" :currentThirdCode="currentThirdCode" @close="editCategoryThirdVisible = false"/>
+    <CategoryFirstPopup v-if="editCategoryFirstVisible" :currentFirstCode="currentFirstCode" :currentFirstName="currentFirstName" @close="editCategoryFirstVisible = false"/>
+    <CategorySecondPopup v-if="editCategorySecondVisible" :currentSecondCode="currentSecondCode" :currentSecondName="currentSecondName" @close="editCategorySecondVisible = false"/>
+    <CategoryThirdPopup v-if="editCategoryThirdVisible" :currentThirdCode="currentThirdCode" :currentThirdName="currentThirdName" @close="editCategoryThirdVisible = false"/>
   </div>
 </template>
 
@@ -82,6 +82,9 @@ const editCategoryThirdVisible = ref(false);
 const currentFirstCode = ref('');
 const currentSecondCode = ref('');
 const currentThirdCode = ref('');
+const currentFirstName = ref('');
+const currentSecondName = ref('');
+const currentThirdName = ref('');
 
 const getCategoryFirstId = async () => {
   try {
@@ -158,26 +161,35 @@ const fetchThirdCategories = async (categorySecondCode) => {
 const setCurrentFirstCode = (categoryFirstCode) => {
   currentFirstCode.value = categoryFirstCode;
 }
-
+const setCurrentFirstName = (categoryFirstName) => {
+  currentFirstName.value = categoryFirstName;
+}
 const setCurrentSecondCode = (categorySecondCode) => {
   currentSecondCode.value = categorySecondCode;
 }
-
+const setCurrentSecondName = (categorySecondName) => {
+  currentSecondName.value = categorySecondName;
+}
 const setCurrentThirdCode = (categoryThirdCode) => {
   currentThirdCode.value = categoryThirdCode;
 }
-
-const editCategoryFirst = (categoryFirstCode) => {
+const setCurrentThirdName = (categoryThirdName) => {
+  currentThirdName.value = categoryThirdName;
+}
+const editCategoryFirst = (categoryFirstCode, categoryFirstName) => {
   setCurrentFirstCode(categoryFirstCode);
+  setCurrentFirstName(categoryFirstName);
   editCategoryFirstVisible.value = true;
 };
-const editCategorySecond = (categorySecondCode) => {
+const editCategorySecond = (categorySecondCode, categorySecondName) => {
   setCurrentSecondCode(categorySecondCode);
+  setCurrentSecondName(categorySecondName);
   editCategorySecondVisible.value = true;
 };
 
-const editCategoryThird = (categoryThirdCode) => {
+const editCategoryThird = (categoryThirdCode, categoryThirdName) => {
   setCurrentThirdCode(categoryThirdCode);
+  setCurrentThirdName(categoryThirdName);
   editCategoryThirdVisible.value = true;
 }
 
