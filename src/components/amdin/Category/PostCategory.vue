@@ -117,6 +117,15 @@ const fetchThirdCategories = async (categorySecondCode) => {
 };
 
 const saveCategoryFirst = async () => {
+  if (!insertCategoryFirstName.value.trim()) {
+    alert('대분류 카테고리명을 입력해주세요.');
+    return;
+  }
+  const existingFirstNames = firstCategories.value.map(category => category.categoryFirstName);
+  if (existingFirstNames.includes(insertCategoryFirstName.value.trim())) {
+    alert('이미 존재하는 대분류 카테고리명입니다.');
+    return;
+  }
   const savedFirstData = {
     categoryFirstName: insertCategoryFirstName.value
   };
@@ -154,6 +163,15 @@ const saveCategorySecond = async () => {
     return;
   }
 
+  if (!insertCategorySecondName.value.trim()) {
+    alert('중분류 카테고리명을 입력해주세요.');
+    return;
+  }
+  const existingSecondNames = secondCategories.value.map(category => category.categorySecondName);
+  if (existingSecondNames.includes(insertCategorySecondName.value.trim())) {
+    alert('이미 존재하는 중분류 카테고리명입니다.');
+    return;
+  }
   const savedSecondData = {
     categorySecondName: insertCategorySecondName.value,
     categoryFirstCode: selectedFirstCategory.value
@@ -191,7 +209,10 @@ const saveCategoryThird = async () => {
     alert('중분류 카테고리를 선택해주세요.');
     return;
   }
-
+  if (!insertCategoryThirdName.value.trim()) {
+    alert('소분류 카테고리명을 입력해주세요.');
+    return;
+  }
   const savedThirdData = {
     categoryThirdName: insertCategoryThirdName.value,
     categorySecondCode: selectedSecondCategory.value
