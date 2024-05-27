@@ -34,7 +34,7 @@
           <th>카테고리1</th>
           <th>카테고리2</th>
           <th>카테고리3</th>
-          <th>선택</th>
+          <th>즐겨찾기</th>
         </tr>
         </thead>
         <tbody>
@@ -47,9 +47,9 @@
           <td>{{ item.product.productStatus }}</td>
           <td>{{ item.product.productColor }}</td>
           <td>{{ item.product.productSize }}</td>
-          <td>{{ getCategoryFirstName(item.product.categoryThirdCode) }}</td>
-          <td>{{ getCategorySecondName(item.product.categoryThirdCode) }}</td>
-          <td>{{ getCategoryThirdName(item.product.categoryThirdCode) }}</td>
+          <td>{{ item.product.categoryFirstName}}</td>
+          <td>{{ item.product.categorySecondName }}</td>
+          <td>{{ item.product.categoryThirdName}}</td>
           <td>
             <input type="checkbox" @change="toggleProductSelection(item)" :checked="isSelected(item.franchiseWarehouseCode)" />
           </td>
@@ -60,7 +60,7 @@
 
     <!-- 선택된 상품 목록 -->
     <div class="table-container">
-      <h3>선택된 상품 목록</h3>
+      <h3>즐겨찾기 추가 상품 목록</h3>
       <table class="table">
         <thead>
         <tr class="header1">
@@ -88,9 +88,9 @@
           <td>{{ item.product.productStatus }}</td>
           <td>{{ item.product.productColor }}</td>
           <td>{{ item.product.productSize }}</td>
-          <td>{{ getCategoryFirstName(item.product.categoryThirdCode) }}</td>
-          <td>{{ getCategorySecondName(item.product.categoryThirdCode) }}</td>
-          <td>{{ getCategoryThirdName(item.product.categoryThirdCode) }}</td>
+          <td>{{ item.product.categoryFirstName}}</td>
+          <td>{{ item.product.categorySecondName }}</td>
+          <td>{{ item.product.categoryThirdName}}</td>
           <td><button @click="removeProductFromList(item.franchiseWarehouseCode)">삭제</button></td>
         </tr>
         </tbody>
@@ -157,8 +157,10 @@ const removeProductFromList = (warehouseCode) => {
   selectedProducts.value = selectedProducts.value.filter(item => item.franchiseWarehouseCode !== warehouseCode);
 };
 
-// Save selected products as favorites
 const saveFavorites = async () => {
+  let alreadyFavoriteProducts = [];
+  let successfullyAddedProducts = [];
+
   const promises = selectedProducts.value.map(async (item) => {
     try {
       const response = await fetch(`http://localhost:9000/warehouse/toggleFavorite/${item.franchiseWarehouseCode}`, {
@@ -167,19 +169,39 @@ const saveFavorites = async () => {
           'Content-Type': 'application/json',
         },
       });
+
       if (!response.ok) {
-        throw new Error(`Failed to toggle favorite for warehouse code ${item.franchiseWarehouseCode}`);
+        const errorText = await response.text();
+        if (errorText === "이미 즐겨찾기 추가된 상품입니다") {
+          alreadyFavoriteProducts.push(item.product.productName);
+        } else {
+          throw new Error(`Failed to toggle favorite for warehouse code ${item.franchiseWarehouseCode}`);
+        }
+      } else {
+        successfullyAddedProducts.push(item.product.productName);
+        // Remove the item from the selected list after successful save
+        removeProductFromList(item.franchiseWarehouseCode);
       }
-      // Remove the item from the selected list after successful save
-      removeProductFromList(item.franchiseWarehouseCode);
     } catch (error) {
       console.error('Failed to save favorites:', error);
     }
   });
 
   await Promise.all(promises);
-  alert('저장이 완료되었습니다.');
+
+  let message = '';
+  if (successfullyAddedProducts.length > 0) {
+    message += '저장이 완료되었습니다: ' + successfullyAddedProducts.join(', ') + '\n';
+  }
+  if (alreadyFavoriteProducts.length > 0) {
+    message += '이미 즐겨찾기에 추가된 상품입니다: ' + alreadyFavoriteProducts.join(', ');
+  }
+  alert(message);
 };
+
+
+
+
 
 // Mock functions to get category names
 const getCategoryFirstName = (categoryThirdCode) => {

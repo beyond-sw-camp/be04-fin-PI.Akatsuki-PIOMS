@@ -78,7 +78,7 @@ const fetchFavorites = async () => {
 
 const removeFavorite = async (productId) => {
   try {
-    const response = await fetch(`http://localhost:9000/warehouse/toggleFavorite/${productId}`, {
+    const response = await fetch(`http://localhost:9000/warehouse/removeFavorite/${productId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
