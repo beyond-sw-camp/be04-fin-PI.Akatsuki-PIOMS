@@ -16,7 +16,10 @@ export default defineConfig(({ mode }) => {
       }
     },
     server: {
-      port: 8080
+      port: 3000,
+    },
+    build: {
+      outDir: 'dist',
     },
     define: {
       'process.env': {

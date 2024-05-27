@@ -9,6 +9,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3
@@ -26,7 +27,7 @@ jobs:
           VITE_APP_BACKEND_URL: ${{ secrets.BACKEND_URL }}
         run: npm run build
 
-      - name: Zip the build artifacts
+      - name: Generate deployment package
         run: |
           mkdir -p deploy/.platform
           cp -r dist/* deploy/
@@ -44,10 +45,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ap-northeast-2
 
-      - name: Get current time
-        id: current-time
-        run: echo "CURRENT_TIME=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
-
       - name: Deploy to AWS Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
         with:
@@ -55,7 +52,7 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: AkatsukiFE
           environment_name: AkatsukiFE-env
-          version_label: deploy-${{ github.run_number }}-${{ github.sha }}-${{ env.CURRENT_TIME }}
+          version_label: deploy-${{ github.run_number }}-${{ github.sha }}
           region: ap-northeast-2
           deployment_package: deploy.zip
           wait_for_environment_recovery: 180
