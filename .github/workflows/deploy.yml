@@ -41,7 +41,7 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: AkatsukiFE
           environment_name: AkatsukiFE-env
-          version_label: deploy-${{ github.run_number }}
+          version_label: deploy-${{ github.run_number }}-${{ github.sha }}
           region: ap-northeast-2
           deployment_package: deploy.zip
           wait_for_environment_recovery: 180
