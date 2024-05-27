@@ -12,7 +12,7 @@
 <!--   <ProductList/>-->
 <!--    <FrProductList/>-->
 <!--    <CategoryList/>-->
-    <PostCategory/>
+    <!-- <PostCategory/> -->
   </main>
 
   <footer>
