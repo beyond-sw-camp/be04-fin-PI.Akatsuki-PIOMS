@@ -8,6 +8,7 @@
             <div class="radio-group">
               <label> 반송신청 <input type="radio" value="반송신청" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
               <label> 반송중 <input type="radio" value="반송중" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
+              <label> 처리대기 <input type="radio" value="처리대기" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
               <label> 처리완료 <input type="radio" value="처리완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
               <label> 반환대기 <input type="radio" value="반환대기" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
               <label> 반환중 <input type="radio" value="반환중" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
@@ -48,11 +49,8 @@
         <img src="@/assets/icon/search.png" alt="Search" />
       </button>
     </div>
-
-    <input class="create-button" type="button" value="발주하기" @click="showPopup" style="  cursor : pointer; border:0; ">
-
-    <exchangePopup v-if="createPopup" :showPopup="showPopup" :popupVisible="createPopup"/>
     <ExchangeDetail v-if="createDetailPopup" :showDetailPopup="showDetailPopup" :popupVisible="createDetailPopup" :detailItem="detailItem"/>
+
 
     <table style=" margin-top: 5%;">
       <thead >

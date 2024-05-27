@@ -72,7 +72,6 @@
       </div>
     </div>
       <div style="display: flex; justify-content: right;">
-        <p v-if="totalPrice > 0">총 가격: {{ totalPrice }}원</p>
         <button @click="exportExchange">반품신청하기</button>
         <button class="close" @click="showPopup" >돌아가기</button>
       </div>
@@ -90,7 +89,7 @@
     popupVisible: Boolean,
     writeActive: Boolean,
   });
-  
+  const franchiseOwnerCode = ref(1);
   const writeActive = ref(true);
   const filter = ref("");
   const conditionFilter = ref("");
@@ -111,11 +110,12 @@
   };
   
   const products = ref([]);
-  
+
+
   const getProducts = async () => {
     try {
 
-      const response = await fetch("/api/warehouse/list?franchiseOwnerCode=1", {
+      const response = await fetch(`/api/warehouse/list?franchiseOwnerCode=${franchiseOwnerCode.value}`, {
         method: "GET",
       });
       if (!response.ok) {
@@ -162,7 +162,7 @@
   };
 
   const franchiseCode = ref(1);
-  const franchiseOwnerCode = ref(1);
+
   const exportExchange = async () => {
   console.log("exportExchange");
 

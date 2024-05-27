@@ -16,7 +16,8 @@ import FrProductList from "@/components/franchise/product/FrProductList.vue";
 import CategoryList from "@/components/amdin/Category/CategoryList.vue";
 import OrderPage from '@/components/order/orderPage.vue';
 
-import ExchangePage from '@/components/exchange/exchangePage.vue';
+import AdminExchangePage from '@/components/exchange/AdminExchangePage.vue';
+import FranchiseExchangePage from '@/components/exchange/FranchiseExchangePage.vue';
 
 import PostCategory from "@/components/amdin/Category/PostCategory.vue";
 
@@ -109,9 +110,14 @@ const routes = [
         component: PostCategory
     },
     {
-        path: '/exchange/list',
-        name: 'exchangeList',
-        component: ExchangePage
+        path: '/franchise/exchange/list',
+        name: 'FranchiseExchangeList',
+        component: FranchiseExchangePage
+    },
+    {
+        path: '/admin/exchange/list',
+        name: 'AdminExchangeList',
+        component: AdminExchangePage
     },
     {
         path: '/franchise/favorite/register',
