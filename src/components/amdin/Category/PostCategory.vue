@@ -64,30 +64,7 @@ const secondCategories = ref([]);
 const thirdCategories = ref([]);
 const selectedFirstCategory = ref('');
 const selectedSecondCategory = ref('');
-const filteredLists = ref([]);
-const lists = ref([]);
 
-const getCategoryFirstId = async () => {
-  try {
-    const response = await fetch('api/admin/category/first', {
-      method: 'GET',
-    });
-    if (!response.ok) {
-      throw new Error('네트워크 오류 발생');
-    }
-
-    const data = await response.json();
-    if (data.length > 0) {
-      lists.value = data.map(({categoryFirst, ...rest}) => rest);
-      filteredLists.value = lists.value;
-    } else {
-      lists.value = [];
-      filteredLists.value = [];
-    }
-  } catch (error) {
-    console.error('오류 발생: ', error);
-  }
-};
 
 const fetchFirstCategories = async () => {
   try {
@@ -161,6 +138,7 @@ const saveCategoryFirst = async () => {
     }
 
     console.log('카테고리 대분류 등록에 성공했습니다.');
+    fetchFirstCategories();
   } catch (error) {
     console.error('오류: ', error);
   }
@@ -168,7 +146,8 @@ const saveCategoryFirst = async () => {
 
 const saveCategorySecond = async () => {
   const savedSecondData = {
-    categorySecondName: insertCategorySecondName.value
+    categorySecondName: insertCategorySecondName.value,
+    categoryFirstCode: selectedFirstCategory.value
   };
 
   console.log('savedSecondData: ', savedSecondData);
@@ -188,6 +167,7 @@ const saveCategorySecond = async () => {
     }
 
     console.log('카테고리 중분류 등록에 성공했습니다.');
+    fetchSecondCategories();
   } catch (error) {
     console.error('오류: ', error);
   }
@@ -195,7 +175,8 @@ const saveCategorySecond = async () => {
 
 const saveCategoryThird = async () => {
   const savedThirdData = {
-    categoryThirdName: insertCategoryThirdName.value
+    categoryThirdName: insertCategoryThirdName.value,
+    categorySecondCode: selectedSecondCategory.value
   };
 
   console.log('savedThirdData: ', savedThirdData);
@@ -215,15 +196,16 @@ const saveCategoryThird = async () => {
     }
 
     console.log('카테고리 소분류 등록에 성공했습니다.');
+    fetchThirdCategories(selectedSecondCategory.value);
   } catch (error) {
     console.error('오류: ', error);
   }
 };
 
-getCategoryFirstId();
-fetchFirstCategories();
-fetchSecondCategories();
-fetchThirdCategories();
+onMounted(() => {
+  fetchFirstCategories();
+});
+
 </script>
 
 <style scoped>
