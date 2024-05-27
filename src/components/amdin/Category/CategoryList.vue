@@ -57,20 +57,24 @@
         </li>
       </ul>
     </div>
+    <CategoryFirstPopup v-if="editCategoryFirstVisible" :currentFirstCode="currentFirstCode" @close="editCategoryFirstVisible = false"/>
+
   </div>
 </template>
 
 <script setup>
 import {ref} from 'vue';
+import CategoryFirstPopup from "@/components/amdin/Category/CategoryFirstPopup.vue";
 
 const firstCategories = ref([]);
 const secondCategories = ref([]);
 const thirdCategories = ref([]);
 const selectedFirstCategory = ref('');
 const selectedSecondCategory = ref('');
-const selectedThirdCategory = ref('');
 const filteredLists = ref([]);
 const lists = ref([]);
+const editCategoryFirstVisible = ref(false);
+const currentFirstCode = ref('');
 
 const getCategoryFirstId = async () => {
   try {
@@ -144,9 +148,21 @@ const fetchThirdCategories = async (categorySecondCode) => {
   }
 };
 
+const setCurrentFirstCode = (categoryFirstCode) => {
+  currentFirstCode.value = categoryFirstCode;
+}
+
+const setCurrentSecondCode = (categorySecondCode) => {
+  currentSecondCode.value = categorySecondCode;
+}
+
 const editCategoryFirst = (categoryFirstCode) => {
-  // 대분류 카테고리 수정 로직
-  alert(`대분류 카테고리 수정: ${categoryFirstCode}`);
+  setCurrentFirstCode(categoryFirstCode);
+  editCategoryFirstVisible.value = true;
+};
+const editCategorySecond = (categorySecondCode) => {
+  setCurrentSecondCode(categorySecondCode);
+  editCategorySecondVisible.value = true;
 };
 
 const deleteCategoryFirst = (categoryFirstCode) => {
@@ -154,10 +170,6 @@ const deleteCategoryFirst = (categoryFirstCode) => {
   alert(`대분류 카테고리 삭제: ${categoryFirstCode}`);
 };
 
-const editCategorySecond = (categorySecondCode) => {
-  // 중분류 카테고리 수정 로직
-  alert(`중분류 카테고리 수정: ${categorySecondCode}`);
-};
 
 const deleteCategorySecond = (categorySecondCode) => {
   // 중분류 카테고리 삭제 로직

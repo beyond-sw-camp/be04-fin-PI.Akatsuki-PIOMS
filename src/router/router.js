@@ -22,6 +22,7 @@ import PostCategory from "@/components/amdin/Category/PostCategory.vue";
 
 import FavoriteRegister from "@/components/franchise/favorite/FavoriteRegister.vue";
 import FavoriteList from "@/components/franchise/favorite/FavoriteList.vue";
+import CategoryFirstPopup from "@/components/amdin/Category/CategoryFirstPopup.vue";
 
 
 
@@ -107,6 +108,11 @@ const routes = [
         path: '/admin/category/post',
         name: 'AdminProductCategoryPost',
         component: PostCategory
+    },
+    {
+        path: '/admin/category/update',
+        name: 'AdminProductCategoryUpdate',
+        component: CategoryFirstPopup
     },
     {
         path: '/exchange/list',

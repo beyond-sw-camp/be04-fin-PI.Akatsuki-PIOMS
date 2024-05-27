@@ -223,7 +223,6 @@ const applyFilters = () => {
   });
 };
 
-
 const resetFilters = () => {
   selectedExposureStatus.value = '전체';
   filterStatus.value = '';
