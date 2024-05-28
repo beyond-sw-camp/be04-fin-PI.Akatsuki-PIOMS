@@ -85,15 +85,17 @@ jobs:
           cd deploy && zip -r ../deploy.zip .
         shell: bash
 
-      - name: Log in to Amazon ECR
+      - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
         with:
           registry-type: public
           mask-password: true
+          skip-logout: false
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ap-northeast-2
+
 
       - name: Upload build artifacts to S3
         run: |
