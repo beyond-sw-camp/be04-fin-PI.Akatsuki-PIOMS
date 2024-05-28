@@ -19,7 +19,7 @@ const props = defineProps({
   currentThirdName: String,
 });
 const updateThirdName = ref('');
-const emits = defineEmits(['close']);
+const emits = defineEmits(['close', 'update:currentSecondName']);
 
 const saveCategoryThird = async () => {
   const requestData = {
@@ -29,7 +29,7 @@ const saveCategoryThird = async () => {
   console.log('Request Data:', requestData);
 
   try {
-    const response = await fetch(`api/admin/category/third/update/${props.currentThirdCode}?requesterAdminCode=1`, {
+    const response = await fetch(`/api/admin/category/third/update/${props.currentThirdCode}?requesterAdminCode=1`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
