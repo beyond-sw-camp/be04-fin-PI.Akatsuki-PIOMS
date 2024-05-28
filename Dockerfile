@@ -11,7 +11,10 @@ COPY package*.json ./
 RUN npm install --omit=dev
 
 # Copy local code to the container image.
-COPY . .
+COPY . ./
+WORKDIR /app
+
+RUN npm install
 
 # Run the web service on container startup.
-CMD [ "node", "server.cjs" ]
+CMD [ "node", "server.cjs", "npm", "run", "dev", "--", "--host", "0.0.0.0"]
