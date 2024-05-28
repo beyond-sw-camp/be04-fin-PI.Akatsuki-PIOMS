@@ -9,6 +9,10 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: ap-northeast-2
 
     steps:
       - name: Checkout source code
@@ -20,8 +24,7 @@ jobs:
           node-version: '20.x'
 
       - name: Install dependencies
-        run: |
-          npm install || npm install || npm install
+        run: npm install --retry-on-fail
 
       - name: Build the project
         env:
@@ -30,74 +33,20 @@ jobs:
 
       - name: Generate deployment package
         run: |
-          mkdir -p deploy/.platform
-          mkdir -p deploy/dist
-
-          if [ -d dist ]; then
-            cp -r dist/* deploy/dist
-          else
-            echo "Dist directory not found!"
-            exit 1
-          fi
-
-          if [ -f vite.config.js ]; then
-            cp vite.config.js deploy/vite.config.js
-          else
-            echo "vite.config.js not found!"
-            exit 1
-          fi
-
-          if [ -f package.json ]; then
-            cp package.json deploy/package.json
-          else
-            echo "package.json not found!"
-            exit 1
-          fi
-
-          if [ -f Procfile ]; then
-            cp Procfile deploy/Procfile
-          else
-            echo "Procfile not found!"
-            exit 1
-          fi
-
-          if [ -f server.js ]; then
-            cp server.js deploy/server.js
-          else
-            echo "server.js not found!"
-            exit 1
-          fi
-
-          if [ -d .ebextensions ]; then
-            cp -r .ebextensions deploy/.ebextensions
-          else
-            echo ".ebextensions directory not found!"
-            exit 1
-          fi
-
-          if [ -d .platform ]; then
-            cp -r .platform deploy/.platform
-          else
-            echo ".platform directory not found!"
-            exit 1
-          fi
-
+          mkdir -p deploy/.platform deploy/dist
+          cp -r dist/* deploy/dist
+          cp vite.config.js package.json Procfile server.js deploy/
+          cp -r .ebextensions .platform deploy/
           cd deploy && zip -r ../deploy.zip .
-        shell: bash
 
       - name: Upload build artifacts to S3
-        run: |
-          aws s3 cp deploy.zip s3://elasticbeanstalk-ap-northeast-2-730335325274/deploy/deploy-${{ github.run_number }}-${{ github.sha }}.zip
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ap-northeast-2
+        run: aws s3 cp deploy.zip s3://elasticbeanstalk-ap-northeast-2-730335325274/deploy/deploy-${{ github.run_number }}-${{ github.sha }}.zip
 
       - name: Deploy to AWS Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
         with:
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_access_key: $AWS_ACCESS_KEY_ID
+          aws_secret_key: $AWS_SECRET_ACCESS_KEY
           application_name: AkatsukiFE
           environment_name: AkatsukiFE-env
           version_label: deploy-${{ github.run_number }}-${{ github.sha }}
@@ -114,24 +63,14 @@ jobs:
             exit 1
           else
             echo "Deployment succeeded. Environment health is $STATUS."
-          fi
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ap-northeast-2
 
       - name: Retrieve EB Engine Log
         if: failure()
         run: |
-          EB_LOG=$(aws elasticbeanstalk describe-environment-resources --environment-name AkatsukiFE-env --query 'EnvironmentResources.Instances[0].Id' --output text)
-          echo "Instance ID: $EB_LOG"
-          COMMAND_ID=$(aws ssm send-command --document-name "AWS-RunShellScript" --targets "Key=InstanceIds,Values=$EB_LOG" --parameters 'commands=["sudo cat /var/log/eb-engine.log"]' --query 'Command.CommandId' --output text)
+          INSTANCE_ID=$(aws elasticbeanstalk describe-environment-resources --environment-name AkatsukiFE-env --query 'EnvironmentResources.Instances[0].Id' --output text)
+          COMMAND_ID=$(aws ssm send-command --document-name "AWS-RunShellScript" --targets "Key=InstanceIds,Values=$INSTANCE_ID" --parameters 'commands=["sudo cat /var/log/eb-engine.log"]' --query 'Command.CommandId' --output text)
           sleep 10
-          aws ssm get-command-invocation --command-id $COMMAND_ID --instance-id $EB_LOG --query 'StandardOutputContent' --output text
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ap-northeast-2
+          aws ssm get-command-invocation --command-id $COMMAND_ID --instance-id $INSTANCE_ID --query 'StandardOutputContent' --output text
 
   check-comments:
     runs-on: ubuntu-latest
@@ -142,23 +81,16 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install GitHub CLI
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y gh jq
+        run: sudo apt-get update && sudo apt-get install -y gh jq
 
       - name: Check Pull Request Comments
         id: pr-comments
         run: |
           PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
           COMMENTS=$(gh pr view $PR_NUMBER --json comments --jq '.comments')
-
           UNIQUE_USERS=$(echo "$COMMENTS" | jq -r 'map(.author.login) | unique | length')
-
           if [ $UNIQUE_USERS -lt 2 ]; then
             echo "Not enough unique users ($UNIQUE_USERS) in the pull request comments. At least 2 unique users are required."
             exit 1
           else
             echo "Sufficient unique users ($UNIQUE_USERS) in the pull request comments."
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

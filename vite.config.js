@@ -12,17 +12,21 @@ export default defineConfig(({ mode }) => {
     ],
     resolve: {
       alias: {
+        // Create an alias for '@' as the /src directory
         '@': fileURLToPath(new URL('./src', import.meta.url))
       }
     },
     server: {
+      // Define the server's port number
       port: 8080,
     },
     build: {
+      // Specify the output directory for the build files
       outDir: 'dist',
     },
     define: {
       'process.env': {
+        // Dynamically assign the backend URL from environment variables
         VITE_APP_BACKEND_URL: env.VITE_APP_BACKEND_URL
       }
     }
