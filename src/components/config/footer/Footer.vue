@@ -12,25 +12,26 @@
 </template>
 
 <style scoped>
-  /* footer css */
-  .footer {
-    width: 100%;
-    height: 30px;
-    position: fixed;
-    bottom: 10px;
-    left: 0;
-    padding: 10px 20px; /* 상하 좌우 여백 */
-    box-shadow: 0 -1px 5px rgba(0,0,0,0.1); /* 약간의 그림자 효과 */
-    display: flex;
-    justify-content: flex-end;
-  }
-  .footer_text {
-    font-size: 12px;
-    color: #B9B9B9;
-    position: relative;
-    right: 400px;
-    top: 10px;
-    display: inline-flex;
-    text-align: right;
-  }
+/* footer css */
+.footer {
+  width: 2100px;
+  height: 30px;
+  position: fixed;
+  bottom: 10px;
+  left: 0;
+  padding: 10px 20px; /* 상하 좌우 여백 */
+  box-shadow: 0 -1px 5px rgba(0,0,0,0.1); /* 약간의 그림자 효과 */
+  display: flex;
+  justify-content: flex-end;
+  z-index: 1000;
+}
+.footer_text {
+  font-size: 12px;
+  color: #B9B9B9;
+  position: relative;
+  right: 550px;
+  top: 10px;
+  display: flex;
+  text-align: center;
+}
 </style>

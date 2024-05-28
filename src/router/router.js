@@ -16,6 +16,7 @@ import ProductList from "@/components/amdin/product/ProductList.vue";
 import OrderPage from '@/components/order/orderPage.vue';
 
 import ExchangePage from '@/components/exchange/exchangePage.vue';
+import NoticeList from "@/components/notice/noticeList.vue";
 
 
 
@@ -90,6 +91,11 @@ const routes = [
         path: '/exchange/list',
         name: 'exchangeList',
         component: ExchangePage
+    },
+    {
+        path: '/admin/notice/list',
+        name: 'noticeList',
+        component: NoticeList
     }
 ];
 

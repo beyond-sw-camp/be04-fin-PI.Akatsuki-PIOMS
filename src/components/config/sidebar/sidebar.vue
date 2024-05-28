@@ -7,7 +7,7 @@
   <article id="sidebar">
     <section class="sidebar_content">
       <div class="sidebar_title_Box">
-        <img class="sider_dashBoard" src="/PIOMS_image/png/root/dashboard.png">
+        <img class="sider_dashBoard" src="@/asserts/icon/dashboard.png"/>
         <h2 class="sidebar_title">Dash Board</h2>
       </div>
     </section>
@@ -16,7 +16,6 @@
 
 <style scoped>
   .sidebar_title_Box {
-    align-items: left;
     position: relative;
     top: 10px;
     left: 10px;
