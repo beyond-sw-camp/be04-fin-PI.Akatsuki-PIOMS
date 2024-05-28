@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       // Define the server's port number
-      port: 8080,
+      port: 5173,
     },
     build: {
       // Specify the output directory for the build files
