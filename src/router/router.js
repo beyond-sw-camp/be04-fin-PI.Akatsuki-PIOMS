@@ -41,7 +41,7 @@ const routes = [
         component: DriverLogin,
     },
     {
-        path: '/login',
+        path: '/',
         name: 'CommonLogin',
         component: CommonLogin,
     },
