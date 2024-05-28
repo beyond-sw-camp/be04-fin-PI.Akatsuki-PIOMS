@@ -9,6 +9,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3
@@ -23,16 +24,73 @@ jobs:
 
       - name: Build the project
         env:
-          VUE_APP_BACKEND_URL: ${{ secrets.BACKEND_URL }}
+          VITE_APP_BACKEND_URL: ${{ secrets.BACKEND_URL }}
         run: npm run build
 
-      - name: Zip the build artifacts
+      - name: Generate deployment package
         run: |
-          mkdir -p deploy
-          cp -r dist/* deploy/
-          cp server.js package.json Procfile deploy/
+          mkdir -p deploy/.platform
+          mkdir -p deploy/dist
+          
+          if [ -d dist ]; then
+            cp -r dist/* deploy/dist
+          else
+            echo "Dist directory not found!"
+            exit 1
+          fi
+
+          if [ -f vite.config.js ]; then
+            cp vite.config.js deploy/vite.config.js
+          else
+            echo "vite.config.js not found!"
+            exit 1
+          fi
+          
+          if [ -f package.json ]; then
+            cp package.json deploy/package.json
+          else
+            echo "package.json not found!"
+            exit 1
+          fi
+
+          if [ -f Procfile ]; then
+            cp Procfile deploy/Procfile
+          else
+            echo "Procfile not found!"
+            exit 1
+          fi
+
+          if [ -f server.js ]; then
+            cp server.js deploy/server.js
+          else
+            echo "server.js not found!"
+            exit 1
+          fi
+
+          if [ -d .ebextensions ]; then
+            cp -r .ebextensions deploy/.ebextensions
+          else
+            echo ".ebextensions directory not found!"
+            exit 1
+          fi
+          
+          if [ -f .platform/nginx.config ]; then
+            cp .platform/nginx.config deploy/.platform/nginx.config
+          else
+            echo ".platform/nginx.config not found!"
+            exit 1
+          fi
+          
           cd deploy && zip -r ../deploy.zip .
-        shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+        shell: bash
+
+      - name: Upload build artifacts to S3
+        run: |
+          aws s3 cp deploy.zip s3://elasticbeanstalk-ap-northeast-2-730335325274/deploy/deploy-${{ github.run_number }}-${{ github.sha }}.zip
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-northeast-2
 
       - name: Deploy to AWS Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
@@ -44,6 +102,7 @@ jobs:
           version_label: deploy-${{ github.run_number }}-${{ github.sha }}
           region: ap-northeast-2
           deployment_package: deploy.zip
+          use_existing_version_if_available: true
           wait_for_environment_recovery: 180
 
       - name: Check deployment status
