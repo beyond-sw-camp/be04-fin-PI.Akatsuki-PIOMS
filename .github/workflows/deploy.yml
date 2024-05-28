@@ -75,6 +75,24 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ap-northeast-2
 
+      - name: Wait for Blue environment to be stable
+        run: |
+          for i in {1..20}; do
+            STATUS=$(aws elasticbeanstalk describe-environments --environment-names AkatsukiFE-env --query 'Environments[0].Status' --output text)
+            if [ "$STATUS" == "Ready" ]; then
+              echo "Blue environment is stable."
+              exit 0
+            fi
+            echo "Waiting for blue environment to be stable..."
+            sleep 30
+          done
+          echo "Blue environment did not become stable in time."
+          exit 1
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ap-northeast-2
+
       - name: Terminate old Blue environment
         run: aws elasticbeanstalk terminate-environment --environment-name AkatsukiFE-env --terminate-resources
         if: success()
