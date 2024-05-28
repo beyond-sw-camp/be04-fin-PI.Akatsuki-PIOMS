@@ -29,8 +29,8 @@
               <tr>
                 <td class="insert-label">상품상태</td>
                 <td class="insert-input">
-<!--                  <select v-model="updateStatus" class="textInput">-->
-                  <select class="textInput" v-bind:value="currentProductStatus" v-on:select="updateStatus= $event.target.value">
+                  <select v-model="updateStatus" class="textInput">
+<!--                  <select class="textInput" v-bind:value="currentProductStatus" v-on:select="updateStatus= $event.target.value">-->
                     <option value="공급가능">공급가능</option>
                     <option value="일시제한">일시제한</option>
                     <option value="단종">단종</option>
@@ -39,16 +39,16 @@
                 </td>
                 <td class="insert-label">상품노출상태</td>
                 <td class="insert-input">
-<!--                  <select v-model="updateExposureStatus" class="textInput">-->
-                  <select  class="textInput" v-bind:value="currentProductExposureStatus" v-on:select="updateExposureStatus= $event.target.value">
+                  <select v-model="updateExposureStatus" class="textInput">
+<!--                  <select  class="textInput" v-bind:value="currentProductExposureStatus" v-on:select="updateExposureStatus= $event.target.value">-->
                     <option value="true">노출</option>
                     <option value="false">미노출</option>
                   </select>
                 </td>
                 <td class="insert-label">색상</td>
                 <td class="insert-input">
-<!--                  <select v-model="updateColor" class="textInput">-->
-                    <select  class="textInput" v-bind:value="currentProductColor" v-on:select="updateColor= $event.target.value">
+                  <select v-model="updateColor" class="textInput">
+<!--                    <select  class="textInput" v-bind:value="currentProductColor" v-on:select="updateColor= $event.target.value">-->
                     <option value="빨간색">빨간색</option>
                     <option value="주황색">주황색</option>
                     <option value="노란색">노란색</option>
@@ -247,9 +247,6 @@ const props = defineProps({
   currentProductName: String,
   currentProductCount: String,
   currentProductPrice: String,
-  currentProductStatus: String,
-  currentProductExposureStatus: String,
-  currentProductColor: String,
   currentProductSize: String,
   currentProductContent: String,
 });

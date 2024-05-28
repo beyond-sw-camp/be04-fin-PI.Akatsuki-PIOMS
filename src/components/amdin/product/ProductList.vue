@@ -115,13 +115,9 @@
                         item.productName,
                         item.productCount,
                         item.productPrice,
-                        item.productStatus,
-                        item.productExposureStatus,
-                        item.productColor,
                         item.productSize,
                         item.productContent
-                        )"
-            >
+                        )">
               {{ item[header.key] }}
             </button>
             <span v-else>{{ item[header.key] }}</span>
@@ -143,9 +139,6 @@
                         :currentProductName="currentProductName"
                         :currentProductCount="currentProductCount"
                         :currentProductPrice="currentProductPrice"
-                        :currentProductStatus="currentProductStatus"
-                        :currentProductExposure="currentProductExposureStatus"
-                        :currentProductColor="currentProductColor"
                         :currentProductSize="currentProductSize"
                         :currentProductContent="currentProductContent"
                         @close="currentProductCode = null"/>
@@ -283,15 +276,6 @@ const setCurrentProductCount = (productCount) => {
 const setCurrentProductPrice = (productPrice) => {
   currentProductPrice.value = productPrice;
 }
-const setCurrentProductStatus = (productStatus) => {
-  currentProductStatus.value = productStatus;
-}
-const setCurrentProductExposureStatus = (productExposureStatus) => {
-  currentProductExposureStatus.value = productExposureStatus;
-}
-const setCurrentProductColor = (productColor) => {
-  currentProductColor.value = productColor;
-}
 const setCurrentProductSize = (productSize) => {
   currentProductSize.value = productSize;
 }
@@ -302,18 +286,12 @@ const showModifyPopup = (productCode,
                          productName,
                          productCount,
                          productPrice,
-                         productStatus,
-                         productExposureStatus,
-                         productColor,
                          productSize,
                          productContent) => {
   setCurrentProductCode(productCode);
   setCurrentProductName(productName);
   setCurrentProductCount(productCount);
   setCurrentProductPrice(productPrice);
-  setCurrentProductStatus(productStatus);
-  setCurrentProductExposureStatus(productExposureStatus);
-  setCurrentProductColor(productColor);
   setCurrentProductSize(productSize);
   setCurrentProductContent(productContent);
 };
