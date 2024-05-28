@@ -30,13 +30,14 @@ jobs:
 
       - name: Generate deployment package
         run: |
-          mkdir -p deploy/.platform
+          mkdir -p deploy/.platform/hooks/prebuild
           cp -r dist deploy/dist
           cp vite.config.js deploy/
           cp package.json deploy/
           cp Procfile deploy/
           cp server.cjs deploy/
           cp -r .ebextensions deploy/
+          cp .platform/hooks/prebuild/01_install_npm_dependencies.sh deploy/.platform/hooks/prebuild/
           cd deploy && zip -r ../deploy.zip .
         shell: bash
 
