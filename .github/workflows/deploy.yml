@@ -30,7 +30,7 @@ jobs:
 
       - name: Generate deployment package
         run: |
-          mkdir -p deploy/.platform/nginx/conf.d
+          mkdir -p deploy/.platform
           mkdir -p deploy/dist
 
           if [ -d dist ]; then
@@ -75,8 +75,9 @@ jobs:
             exit 1
           fi
 
-          if [ -f .platform/nginx/conf.d/nginx.conf ]; then
-            cp .platform/nginx/conf.d/nginx.conf deploy/.platform/nginx/conf.d/nginx.conf
+          if [ -f .platform/nginx.conf ]; then
+            mkdir -p deploy/.platform/nginx/
+            cp .platform/nginx.conf deploy/.platform/nginx/nginx.conf
           else
             echo "nginx.conf not found!"
             exit 1
