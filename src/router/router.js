@@ -25,7 +25,7 @@ import PostCategory from "@/components/amdin/Category/PostCategory.vue";
 import FavoriteRegister from "@/components/franchise/favorite/FavoriteRegister.vue";
 import FavoriteList from "@/components/franchise/favorite/FavoriteList.vue";
 
-
+import AdminMembers from "@/components/amdin/member/AdminMemberPage.vue";
 
 
 
@@ -134,7 +134,13 @@ const routes = [
         path: '/franchise/favorite/list',
         name: 'FranchiseFavoriteList',
         component: FavoriteList
+    },
+    {
+        path: '/admin/members',
+        name: 'AdminMemberList',
+        component: AdminMembers
     }
+
 ];
 
 const router = createRouter({
