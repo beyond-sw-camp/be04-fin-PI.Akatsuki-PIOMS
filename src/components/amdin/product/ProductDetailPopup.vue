@@ -12,18 +12,18 @@
               <tr>
                 <td class="insert-label">상품명</td>
                 <td class="insert-input">
-                  <input type="text" v-bind:value="currentProductName" v-on:input="updateProductName= $event.target.value" class="textInput"/>
-<!--                  <input type="text" v-model="updateProductName" class="textInput"/>-->
+<!--                  <input type="text" v-bind:value="currentProductName" v-on:input="updateProductName= $event.target.value" class="textInput"/>-->
+                  <input type="text" v-model="updateProductName" class="textInput"/>
                 </td>
                 <td class="insert-label">재고량</td>
                 <td class="insert-input">
-<!--                  <input type="number" v-model="updateProductCount" class="textInput"/>-->
-                  <input type="number" v-bind:value="currentProductCount" v-on:input="updateProductCount= $event.target.value" class="textInput"/>
+                  <input type="number" v-model="updateProductCount" class="textInput"/>
+<!--                  <input type="number" v-bind:value="currentProductCount" v-on:input="updateProductCount= $event.target.value" class="textInput"/>-->
                 </td>
                 <td class="insert-label">가격</td>
                 <td class="insert-input">
-<!--                  <input type="number" v-model="updateProductPrice" class="textInput"/>-->
-                  <input type="number" v-bind:value="currentProductPrice" v-on:input="updateProductPrice= $event.target.value" class="textInput"/>
+                  <input type="number" v-model="updateProductPrice" class="textInput"/>
+<!--                  <input type="number" v-bind:value="currentProductPrice" v-on:input="updateProductPrice= $event.target.value" class="textInput"/>-->
                 </td>
               </tr>
               <tr>
@@ -60,8 +60,8 @@
                 </td>
                 <td class="insert-label">사이즈</td>
                 <td class="insert-input">
-<!--                  <select v-model="updateSize" class="textInput">-->
-                    <select  class="textInput" v-bind:value="currentProductSize" v-on:select="updateSize= $event.target.value">
+                  <select v-model="updateSize" class="textInput">
+<!--                    <select  class="textInput" v-bind:value="currentProductSize" v-on:select="updateSize= $event.target.value">-->
                     <option value="90">90</option>
                     <option value="95">95</option>
                     <option value="100">100</option>
@@ -98,8 +98,8 @@
               <tr>
                 <td class="second-insert-label"><div class="second-insert-label0">상세정보</div></td>
                 <td class="second-insert-input">
-                  <input type="text" v-bind:value="currentProductContent" v-on:input="updateContent= $event.target.value" class="textInput"/>
-<!--                  <input type="text" style="width: 99%; height: 150px" v-model="updateContent" class="textInput">-->
+<!--                  <input type="text" v-bind:value="currentProductContent" v-on:input="updateContent= $event.target.value" class="textInput"/>-->
+                  <input type="text" style="width: 99%; height: 150px" v-model="updateContent" class="textInput">
                 </td>
               </tr>
               <tr>
@@ -155,6 +155,7 @@ const updateFirstCategory = ref('');
 const updateSecondCategory = ref('');
 const updateThirdCategory = ref('');
 let imageUrl = '';
+
 const fetchCategories = async (level) => {
   let url = '';
   switch (level) {
@@ -243,12 +244,12 @@ const props = defineProps({
   currentProductCode: {
     type: String,
     required: true
-  },
-  currentProductName: String,
-  currentProductCount: String,
-  currentProductPrice: String,
-  currentProductSize: String,
-  currentProductContent: String,
+  }
+  // currentProductName: String,
+  // currentProductCount: String,
+  // currentProductPrice: String,
+  // currentProductSize: String,
+  // currentProductContent: String,
 });
 const saveProduct = async (imageUrl) => {
   const requestData = {

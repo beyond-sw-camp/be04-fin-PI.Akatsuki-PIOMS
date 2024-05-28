@@ -155,7 +155,7 @@ const lists = ref([]);
 const headers = ref([
   { key: 'productCode', label: '상품 코드'},
   { key: 'productName', label: '상품명'},
-  { key: 'url', label: '상품 이미지'},
+  { key: 'imgUrl', label: '상품 이미지'},
   { key: 'productCount', label: '본사 보유량'},
   { key: 'productDiscount', label: '본사 폐기량'},
   { key: 'productNoticeCount', label: '알림 기준 수량'},
@@ -189,7 +189,21 @@ const currentProductCount = ref('');
 const currentProductPrice = ref('');
 const currentProductSize = ref('');
 const currentProductContent = ref('');
-const currentProductExposureStatus = ref('');
+const productImages = ref([]);
+
+// const fetchProductImages = async () => {
+//   try {
+//     const response = await fetch(`http://localhost:5000/admin/product/productImage`, {
+//       method: 'GET',
+//     });
+//     if(!response.ok) {
+//       throw new Error('이미지를 불러오지 못했습니다.');
+//     }
+//     productImages.value = await response.json();
+//   } catch (error) {
+//     console.error('Errpr:', error);
+//   }
+// };
 
 const fetchFirstCategories = async () => {
   try {
@@ -295,6 +309,7 @@ const showModifyPopup = (productCode,
   setCurrentProductContent(productContent);
 };
 
+
 const getMemberId = async () => {
   try {
     const response = await fetch('http://localhost:5000/admin/product', {
@@ -327,7 +342,7 @@ const downloadExcel = () => {
     const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }));
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', 'productList.xlsx'); // 원하는 파일 이름 설정
+    link.setAttribute('download', 'ProductList.xlsx'); // 원하는 파일 이름 설정
     document.body.appendChild(link);
     link.click();
   }).catch((error) => {
