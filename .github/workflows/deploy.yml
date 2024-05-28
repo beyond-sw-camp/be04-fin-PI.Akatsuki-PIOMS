@@ -31,57 +31,16 @@ jobs:
       - name: Generate deployment package
         run: |
           mkdir -p deploy/.platform
+          mkdir -p deploy/.ebextensions
           mkdir -p deploy/dist
 
-          if [ -d dist ]; then
-            cp -r dist/* deploy/dist
-          else
-            echo "Dist directory not found!"
-            exit 1
-          fi
-
-          if [ -f vite.config.js ]; then
-            cp vite.config.js deploy/vite.config.js
-          else
-            echo "vite.config.js not found!"
-            exit 1
-          fi
-
-          if [ -f package.json ]; then
-            cp package.json deploy/package.json
-          else
-            echo "package.json not found!"
-            exit 1
-          fi
-
-          if [ -f Procfile ]; then
-            cp Procfile deploy/Procfile
-          else
-            echo "Procfile not found!"
-            exit 1
-          fi
-
-          if [ -f server.cjs ]; then
-            cp server.cjs deploy/server.cjs
-          else
-            echo "server.cjs not found!"
-            exit 1
-          fi
-
-          if [ -d .ebextensions ]; then
-            cp -r .ebextensions deploy/.ebextensions
-          else
-            echo ".ebextensions directory not found!"
-            exit 1
-          fi
-
-          if [ -f .platform/nginx.conf ]; then
-            mkdir -p deploy/.platform/nginx/
-            cp .platform/nginx.conf deploy/.platform/nginx/nginx.conf
-          else
-            echo "nginx.conf not found!"
-            exit 1
-          fi
+          cp -r dist deploy/dist
+          cp vite.config.js deploy/vite.config.js
+          cp package.json deploy/package.json
+          cp Procfile deploy/Procfile
+          cp server.cjs deploy/server.cjs
+          cp -r .platform deploy/.platform
+          cp -r .ebextensions deploy/.ebextensions
 
           cd deploy && zip -r ../deploy.zip .
         shell: bash
@@ -133,3 +92,33 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ap-northeast-2
+
+  check-comments:
+    runs-on: ubuntu-latest
+    needs: build-and-deploy
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install GitHub CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gh jq
+
+      - name: Check Pull Request Comments
+        id: pr-comments
+        run: |
+          PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+          COMMENTS=$(gh pr view $PR_NUMBER --json comments --jq '.comments')
+
+          UNIQUE_USERS=$(echo "$COMMENTS" | jq -r 'map(.author.login) | unique | length')
+
+          if [ $UNIQUE_USERS -lt 2 ]; then
+            echo "Not enough unique users ($UNIQUE_USERS) in the pull request comments. At least 2 unique users are required."
+            exit 1
+          else
+            echo "Sufficient unique users ($UNIQUE_USERS) in the pull request comments."
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
