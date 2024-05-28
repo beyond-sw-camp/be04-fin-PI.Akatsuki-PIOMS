@@ -22,6 +22,7 @@ import PostCategory from "@/components/amdin/Category/PostCategory.vue";
 
 import FavoriteRegister from "@/components/franchise/favorite/FavoriteRegister.vue";
 import FavoriteList from "@/components/franchise/favorite/FavoriteList.vue";
+import Log from "@/components/log/Log.vue";
 
 
 
@@ -122,6 +123,11 @@ const routes = [
         path: '/franchise/favorite/list',
         name: 'FranchiseFavoriteList',
         component: FavoriteList
+    },
+    {
+        path: '/admin/logs',
+        name: 'AdminLogs',
+        component: Log
     }
 ];
 
