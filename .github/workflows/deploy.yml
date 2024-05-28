@@ -24,8 +24,11 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Create Procfile
+        run: echo "web: node server.js" > Procfile
+
       - name: Zip Artifacts
-        run: zip -r deploy.zip dist
+        run: zip -r deploy.zip dist Procfile server.js package.json
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -50,4 +53,4 @@ jobs:
 
       - name: Swap CNAME
         if: success()
-        run: aws elasticbeanstalk swap-environment-cnames --source-environment-name ${{ github.head_ref }}-${{ github.run_number }} --destination-environment-name AkatsukiFE-env
+        run: aws elasticbeanstalk swap-environment-cnames --source-environment-name AkatsukiFE-env --destination-environment-name AkatsukiFE-env
