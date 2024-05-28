@@ -120,11 +120,6 @@
                         )">
               {{ item[header.key] }}
             </button>
-            <button v-else-if="header.key === 'productExposureStatus'"
-                    class="button-as-text"
-                    @click="deleteProduct(item.productCode, item.productExposureStatus)">
-              {{ item[header.key] }}
-            </button>
             <span v-else>{{ item[header.key] }}</span>
           </td>
         </tr>
@@ -139,10 +134,6 @@
       <span> {{currentPage}} / {{totalPages}} </span>
       <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
     </div>
-    <ProductDeletePopup v-if="deleteProductVisible"
-                        :currentProductCode="currentProductCode"
-                        :currentProductName="currentProductName"
-                        @close="deleteProductVisible = false"/>
     <ProductDetailPopup v-if="currentProductCode"
                         :currentProductCode="currentProductCode"
                         :currentProductName="currentProductName"
@@ -159,7 +150,6 @@ import { ref, computed } from 'vue';
 import ProductPostPopup from "@/components/amdin/product/ProductPostPopup.vue"
 import ProductDetailPopup from "@/components/amdin/product/ProductDetailPopup.vue";
 import axios from "axios";
-import ProductDeletePopup from "@/components/amdin/product/ProductDeletePopup.vue";
 
 const lists = ref([]);
 const headers = ref([
@@ -192,6 +182,7 @@ const selectedSecondCategory = ref('');
 const selectedThirdCategory = ref('');
 
 const showPostPopup = ref(false);
+
 const currentProductCode = ref('');
 const currentProductName = ref('');
 const currentProductCount = ref('');
@@ -199,17 +190,6 @@ const currentProductPrice = ref('');
 const currentProductSize = ref('');
 const currentProductContent = ref('');
 const currentProductExposureStatus = ref('');
-const deleteProductVisible = ref(false);
-
-const setCurrentProductExposureStatus = (productExposureStatus) => {
-  currentProductExposureStatus.value = productExposureStatus;
-}
-
-const deleteProduct = (productCode, productExposureStatus) => {
-  setCurrentProductCode(productCode);
-  setCurrentProductExposureStatus(productExposureStatus);
-  deleteProductVisible.value = true;
-}
 
 const fetchFirstCategories = async () => {
   try {
