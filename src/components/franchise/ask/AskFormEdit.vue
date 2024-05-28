@@ -144,14 +144,14 @@ onMounted(fetchAskData);
 .detail-table td {
   border: 1px solid #ddd;
   padding: 15px;
+  font-size: 16px;
 }
 
 .detail-table input {
   width: 98%;
   height: 40px;
   border: 1px solid #ddd;
-  font-size: large;
-  font-weight: bold;
+  font-size: 16px;
 }
 
 .detail-table .content-td {
@@ -234,7 +234,7 @@ textarea {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   width: 50%;
   max-width: 2000px;
-  height: 77%;
+  height: 80%;
   overflow-y: auto;
   max-height: 80vh;
 }
@@ -270,7 +270,12 @@ textarea {
   cursor: pointer;
 }
 
-.popup-content button:hover {
+.popup-content.cancel-btn:hover {
+  background-color: orangered;
+}
+
+.popup-content.submit-btn:hover {
   background-color: #45a049;
 }
+
 </style>

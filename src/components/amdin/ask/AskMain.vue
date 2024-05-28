@@ -191,26 +191,6 @@ const nextPage = () => {
     currentPage.value++;
   }
 };
-
-// const openAnswerForm = (askCode, mode) => {
-//   const width = 800;
-//   const height = 600;
-//   const left = (window.screen.width / 2) - (width / 2);
-//   const top = (window.screen.height / 2) - (height / 2);
-//   const url = `http://localhost:5173/admin/answerform/${mode}?askCode=${askCode}`;
-//   window.open(url, 'popup', `width=${width},height=${height},top=${top},left=${left},toolbar=no,scrollbars=no,resizable=no`);
-// };
-
-// 답변 등록 버튼 클릭 시
-// const registerAnswer = (askCode) => {
-//   openAnswerForm(askCode, 'register');
-// };
-//
-// // 답변 수정 버튼 클릭 시
-// const editAnswer = (askCode) => {
-//   openAnswerForm(askCode, 'edit');
-// };
-
 onMounted(() => {
   fetchAsks();
 });
@@ -261,6 +241,7 @@ const closeEdit = () =>{
 
 .filter-table td {
   padding: 5px 10px;
+  font-size: 16px;
 }
 
 .filter-label {
@@ -321,6 +302,8 @@ const closeEdit = () =>{
 .table th {
   font-weight: bold;
   color: #000;
+  font-size: 16px;
+  text-align: center;
 }
 
 .boardname {
@@ -352,6 +335,7 @@ const closeEdit = () =>{
 
 .allpost td {
   border-right: 1px solid #ddd;
+  font-size: 14px;
 }
 
 .editbutton {

@@ -116,11 +116,13 @@ onMounted(fetchAskData);
 .detail-table td {
   border: 1px solid #ddd;
   padding: 15px;
+  font-size: 16px;
 }
 
 .detail-table .content-td {
   height: 270px; /* 여기에서 원하는 높이를 설정합니다 */
   vertical-align: top;
+  font-size: 16px;
 }
 
 .label {
@@ -143,7 +145,7 @@ textarea {
   border: 1px solid #ddd;
   border-radius: 4px;
   resize: vertical;
-  font-size: large;
+  font-size: 16px;
 }
 
 .action-buttons {
@@ -191,9 +193,9 @@ textarea {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   width: 50%;
   max-width: 2000px;
-  height: 77%;
+  height: 90%;
   overflow-y: auto;
-  max-height: 80vh;
+  max-height: 90vh;
 }
 
 .popup-content h2 {

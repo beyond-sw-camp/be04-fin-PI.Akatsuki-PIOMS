@@ -106,12 +106,13 @@ onMounted(fetchFranchiseOwnerData);
   border-collapse: collapse;
   align-content: center;
   justify-content: center;
-  margin-bottom: 40px;
+  margin-bottom: 10px;
 }
 
 .detail-table td {
   border: 1px solid #ddd;
   padding: 15px;
+  font-size: 16px;
 }
 
 .detail-table input {
@@ -119,11 +120,10 @@ onMounted(fetchFranchiseOwnerData);
   height: 40px;
   border: 1px solid #ddd;
   font-size: large;
-  font-weight: bold;
 }
 
 .detail-table .content-td {
-  height: 450px;
+  height: 300px;
   vertical-align: top;
 }
 
@@ -135,7 +135,7 @@ onMounted(fetchFranchiseOwnerData);
 
 textarea {
   width: 98%;
-  height: 430px !important; /* 높이를 늘렸습니다 */
+  height: 400px !important; /* 높이를 늘렸습니다 */
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -160,7 +160,6 @@ textarea {
   cursor: pointer;
   padding: 8px 16px;
   font-size: 14px;
-  font-weight: bold;
 }
 
 .submit-btn {
@@ -171,7 +170,6 @@ textarea {
   cursor: pointer;
   padding: 8px 16px;
   font-size: 14px;
-  font-weight: bold;
 }
 
 .cancel-btn:hover {
@@ -203,9 +201,9 @@ textarea {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   width: 50%;
   max-width: 2000px;
-  height: 100%;
+  height: 88%;
   overflow-y: auto;
-  max-height: 80vh;
+  max-height: 84vh;
 }
 
 .popup-content h2 {
