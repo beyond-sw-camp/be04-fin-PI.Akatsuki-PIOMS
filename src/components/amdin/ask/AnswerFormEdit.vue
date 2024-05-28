@@ -127,7 +127,7 @@ onMounted(fetchAskData);
 }
 
 .form-wrapper {
-  width: 860px;
+  width: 100%;
   max-width: 1200px;
   background-color: #fff;
   border-radius: 8px;
@@ -137,7 +137,7 @@ onMounted(fetchAskData);
 }
 
 .detail-table {
-  width: 860px;
+  width: 100%x;
   border-collapse: collapse;
   align-content: center;
   justify-content: center;
@@ -147,10 +147,11 @@ onMounted(fetchAskData);
 .detail-table td {
   border: 1px solid #ddd;
   padding: 15px;
+  font-size: 16px;
 }
 
 .detail-table .content-td {
-  height: 270px; /* 여기에서 원하는 높이를 설정합니다 */
+  height: 200px; /* 여기에서 원하는 높이를 설정합니다 */
   vertical-align: top;
 }
 
@@ -168,17 +169,17 @@ onMounted(fetchAskData);
 }
 
 textarea {
-  width: 838px;
+  width: 98%;
   height: 210px;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
   resize: vertical;
-  font-size: large;
+  font-size: medium;
 }
 
 .action-buttons {
-  width: 850px;
+  width: 100%;
   display: flex;
   gap: 10px;
   justify-content: flex-end;
@@ -236,9 +237,9 @@ textarea {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   width: 50%;
   max-width: 2000px;
-  height: 77%;
+  height: 80%;
   overflow-y: auto;
-  max-height: 80vh;
+  max-height: 84vh;
 }
 
 .popup-content h2 {

@@ -265,12 +265,14 @@ onMounted(() => {
   text-align: center;
   width: 100px;
   background-color: #D9D9D9;
+  font-size: 16px;
 }
 
 .filter-input {
   width: 500px;
   text-align: left;
   border: 1px solid lightgray;
+  font-size: 16px;
 }
 
 .date-range {
@@ -320,7 +322,7 @@ onMounted(() => {
   margin: 0 5px;
   position: relative;
   top: 10px; /* 원하는 위치로 이동 */
-  right: 346px; /* 원하는 위치로 이동 */
+  right: 178px; /* 원하는 위치로 이동 */
 }
 
 .create-btn:hover {
@@ -348,6 +350,8 @@ onMounted(() => {
 .table th {
   font-weight: bold;
   color: #000;
+  font-size: 16px;
+  text-align: center;
 }
 
 .boardname {
@@ -379,6 +383,7 @@ onMounted(() => {
 
 .allpost td {
   border-right: 1px solid #ddd;
+  font-size: 14px;
 }
 
 .editbutton {
