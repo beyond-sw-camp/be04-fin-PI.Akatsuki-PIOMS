@@ -36,7 +36,7 @@ const closeDeleteModal = () => {
 
 const deleteCategoryThird = async () => {
   try {
-    const productResponse = await fetch(`/api/admin/product/category/${props.currentThirdCode}`, {
+    const productResponse = await fetch(`http://localhost:5000/admin/product/category/${props.currentThirdCode}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -50,7 +50,7 @@ const deleteCategoryThird = async () => {
     }
 
 
-    const response = await fetch(`/api/admin/category/third/delete/${props.currentThirdCode}?requesterAdminCode=1`, {
+    const response = await fetch(`http://localhost:5000/admin/category/third/delete/${props.currentThirdCode}?requesterAdminCode=1`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'

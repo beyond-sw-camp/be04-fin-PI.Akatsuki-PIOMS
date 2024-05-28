@@ -98,7 +98,7 @@ const currentThirdName = ref('');
 
 const getCategoryFirstId = async () => {
   try {
-    const response = await fetch('api/admin/category/first', {
+    const response = await fetch('http://localhost:5000/admin/category/first', {
       method: 'GET',
     });
     if (!response.ok) {
@@ -120,7 +120,7 @@ const getCategoryFirstId = async () => {
 
 const fetchFirstCategories = async () => {
   try {
-    const response = await fetch('/api/admin/category/first', {
+    const response = await fetch('http://localhost:5000/admin/category/first', {
       method: 'GET',
     });
     if (!response.ok) {
@@ -139,7 +139,7 @@ const fetchSecondCategories = async (categoryFirstCode) => {
   }
   selectedFirstCategory.value = categoryFirstCode;
   try {
-    const response = await fetch(`/api/admin/category/second/list/detail/categoryfirst/${categoryFirstCode}`);
+    const response = await fetch(`http://localhost:5000/admin/category/second/list/detail/categoryfirst/${categoryFirstCode}`);
     if (!response.ok) {
       throw new Error('중분류를 불러오는 데 실패했습니다.');
     }
@@ -158,7 +158,7 @@ const fetchThirdCategories = async (categorySecondCode) => {
   }
   selectedSecondCategory.value = categorySecondCode;
   try {
-    const response = await fetch(`/api/admin/category/third/list/detail/categorysecond/${categorySecondCode}`);
+    const response = await fetch(`http://localhost:5000/admin/category/third/list/detail/categorysecond/${categorySecondCode}`);
     if (!response.ok) {
       throw new Error('소분류를 불러오는 데 실패했습니다.');
     }

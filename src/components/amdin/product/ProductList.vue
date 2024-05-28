@@ -120,6 +120,11 @@
                         )">
               {{ item[header.key] }}
             </button>
+            <button v-else-if="header.key === 'productExposureStatus'"
+                    class="button-as-text"
+                    @click="deleteProduct(item.productCode, item.productExposureStatus)">
+              {{ item[header.key] }}
+            </button>
             <span v-else>{{ item[header.key] }}</span>
           </td>
         </tr>
@@ -134,6 +139,10 @@
       <span> {{currentPage}} / {{totalPages}} </span>
       <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
     </div>
+    <ProductDeletePopup v-if="deleteProductVisible"
+                        :currentProductCode="currentProductCode"
+                        :currentProductName="currentProductName"
+                        @close="deleteProductVisible = false"/>
     <ProductDetailPopup v-if="currentProductCode"
                         :currentProductCode="currentProductCode"
                         :currentProductName="currentProductName"
@@ -150,6 +159,7 @@ import { ref, computed } from 'vue';
 import ProductPostPopup from "@/components/amdin/product/ProductPostPopup.vue"
 import ProductDetailPopup from "@/components/amdin/product/ProductDetailPopup.vue";
 import axios from "axios";
+import ProductDeletePopup from "@/components/amdin/product/ProductDeletePopup.vue";
 
 const lists = ref([]);
 const headers = ref([
@@ -186,15 +196,24 @@ const currentProductCode = ref('');
 const currentProductName = ref('');
 const currentProductCount = ref('');
 const currentProductPrice = ref('');
-const currentProductStatus = ref('');
-const currentProductExposureStatus = ref('');
-const currentProductColor = ref('');
 const currentProductSize = ref('');
 const currentProductContent = ref('');
+const currentProductExposureStatus = ref('');
+const deleteProductVisible = ref(false);
+
+const setCurrentProductExposureStatus = (productExposureStatus) => {
+  currentProductExposureStatus.value = productExposureStatus;
+}
+
+const deleteProduct = (productCode, productExposureStatus) => {
+  setCurrentProductCode(productCode);
+  setCurrentProductExposureStatus(productExposureStatus);
+  deleteProductVisible.value = true;
+}
 
 const fetchFirstCategories = async () => {
   try {
-    const response = await fetch('/api/admin/category/first', {
+    const response = await fetch('http://localhost:5000/admin/category/first', {
       method: 'GET',
     });
     if (!response.ok) {
@@ -212,7 +231,7 @@ const fetchSecondCategories = async () => {
     return;
   }
   try {
-    const response = await fetch(`/api/admin/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`);
+    const response = await fetch(`http://localhost:5000/admin/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`);
     if (!response.ok) {
       throw new Error('중분류를 불러오는 데 실패했습니다.');
     }
@@ -230,7 +249,7 @@ const fetchThirdCategories = async () => {
     return;
   }
   try {
-    const response = await fetch(`/api/admin/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`);
+    const response = await fetch(`http://localhost:5000/admin/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`);
     if (!response.ok) {
       throw new Error('소분류를 불러오는 데 실패했습니다.');
     }
@@ -298,7 +317,7 @@ const showModifyPopup = (productCode,
 
 const getMemberId = async () => {
   try {
-    const response = await fetch('/api/admin/product', {
+    const response = await fetch('http://localhost:5000/admin/product', {
       method: 'GET',
     });
 

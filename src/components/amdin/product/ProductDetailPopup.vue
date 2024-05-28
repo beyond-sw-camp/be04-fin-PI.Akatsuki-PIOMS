@@ -18,12 +18,12 @@
                 <td class="insert-label">재고량</td>
                 <td class="insert-input">
 <!--                  <input type="number" v-model="updateProductCount" class="textInput"/>-->
-                  <input type="text" v-bind:value="currentProductCount" v-on:input="updateProductCount= $event.target.value" class="textInput"/>
+                  <input type="number" v-bind:value="currentProductCount" v-on:input="updateProductCount= $event.target.value" class="textInput"/>
                 </td>
                 <td class="insert-label">가격</td>
                 <td class="insert-input">
 <!--                  <input type="number" v-model="updateProductPrice" class="textInput"/>-->
-                  <input type="text" v-bind:value="currentProductPrice" v-on:input="updateProductPrice= $event.target.value" class="textInput"/>
+                  <input type="number" v-bind:value="currentProductPrice" v-on:input="updateProductPrice= $event.target.value" class="textInput"/>
                 </td>
               </tr>
               <tr>
@@ -159,13 +159,13 @@ const fetchCategories = async (level) => {
   let url = '';
   switch (level) {
     case 'first':
-      url = '/api/admin/category/first';
+      url = 'http://localhost:5000/admin/category/first';
       break;
     case 'second':
-      url = `/api/admin/category/second/list/detail/categoryfirst/${updateFirstCategory.value}`;
+      url = `http://localhost:5000/admin/category/second/list/detail/categoryfirst/${updateFirstCategory.value}`;
       break;
     case 'third':
-      url = `/api/admin/category/third/list/detail/categorysecond/${updateSecondCategory.value}`;
+      url = `http://localhost:5000/admin/category/third/list/detail/categorysecond/${updateSecondCategory.value}`;
       break;
   }
 
@@ -270,7 +270,7 @@ const saveProduct = async (imageUrl) => {
   console.log('Request Data:', requestData);
 
   try {
-    const response = await fetch(`/api/admin/product/update/${props.currentProductCode}?requesterAdminCode=1`, {
+    const response = await fetch(`http://localhost:5000/admin/product/update/${props.currentProductCode}?requesterAdminCode=1`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -307,7 +307,6 @@ onMounted(() => {
       input.value = input.value.replace(/[^0-9]/g, '');
     });
   });
-
   fetchCategories('first');
 });
 </script>

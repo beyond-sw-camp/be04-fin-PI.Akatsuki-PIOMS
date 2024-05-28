@@ -1,7 +1,7 @@
 <template>
   <div class="modal" @click.self="closePopup">
     <div class="modal-content">
-      <h3>대분류 카테고리 수정</h3>
+      <h3>소분류 카테고리 수정</h3>
       <p>카테고리 코드: {{ currentThirdCode }}</p>
       <p>카테고리 이름: {{ currentThirdName}}</p>
       <input type="text" v-bind:value="currentThirdName" v-on:input="updateThirdName= $event.target.value">
@@ -29,7 +29,7 @@ const saveCategoryThird = async () => {
   console.log('Request Data:', requestData);
 
   try {
-    const response = await fetch(`/api/admin/category/third/update/${props.currentThirdCode}?requesterAdminCode=1`, {
+    const response = await fetch(`http://localhost:5000/admin/category/third/update/${props.currentThirdCode}?requesterAdminCode=1`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
