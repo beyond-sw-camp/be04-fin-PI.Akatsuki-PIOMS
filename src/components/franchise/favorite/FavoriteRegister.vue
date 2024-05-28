@@ -114,6 +114,7 @@ const products = ref([]);
 const fetchProducts = async () => {
   try {
     const response = await fetch('http://localhost:5000/warehouse', {
+
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -164,6 +165,7 @@ const saveFavorites = async () => {
   const promises = selectedProducts.value.map(async (item) => {
     try {
       const response = await fetch(`http://localhost:5000/warehouse/toggleFavorite/${item.franchiseWarehouseCode}`, {
+
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -121,7 +121,7 @@ const franchises = ref([
 
 const fetchAsks = async () => {
   try {
-    const response = await fetch('http://localhost:9000/admin/ask/list', {
+    const response = await fetch('http://localhost:5000/admin/ask/list', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -311,7 +311,7 @@ const closeEdit = () =>{
 .table {
   width: 1200px;
   max-width: 1200px;
-  border-collapse: separate;
+  border-collapse: collapse;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

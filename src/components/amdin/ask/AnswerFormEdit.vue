@@ -215,7 +215,6 @@ textarea {
 .submit-btn:hover {
   background-color: rgba(253, 111, 135, 0.63);
 }
-
 .popup-overlay {
   position: fixed;
   top: 0;

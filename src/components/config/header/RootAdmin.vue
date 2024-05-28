@@ -4,7 +4,7 @@
     <img class="logo" src="@/assets/icon/PIOMS_로고.png" alt="Logo"/>
     <section class="header_info">
       <div class="crown">
-        <img class="crown_icon" src="@/assets/icon/root/Crown.png" alt="Crown"/>
+        <img class="crown_icon" src="@/assets/icon/Crown.png" alt="Crown"/>
         <h5><u>Akatsuki</u>님 정보</h5>
       </div>
       <div class="dictionary">

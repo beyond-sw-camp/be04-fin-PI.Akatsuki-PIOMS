@@ -60,6 +60,7 @@ const favoriteProducts = ref([]);
 const fetchFavorites = async () => {
   try {
     const response = await fetch('http://localhost:5000/warehouse/favorites', {
+
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -79,6 +80,7 @@ const fetchFavorites = async () => {
 const removeFavorite = async (productId) => {
   try {
     const response = await fetch(`http://localhost:5000/warehouse/removeFavorite/${productId}`, {
+
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
