@@ -28,7 +28,11 @@ jobs:
         run: zip -r deploy.zip dist
 
       - name: Upload to S3
-        run: aws s3 cp deploy.zip s3://mybucket/path/${{ github.run_id }}.zip
+        run: aws s3 cp deploy.zip s3://elasticbeanstalk-ap-northeast-2-730335325274/deploy/${{ github.run_id }}.zip
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-northeast-2
 
       - name: Deploy to Elastic Beanstalk
         id: deploy
@@ -45,3 +49,7 @@ jobs:
       - name: Swap CNAME
         if: success()
         run: aws elasticbeanstalk swap-environment-cnames --source-environment-name ${{ github.head_ref }}-${{ github.run_number }} --destination-environment-name AkatsukiFE-env
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-northeast-2
