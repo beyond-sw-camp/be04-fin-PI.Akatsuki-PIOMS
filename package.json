@@ -2,24 +2,19 @@
   "name": "piomsfe",
   "version": "0.0.0",
   "private": true,
-  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "test:unit": "jest --config jest.unit.config.cjs",
-    "start": "node server.js"
+    "start": "node server.cjs"
   },
   "dependencies": {
     "axios": "^1.7.1",
     "express": "^4.19.2",
     "gh-pages": "^6.1.1",
     "github-label-sync": "^2.3.1",
-
-    "node": "^18.20.3",
-
     "sweetalert2": "^11.11.0",
-
     "vue": "^3.4.21",
     "vue-router": "^4.3.2",
     "vuex": "^4.1.0"

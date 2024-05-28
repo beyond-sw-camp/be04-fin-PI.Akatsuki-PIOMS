@@ -60,10 +60,10 @@ jobs:
             exit 1
           fi
 
-          if [ -f server.js ]; then
-            cp server.js deploy/server.js
+          if [ -f server.cjs ]; then
+            cp server.cjs deploy/server.cjs
           else
-            echo "server.js not found!"
+            echo "server.cjs not found!"
             exit 1
           fi
 
@@ -153,7 +153,7 @@ jobs:
           
           UNIQUE_USERS=$(echo "$COMMENTS" | jq -r 'map(.author.login) | unique | length')
           
-          if [ $UNIQUE_USERS -lt 2]; then
+          if [ $UNIQUE_USERS -lt 2 ]; then
             echo "Not enough unique users ($UNIQUE_USERS) in the pull request comments. At least 2 unique users are required."
             exit 1
           else
