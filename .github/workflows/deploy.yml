@@ -73,14 +73,7 @@ jobs:
             echo ".ebextensions directory not found!"
             exit 1
           fi
-          
-          if [ -f .platform/nginx.conf ]; then
-            cp .platform/nginx.conf deploy/.platform/nginx.conf
-          else
-            echo ".platform/nginx.conf not found!"
-            exit 1
-          fi
-          
+
           cd deploy && zip -r ../deploy.zip .
         shell: bash
 
