@@ -36,7 +36,7 @@
     </div>
 
     <div class="table-header">
-      <button @click="createAsk" class="create-btn">문의작성</button>
+      <button @click="showCreate" class="create-btn">문의작성</button>
     </div>
 
     <div class="table-container">
@@ -66,7 +66,7 @@
             <button
                 class="editbutton"
                 :class="{ 'editbutton-pending': ask.askStatus === '답변대기' }"
-                @click="ask.askStatus === '답변대기' ? editAsk(ask.askCode) : viewAsk(ask.askCode)"
+                @click="ask.askStatus === '답변대기' ? showEdit(ask) : showView(ask)"
             >
               {{ ask.askStatus === '답변대기' ? '문의 수정' : '문의 조회' }}
             </button>
@@ -81,10 +81,16 @@
       <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
     </div>
   </div>
+  <Create v-if = "createPopup" :closeCreate="closeCreate"/>
+  <Edit v-if = "editPopup" :askCode="askCode" :closeEdit="closeEdit"/>
+  <View v-if = "viewPopup" :askCode="askCode" :closeView="closeView"/>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
+import Create from './AskFormCreate.vue';
+import Edit from './AskFormEdit.vue';
+import View from './AskFormView.vue';
 import Breadcrumb from '@/components/amdin/ask/Breadcrumb.vue'; // Breadcrumb 컴포넌트 임포트
 
 const asks = ref([]);
@@ -172,30 +178,58 @@ const nextPage = () => {
   }
 };
 
-const openAskForm = (askCode, mode) => {
-  const width = 800;
-  const height = 650;
-  const left = (window.screen.width / 2) - (width / 2);
-  const top = (window.screen.height / 2) - (height / 2);
-  const url = `http://localhost:5173/franchise/askform/${mode}?askCode=${askCode}`;
-  window.open(url, 'popup', `width=${width},height=${height},top=${top},left=${left},toolbar=no,scrollbars=no,resizable=no`);
-};
-
-// 문의 작성 버튼 클릭 시
-const createAsk = () => {
-  openAskForm(null, 'create');
-};
-
-// 답변 등록 버튼 클릭 시
-const editAsk = (askCode) => {
-  openAskForm(askCode, 'edit');
-};
+// const openAskForm = (askCode, mode) => {
+//   const width = 800;
+//   const height = 650;
+//   const left = (window.screen.width / 2) - (width / 2);
+//   const top = (window.screen.height / 2) - (height / 2);
+//   const url = `http://localhost:5173/franchise/askform/${mode}?askCode=${askCode}`;
+//   window.open(url, 'popup', `width=${width},height=${height},top=${top},left=${left},toolbar=no,scrollbars=no,resizable=no`);
+// };
+//
+// // 문의 작성 버튼 클릭 시
+// const createAsk = () => {
+//   openAskForm(null, 'create');
+// };
+//
+// // 답변 등록 버튼 클릭 시
+// const editAsk = (askCode) => {
+//   openAskForm(askCode, 'edit');
+// };
 
 // 답변 수정 버튼 클릭 시
-const viewAsk = (askCode) => {
-  openAskForm(askCode, 'view');
-};
+// const viewAsk = (askCode) => {
+//   openAskForm(askCode, 'view');
+// };
 
+const askCode = ref(null);
+const createPopup = ref(false);
+const editPopup = ref(false);
+const viewPopup = ref(false);
+
+const showCreate = () =>{
+  createPopup.value = true;
+}
+
+const showEdit = (askCode2) => {
+  editPopup.value = !editPopup.value;
+  askCode.value = askCode2;
+}
+const showView = (askCode3) => {
+  viewPopup.value = !viewPopup.value;
+  askCode.value = askCode3;
+}
+
+const closeCreate = () =>{
+  createPopup.value = false;
+}
+
+const closeEdit = () =>{
+  editPopup.value = !editPopup.value;
+}
+const closeView = () =>{
+  viewPopup.value = !viewPopup.value;
+}
 onMounted(() => {
   fetchAsks();
 });
@@ -304,7 +338,7 @@ onMounted(() => {
 .table {
   width: 1200px;
   max-width: 1200px;
-  border-collapse: separate;
+  border-collapse: collapse;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
