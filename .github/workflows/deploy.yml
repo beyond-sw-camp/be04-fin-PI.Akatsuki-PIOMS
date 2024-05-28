@@ -37,7 +37,10 @@ jobs:
           cp Procfile deploy/
           cp server.cjs deploy/
           cp -r .ebextensions deploy/
-          cp .platform/hooks/prebuild/01_install_npm_dependencies.sh deploy/.platform/hooks/prebuild/
+          echo '#!/bin/bash' > deploy/.platform/hooks/prebuild/01_install_npm_dependencies.sh
+          echo 'echo "Running npm install"' >> deploy/.platform/hooks/prebuild/01_install_npm_dependencies.sh
+          echo 'npm install --omit=dev' >> deploy/.platform/hooks/prebuild/01_install_npm_dependencies.sh
+          chmod +x deploy/.platform/hooks/prebuild/01_install_npm_dependencies.sh
           cd deploy && zip -r ../deploy.zip .
         shell: bash
 
