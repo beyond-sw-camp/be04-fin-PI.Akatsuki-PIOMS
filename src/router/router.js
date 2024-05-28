@@ -22,13 +22,6 @@ import PostCategory from "@/components/amdin/Category/PostCategory.vue";
 
 import FavoriteRegister from "@/components/franchise/favorite/FavoriteRegister.vue";
 import FavoriteList from "@/components/franchise/favorite/FavoriteList.vue";
-import CategoryFirstPopup from "@/components/amdin/Category/CategoryFirstPopup.vue";
-import CategorySecondPopup from "@/components/amdin/Category/CategorySecondPopup.vue";
-import CategoryThirdPopup from "@/components/amdin/Category/CategoryThirdPopup.vue";
-
-
-
-
 
 const routes = [
     {
@@ -105,6 +98,11 @@ const routes = [
         path: '/admin/category/list',
         name: 'AdminProductCategoryList',
         component: CategoryList
+    },
+    {
+        path: '/admin/category/post',
+        name: 'AdminProductCategoryPost',
+        component: PostCategory
     },
     {
         path: '/exchange/list',

@@ -17,7 +17,7 @@
             </button>
             <div class="category-actions">
               <button @click="editCategoryFirst(category.categoryFirstCode,category.categoryFirstName)" class="MD-btn">수정</button>
-              <button @click="deleteCategoryFirst(category.categoryFirstCode)" class="MD-btn">삭제</button>
+              <button @click="deleteCategoryFirst(category.categoryFirstCode, category.categoryFirstName)" class="MD-btn">삭제</button>
             </div>
           </div>
         </li>
@@ -34,7 +34,7 @@
             </button>
             <div class="category-actions">
               <button @click="editCategorySecond(category.categorySecondCode, category.categorySecondName)" class="MD-btn">수정</button>
-              <button @click="deleteCategorySecond(category.categorySecondCode)" class="MD-btn">삭제</button>
+              <button @click="deleteCategorySecond(category.categorySecondCode, category.categorySecondName)" class="MD-btn">삭제</button>
             </div>
           </div>
         </li>
@@ -51,7 +51,7 @@
             </button>
             <div class="category-actions">
               <button @click="editCategoryThird(category.categoryThirdCode, category.categoryThirdName)" class="MD-btn">수정</button>
-              <button @click="deleteCategoryThird(category.categoryThirdCode)" class="MD-btn">삭제</button>
+              <button @click="deleteCategoryThird(category.categoryThirdCode, category.categoryThirdName)" class="MD-btn">삭제</button>
             </div>
           </div>
         </li>
@@ -60,6 +60,9 @@
     <CategoryFirstPopup v-if="editCategoryFirstVisible" :currentFirstCode="currentFirstCode" :currentFirstName="currentFirstName" @close="editCategoryFirstVisible = false"/>
     <CategorySecondPopup v-if="editCategorySecondVisible" :currentSecondCode="currentSecondCode" :currentSecondName="currentSecondName" @close="editCategorySecondVisible = false"/>
     <CategoryThirdPopup v-if="editCategoryThirdVisible" :currentThirdCode="currentThirdCode" :currentThirdName="currentThirdName" @close="editCategoryThirdVisible = false"/>
+    <DeleteFirstPopup v-if="deleteCategoryFirstVisible" :currentFirstCode="currentFirstCode" :currentFirstName="currentFirstName" @close="deleteCategoryFirstVisible = false"/>
+    <DeleteSecondPopup v-if="deleteCategorySecondVisible" :currentSecondCode="currentSecondCode" :currentSecondName="currentSecondName" @close="deleteCategorySecondVisible = false"/>
+    <DeleteThirdPopup v-if="deleteCategoryThirdVisible" :currentThirdCode="currentThirdCode" :currentThirdName="currentThirdName" @close="deleteCategoryThirdVisible = false"/>
   </div>
 </template>
 
@@ -68,6 +71,10 @@ import {ref} from 'vue';
 import CategoryFirstPopup from "@/components/amdin/Category/CategoryFirstPopup.vue";
 import CategorySecondPopup from "@/components/amdin/Category/CategorySecondPopup.vue";
 import CategoryThirdPopup from "@/components/amdin/Category/CategoryThirdPopup.vue";
+import DeleteFirstPopup from "@/components/amdin/Category/DeleteFirstPopup.vue";
+import DeleteSecondPopup from "@/components/amdin/Category/DeleteSecondPopup.vue";
+import DeleteThirdPopup from "@/components/amdin/Category/DeleteThirdPopup.vue";
+
 
 const firstCategories = ref([]);
 const secondCategories = ref([]);
@@ -79,6 +86,9 @@ const lists = ref([]);
 const editCategoryFirstVisible = ref(false);
 const editCategorySecondVisible = ref(false);
 const editCategoryThirdVisible = ref(false);
+const deleteCategoryFirstVisible = ref(false);
+const deleteCategorySecondVisible = ref(false);
+const deleteCategoryThirdVisible = ref(false);
 const currentFirstCode = ref('');
 const currentSecondCode = ref('');
 const currentThirdCode = ref('');
@@ -193,20 +203,23 @@ const editCategoryThird = (categoryThirdCode, categoryThirdName) => {
   editCategoryThirdVisible.value = true;
 }
 
-const deleteCategoryFirst = (categoryFirstCode) => {
-  // 대분류 카테고리 삭제 로직
-  alert(`대분류 카테고리 삭제: ${categoryFirstCode}`);
+const deleteCategoryFirst = (categoryFirstCode, categoryFirstName) => {
+  setCurrentFirstCode(categoryFirstCode);
+  setCurrentFirstName(categoryFirstName);
+  deleteCategoryFirstVisible.value = true;
 };
 
 
-const deleteCategorySecond = (categorySecondCode) => {
-  // 중분류 카테고리 삭제 로직
-  alert(`중분류 카테고리 삭제: ${categorySecondCode}`);
+const deleteCategorySecond = (categorySecondCode, categorySecondName) => {
+  setCurrentSecondCode(categorySecondCode);
+  setCurrentSecondName(categorySecondName);
+  deleteCategorySecondVisible.value = true;
 };
 
-const deleteCategoryThird = (categoryThirdCode) => {
-  // 소분류 카테고리 삭제 로직
-  alert(`소분류 카테고리 삭제: ${categoryThirdCode}`);
+const deleteCategoryThird = (categoryThirdCode, categoryThirdName) => {
+  setCurrentThirdCode(categoryThirdCode);
+  setCurrentThirdName(categoryThirdName)
+  deleteCategoryThirdVisible.value = true;
 };
 
 getCategoryFirstId();
@@ -306,36 +319,3 @@ fetchThirdCategories();
 
 }
 </style>
-<!--<table class="filter-table">-->
-<!--<tr>-->
-<!--  <td class="filter-label">카테고리 조회</td>-->
-<!--  <td class="filter-input">-->
-<!--    <div class="filter-category">-->
-<!--      <select id="firstCategory" v-model="selectedFirstCategory" @change="fetchSecondCategories" class="categories">-->
-<!--        <option value="">대분류</option>-->
-<!--        <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">-->
-<!--          {{ category.categoryFirstName }}-->
-<!--        </option>-->
-<!--      </select>-->
-<!--      <select class="categories" id="secondCategory" v-model="selectedSecondCategory" @change="fetchThirdCategories">-->
-<!--        <option value="">중분류</option>-->
-<!--        <option v-for="category in secondCategories" :key="category.categorySecondCode" :value="category.categorySecondCode">-->
-<!--          {{ category.categorySecondName }}-->
-<!--        </option>-->
-<!--      </select>-->
-<!--      <select class="categories" id="thirdCategory" v-model="selectedThirdCategory">-->
-<!--        <option value="">소분류</option>-->
-<!--        <option v-for="category in thirdCategories" :key="category.categoryThirdCode" :value="category.categoryThirdCode">-->
-<!--          {{ category.categoryThirdName }}-->
-<!--        </option>-->
-<!--      </select>-->
-<!--    </div>-->
-<!--    <div class="filter-categoryName">-->
-<!--      <input type="text" v-model="filterProductName" class="textInput" placeholder="카테고리명을 입력하세요."/>-->
-<!--      <button @click="applyFilters">-->
-<!--        <img src="@/assets/icon/search.png" alt="" style="width: 30px; height: 30px">-->
-<!--      </button>-->
-<!--    </div>-->
-<!--  </td>-->
-<!--</tr>-->
-<!--</table>-->
