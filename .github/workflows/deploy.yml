@@ -153,7 +153,7 @@ jobs:
           
           UNIQUE_USERS=$(echo "$COMMENTS" | jq -r 'map(.author.login) | unique | length')
           
-          if [ $UNIQUE_USERS -lt 2 ]; then
+          if [ $UNIQUE_USERS -lt 2]; then
             echo "Not enough unique users ($UNIQUE_USERS) in the pull request comments. At least 2 unique users are required."
             exit 1
           else
