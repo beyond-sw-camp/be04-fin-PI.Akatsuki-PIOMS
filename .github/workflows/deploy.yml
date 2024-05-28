@@ -61,10 +61,10 @@ jobs:
             exit 1
           fi
 
-          if [ -f server.cjs ]; then
-            cp server.cjs deploy/server.cjs
+          if [ -f server.js ]; then
+            cp server.js deploy/server.js
           else
-            echo "server.cjs not found!"
+            echo "server.js not found!"
             exit 1
           fi
 
@@ -103,7 +103,8 @@ jobs:
           version_label: deploy-${{ github.run_number }}-${{ github.sha }}
           region: ap-northeast-2
           deployment_package: deploy.zip
-          bucket_name: elasticbeanstalk-ap-northeast-2-730335325274
+          use_existing_version_if_available: true
+          wait_for_environment_recovery: 180
 
       - name: Check deployment status
         run: |
