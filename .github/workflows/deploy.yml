@@ -51,16 +51,18 @@ jobs:
 
       - name: Wait for Green environment to be healthy
         run: |
-          while true; do
+          for i in {1..20}; do
             STATUS=$(aws elasticbeanstalk describe-environments --environment-names AkatsukiFE-green-env --query 'Environments[0].Status' --output text)
             HEALTH=$(aws elasticbeanstalk describe-environments --environment-names AkatsukiFE-green-env --query 'Environments[0].Health' --output text)
             if [ "$STATUS" == "Ready" ] && [ "$HEALTH" == "Green" ]; then
               echo "Green environment is healthy and ready."
-              break
+              exit 0
             fi
             echo "Waiting for green environment to be ready and healthy..."
             sleep 30
           done
+          echo "Environment did not become healthy in time."
+          exit 1
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
