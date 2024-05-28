@@ -75,6 +75,13 @@ jobs:
             exit 1
           fi
 
+          if [ -d .platform ]; then
+            cp -r .platform deploy/.platform
+          else
+            echo ".platform directory not found!"
+            exit 1
+          fi
+
           cd deploy && zip -r ../deploy.zip .
         shell: bash
 
