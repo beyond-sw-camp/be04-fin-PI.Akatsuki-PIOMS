@@ -104,14 +104,16 @@
   
 <script setup>
   import { ref } from "vue";
-  const franchiseOwnerCode = ref(1);
-  const franchiseCode = ref(1);
-  
+
   const props = defineProps({
     showPopup: Function,
     popupVisible: Boolean,
     writeActive: Boolean,
+    franchiseCode:Number,
+    franchiseOwnerCode:Number
   });
+  const franchiseOwnerCode = props.franchiseOwnerCode;
+  const franchiseCode = props.franchiseCode;
   
   const writeActive = ref(true);
   const filter = ref("");
@@ -198,11 +200,11 @@
   const orderData = {
     orderTotalPrice: totalPrice.value,
     products: productsData,
-    franchiseCode: franchiseCode.value
+    franchiseCode: franchiseCode
   };
 
   try {
-    const response = await fetch(`http://localhost:5000/franchise/order?franchiseOwnerCode=${franchiseOwnerCode.value}`, {
+    const response = await fetch(`http://localhost:5000/franchise/order?franchiseOwnerCode=${franchiseOwnerCode}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

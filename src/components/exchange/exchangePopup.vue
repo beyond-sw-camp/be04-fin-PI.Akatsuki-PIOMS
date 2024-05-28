@@ -88,8 +88,11 @@
     showPopup: Function,
     popupVisible: Boolean,
     writeActive: Boolean,
+    franchiseCode:Number,
+    franchiseOwnerCode:Number
   });
-  const franchiseOwnerCode = ref(1);
+  const franchiseOwnerCode = props.franchiseOwnerCode;
+  const franchiseCode = props.franchiseCode;
   const writeActive = ref(true);
   const filter = ref("");
   const conditionFilter = ref("");
@@ -115,7 +118,7 @@
   const getProducts = async () => {
     try {
 
-      const response = await fetch(`/api/warehouse/list?franchiseOwnerCode=${franchiseOwnerCode.value}`, {
+      const response = await fetch(`/api/warehouse/list?franchiseOwnerCode=${franchiseOwnerCode}`, {
         method: "GET",
       });
       if (!response.ok) {
@@ -161,7 +164,6 @@
     document.querySelector(`#row-${index}`).classList.remove('highlighted');
   };
 
-  const franchiseCode = ref(1);
 
   const exportExchange = async () => {
   console.log("exportExchange");
@@ -174,13 +176,13 @@
   }));
 
   const exchangeData = {
-    franchiseCode: 1, // 실제 프랜차이즈 코드를 사용 예정
+    franchiseCode: franchiseCode, // 실제 프랜차이즈 코드를 사용 예정
     exchangeStatus: "반송신청",
     products: productsData
   };
 
   try {
-    const response = await fetch(`/api/franchise/exchange?franchiseOwnerCode=${franchiseOwnerCode.value}`, {
+    const response = await fetch(`/api/franchise/exchange?franchiseOwnerCode=${franchiseOwnerCode}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

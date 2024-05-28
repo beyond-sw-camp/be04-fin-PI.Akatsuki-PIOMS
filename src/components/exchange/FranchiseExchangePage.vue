@@ -51,8 +51,21 @@
 
     <input class="create-button" type="button" value="발주하기" @click="showPopup" style="  cursor : pointer; border:0; ">
 
-    <exchangePopup v-if="createPopup" :showPopup="showPopup" :popupVisible="createPopup"/>
-    <ExchangeDetail v-if="createDetailPopup" :showDetailPopup="showDetailPopup" :popupVisible="createDetailPopup" :detailItem="detailItem"/>
+    <exchangePopup 
+        v-if="createPopup"
+        :showPopup="showPopup" 
+        :popupVisible="createPopup"
+        :franchiseCode="franchiseCode"
+        :franchiseOwnerCode="franchiseOwnerCode"
+        />
+
+    <ExchangeDetail 
+        v-if="createDetailPopup" 
+        :showDetailPopup="showDetailPopup" 
+        :popupVisible="createDetailPopup" 
+        :detailItem="detailItem"
+        :franchiseCode="franchiseCode"
+        :franchiseOwnerCode="franchiseOwnerCode"/>
 
     <table style=" margin-top: 5%;">
       <thead >
@@ -91,8 +104,8 @@ import ExchangeDetail from './FranchiseExchangeDetail.vue';
 const lists = ref([]);
 
 // 추후 토큰으로 받을 예정
-const franchiseCode = ref(1);
-const franchiseOwnerCode = ref(1);
+const franchiseCode = 3;
+const franchiseOwnerCode = 3;
 
 const headers = ref([
   { key: 'exchangeCode', label: '주문 코드' },
@@ -117,7 +130,7 @@ const filterExchangeDate = ref('');
 
 const getExchangeList = async () => {
   try {
-    const response = await fetch(`/api/franchise/exchanges?franchiseOwnerCode=${franchiseOwnerCode.value}`, {
+    const response = await fetch(`/api/franchise/exchanges?franchiseOwnerCode=${franchiseOwnerCode}`, {
       method: 'GET',
     });
 

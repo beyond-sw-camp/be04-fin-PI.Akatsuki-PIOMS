@@ -115,6 +115,7 @@ const checkExchange = async () => {
     exchangeStatus: "처리완료",
     products: list.map(product => ({
       exchangeProductCode: product.exchangeProductCode,
+      productCode : product.productCode,
       exchangeProductCount: product.exchangeProductCount,
       exchangeProductNormalCount: product.exchangeNormalCount,
       exchangeProductDiscount: product.exchangeDiscount

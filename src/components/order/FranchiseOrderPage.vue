@@ -54,8 +54,20 @@
 
     <input class="create-button" type="button" value="발주하기" @click="showPopup" style="  cursor : pointer; border:0; ">
 
-    <popup v-if="createPopup" :showPopup="showPopup" :popupVisible="createPopup"/>
-    <OrderDetail v-if="createDetailPopup" :showDetailPopup="showDetailPopup" :popupVisible="createDetailPopup" :detailItem="detailItem"/>
+    <popup 
+        v-if="createPopup"    
+        :showPopup="showPopup" 
+        :popupVisible="createPopup"
+        :franchiseCode="franchiseCode"
+        :franchiseOwnerCode="franchiseOwnerCode"/>
+    <OrderDetail 
+        v-if="createDetailPopup" 
+        :showDetailPopup="showDetailPopup" 
+        :popupVisible="createDetailPopup" 
+        :detailItem="detailItem"
+        :franchiseCode="franchiseCode"
+        :franchiseOwnerCode="franchiseOwnerCode"
+        />
 
     <table style=" margin-top: 5%;">
       <thead >
@@ -94,8 +106,8 @@ import OrderDetail from './FranchiseOrderDetail.vue';
 const lists = ref([]);
 
 // 추후 토큰으로 받을 예정
-const franchiseCode = ref(1);
-const franchiseOwnerCode = ref(1);
+const franchiseCode = 3;
+const franchiseOwnerCode = 3;
 
 const headers = ref([
   { key: 'orderCode', label: '주문 코드' },
@@ -122,13 +134,14 @@ const filterOrderDate = ref('');
 
 const getOrderList = async () => {
   try {
-    const response = await fetch(`/api/franchise/orders?franchiseOwnerCode=${franchiseCode.value}`, {
-      method: 'GET',
+    const response = await fetch(`/api/franchise/orders?franchiseOwnerCode=${franchiseOwnerCode}`, {
+      method: 'GET'
     });
 
     if (!response.ok) {
       throw new Error('네트워크 오류 발생');
     }
+
     const data = await response.json();
     console.log(data);
     if (data.orderList.length > 0) {
@@ -139,7 +152,7 @@ const getOrderList = async () => {
     } else {
       lists.value = [];
       filteredLists.value = [];
-    }
+  }
   } catch (error) {
     console.error('오류 발생:', error);
   }
