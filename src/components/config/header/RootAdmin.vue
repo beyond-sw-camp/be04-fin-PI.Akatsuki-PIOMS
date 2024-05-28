@@ -530,5 +530,4 @@ document.addEventListener('DOMContentLoaded', function() {
   .show {
     display: block;
   }
-
   </style>
