@@ -85,18 +85,6 @@ jobs:
           cd deploy && zip -r ../deploy.zip .
         shell: bash
 
-      - name: Login to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v1
-        with:
-          registry-type: public
-          mask-password: true
-          skip-logout: false
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ap-northeast-2
-
-
       - name: Upload build artifacts to S3
         run: |
           aws s3 cp deploy.zip s3://elasticbeanstalk-ap-northeast-2-730335325274/deploy/deploy-${{ github.run_number }}-${{ github.sha }}.zip
@@ -115,8 +103,7 @@ jobs:
           version_label: deploy-${{ github.run_number }}-${{ github.sha }}
           region: ap-northeast-2
           deployment_package: deploy.zip
-          use_existing_version_if_available: true
-          wait_for_environment_recovery: 180
+          bucket_name: elasticbeanstalk-ap-northeast-2-730335325274
 
       - name: Check deployment status
         run: |
