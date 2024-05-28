@@ -47,6 +47,7 @@ jobs:
           environment_name: AkatsukiFE-green-env
           version_label: ${{ github.sha }}
           deployment_package: deploy.zip
+          use_existing_version_if_available: true
 
       - name: Wait for Green environment to be healthy
         run: |
