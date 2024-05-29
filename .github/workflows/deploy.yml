@@ -29,8 +29,12 @@ jobs:
 
       - name: Upload to S3
         run: aws s3 cp deploy.zip s3://elasticbeanstalk-ap-northeast-2-730335325274/${{ github.run_id }}.zip
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-northeast-2
 
-      - name: Deploy to Elastic Beanstalk
+      - name: Deploy to Elastic Beanstalk (Green)
         id: deploy
         uses: einaregilsson/beanstalk-deploy@v22
         with:
@@ -42,6 +46,18 @@ jobs:
           version_label: ${{ github.sha }}
           deployment_package: deploy.zip
 
+      - name: Check Green Environment Health
+        run: |
+          STATUS=$(aws elasticbeanstalk describe-environments --environment-names AkatsukiFE-green-env --query 'Environments[0].Health' --output text)
+          if [ "$STATUS" != "Green" ]; then
+            echo "Green environment health is not 'Green'. Current status: $STATUS"
+            exit 1
+          fi
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-northeast-2
+
       - name: Swap CNAME
         run: |
           echo "Swapping CNAMEs between AkatsukiFE-env and AkatsukiFE-green-env"
@@ -50,4 +66,13 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ap-northeast-2
-          AWS_REGION: ap-northeast-2
+
+      - name: Terminate Old Environment
+        run: |
+          echo "Terminating old environment AkatsukiFE-env"
+          aws elasticbeanstalk terminate-environment --environment-name AkatsukiFE-env --terminate-resources
+        if: always()
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-northeast-2
