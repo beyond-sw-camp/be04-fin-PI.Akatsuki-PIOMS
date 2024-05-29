@@ -62,15 +62,17 @@
           <th>이력내용</th>
           <th>변경일</th>
           <th>이력상태</th>
+          <th>이력대상</th>
         </tr>
         </thead>
         <tbody>
         <tr v-for="(history, index) in paginatedHistories" :key="history.logCode" class="allpost">
           <td>{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
           <td>{{ history.logChanger }}</td>
-          <td class="historyContent">{{ history.logContent }}</td>
+          <td @dblclick="showPopup(history.logContent)">{{ history.logContent }}</td>
           <td>{{ formatDate(history.logDate) }}</td>
           <td>{{ history.logStatus }}</td>
+          <td>{{ history.logTarget }}</td>
         </tr>
         </tbody>
       </table>
@@ -81,6 +83,15 @@
       <button @click="prevPage" :disabled="currentPage === 1">이전</button>
       <span>{{ currentPage }} / {{ totalPages }}</span>
       <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
+    </div>
+
+    <!-- 팝업 -->
+    <div v-if="popupVisible" class="popup-overlay" @click="closePopup">
+      <div class="popup-content" @click.stop>
+        <h2>이력 내용</h2>
+        <p class="popup-text">{{ popupContent }}</p>
+        <button @click="closePopup">닫기</button>
+      </div>
     </div>
   </div>
 </template>
@@ -106,7 +117,7 @@ const breadcrumbs = [
 
 const fetchHistories = async () => {
   try {
-    const response = await fetch('http://localhost:5000/admin/log', {
+    const response = await fetch('http://api.pioms.shop/admin/log', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -159,6 +170,7 @@ const formatDate = (dateArray) => {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
+    hour12: false,
   });
 };
 
@@ -184,6 +196,18 @@ const nextPage = () => {
   }
 };
 
+const popupVisible = ref(false);
+const popupContent = ref('');
+
+const showPopup = (content) => {
+  popupContent.value = content;
+  popupVisible.value = true;
+};
+
+const closePopup = () => {
+  popupVisible.value = false;
+};
+
 onMounted(() => {
   fetchHistories();
 });
@@ -205,7 +229,7 @@ onMounted(() => {
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 10px;
-  width: 1200px;
+  width: 1360px;
 }
 
 .filter-table td {
@@ -279,8 +303,17 @@ onMounted(() => {
 .table th {
   font-weight: bold;
   color: #000;
-  width: 100px;
   text-align: center;
+}
+
+.table th,
+.table td {
+  width: 150px; /* 모든 열의 기본 크기를 고정 */
+}
+
+.table .historyContent {
+  cursor: pointer;
+  width: 200px; /* 이력내용 칸의 크기를 고정 */
 }
 
 .header1 {
@@ -322,5 +355,48 @@ onMounted(() => {
 .pagination span {
   margin: 0 10px;
   font-weight: bold;
+}
+
+/* 팝업 스타일 */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.popup-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 50%;
+  max-height: 20%;
+  overflow-y: auto;
+  text-align: center;
+}
+
+.popup-text {
+  font-size: 40px;
+  white-space: pre-wrap;
+}
+
+.table td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 19ch;
+  max-width: 19ch; /* 최대 25글자까지 표시 */
+  cursor: default;
+}
+
+.table .historyContent {
+  cursor: pointer;
 }
 </style>
