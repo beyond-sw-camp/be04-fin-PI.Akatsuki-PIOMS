@@ -55,7 +55,7 @@ const fetchAskData = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://localhost:5000/franchise/ask/${askCode}`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/ask/${askCode}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -92,7 +92,7 @@ const submitUpdate = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://localhost:5000/franchise/update/${askCode}`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/update/${askCode}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

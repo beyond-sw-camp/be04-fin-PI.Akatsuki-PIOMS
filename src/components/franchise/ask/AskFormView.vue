@@ -55,7 +55,7 @@ const fetchAskData = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://localhost:5000/admin/ask/${askCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/ask/${askCode}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
