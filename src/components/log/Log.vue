@@ -117,7 +117,7 @@ const breadcrumbs = [
 
 const fetchHistories = async () => {
   try {
-    const response = await fetch('http://api.pioms.shop/admin/log', {
+    const response = await fetch('http://localhost:5000/admin/log', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -377,13 +377,13 @@ onMounted(() => {
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   max-width: 50%;
-  max-height: 20%;
+  max-height: 30%;
   overflow-y: auto;
   text-align: center;
 }
 
 .popup-text {
-  font-size: 40px;
+  font-size: 20px;
   white-space: pre-wrap;
 }
 
