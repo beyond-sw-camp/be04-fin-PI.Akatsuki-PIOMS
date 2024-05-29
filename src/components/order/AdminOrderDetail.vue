@@ -190,6 +190,7 @@
    popupVisible: Boolean,
    writeActive: Boolean,
    detailItem: Object,
+   getOrderList: Function,
  });
  const item = props.detailItem;
  const list = props.detailItem.orderProductList;
@@ -212,16 +213,20 @@ const accpetOrder = async () => {
       if(response.status ==406){
         alert("이 발주는 이미 처리되어 있습니다.");
         props.showDetailPopup();
+        
         return;
       }
       if (!response.ok) {
         alert("헉 왜 주문 승인 안되지????????????")
+        props.showDetailPopup();
         throw new Error('네트워크 오류 발생');
       }
+    
       props.showDetailPopup();
-
+      props.getOrderList();
     } catch (error) {
       console.error('오류 발생:', error);
+      props.showDetailPopup();
     }
 };
 
@@ -241,14 +246,17 @@ const denyOrder = async () => {
         alert("이 발주는 이미 처리되어 있습니다.");
         clickDeny();
         props.showDetailPopup();
+        props.getOrderList();
         return;
       }
       if (!response.ok) {
         alert("헉 왜 주문 거절 안되지????????????")
+        props.showDetailPopup();
         throw new Error('네트워크 오류 발생');
       }
     } catch (error) {
       alert("헉 왜 주문 거절 안되지????????????");
+      props.showDetailPopup();
       console.error('오류 발생:', error);
     }
 };

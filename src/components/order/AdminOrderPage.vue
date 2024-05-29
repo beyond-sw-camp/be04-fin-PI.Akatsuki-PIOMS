@@ -51,7 +51,14 @@
         <img src="@/assets/icon/search.png" alt="Search" />
       </button>
     </div>
-    <OrderDetail v-if="createDetailPopup" :showDetailPopup="showDetailPopup" :popupVisible="createDetailPopup" :detailItem="detailItem"/>
+
+    <OrderDetail 
+        v-if="createDetailPopup" 
+        :showDetailPopup="showDetailPopup" 
+        :popupVisible="createDetailPopup" 
+        :detailItem="detailItem"
+        :getOrderList="getOrderList"
+    />
 
     <table style=" margin-top: 5%;">
       <thead >
@@ -116,9 +123,18 @@ const filterInvoiceCode = ref('');
 const filterOrderDate = ref('');
 
 const getOrderList = async () => {
+
   try {
-    const response = await fetch(`/api/admin/orders?adminCode=${adminCode.value}`, {
+    const authToken = localStorage.getItem('Authorization');
+    const headers = {
+            'access': authToken,
+            'Content-Type': 'application/json',
+        };
+    console.log(authToken);
+    const response = await fetch(`/api/admin/orders`, {
       method: 'GET',
+      headers: headers,
+      credentials: 'include'
     });
 
     if (!response.ok) {
