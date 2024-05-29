@@ -23,7 +23,7 @@ export default {
 
 <style scoped>
 .breadcrumbs {
-  font-size: 16px;
+  font-size: 20px;
   margin-bottom: 15px;
   display: flex;
   justify-content: left;

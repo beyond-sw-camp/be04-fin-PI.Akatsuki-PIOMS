@@ -71,7 +71,7 @@
             <button
                 class="editbutton"
                 :class="{ 'editbutton-pending': ask.askStatus === '답변대기' }"
-                @click="ask.askStatus === '답변대기' ? registerAnswer(ask.askCode) : editAnswer(ask.askCode)"
+                @click="ask.askStatus === '답변대기' ? showRegist(ask) : showEdit(ask)"
             >
               {{ ask.askStatus === '답변대기' ? '답변 작성' : '답변 조회' }}
             </button>
@@ -86,10 +86,14 @@
       <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
     </div>
   </div>
+  <Register v-if="registPopup" :askCode="askCode" :closeRegist="closeRegist" @refreshData="refreshData"/>
+  <Edit v-if="editPopup" :askCode="askCode" :closeEdit="closeEdit" @refreshData="refreshData"/>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
+import Register from './AnswerFormRegister.vue';
+import Edit from './AnswerFormEdit.vue';
 import Breadcrumb from '@/components/amdin/ask/Breadcrumb.vue'; // Breadcrumb 컴포넌트 임포트
 
 const asks = ref([]);
@@ -114,6 +118,11 @@ const franchises = ref([
   { code: 5, name: 'PIOMS 성수점' },
   { code: 6, name: 'PIOMS 논현점' },
 ]);
+
+const refreshData = () => {
+  fetchAsks(); // 데이터를 새로고침
+};
+
 
 const fetchAsks = async () => {
   try {
@@ -187,29 +196,31 @@ const nextPage = () => {
     currentPage.value++;
   }
 };
-
-const openAnswerForm = (askCode, mode) => {
-  const width = 800;
-  const height = 600;
-  const left = (window.screen.width / 2) - (width / 2);
-  const top = (window.screen.height / 2) - (height / 2);
-  const url = `http://localhost:5173/admin/answerform/${mode}?askCode=${askCode}`;
-  window.open(url, 'popup', `width=${width},height=${height},top=${top},left=${left},toolbar=no,scrollbars=no,resizable=no`);
-};
-
-// 답변 등록 버튼 클릭 시
-const registerAnswer = (askCode) => {
-  openAnswerForm(askCode, 'register');
-};
-
-// 답변 수정 버튼 클릭 시
-const editAnswer = (askCode) => {
-  openAnswerForm(askCode, 'edit');
-};
-
 onMounted(() => {
   fetchAsks();
 });
+
+const registPopup = ref(false);
+const askCode = ref(null);
+const editPopup = ref(false);
+
+const showRegist = (askCode1) =>{
+  registPopup.value = !registPopup.value;
+  askCode.value = askCode1;
+}
+
+const showEdit = (askCode2) => {
+  editPopup.value = !editPopup.value;
+  askCode.value = askCode2;
+}
+const closeRegist = () =>{
+  registPopup.value = !registPopup.value;
+}
+
+const closeEdit = () =>{
+  editPopup.value = !editPopup.value;
+}
+
 </script>
 
 <style scoped>
@@ -230,11 +241,12 @@ onMounted(() => {
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 10px;
-  width: 1200px;
+  width: 1300px;
 }
 
 .filter-table td {
   padding: 5px 10px;
+  font-size: 16px;
 }
 
 .filter-label {
@@ -258,6 +270,7 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   margin-top: 10px;
+  margin-bottom: 20px;
 }
 
 .reset-btn, .search-btn {
@@ -283,8 +296,8 @@ onMounted(() => {
 }
 
 .table {
-  width: 1200px;
-  max-width: 1200px;
+  width: 1300px;
+  max-width: 1300px;
   border-collapse: collapse;
   background-color: #fff;
   border-radius: 10px;
@@ -295,12 +308,23 @@ onMounted(() => {
 .table th {
   font-weight: bold;
   color: #000;
+  font-size: 16px;
+  text-align: center;
 }
 
-.boardname {
+.table th,td {
+  width: 50px;
+}
+
+.table th:nth-child(5), .table td:nth-child(5) {
+  width: 100px; /* 원하는 너비로 설정 */
+}
+
+td.boardname {
   text-decoration: none;
   color: black;
   cursor: pointer;
+  width: 150px;
 }
 
 .header1 {
@@ -326,6 +350,7 @@ onMounted(() => {
 
 .allpost td {
   border-right: 1px solid #ddd;
+  font-size: 14px;
 }
 
 .editbutton {

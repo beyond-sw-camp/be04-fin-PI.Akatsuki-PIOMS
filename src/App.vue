@@ -1,40 +1,22 @@
 <template>
-
   <header>
-     <RootAdmin/>
-<!--   <AdminHeader/>-->
-<!--    <FranchiseHeader/>-->
-<!--    <DriverHeader/>-->
+<!--    <RootAdmin/>-->
   </header>
-  
-  <main>
-  <router-view></router-view>
-<!--   <ProductList/>-->
-<!--    <FrProductList/>-->
-<!--    <CategoryList/>-->
-    <!-- <PostCategory/> -->
-  </main>
 
+<!--  <main>-->
+  <router-view/>
+<!--  </main>-->
+
+<!--  <aside>-->
+<!--    <Sidebar/>-->
+<!--  </aside>-->
   <footer>
-    <!-- <Footer/> -->
+     <Footer/>
   </footer>
 </template>
 
 <script setup>
-// import AskMain from "@/components/amdin/ask/AskMain.vue";
-// import Breadcrumb from "@/components/amdin/ask/Breadcrumb.vue";
-// import CategoryList from "@/components/amdin/Category/CategoryList.vue";
-import RootAdmin from "@/components/config/header/RootAdmin.vue";
 import Footer from "@/components/config/footer/Footer.vue";
-import ProductList from "@/components/amdin/product/ProductList.vue";
-import FrProductList from "@/components/franchise/product/FrProductList.vue";
-import CategoryList from "@/components/amdin/Category/CategoryList.vue";
-import PostCategory from "@/components/amdin/Category/PostCategory.vue";
-// import AdminHeader from "@/components/config/header/AdminHeader.vue";
-// import DriverHeader from "@/components/config/header/DriverHeader.vue";
-// import FranchiseHeader from "@/components/config/header/FranchiseHeader.vue";
+import RootAdmin from "@/components/config/header/RootAdmin.vue";
+import Sidebar from "@/components/config/sidebar/sidebar.vue";
 </script>
-
-<style lang="scss" scoped>
-
-</style>

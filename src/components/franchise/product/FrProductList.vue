@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="headerTitle">
-        <h3 class="product-title"><img src="@/assets/icon/Cloth.png">상품 및 상품 카테고리 관리 > 상품 관리 > 상품 전체 조회 및 관리</h3>
+        <h3 class="product-title"><img src="@/assets/icon/Cloth.png">상품 및 재고 관리 > 재고 관리 > 재고 알림 관리 </h3>
     <h6 class="product-sub-title">조회할 상품의 조건을 선택 후
       <img src="@/assets/icon/reset.png">초기화 또는 <img src="@/assets/icon/search.png">검색을 눌러주세요.
     </h6>
@@ -15,8 +15,6 @@
           <td class="filter-input">
             <input type="text" v-model="filterProductName" class="textInput"/>
           </td>
-        </tr>
-        <tr>
           <td class="filter-label">상품상태</td>
           <td class="filter-input">
             <select id="filterStatus" v-model="filterStatus" class="textInput">
@@ -24,13 +22,6 @@
               <option value="일시제한">일시제한</option>
               <option value="단종">단종</option>
               <option value="품절">품절</option>
-            </select>
-          </td>
-          <td class="filter-label">상품노출상태</td>
-          <td class="filter-input">
-            <select id="selectedExposureStatus" v-model="selectedExposureStatus" class="textInput">
-              <option value="노출">노출</option>
-              <option value="미노출">미노출</option>
             </select>
           </td>
         </tr>
@@ -102,12 +93,14 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost">
+        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost"
+            :id="'row-' + rowIndex"
+            @dblclick="showDetailPopup(item)">
           <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">
-            <button v-if="header.key === 'productName'" @click="showModifyPopup(item.productCode)" class="button-as-text">
               {{ item[header.key] }}
-            </button>
-            <span v-else>{{ item[header.key] }}</span>
+            <template v-if="header.key === 'imgUrl'">
+              <img :src="getProductImageUrl(item.productCode)" class="product-img"/>
+            </template>
           </td>
         </tr>
         <tr v-for="row in emptyRows" :key="'empty-' + row">
@@ -121,7 +114,7 @@
       <span> {{currentPage}} / {{totalPages}} </span>
       <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
     </div>
-    <ProductDetailPopup v-if="currentProductCode" :currentProductCode="currentProductCode" @close="currentProductCode = null" />
+    <FrProductDetail v-if="openDetailPopup" :showDetailPopup="showDetailPopup" :popupVisible="openDetailPopup" :detailItem="detailItem"/>
   </div>
 </template>
 
@@ -130,17 +123,17 @@ import { ref, computed } from 'vue';
 import ProductPostPopup from "@/components/amdin/product/ProductPostPopup.vue"
 import ProductDetailPopup from "@/components/amdin/product/ProductDetailPopup.vue";
 import axios from "axios";
+import FrProductDetail from "@/components/franchise/product/FrProductDetail.vue";
 
 const lists = ref([]);
 const headers = ref([
   { key: 'productCode', label: '상품 코드'},
   { key: 'productName', label: '상품명'},
-  { key: 'url', label: '상품 이미지'},
-  { key: 'productCount', label: '본사 보유량'},
-  { key: 'productDiscount', label: '본사 폐기량'},
+  { key: 'imgUrl', label: '상품 이미지'},
+  { key: 'franchiseWarehouseCount', label: '보유량'},
+  { key: 'franchiseWarehouseEnable', label: '판매가능 재고량'},
   { key: 'productNoticeCount', label: '알림 기준 수량'},
   { key: 'productStatus', label: '상품 상태'},
-  { key: 'productExposureStatus', label: '상품 노출 상태'},
   { key: 'productColor', label: '색상'},
   { key: 'productSize', label: '사이즈'},
   { key: 'categoryThirdCode', label: '카테고리 코드'},
@@ -160,10 +153,42 @@ const thirdCategories = ref([]);
 const selectedFirstCategory = ref('');
 const selectedSecondCategory = ref('');
 const selectedThirdCategory = ref('');
+const openDetailPopup = ref(false);
+const productImages = ref({});
+
+const getProductImageUrl = (productCode) => {
+  return productImages.value[productCode] || 'path/to/default-image.jpg';
+};
+const fetchProductImages = async () => {
+  try {
+    const response = await fetch(`http://localhost:5000/admin/product/productImage`, {
+      method: 'GET',
+    });
+    if(!response.ok) {
+      throw new Error('이미지를 불러오지 못했습니다.');
+    }
+    const productImagesData = await response.json();
+
+    productImages.value = productImagesData.reduce((map, item) => {
+      map[item.productCode] = item.imgUrl;
+      return map;
+    }, {});
+
+    console.log(productImages);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+
+
+const showDetailPopup = (item) => {
+  detailItem.value = item;
+  openDetailPopup.value = !openDetailPopup.value;
+}
 
 const fetchFirstCategories = async () => {
   try {
-    const response = await fetch('/api/admin/category/first', {
+    const response = await fetch('http://localhost:5000/admin/category/first', {
       method: 'GET',
     });
     if (!response.ok) {
@@ -181,7 +206,7 @@ const fetchSecondCategories = async () => {
     return;
   }
   try {
-    const response = await fetch(`/api/admin/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`);
+    const response = await fetch(`http://localhost:5000/admin/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`);
     if (!response.ok) {
       throw new Error('중분류를 불러오는 데 실패했습니다.');
     }
@@ -199,7 +224,7 @@ const fetchThirdCategories = async () => {
     return;
   }
   try {
-    const response = await fetch(`/api/admin/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`);
+    const response = await fetch(`http://localhost:5000/admin/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`);
     if (!response.ok) {
       throw new Error('소분류를 불러오는 데 실패했습니다.');
     }
@@ -221,7 +246,6 @@ const applyFilters = () => {
   });
 };
 
-
 const resetFilters = () => {
   selectedExposureStatus.value = '전체';
   filterStatus.value = '';
@@ -233,19 +257,9 @@ const resetFilters = () => {
   filteredLists.value = lists.value;
 };
 
-const showPostPopup = ref(false);
-const currentProductCode = ref('');
-const setCurrentProductCode = (productCode) => {
-  currentProductCode.value = productCode;
-};
-
-const showModifyPopup = (productCode) => {
-  setCurrentProductCode(productCode);
-};
-
 const getMemberId = async () => {
   try {
-    const response = await fetch('/api/admin/product', {
+    const response = await fetch('http://localhost:5000/franchise/product', {
       method: 'GET',
     });
 
@@ -268,7 +282,7 @@ const getMemberId = async () => {
 
 const downloadExcel = () => {
   axios({
-    url: 'http://localhost:5000/admin/exceldownload/product-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
+    url: 'http://localhost:5000/franchise/exceldownload/product-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
     method: 'GET',
     responseType: 'blob', // 서버에서 반환되는 데이터의 형식을 명시
   }).then((response) => {
@@ -315,12 +329,22 @@ const prevPage = () => {
 };
 
 getMemberId();
+fetchProductImages();
 fetchFirstCategories();
 fetchSecondCategories();
 fetchThirdCategories();
 </script>
 
 <style scoped>
+.product-img {
+  width: 30px;
+  height: 30px;
+  transition: transform 0.5s ease;
+}
+.product-img:hover {
+  transform: scale(3.3);
+}
+
 .pagination {
   margin-top: 10px;
   margin-bottom: 100px;
@@ -329,6 +353,11 @@ fetchThirdCategories();
   align-items: center;
 }
 
+.pagination button {
+  border: none;
+  border-radius: 10px;
+  width: 75px;
+}
 .filter-section {
   display: flex;
   justify-content: center;
@@ -391,10 +420,10 @@ fetchThirdCategories();
 }
 .post-btn {
   display: flex;
-  justify-content: space-between; /* 양 끝에 정렬 */
+  justify-content: flex-end; /* 양 끝에 정렬 */
   align-items: center; /* 수직 가운데 정렬 */
   position: absolute; /* 절대 위치 설정 */
-  left: 24.1%; /* 좌측 정렬 */
+  left: 15.5%; /* 좌측 정렬 */
   width: 1210px;
 }
 
@@ -424,7 +453,7 @@ fetchThirdCategories();
 .table th {
   font-weight: bold;
   color: #000;
-  width: 100px;
+  width: 100%;
   height: 10px;
   table-layout: fixed;
 }
@@ -489,7 +518,7 @@ fetchThirdCategories();
 }
 .headerTitle {
   text-align: left;
-  margin-left: 24.7%;
+  margin-left: 16.2%;
   margin-bottom: 0.5%;
 }
 

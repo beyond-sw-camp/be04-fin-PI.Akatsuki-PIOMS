@@ -24,9 +24,8 @@ import PostCategory from "@/components/amdin/Category/PostCategory.vue";
 
 import FavoriteRegister from "@/components/franchise/favorite/FavoriteRegister.vue";
 import FavoriteList from "@/components/franchise/favorite/FavoriteList.vue";
-
 import AdminMembers from "@/components/amdin/member/AdminMemberPage.vue";
-
+import Log from "@/components/log/Log.vue";
 
 
 const routes = [
@@ -46,7 +45,7 @@ const routes = [
         component: DriverLogin,
     },
     {
-        path: '/login',
+        path: '/',
         name: 'CommonLogin',
         component: CommonLogin,
     },
@@ -136,9 +135,15 @@ const routes = [
         component: FavoriteList
     },
     {
+
         path: '/admin/members',
         name: 'AdminMemberList',
         component: AdminMembers
+    },
+    {
+        path: '/admin/logs',
+        name: 'AdminLogs',
+        component: Log
     }
 
 ];

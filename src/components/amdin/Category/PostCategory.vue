@@ -2,7 +2,7 @@
   <div class="category-top">
     <img src="@/assets/icon/Cloth.png" alt="" style="width: 40px; height: 40px">
     <span>
-    상품 및 상품 카테고리 관리 > 상품 카테고리 관리 > 상품 카테고리 등록
+    상품 및 상품 카테고리 관리 > 상품 카테고리 관리 > 상품 카테고리 조회 및 등록
     </span>
   </div>
   <div class="category-select">
@@ -68,7 +68,7 @@ const selectedSecondCategory = ref('');
 
 const fetchFirstCategories = async () => {
   try {
-    const response = await fetch('/api/admin/category/first', {
+    const response = await fetch('http://localhost:5000/admin/category/first', {
       method: 'GET',
     });
     if (!response.ok) {
@@ -87,7 +87,7 @@ const fetchSecondCategories = async (categoryFirstCode) => {
   }
   selectedFirstCategory.value = categoryFirstCode;
   try {
-    const response = await fetch(`/api/admin/category/second/list/detail/categoryfirst/${categoryFirstCode}`);
+    const response = await fetch(`http://localhost:5000/admin/category/second/list/detail/categoryfirst/${categoryFirstCode}`);
     if (!response.ok) {
       throw new Error('중분류를 불러오는 데 실패했습니다.');
     }
@@ -106,7 +106,7 @@ const fetchThirdCategories = async (categorySecondCode) => {
   }
   selectedSecondCategory.value = categorySecondCode;
   try {
-    const response = await fetch(`/api/admin/category/third/list/detail/categorysecond/${categorySecondCode}`);
+    const response = await fetch(`http://localhost:5000/admin/category/third/list/detail/categorysecond/${categorySecondCode}`);
     if (!response.ok) {
       throw new Error('소분류를 불러오는 데 실패했습니다.');
     }
@@ -117,6 +117,15 @@ const fetchThirdCategories = async (categorySecondCode) => {
 };
 
 const saveCategoryFirst = async () => {
+  if (!insertCategoryFirstName.value.trim()) {
+    alert('대분류 카테고리명을 입력해주세요.');
+    return;
+  }
+  const existingFirstNames = firstCategories.value.map(category => category.categoryFirstName);
+  if (existingFirstNames.includes(insertCategoryFirstName.value.trim())) {
+    alert('이미 존재하는 대분류 카테고리명입니다.');
+    return;
+  }
   const savedFirstData = {
     categoryFirstName: insertCategoryFirstName.value
   };
@@ -124,7 +133,7 @@ const saveCategoryFirst = async () => {
   console.log('savedFirstData: ', savedFirstData);
 
   try {
-    const responseFirst = await fetch(`/api/admin/category/first/post?requesterAdminCode=1`, {
+    const responseFirst = await fetch(`http://localhost:5000/admin/category/first/post?requesterAdminCode=1`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -154,6 +163,15 @@ const saveCategorySecond = async () => {
     return;
   }
 
+  if (!insertCategorySecondName.value.trim()) {
+    alert('중분류 카테고리명을 입력해주세요.');
+    return;
+  }
+  const existingSecondNames = secondCategories.value.map(category => category.categorySecondName);
+  if (existingSecondNames.includes(insertCategorySecondName.value.trim())) {
+    alert('이미 존재하는 중분류 카테고리명입니다.');
+    return;
+  }
   const savedSecondData = {
     categorySecondName: insertCategorySecondName.value,
     categoryFirstCode: selectedFirstCategory.value
@@ -162,7 +180,7 @@ const saveCategorySecond = async () => {
   console.log('savedSecondData: ', savedSecondData);
 
   try {
-    const responseSecond = await fetch(`/api/admin/category/second/create?requesterAdminCode=1`, {
+    const responseSecond = await fetch(`http://localhost:5000/admin/category/second/create?requesterAdminCode=1`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -191,7 +209,15 @@ const saveCategoryThird = async () => {
     alert('중분류 카테고리를 선택해주세요.');
     return;
   }
-
+  if (!insertCategoryThirdName.value.trim()) {
+    alert('소분류 카테고리명을 입력해주세요.');
+    return;
+  }
+  const existingThirdNames = thirdCategories.value.map(category => category.categoryThirdName);
+  if (existingThirdNames.includes(insertCategoryThirdName.value.trim())) {
+    alert('이미 존재하는 중분류 카테고리명입니다.');
+    return;
+  }
   const savedThirdData = {
     categoryThirdName: insertCategoryThirdName.value,
     categorySecondCode: selectedSecondCategory.value
@@ -200,7 +226,7 @@ const saveCategoryThird = async () => {
   console.log('savedThirdData: ', savedThirdData);
 
   try {
-    const responseThird = await fetch(`/api/admin/category/third/create?requesterAdminCode=1`, {
+    const responseThird = await fetch(`http://localhost:5000/admin/category/third/create?requesterAdminCode=1`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -279,6 +305,7 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 10px;
 }
 .input-container {
   display: flex;
@@ -297,12 +324,11 @@ onMounted(() => {
 }
 .categoryFirst-select, .categorySecond-select, .categoryThird-select {
   border: 1px solid black;
-  width: 95%;
+  width: 90%;
   min-height: 400px; /* Set a minimum height */
   padding: 10px;
   overflow-y: auto; /* Enable vertical scrolling */
   max-height: 400px; /* Set a maximum height */
-
 }
 
 .categoryFirst-select ul, .categorySecond-select ul, .categoryThird-select ul {
@@ -317,7 +343,7 @@ onMounted(() => {
 }
 
 .categoryFirst-select button, .categorySecond-select button, .categoryThird-select button {
-  width: 100%;
+  width: 90%;
   padding: 10px;
   background-color: #f9f9f9;
   border: 1px solid #ddd;
@@ -326,6 +352,6 @@ onMounted(() => {
 }
 
 .categoryFirst-select button:hover, .categorySecond-select button:hover, .categoryThird-select button:hover {
-  background-color: #ddd;
+  background-color: #f0f0f0;
 }
 </style>
