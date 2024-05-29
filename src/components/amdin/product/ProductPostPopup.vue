@@ -154,13 +154,13 @@ const fetchCategories = async (level) => {
   let url = '';
   switch (level) {
     case 'first':
-      url = '/api/admin/category/first';
+      url = 'http://localhost:5000/admin/category/first';
       break;
     case 'second':
-      url = `/api/admin/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`;
+      url = `http://localhost:5000/admin/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`;
       break;
     case 'third':
-      url = `/api/admin/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`;
+      url = `http://localhost:5000/admin/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`;
       break;
   }
 
@@ -215,7 +215,7 @@ const uploadImage = async () => {
   formData.append('file', file);
 
   try {
-    const response = await fetch(`/api/admin/product/image`, {
+    const response = await fetch(`http://localhost:5000/admin/product/image`, {
       method: 'POST',
       credentials: 'include',
       body: formData
@@ -253,7 +253,7 @@ const saveProduct = async (imageUrl) => {
   console.log('Request Data:', requestData);
 
   try {
-    const response = await fetch('/api/admin/product/create?requesterAdminCode=1', {
+    const response = await fetch('http://localhost:5000/admin/product/create?requesterAdminCode=1', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -320,7 +320,7 @@ const uploadAndSaveProduct = async () => {
   formData.append('categoryThirdCode', selectedThirdCategory.value);
 
   try {
-    const response = await fetch('/api/admin/product/image', {
+    const response = await fetch('http://localhost:5000/admin/product/image', {
       method: 'POST',
       credentials: 'include',
       body: formData

@@ -29,7 +29,7 @@ const saveCategoryFirst = async () => {
   console.log('Request Data:', requestData);
 
   try {
-    const response = await fetch(`/api/admin/category/first/update/${props.currentFirstCode}?requesterAdminCode=1`, {
+    const response = await fetch(`http://localhost:5000/admin/category/first/update/${props.currentFirstCode}?requesterAdminCode=1`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'

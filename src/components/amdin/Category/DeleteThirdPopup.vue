@@ -36,7 +36,21 @@ const closeDeleteModal = () => {
 
 const deleteCategoryThird = async () => {
   try {
-    const response = await fetch(`/api/admin/category/third/delete/${props.currentThirdCode}?requesterAdminCode=1`, {
+    const productResponse = await fetch(`http://localhost:5000/admin/product/category/${props.currentThirdCode}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    const products = await productResponse.json();
+
+    if(products.length > 0) {
+      alert("카테고리를 삭제할 수 없습니다. 해당 카테고리를 사용하는 제품이 존재합니다.");
+      return;
+    }
+
+
+    const response = await fetch(`http://localhost:5000/admin/category/third/delete/${props.currentThirdCode}?requesterAdminCode=1`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
@@ -57,6 +71,7 @@ const deleteCategoryThird = async () => {
 
 const closePopup = () => {
   emits('close');
+  window.location.reload();
 };
 
 </script>
