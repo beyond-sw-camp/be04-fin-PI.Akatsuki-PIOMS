@@ -108,14 +108,7 @@
         <tbody>
         <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" 
             class="allpost"
-            @dblclick="showModifyPopup(
-                        item.productCode,
-                        item.productName,
-                        item.productCount,
-                        item.productPrice,
-                        item.productSize,
-                        item.productContent
-            )">
+            @dblclick="showModifyPopup(item)">
           <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">
               {{ item[header.key] }}
             <template v-if="header.key === 'imgUrl'">
@@ -134,14 +127,7 @@
       <span> {{currentPage}} / {{totalPages}} </span>
       <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
     </div>
-    <ProductDetailPopup v-if="currentProductCode"
-                        :currentProductCode="currentProductCode"
-                        :currentProductName="currentProductName"
-                        :currentProductCount="currentProductCount"
-                        :currentProductPrice="currentProductPrice"
-                        :currentProductSize="currentProductSize"
-                        :currentProductContent="currentProductContent"
-                        @close="currentProductCode = null"/>
+    <ProductDetailPopup v-if="editPopup" :productCode="productCode" :closeEdit="closeEdit"/>
   </div>
 </template>
 
@@ -190,6 +176,16 @@ const currentProductPrice = ref('');
 const currentProductSize = ref('');
 const currentProductContent = ref('');
 const productImages = ref({});
+const productCode = ref(null);
+const editPopup = ref(false);
+
+const showModifyPopup = (productCode1) => {
+  editPopup.value = !editPopup.value;
+  productCode.value = productCode1;
+}
+const closeEdit = () => {
+  editPopup.value = !editPopup.value;
+}
 
 const getProductImageUrl = (productCode) => {
   return productImages.value[productCode] || 'path/to/default-image.jpg';
@@ -304,20 +300,6 @@ const setCurrentProductSize = (productSize) => {
 const setCurrentProductContent = (productContent) => {
   currentProductContent.value = productContent;
 }
-const showModifyPopup = (productCode,
-                         productName,
-                         productCount,
-                         productPrice,
-                         productSize,
-                         productContent) => {
-  setCurrentProductCode(productCode);
-  setCurrentProductName(productName);
-  setCurrentProductCount(productCount);
-  setCurrentProductPrice(productPrice);
-  setCurrentProductSize(productSize);
-  setCurrentProductContent(productContent);
-};
-
 
 const getMemberId = async () => {
   try {

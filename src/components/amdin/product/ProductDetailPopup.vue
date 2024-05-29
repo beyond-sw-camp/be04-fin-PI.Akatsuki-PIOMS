@@ -1,36 +1,32 @@
 <template>
-  <div class="popup-overlay" @click.self="closePopup">
+  <div class="popup-overlay" @click.self="closeEdit">
     <div class="popup-content">
       <div class="popup-header">
-        <button class="close-button" @click="closePopup">×</button>
+        <button class="close-button" @click="closeEdit">×</button>
         <h4>상품 수정</h4>
       </div>
       <div class="popup-body">
         <div class="insert-section">
-          <div class="table-wrapper">
+          <div v-if="productData" class="table-wrapper">
             <table class="insert-table">
               <tr>
                 <td class="insert-label">상품명</td>
                 <td class="insert-input">
-<!--                  <input type="text" v-bind:value="currentProductName" v-on:input="updateProductName= $event.target.value" class="textInput"/>-->
-                  <input type="text" v-model="updateProductName" class="textInput"/>
+                  <input type="text" id="name" v-model="name" class="textInput" />
                 </td>
                 <td class="insert-label">재고량</td>
                 <td class="insert-input">
-                  <input type="number" v-model="updateProductCount" class="textInput"/>
-<!--                  <input type="number" v-bind:value="currentProductCount" v-on:input="updateProductCount= $event.target.value" class="textInput"/>-->
+                  <input type="number" id="count" v-model="count" class="textInput" />
                 </td>
                 <td class="insert-label">가격</td>
                 <td class="insert-input">
-                  <input type="number" v-model="updateProductPrice" class="textInput"/>
-<!--                  <input type="number" v-bind:value="currentProductPrice" v-on:input="updateProductPrice= $event.target.value" class="textInput"/>-->
+                  <input type="number" id="price" v-model="price" class="textInput" />
                 </td>
               </tr>
               <tr>
                 <td class="insert-label">상품상태</td>
                 <td class="insert-input">
-                  <select v-model="updateStatus" class="textInput">
-<!--                  <select class="textInput" v-bind:value="currentProductStatus" v-on:select="updateStatus= $event.target.value">-->
+                  <select id="status" v-model="status" class="textInput">
                     <option value="공급가능">공급가능</option>
                     <option value="일시제한">일시제한</option>
                     <option value="단종">단종</option>
@@ -39,16 +35,14 @@
                 </td>
                 <td class="insert-label">상품노출상태</td>
                 <td class="insert-input">
-                  <select v-model="updateExposureStatus" class="textInput">
-<!--                  <select  class="textInput" v-bind:value="currentProductExposureStatus" v-on:select="updateExposureStatus= $event.target.value">-->
+                  <select id="exposureStatus" v-model="exposureStatus" class="textInput">
                     <option value="true">노출</option>
                     <option value="false">미노출</option>
                   </select>
                 </td>
                 <td class="insert-label">색상</td>
                 <td class="insert-input">
-                  <select v-model="updateColor" class="textInput">
-<!--                    <select  class="textInput" v-bind:value="currentProductColor" v-on:select="updateColor= $event.target.value">-->
+                  <select id="color" v-model="color" class="textInput">
                     <option value="빨간색">빨간색</option>
                     <option value="주황색">주황색</option>
                     <option value="노란색">노란색</option>
@@ -60,8 +54,7 @@
                 </td>
                 <td class="insert-label">사이즈</td>
                 <td class="insert-input">
-                  <select v-model="updateSize" class="textInput">
-<!--                    <select  class="textInput" v-bind:value="currentProductSize" v-on:select="updateSize= $event.target.value">-->
+                  <select id="size" v-model="size" class="textInput">
                     <option value="90">90</option>
                     <option value="95">95</option>
                     <option value="100">100</option>
@@ -73,21 +66,23 @@
             </table>
             <table class="second-insert-table">
               <tr>
-                <td class="second-insert-label"><div class="second-insert-label0">카테고리 구분</div></td>
+                <td class="second-insert-label">
+                  <div class="second-insert-label0">카테고리 구분</div>
+                </td>
                 <td class="second-insert-input">
-                  <select v-model="updateFirstCategory" @change="fetchCategories('second')" class="categories">
+                  <select id="firstCategory" v-model="firstCategory" @change="fetchCategories('second')" class="categories">
                     <option value="">대분류</option>
                     <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">
                       {{ category.categoryFirstName }}
                     </option>
                   </select>
-                  <select class="categories-g" v-model="updateSecondCategory" @change="fetchCategories('third')">
+                  <select id="secondCategory" class="categories-g" v-model="secondCategory" @change="fetchCategories('third')">
                     <option value="">중분류</option>
                     <option v-for="category in secondCategories" :key="category.categorySecondCode" :value="category.categorySecondCode">
                       {{ category.categorySecondName }}
                     </option>
                   </select>
-                  <select class="categories-g" v-model="updateThirdCategory">
+                  <select id="thirdCategory" class="categories-g" v-model="thirdCategory">
                     <option value="">소분류</option>
                     <option v-for="category in thirdCategories" :key="category.categoryThirdCode" :value="category.categoryThirdCode">
                       {{ category.categoryThirdName }}
@@ -96,16 +91,17 @@
                 </td>
               </tr>
               <tr>
-                <td class="second-insert-label"><div class="second-insert-label0">상세정보</div></td>
+                <td class="second-insert-label">
+                  <div class="second-insert-label0">상세정보</div>
+                </td>
                 <td class="second-insert-input">
-<!--                  <input type="text" v-bind:value="currentProductContent" v-on:input="updateContent= $event.target.value" class="textInput"/>-->
-                  <input type="text" style="width: 99%; height: 150px" v-model="updateContent" class="textInput">
+                  <textarea id="content" v-model="content" class="textInput" style="width: 99%; height: 150px"></textarea>
                 </td>
               </tr>
               <tr>
                 <td class="second-insert-label1">
                   <div class="label-content">
-                    이미지<br>
+                    이미지<br />
                     (최대 3장)
                   </div>
                 </td>
@@ -126,35 +122,114 @@
             </table>
           </div>
         </div>
-        <button class="action-button" @click="closePopup">취소</button>
-        <button class="post-button" @click="saveProduct">수정</button>
+        <button class="action-button" @click="closeEdit">취소</button>
+        <button class="post-button" @click="submitProduct">수정</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import {onMounted, defineEmits, ref, defineProps} from 'vue';
+import { onMounted, ref, defineProps } from 'vue';
 import imageSrc from '@/assets/icon/picture.png';
 
-const emit = defineEmits(['close']);
 const imagePreview = ref(imageSrc);
 const imgOn = ref(false);
-const updateProductName = ref('');
-const updateProductCount = ref('');
-const updateProductPrice = ref('');
-const updateStatus = ref('');
-const updateExposureStatus = ref('true');
-const updateColor = ref('');
-const updateSize = ref('');
-const updateContent = ref('');
 const firstCategories = ref([]);
 const secondCategories = ref([]);
 const thirdCategories = ref([]);
-const updateFirstCategory = ref('');
-const updateSecondCategory = ref('');
-const updateThirdCategory = ref('');
-let imageUrl = '';
+const productData = ref(null);
+const name = ref('');
+const count = ref('');
+const price = ref('');
+const status = ref('');
+const exposureStatus = ref('');
+const color = ref('');
+const size = ref('');
+const firstCategory = ref('');
+const secondCategory = ref('');
+const thirdCategory = ref('');
+const content = ref('');
+const imageUrl = ref('');
+
+const props = defineProps({
+  productCode: Object,
+  closeEdit: Function
+});
+
+const fetchProductData = async () => {
+  const productCode = props.productCode.productCode;
+  if (!productCode) {
+    console.error('그런거 없다.');
+    return;
+  }
+  try {
+    const response = await fetch(`http://localhost:5000/admin/product/list/detail/${productCode}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`못불러옴: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    productData.value = data;
+    name.value = data.productName || '';
+    count.value = data.productCount || '';
+    price.value = data.productPrice || '';
+    status.value = data.productStatus || '';
+    exposureStatus.value = data.productExposureStatus || '';
+    color.value = data.productColor || '';
+    size.value = data.productSize || '';
+    firstCategory.value = data.categoryFirstCode || '';
+    secondCategory.value = data.categorySecondCode || '';
+    thirdCategory.value = data.categoryThirdCode || '';
+    content.value = data.productContent || '';
+  } catch (error) {
+    console.error('못불러옴:', error);
+  }
+};
+
+const submitProduct = async () => {
+  const productCode = props.productCode.productCode;
+  if (!productCode) {
+    console.error('그런거 없다');
+    return;
+  }
+  try {
+    const response = await fetch(`http://localhost:5000/admin/product/update/${productCode}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        productName: name.value,
+        productCount: count.value,
+        productPrice: price.value,
+        productStatus: status.value,
+        productExposureStatus: exposureStatus.value,
+        productColor: color.value,
+        productSize: size.value,
+        categoryFirstCode: firstCategory.value,
+        categorySecondCode: secondCategory.value,
+        categoryThirdCode: thirdCategory.value,
+        productContent: content.value,
+        productImageUrl: imageUrl.value
+      }),
+    });
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(`수정 실패: ${errorMessage}`);
+    }
+
+    props.closeEdit();
+  } catch (error) {
+    console.error('수정 실패:', error);
+  }
+};
 
 const fetchCategories = async (level) => {
   let url = '';
@@ -163,15 +238,15 @@ const fetchCategories = async (level) => {
       url = 'http://localhost:5000/admin/category/first';
       break;
     case 'second':
-      url = `http://localhost:5000/admin/category/second/list/detail/categoryfirst/${updateFirstCategory.value}`;
+      url = `http://localhost:5000/admin/category/second/list/detail/categoryfirst/${firstCategory.value}`;
       break;
     case 'third':
-      url = `http://localhost:5000/admin/category/third/list/detail/categorysecond/${updateSecondCategory.value}`;
+      url = `http://localhost:5000/admin/category/third/list/detail/categorysecond/${secondCategory.value}`;
       break;
   }
 
   try {
-    const response = await fetch(url, {method: 'GET'});
+    const response = await fetch(url, { method: 'GET' });
     if (!response.ok) {
       throw new Error(`${level} 카테고리를 불러오는 데 실패했습니다.`);
     }
@@ -183,7 +258,7 @@ const fetchCategories = async (level) => {
       case 'second':
         secondCategories.value = data;
         thirdCategories.value = [];
-        selectedSecondCategory.value = '';
+        secondCategory.value = '';
         break;
       case 'third':
         thirdCategories.value = data;
@@ -193,6 +268,7 @@ const fetchCategories = async (level) => {
     console.error('Error:', error);
   }
 };
+
 const resetImage = () => {
   imagePreview.value = imageSrc;
   imgOn.value = false;
@@ -209,11 +285,12 @@ const previewImage = (event) => {
     reader.readAsDataURL(file);
   }
 };
+
 const uploadImage = async () => {
   const fileInput = document.querySelector('input[type="file"]');
   const file = fileInput.files[0];
   if (!file) {
-    await saveProduct(''); // 이미지가 없는 경우 saveProduct 호출
+    await submitProduct();
     return;
   }
 
@@ -233,66 +310,11 @@ const uploadImage = async () => {
 
     const data = await response.json();
     console.log('이미지 URL:', data);
-    imageUrl = data.imgUrl; // 이미지 URL 저장
-    await saveProduct(imageUrl); // saveProduct 호출 시 이미지 URL 전달
+    imageUrl.value = data.imgUrl;
+    await submitProduct();
   } catch (error) {
     console.error('오류:', error);
   }
-};
-
-const props = defineProps({
-  currentProductCode: {
-    type: String,
-    required: true
-  }
-  // currentProductName: String,
-  // currentProductCount: String,
-  // currentProductPrice: String,
-  // currentProductSize: String,
-  // currentProductContent: String,
-});
-const saveProduct = async (imageUrl) => {
-  const requestData = {
-    productName: updateProductName.value,
-    productCount: updateProductCount.value,
-    productPrice: updateProductPrice.value,
-    productStatus: updateStatus.value,
-    productExposureStatus: updateExposureStatus.value === 'true',
-    productColor: updateColor.value,
-    productSize: updateSize.value,
-    productContent: updateContent.value,
-    categoryFirstCode: updateFirstCategory.value,
-    categorySecondCode: updateSecondCategory.value,
-    categoryThirdCode: updateThirdCategory.value,
-    url: imageUrl
-
-  };
-
-  console.log('Request Data:', requestData);
-
-  try {
-    const response = await fetch(`http://localhost:5000/admin/product/update/${props.currentProductCode}?requesterAdminCode=1`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(requestData)
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`상품 수정에 실패했습니다. 상태 코드: ${response.status}, 메시지: ${errorText}`);
-    }
-
-    console.log('상품이 성공적으로 수정되었습니다.');
-    emit('close');
-  } catch (error) {
-    console.error('오류:', error);
-  }
-};
-
-const closePopup = () => {
-  emit('close');
 };
 
 onMounted(() => {
@@ -309,6 +331,7 @@ onMounted(() => {
     });
   });
   fetchCategories('first');
+  fetchProductData();
 });
 </script>
 
