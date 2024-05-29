@@ -31,10 +31,13 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { defineEmits } from 'vue';
 
 const props = defineProps({
   closeCreate: Function
 });
+
+const emit = defineEmits(['refreshData']);
 
 const franchiseOwnerCode = 1; // 테스트를 위한 하드코딩된 코드
 const franchiseOwnerData = ref(null);
@@ -43,7 +46,7 @@ const askContent = ref('');
 
 const fetchFranchiseOwnerData = async () => {
   try {
-    const response = await fetch(`http://api.pioms.shop/franchise/owner/${franchiseOwnerCode}`, {
+    const response = await fetch(`http://localhost:5000/franchise/owner/${franchiseOwnerCode}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -60,7 +63,7 @@ const fetchFranchiseOwnerData = async () => {
 
 const submitAsk = async () => {
   try {
-    const response = await fetch(`http://api.pioms.shop/franchise/ask/create/${franchiseOwnerCode}`, {
+    const response = await fetch(`http://localhost:5000/franchise/ask/create/${franchiseOwnerCode}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -74,6 +77,7 @@ const submitAsk = async () => {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
+    emit('refreshData');
     props.closeCreate();
   } catch (error) {
     console.error('Failed to submit ask:', error);
@@ -196,12 +200,12 @@ textarea {
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: #f5f5f5;
-  padding: 20px;
+  padding: 40px;
   border-radius: 30px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   width: 50%;
   max-width: 2000px;
-  height: 88%;
+  height: 75%;
   overflow-y: auto;
   max-height: 84vh;
 }
@@ -221,12 +225,12 @@ textarea {
 .popup-content input[type="text"],
 .popup-content textarea {
   width: 100%;
-  padding: 10px;
+  padding: 30px;
   border-radius: 5px;
   border: 1px solid #ccc;
   box-sizing: border-box;
   resize: none;
-  height: auto;
+  height: 80px;
 }
 
 .popup-content button {

@@ -41,9 +41,11 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { defineEmits } from 'vue';
 
 const askData = ref(null);
 const answer = ref('');
+const emit = defineEmits(['refreshData']);
 const props = defineProps({
   askCode: Object,
   closeEdit: Function
@@ -56,7 +58,7 @@ const fetchAskData = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://api.pioms.shop/admin/ask/${askCode}`, {
+    const response = await fetch(`http://localhost:5000/admin/ask/${askCode}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -93,7 +95,7 @@ const submitAnswer = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://api.pioms.shop/admin/ask/answer/${askCode}`, {
+    const response = await fetch(`http://localhost:5000/admin/ask/answer/${askCode}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -108,6 +110,7 @@ const submitAnswer = async () => {
     }
 
     // Close the form after successful submission
+    emit('refreshData');
     props.closeEdit();
   } catch (error) {
     console.error('Failed to submit answer:', error);
@@ -232,12 +235,12 @@ textarea {
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: #f5f5f5;
-  padding: 20px;
+  padding: 40px;
   border-radius: 30px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   width: 50%;
   max-width: 2000px;
-  height: 80%;
+  height: 65%;
   overflow-y: auto;
   max-height: 84vh;
 }
