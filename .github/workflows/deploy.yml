@@ -75,18 +75,19 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ap-northeast-2
 
-      - name: Wait for Blue environment to be stable
+      - name: Wait for swapped environments to be stable
         run: |
           for i in {1..20}; do
-            STATUS=$(aws elasticbeanstalk describe-environments --environment-names AkatsukiFE-env --query 'Environments[0].Status' --output text)
-            if [ "$STATUS" == "Ready" ]; then
-              echo "Blue environment is stable."
+            GREEN_STATUS=$(aws elasticbeanstalk describe-environments --environment-names AkatsukiFE-green-env --query 'Environments[0].Status' --output text)
+            BLUE_STATUS=$(aws elasticbeanstalk describe-environments --environment-names AkatsukiFE-env --query 'Environments[0].Status' --output text)
+            if [ "$GREEN_STATUS" == "Ready" ] && [ "$BLUE_STATUS" == "Ready" ]; then
+              echo "Both environments are stable."
               exit 0
             fi
-            echo "Waiting for blue environment to be stable..."
+            echo "Waiting for both environments to be stable..."
             sleep 30
           done
-          echo "Blue environment did not become stable in time."
+          echo "Environments did not become stable in time."
           exit 1
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
