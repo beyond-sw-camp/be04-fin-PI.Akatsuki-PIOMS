@@ -125,13 +125,12 @@ const filterOrderDate = ref('');
 const getOrderList = async () => {
 
   try {
-    const authToken = localStorage.getItem('Authorization');
+    const authToken = localStorage.getItem('access');
     const headers = {
             'access': authToken,
             'Content-Type': 'application/json',
         };
-    console.log(authToken);
-    const response = await fetch(`/api/admin/orders`, {
+    const response = await fetch(`http://localhost:5000/admin/orders`, {
       method: 'GET',
       headers: headers,
       credentials: 'include'

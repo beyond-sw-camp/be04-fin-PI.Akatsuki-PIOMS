@@ -199,16 +199,17 @@
  // 추후 개선 예정 
  const adminCode = 2;
  const franchiseCode = 1;
-
- console.log(item);
- console.log(list);
- console.log(exchangeList);
-
-
 const accpetOrder = async () => {
+    const authToken = localStorage.getItem('access');
+    const headers = {
+            'access': authToken,
+            'Content-Type': 'application/json',
+        };
     try {
-      const response = await fetch(`/api/admin/order/${item.orderCode}/accept?adminCode=${adminCode}`, {
+      const response = await fetch(`http://localhost:5000/admin/order/${item.orderCode}/accept`, {
         method: 'PUT',
+        headers: headers,
+        credentials: 'include'
       });
       if(response.status ==406){
         alert("이 발주는 이미 처리되어 있습니다.");
@@ -237,10 +238,16 @@ const clickDeny = () =>{
 }
 
 const denyOrder = async () => {
-  console.log(item.orderCode);
+    const authToken = localStorage.getItem('access');
+    const headers = {
+            'access': authToken,
+            'Content-Type': 'application/json',
+        };
     try {
-      const response = await fetch(`/api/admin/order/${item.orderCode}/deny?adminCode=${adminCode}&denyMessage=${reason.value}`, {
+      const response = await fetch(`http://localhost:5000/admin/order/${item.orderCode}/deny?denyMessage=${reason.value}`, {
         method: 'PUT',
+        headers: headers,
+        credentials: 'include'
       });
       if(response.status ==406){
         alert("이 발주는 이미 처리되어 있습니다.");

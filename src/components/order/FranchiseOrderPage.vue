@@ -133,9 +133,17 @@ const filterInvoiceCode = ref('');
 const filterOrderDate = ref('');
 
 const getOrderList = async () => {
+    const authToken = localStorage.getItem('access');
+    const headers = {
+            'access': authToken,
+            'Content-Type': 'application/json',
+        };
   try {
-    const response = await fetch(`/api/franchise/orders?franchiseOwnerCode=${franchiseOwnerCode}`, {
-      method: 'GET'
+    const response = await fetch(`http://localhost:5000/franchise/orders`, {
+      method: 'GET',
+      headers: headers,
+      credentials: 'include'
+
     });
 
     if (!response.ok) {

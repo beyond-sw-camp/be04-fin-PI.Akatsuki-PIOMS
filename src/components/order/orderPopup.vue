@@ -202,13 +202,17 @@
     products: productsData,
     franchiseCode: franchiseCode
   };
-
+  const authToken = localStorage.getItem('access');
+    const headers = {
+            'access': authToken,
+            'Content-Type': 'application/json',
+            "Content-Type": "application/json"
+        };
   try {
-    const response = await fetch(`http://localhost:5000/franchise/order?franchiseOwnerCode=${franchiseOwnerCode}`, {
+    const response = await fetch(`http://localhost:5000/franchise/order`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: headers,
+        credentials: 'include',
         body: JSON.stringify(orderData)
       });
     if (response.status == 406) {
