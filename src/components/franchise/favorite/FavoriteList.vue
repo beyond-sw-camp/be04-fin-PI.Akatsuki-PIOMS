@@ -97,7 +97,7 @@ const removeFavorite = async (productId) => {
 };
 
 const navigateToAddProduct = () => {
-  window.location.href = 'http://localhost:5173/franchise/favorite/register';
+  window.location.href = 'http://localhost:8080/franchise/favorite/register';
 };
 
 fetchFavorites();

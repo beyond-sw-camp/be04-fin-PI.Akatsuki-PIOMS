@@ -27,7 +27,7 @@
   <!-- 카테고리 -->
   <nav class="header_rootAdmin">
     <ul class="nav_header">
-      <li><a href="#" class="dashboard" style= "display: flex;"><img src="@/assets/icon/dashboard.png"></a></li>
+<!--      <li><a href="#" class="dashboard" style= "display: flex;"><img src="@/assets/icon/dashboard.png"></a></li>-->
 
       <li><a href="#" class="label">가맹점 및 직원 관리</a>
         <container class="submenu_box">

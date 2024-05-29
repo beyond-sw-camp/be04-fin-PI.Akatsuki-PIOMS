@@ -2,19 +2,18 @@ name: AkatsukiFE
 
 on:
   push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main, develop]
+    branches:
+      - main
+      - develop
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout source code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20.x'
@@ -22,142 +21,82 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build the project
-        env:
-          VITE_APP_BACKEND_URL: ${{ secrets.BACKEND_URL }}
+      - name: Build
         run: npm run build
 
-      - name: Generate deployment package
-        run: |
-          mkdir -p deploy/.platform
-          mkdir -p deploy/dist
-          
-          if [ -d dist ]; then
-            cp -r dist/* deploy/dist
-          else
-            echo "Dist directory not found!"
-            exit 1
-          fi
+      - name: Zip Artifacts
+        run: zip -r deploy.zip dist Procfile server.js package.json
 
-          if [ -f vite.config.js ]; then
-            cp vite.config.js deploy/vite.config.js
-          else
-            echo "vite.config.js not found!"
-            exit 1
-          fi
-          
-          if [ -f package.json ]; then
-            cp package.json deploy/package.json
-          else
-            echo "package.json not found!"
-            exit 1
-          fi
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
 
-          if [ -f Procfile ]; then
-            cp Procfile deploy/Procfile
-          else
-            echo "Procfile not found!"
-            exit 1
-          fi
+      - name: Upload to S3
+        run: aws s3 cp deploy.zip s3://elasticbeanstalk-ap-northeast-2-730335325274/${{ github.run_id }}.zip
 
-          if [ -f server.js ]; then
-            cp server.js deploy/server.js
-          else
-            echo "server.js not found!"
-            exit 1
-          fi
-
-          if [ -d .ebextensions ]; then
-            cp -r .ebextensions deploy/.ebextensions
-          else
-            echo ".ebextensions directory not found!"
-            exit 1
-          fi
-          
-          if [ -f .platform/nginx.config ]; then
-            cp .platform/nginx.config deploy/.platform/nginx.config
-          else
-            echo ".platform/nginx.config not found!"
-            exit 1
-          fi
-          
-          cd deploy && zip -r ../deploy.zip .
-        shell: bash
-
-      - name: Upload build artifacts to S3
-        run: |
-          aws s3 cp deploy.zip s3://elasticbeanstalk-ap-northeast-2-730335325274/deploy/deploy-${{ github.run_number }}-${{ github.sha }}.zip
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ap-northeast-2
-
-      - name: Deploy to AWS Elastic Beanstalk
+      - name: Deploy to Elastic Beanstalk Green environment
         uses: einaregilsson/beanstalk-deploy@v22
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: AkatsukiFE
-          environment_name: AkatsukiFE-env
-          version_label: deploy-${{ github.run_number }}-${{ github.sha }}
           region: ap-northeast-2
+          application_name: AkatsukiFE
+          environment_name: AkatsukiFE-green-env
+          version_label: ${{ github.sha }}
           deployment_package: deploy.zip
           use_existing_version_if_available: true
-          wait_for_environment_recovery: 180
 
-      - name: Check deployment status
+      - name: Wait for Green environment to be healthy
         run: |
-          STATUS=$(aws elasticbeanstalk describe-environments --environment-names AkatsukiFE-env --query 'Environments[0].Health' --output text)
-          if [ "$STATUS" != "Green" ]; then
-            echo "Deployment failed. Environment health is $STATUS."
-            exit 1
-          else
-            echo "Deployment succeeded. Environment health is $STATUS."
-          fi
+          for i in {1..20}; do
+            STATUS=$(aws elasticbeanstalk describe-environments --environment-names AkatsukiFE-green-env --query 'Environments[0].Status' --output text)
+            HEALTH=$(aws elasticbeanstalk describe-environments --environment-names AkatsukiFE-green-env --query 'Environments[0].Health' --output text)
+            if [ "$STATUS" == "Ready" ] && [ "$HEALTH" == "Green" ]; then
+              echo "Green environment is healthy and ready."
+              exit 0
+            fi
+            echo "Waiting for green environment to be ready and healthy..."
+            sleep 30
+          done
+          echo "Environment did not become healthy in time."
+          exit 1
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ap-northeast-2
+          AWS_REGION: ap-northeast-2
 
-      - name: Retrieve EB Engine Log
-        if: failure()
-        run: |
-          EB_LOG=$(aws elasticbeanstalk describe-environment-resources --environment-name AkatsukiFE-env --query 'EnvironmentResources.Instances[0].Id' --output text)
-          echo "Instance ID: $EB_LOG"
-          COMMAND_ID=$(aws ssm send-command --document-name "AWS-RunShellScript" --targets "Key=InstanceIds,Values=$EB_LOG" --parameters 'commands=["sudo cat /var/log/eb-engine.log"]' --query 'Command.CommandId' --output text)
-          sleep 10
-          aws ssm get-command-invocation --command-id $COMMAND_ID --instance-id $EB_LOG --query 'StandardOutputContent' --output text
+      - name: Swap CNAMEs to make Green environment live
+        run: aws elasticbeanstalk swap-environment-cnames --source-environment-name AkatsukiFE-green-env --destination-environment-name AkatsukiFE-env
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ap-northeast-2
+          AWS_REGION: ap-northeast-2
 
-  check-comments:
-    runs-on: ubuntu-latest
-    needs: build-and-deploy
-    if: github.event_name == 'pull_request'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Install GitHub CLI
+      - name: Wait for Blue environment to be stable
         run: |
-          sudo apt-get update
-          sudo apt-get install -y gh jq
-
-      - name: Check Pull Request Comments
-        id: pr-comments
-        run: |
-          PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
-          COMMENTS=$(gh pr view $PR_NUMBER --json comments --jq '.comments')
-          
-          UNIQUE_USERS=$(echo "$COMMENTS" | jq -r 'map(.author.login) | unique | length')
-          
-          if [ $UNIQUE_USERS -lt 2 ]; then
-            echo "Not enough unique users ($UNIQUE_USERS) in the pull request comments. At least 2 unique users are required."
-            exit 1
-          else
-            echo "Sufficient unique users ($UNIQUE_USERS) in the pull request comments."
-          fi
+          for i in {1..20}; do
+            STATUS=$(aws elasticbeanstalk describe-environments --environment-names AkatsukiFE-env --query 'Environments[0].Status' --output text)
+            if [ "$STATUS" == "Ready" ]; then
+              echo "Blue environment is stable."
+              exit 0
+            fi
+            echo "Waiting for blue environment to be stable..."
+            sleep 30
+          done
+          echo "Blue environment did not become stable in time."
+          exit 1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ap-northeast-2
+
+      - name: Terminate old Blue environment
+        run: aws elasticbeanstalk terminate-environment --environment-name AkatsukiFE-env --terminate-resources
+        if: success()
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ap-northeast-2

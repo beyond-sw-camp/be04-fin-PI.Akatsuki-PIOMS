@@ -243,8 +243,8 @@ onMounted(() => {
 }
 
 .filter-label {
-  width: 100px;
-  text-align: right;
+  width: 60px;
+  text-align: center;
   padding-right: 10px;
 }
 
