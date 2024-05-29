@@ -113,7 +113,7 @@ const products = ref([]);
 // Fetch products from the server
 const fetchProducts = async () => {
   try {
-    const response = await fetch('http://localhost:5000/warehouse', {
+    const response = await fetch('http://api.pioms.shop/warehouse', {
 
       method: 'GET',
       headers: {
@@ -164,7 +164,7 @@ const saveFavorites = async () => {
 
   const promises = selectedProducts.value.map(async (item) => {
     try {
-      const response = await fetch(`http://localhost:5000/warehouse/toggleFavorite/${item.franchiseWarehouseCode}`, {
+      const response = await fetch(`http://api.pioms.shop/warehouse/toggleFavorite/${item.franchiseWarehouseCode}`, {
 
         method: 'PUT',
         headers: {

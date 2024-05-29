@@ -25,19 +25,17 @@ jobs:
         run: npm run build
 
       - name: Zip Artifacts
-        run: zip -r deploy.zip dist Procfile server.js package.json
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-northeast-2
+        run: zip -r deploy.zip dist
 
       - name: Upload to S3
         run: aws s3 cp deploy.zip s3://elasticbeanstalk-ap-northeast-2-730335325274/${{ github.run_id }}.zip
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-northeast-2
 
-      - name: Deploy to Elastic Beanstalk Green environment
+      - name: Deploy to Elastic Beanstalk (Green)
+        id: deploy
         uses: einaregilsson/beanstalk-deploy@v22
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -47,56 +45,34 @@ jobs:
           environment_name: AkatsukiFE-green-env
           version_label: ${{ github.sha }}
           deployment_package: deploy.zip
-          use_existing_version_if_available: true
 
-      - name: Wait for Green environment to be healthy
+      - name: Check Green Environment Health
         run: |
-          for i in {1..20}; do
-            STATUS=$(aws elasticbeanstalk describe-environments --environment-names AkatsukiFE-green-env --query 'Environments[0].Status' --output text)
-            HEALTH=$(aws elasticbeanstalk describe-environments --environment-names AkatsukiFE-green-env --query 'Environments[0].Health' --output text)
-            if [ "$STATUS" == "Ready" ] && [ "$HEALTH" == "Green" ]; then
-              echo "Green environment is healthy and ready."
-              exit 0
-            fi
-            echo "Waiting for green environment to be ready and healthy..."
-            sleep 30
-          done
-          echo "Environment did not become healthy in time."
-          exit 1
+          STATUS=$(aws elasticbeanstalk describe-environments --environment-names AkatsukiFE-green-env --query 'Environments[0].Health' --output text)
+          if [ "$STATUS" != "Green" ]; then
+            echo "Green environment health is not 'Green'. Current status: $STATUS"
+            exit 1
+          fi
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ap-northeast-2
+          AWS_DEFAULT_REGION: ap-northeast-2
 
-      - name: Swap CNAMEs to make Green environment live
-        run: aws elasticbeanstalk swap-environment-cnames --source-environment-name AkatsukiFE-green-env --destination-environment-name AkatsukiFE-env
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ap-northeast-2
-
-      - name: Wait for Blue environment to be stable
+      - name: Swap CNAME
         run: |
-          for i in {1..20}; do
-            STATUS=$(aws elasticbeanstalk describe-environments --environment-names AkatsukiFE-env --query 'Environments[0].Status' --output text)
-            if [ "$STATUS" == "Ready" ]; then
-              echo "Blue environment is stable."
-              exit 0
-            fi
-            echo "Waiting for blue environment to be stable..."
-            sleep 30
-          done
-          echo "Blue environment did not become stable in time."
-          exit 1
+          echo "Swapping CNAMEs between AkatsukiFE-env and AkatsukiFE-green-env"
+          aws elasticbeanstalk swap-environment-cnames --source-environment-name AkatsukiFE-green-env --destination-environment-name AkatsukiFE-env
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ap-northeast-2
+          AWS_DEFAULT_REGION: ap-northeast-2
 
-      - name: Terminate old Blue environment
-        run: aws elasticbeanstalk terminate-environment --environment-name AkatsukiFE-env --terminate-resources
-        if: success()
+      - name: Terminate Old Environment
+        run: |
+          echo "Terminating old environment AkatsukiFE-env"
+          aws elasticbeanstalk terminate-environment --environment-name AkatsukiFE-env --terminate-resources
+        if: always()
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ap-northeast-2
+          AWS_DEFAULT_REGION: ap-northeast-2
