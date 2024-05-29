@@ -113,7 +113,8 @@ const products = ref([]);
 // Fetch products from the server
 const fetchProducts = async () => {
   try {
-    const response = await fetch('http://localhost:9000/warehouse', {
+    const response = await fetch('http://localhost:5000/warehouse', {
+
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -163,7 +164,8 @@ const saveFavorites = async () => {
 
   const promises = selectedProducts.value.map(async (item) => {
     try {
-      const response = await fetch(`http://localhost:9000/warehouse/toggleFavorite/${item.franchiseWarehouseCode}`, {
+      const response = await fetch(`http://localhost:5000/warehouse/toggleFavorite/${item.franchiseWarehouseCode}`, {
+
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -241,8 +243,8 @@ onMounted(() => {
 }
 
 .filter-label {
-  width: 100px;
-  text-align: right;
+  width: 60px;
+  text-align: center;
   padding-right: 10px;
 }
 

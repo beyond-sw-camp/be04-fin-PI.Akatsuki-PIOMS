@@ -12,21 +12,25 @@
               <tr>
                 <td class="insert-label">상품명</td>
                 <td class="insert-input">
-                  <input type="text" v-model="updateProductName" class="textInput"/>
+                  <input type="text" v-bind:value="currentProductName" v-on:input="updateProductName= $event.target.value" class="textInput"/>
+<!--                  <input type="text" v-model="updateProductName" class="textInput"/>-->
                 </td>
                 <td class="insert-label">재고량</td>
                 <td class="insert-input">
-                  <input type="number" v-model="updateProductCount" class="textInput"/>
+<!--                  <input type="number" v-model="updateProductCount" class="textInput"/>-->
+                  <input type="text" v-bind:value="currentProductCount" v-on:input="updateProductCount= $event.target.value" class="textInput"/>
                 </td>
                 <td class="insert-label">가격</td>
                 <td class="insert-input">
-                  <input type="number" v-model="updateProductPrice" class="textInput"/>
+<!--                  <input type="number" v-model="updateProductPrice" class="textInput"/>-->
+                  <input type="text" v-bind:value="currentProductPrice" v-on:input="updateProductPrice= $event.target.value" class="textInput"/>
                 </td>
               </tr>
               <tr>
                 <td class="insert-label">상품상태</td>
                 <td class="insert-input">
                   <select v-model="updateStatus" class="textInput">
+<!--                  <select class="textInput" v-bind:value="currentProductStatus" v-on:select="updateStatus= $event.target.value">-->
                     <option value="공급가능">공급가능</option>
                     <option value="일시제한">일시제한</option>
                     <option value="단종">단종</option>
@@ -36,6 +40,7 @@
                 <td class="insert-label">상품노출상태</td>
                 <td class="insert-input">
                   <select v-model="updateExposureStatus" class="textInput">
+<!--                  <select  class="textInput" v-bind:value="currentProductExposureStatus" v-on:select="updateExposureStatus= $event.target.value">-->
                     <option value="true">노출</option>
                     <option value="false">미노출</option>
                   </select>
@@ -43,6 +48,7 @@
                 <td class="insert-label">색상</td>
                 <td class="insert-input">
                   <select v-model="updateColor" class="textInput">
+<!--                    <select  class="textInput" v-bind:value="currentProductColor" v-on:select="updateColor= $event.target.value">-->
                     <option value="빨간색">빨간색</option>
                     <option value="주황색">주황색</option>
                     <option value="노란색">노란색</option>
@@ -54,7 +60,8 @@
                 </td>
                 <td class="insert-label">사이즈</td>
                 <td class="insert-input">
-                  <select v-model="updateSize" class="textInput">
+<!--                  <select v-model="updateSize" class="textInput">-->
+                    <select  class="textInput" v-bind:value="currentProductSize" v-on:select="updateSize= $event.target.value">
                     <option value="90">90</option>
                     <option value="95">95</option>
                     <option value="100">100</option>
@@ -91,7 +98,8 @@
               <tr>
                 <td class="second-insert-label"><div class="second-insert-label0">상세정보</div></td>
                 <td class="second-insert-input">
-                  <input type="text" style="width: 99%; height: 150px" v-model="updateContent" class="textInput">
+                  <input type="text" v-bind:value="currentProductContent" v-on:input="updateContent= $event.target.value" class="textInput"/>
+<!--                  <input type="text" style="width: 99%; height: 150px" v-model="updateContent" class="textInput">-->
                 </td>
               </tr>
               <tr>
@@ -235,7 +243,12 @@ const props = defineProps({
   currentProductCode: {
     type: String,
     required: true
-  }
+  },
+  currentProductName: String,
+  currentProductCount: String,
+  currentProductPrice: String,
+  currentProductSize: String,
+  currentProductContent: String,
 });
 const saveProduct = async (imageUrl) => {
   const requestData = {

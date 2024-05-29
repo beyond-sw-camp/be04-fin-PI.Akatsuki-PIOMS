@@ -5,78 +5,96 @@
     상품 및 상품 카테고리 관리 > 상품 카테고리 관리 > 상품 카테고리 전체 조회
     </span>
   </div>
-  <table class="filter-table">
-    <tr>
-      <td class="filter-label">카테고리 조회</td>
-      <td class="filter-input">
-        <div class="filter-category">
-          <select id="firstCategory" v-model="selectedFirstCategory" @change="fetchSecondCategories" class="categories">
-            <option value="">대분류</option>
-            <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">
-              {{ category.categoryFirstName }}
-            </option>
-          </select>
-          <select class="categories" id="secondCategory" v-model="selectedSecondCategory" @change="fetchThirdCategories">
-            <option value="">중분류</option>
-            <option v-for="category in secondCategories" :key="category.categorySecondCode" :value="category.categorySecondCode">
-              {{ category.categorySecondName }}
-            </option>
-          </select>
-          <select class="categories" id="thirdCategory" v-model="selectedThirdCategory">
-            <option value="">소분류</option>
-            <option v-for="category in thirdCategories" :key="category.categoryThirdCode" :value="category.categoryThirdCode">
-              {{ category.categoryThirdName }}
-            </option>
-          </select>
-        </div>
-        <div class="filter-categoryName">
-          <input type="text" v-model="filterProductName" class="textInput" placeholder="카테고리명을 입력하세요."/>
-          <button @click="applyFilters">
-            <img src="@/assets/icon/search.png" alt="" style="width: 30px; height: 30px">
-          </button>
-        </div>
-      </td>
-    </tr>
-  </table>
   <div class="category-select">
     <div class="categoryFirst-select">
       <ul>
-        <li v-for="category in firstCategories" :key="category.categoryFirstCode">
-          <div>
-          <button @click="fetchSecondCategories(category.categoryFirstCode)">{{ category.categoryFirstName }}</button>
-
+        <li v-for="category in firstCategories" :key="category.categoryFirstCode" class="category-item">
+          <div class="category-content">
+            <button style="width: 300px">
+              <span @click="fetchSecondCategories(category.categoryFirstCode)">
+                {{ category.categoryFirstName }}
+              </span>
+            </button>
+            <div class="category-actions">
+              <button @click="editCategoryFirst(category.categoryFirstCode,category.categoryFirstName)" class="MD-btn">수정</button>
+              <button @click="deleteCategoryFirst(category.categoryFirstCode, category.categoryFirstName)" class="MD-btn">삭제</button>
+            </div>
           </div>
         </li>
       </ul>
     </div>
     <div class="categorySecond-select">
       <ul>
-        <li v-for="category in secondCategories" :key="category.categorySecondCode">
-          <button @click="fetchThirdCategories(category.categorySecondCode)">{{ category.categorySecondName }}</button>
+        <li v-for="category in secondCategories" :key="category.categorySecondCode" class="category-item">
+          <div class="category-content">
+            <button style="width: 300px">
+              <span @click="fetchThirdCategories(category.categorySecondCode)">
+                {{ category.categorySecondName }}
+              </span>
+            </button>
+            <div class="category-actions">
+              <button @click="editCategorySecond(category.categorySecondCode, category.categorySecondName)" class="MD-btn">수정</button>
+              <button @click="deleteCategorySecond(category.categorySecondCode, category.categorySecondName)" class="MD-btn">삭제</button>
+            </div>
+          </div>
         </li>
       </ul>
     </div>
     <div class="categoryThird-select">
       <ul>
-        <li v-for="category in thirdCategories" :key="category.categoryThirdCode">
-          <button>{{ category.categoryThirdName }}</button>
+        <li v-for="category in thirdCategories" :key="category.categoryThirdCode" class="category-item">
+          <div class="category-content">
+            <button style="width: 300px">
+              <span>
+                {{ category.categoryThirdName }}
+              </span>
+            </button>
+            <div class="category-actions">
+              <button @click="editCategoryThird(category.categoryThirdCode, category.categoryThirdName)" class="MD-btn">수정</button>
+              <button @click="deleteCategoryThird(category.categoryThirdCode, category.categoryThirdName)" class="MD-btn">삭제</button>
+            </div>
+          </div>
         </li>
       </ul>
     </div>
+    <CategoryFirstPopup v-if="editCategoryFirstVisible" :currentFirstCode="currentFirstCode" :currentFirstName="currentFirstName" @close="editCategoryFirstVisible = false"/>
+    <CategorySecondPopup v-if="editCategorySecondVisible" :currentSecondCode="currentSecondCode" :currentSecondName="currentSecondName" @close="editCategorySecondVisible = false"/>
+    <CategoryThirdPopup v-if="editCategoryThirdVisible" :currentThirdCode="currentThirdCode" :currentThirdName="currentThirdName" @close="editCategoryThirdVisible = false"/>
+    <DeleteFirstPopup v-if="deleteCategoryFirstVisible" :currentFirstCode="currentFirstCode" :currentFirstName="currentFirstName" @close="deleteCategoryFirstVisible = false"/>
+    <DeleteSecondPopup v-if="deleteCategorySecondVisible" :currentSecondCode="currentSecondCode" :currentSecondName="currentSecondName" @close="deleteCategorySecondVisible = false"/>
+    <DeleteThirdPopup v-if="deleteCategoryThirdVisible" :currentThirdCode="currentThirdCode" :currentThirdName="currentThirdName" @close="deleteCategoryThirdVisible = false"/>
   </div>
 </template>
 
 <script setup>
 import {ref} from 'vue';
+import CategoryFirstPopup from "@/components/amdin/Category/CategoryFirstPopup.vue";
+import CategorySecondPopup from "@/components/amdin/Category/CategorySecondPopup.vue";
+import CategoryThirdPopup from "@/components/amdin/Category/CategoryThirdPopup.vue";
+import DeleteFirstPopup from "@/components/amdin/Category/DeleteFirstPopup.vue";
+import DeleteSecondPopup from "@/components/amdin/Category/DeleteSecondPopup.vue";
+import DeleteThirdPopup from "@/components/amdin/Category/DeleteThirdPopup.vue";
+
 
 const firstCategories = ref([]);
 const secondCategories = ref([]);
 const thirdCategories = ref([]);
 const selectedFirstCategory = ref('');
 const selectedSecondCategory = ref('');
-const selectedThirdCategory = ref('');
 const filteredLists = ref([]);
 const lists = ref([]);
+const editCategoryFirstVisible = ref(false);
+const editCategorySecondVisible = ref(false);
+const editCategoryThirdVisible = ref(false);
+const deleteCategoryFirstVisible = ref(false);
+const deleteCategorySecondVisible = ref(false);
+const deleteCategoryThirdVisible = ref(false);
+const currentFirstCode = ref('');
+const currentSecondCode = ref('');
+const currentThirdCode = ref('');
+const currentFirstName = ref('');
+const currentSecondName = ref('');
+const currentThirdName = ref('');
 
 const getCategoryFirstId = async () => {
   try {
@@ -150,11 +168,59 @@ const fetchThirdCategories = async (categorySecondCode) => {
   }
 };
 
-const applyFilters = () => {
-  filteredLists.value = lists.value.filter(list => {
-    return !selectedThirdCategory.value || list.categoryThirdCode === selectedThirdCategory.value;
-  });
+const setCurrentFirstCode = (categoryFirstCode) => {
+  currentFirstCode.value = categoryFirstCode;
 }
+const setCurrentFirstName = (categoryFirstName) => {
+  currentFirstName.value = categoryFirstName;
+}
+const setCurrentSecondCode = (categorySecondCode) => {
+  currentSecondCode.value = categorySecondCode;
+}
+const setCurrentSecondName = (categorySecondName) => {
+  currentSecondName.value = categorySecondName;
+}
+const setCurrentThirdCode = (categoryThirdCode) => {
+  currentThirdCode.value = categoryThirdCode;
+}
+const setCurrentThirdName = (categoryThirdName) => {
+  currentThirdName.value = categoryThirdName;
+}
+const editCategoryFirst = (categoryFirstCode, categoryFirstName) => {
+  setCurrentFirstCode(categoryFirstCode);
+  setCurrentFirstName(categoryFirstName);
+  editCategoryFirstVisible.value = true;
+};
+const editCategorySecond = (categorySecondCode, categorySecondName) => {
+  setCurrentSecondCode(categorySecondCode);
+  setCurrentSecondName(categorySecondName);
+  editCategorySecondVisible.value = true;
+};
+
+const editCategoryThird = (categoryThirdCode, categoryThirdName) => {
+  setCurrentThirdCode(categoryThirdCode);
+  setCurrentThirdName(categoryThirdName);
+  editCategoryThirdVisible.value = true;
+}
+
+const deleteCategoryFirst = (categoryFirstCode, categoryFirstName) => {
+  setCurrentFirstCode(categoryFirstCode);
+  setCurrentFirstName(categoryFirstName);
+  deleteCategoryFirstVisible.value = true;
+};
+
+
+const deleteCategorySecond = (categorySecondCode, categorySecondName) => {
+  setCurrentSecondCode(categorySecondCode);
+  setCurrentSecondName(categorySecondName);
+  deleteCategorySecondVisible.value = true;
+};
+
+const deleteCategoryThird = (categoryThirdCode, categoryThirdName) => {
+  setCurrentThirdCode(categoryThirdCode);
+  setCurrentThirdName(categoryThirdName)
+  deleteCategoryThirdVisible.value = true;
+};
 
 getCategoryFirstId();
 fetchFirstCategories();
@@ -174,50 +240,32 @@ fetchThirdCategories();
 .category-top span {
   vertical-align: middle;
 }
-.filter-label {
-  font-weight: bold;
-  text-align: center;
-  font-size: 12px;
-  width: 100px;
-  background-color: #D9D9D9;
-  border: 1px solid #ddd;
-}
-
-.filter-input {
-  text-align: center;
-  border: 1px solid lightgray;
-  border-right: none;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-}
-
-.filter-category,
-.filter-categoryName {
-  display: flex;
-  align-items: center;
-}
 
 .filter-category select {
   margin-right: 10px;
 }
+.category-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.category-content {
+  display: flex;
+
+  flex-grow: 1;
+}
+.category-content button {
+  width: 50px;
+}
+.category-actions {
+  display: flex;
+  gap: 8px;
+}
 
 .filter-categoryName input {
   margin-right: 10px;
-}
-
-.categories {
-  border: 1px solid rgba(217, 217, 217, 0.7);
-  margin-left: 2%;
-}
-
-.filter-table {
-  border-collapse: collapse;
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  width: 1400px;
 }
 
 .filter-table tr {
@@ -226,9 +274,8 @@ fetchThirdCategories();
 }
 
 .category-select {
-  border: 1px solid black;
   margin-top: 3%;
-  width: 1350px;
+  width: 1500px;
   display: flex;
   justify-content: space-between;
   align-items: flex-start; /* Align items to the top */
@@ -238,7 +285,7 @@ fetchThirdCategories();
 
 .categoryFirst-select, .categorySecond-select, .categoryThird-select {
   border: 1px solid black;
-  width: 400px;
+  width: 450px;
   min-height: 400px; /* Set a minimum height */
   padding: 10px;
   overflow-y: auto; /* Enable vertical scrolling */
@@ -259,7 +306,6 @@ fetchThirdCategories();
 
 .categoryFirst-select button, .categorySecond-select button, .categoryThird-select button {
   width: 100%;
-  padding: 10px;
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   cursor: pointer;
@@ -268,5 +314,8 @@ fetchThirdCategories();
 
 .categoryFirst-select button:hover, .categorySecond-select button:hover, .categoryThird-select button:hover {
   background-color: #ddd;
+}
+.MD-btn {
+
 }
 </style>

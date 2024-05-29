@@ -1,12 +1,8 @@
-<script setup>
-
-</script>
-
 <template>
   <!-- footer -->
   <footer class="footer">
     <p class="footer_text">
-      회사명: PIOMS 솔루션  |  대표명: 김용승  |  사업자등록번호: 478-34-23344  |  주소: 서울특별시 동작구 보라매로 87, 3~5층 플레이데이터 © FORBIZKOREA x NAVER Cloud CO.LTD. All Rights Reserved.
+      회사명: PIOMS 솔루션  |  대표명: 김용승  |  사업자등록번호: 478-34-23344  |  주소: 서울특별시 동작구 보라매로 87, 3~5층 플레이데이터 © PIOMS
     </p>
   </footer>
 </template>
@@ -28,10 +24,7 @@
 .footer_text {
   font-size: 12px;
   color: #B9B9B9;
-  position: relative;
-  right: 550px;
   top: 10px;
-  display: flex;
   text-align: center;
 }
 </style>

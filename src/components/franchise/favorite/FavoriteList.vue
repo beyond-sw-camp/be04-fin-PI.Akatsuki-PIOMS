@@ -59,7 +59,8 @@ const favoriteProducts = ref([]);
 // Fetch favorite products
 const fetchFavorites = async () => {
   try {
-    const response = await fetch('http://localhost:9000/warehouse/favorites', {
+    const response = await fetch('http://localhost:5000/warehouse/favorites', {
+
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -78,7 +79,8 @@ const fetchFavorites = async () => {
 
 const removeFavorite = async (productId) => {
   try {
-    const response = await fetch(`http://localhost:9000/warehouse/removeFavorite/${productId}`, {
+    const response = await fetch(`http://localhost:5000/warehouse/removeFavorite/${productId}`, {
+
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -95,7 +97,7 @@ const removeFavorite = async (productId) => {
 };
 
 const navigateToAddProduct = () => {
-  window.location.href = 'http://localhost:5173/franchise/favorite/register';
+  window.location.href = 'http://localhost:8080/franchise/favorite/register';
 };
 
 fetchFavorites();
