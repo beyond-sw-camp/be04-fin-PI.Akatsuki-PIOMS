@@ -305,6 +305,7 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 10px;
 }
 .input-container {
   display: flex;
@@ -323,12 +324,11 @@ onMounted(() => {
 }
 .categoryFirst-select, .categorySecond-select, .categoryThird-select {
   border: 1px solid black;
-  width: 95%;
+  width: 90%;
   min-height: 400px; /* Set a minimum height */
   padding: 10px;
   overflow-y: auto; /* Enable vertical scrolling */
   max-height: 400px; /* Set a maximum height */
-
 }
 
 .categoryFirst-select ul, .categorySecond-select ul, .categoryThird-select ul {
@@ -343,7 +343,7 @@ onMounted(() => {
 }
 
 .categoryFirst-select button, .categorySecond-select button, .categoryThird-select button {
-  width: 100%;
+  width: 90%;
   padding: 10px;
   background-color: #f9f9f9;
   border: 1px solid #ddd;
@@ -352,6 +352,6 @@ onMounted(() => {
 }
 
 .categoryFirst-select button:hover, .categorySecond-select button:hover, .categoryThird-select button:hover {
-  background-color: #ddd;
+  background-color: #f0f0f0;
 }
 </style>

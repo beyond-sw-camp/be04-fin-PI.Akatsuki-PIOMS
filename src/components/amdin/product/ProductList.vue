@@ -106,21 +106,21 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost">
-          <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">
-            <button v-if="header.key === 'productName'"
-                    class="button-as-text"
-                    @click="showModifyPopup(
+        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" 
+            class="allpost"
+            @dblclick="showModifyPopup(
                         item.productCode,
                         item.productName,
                         item.productCount,
                         item.productPrice,
                         item.productSize,
                         item.productContent
-                        )">
+            )">
+          <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">
               {{ item[header.key] }}
-            </button>
-            <span v-else>{{ item[header.key] }}</span>
+            <template v-if="header.key === 'imgUrl'">
+              <img :src="getProductImageUrl(item.productCode)" class="product-img" />
+            </template>
           </td>
         </tr>
         <tr v-for="row in emptyRows" :key="'empty-' + row">
@@ -189,21 +189,31 @@ const currentProductCount = ref('');
 const currentProductPrice = ref('');
 const currentProductSize = ref('');
 const currentProductContent = ref('');
-const productImages = ref([]);
+const productImages = ref({});
 
-// const fetchProductImages = async () => {
-//   try {
-//     const response = await fetch(`http://localhost:5000/admin/product/productImage`, {
-//       method: 'GET',
-//     });
-//     if(!response.ok) {
-//       throw new Error('이미지를 불러오지 못했습니다.');
-//     }
-//     productImages.value = await response.json();
-//   } catch (error) {
-//     console.error('Errpr:', error);
-//   }
-// };
+const getProductImageUrl = (productCode) => {
+  return productImages.value[productCode] || 'path/to/default-image.jpg';
+};
+const fetchProductImages = async () => {
+  try {
+    const response = await fetch(`http://localhost:5000/admin/product/productImage`, {
+      method: 'GET',
+    });
+    if(!response.ok) {
+      throw new Error('이미지를 불러오지 못했습니다.');
+    }
+    const productImagesData = await response.json();
+
+    productImages.value = productImagesData.reduce((map, item) => {
+      map[item.productCode] = item.imgUrl;
+      return map;
+    }, {});
+
+    console.log(productImages);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
 
 const fetchFirstCategories = async () => {
   try {
@@ -282,7 +292,6 @@ const setCurrentProductCode = (productCode) => {
 const setCurrentProductName = (productName) => {
   currentProductName.value = productName;
 }
-
 const setCurrentProductCount = (productCount) => {
   currentProductCount.value = productCount;
 }
@@ -382,12 +391,22 @@ const prevPage = () => {
 };
 
 getMemberId();
+fetchProductImages();
 fetchFirstCategories();
 fetchSecondCategories();
 fetchThirdCategories();
 </script>
 
 <style scoped>
+.product-img {
+  width: 30px;
+  height: 30px;
+  transition: transform 0.5s ease;
+}
+.product-img:hover {
+  transform: scale(3.3);
+}
+
 .pagination {
   margin-top: 10px;
   margin-bottom: 100px;
@@ -399,7 +418,6 @@ fetchThirdCategories();
 .filter-section {
   display: flex;
   justify-content: center;
-  margin: 0;
 }
 
 .filter-table {
@@ -497,7 +515,7 @@ fetchThirdCategories();
 .table th {
   font-weight: bold;
   color: #000;
-  width: 100px;
+  width: 100%;
   height: 10px;
   table-layout: fixed;
 }
@@ -562,8 +580,7 @@ fetchThirdCategories();
 }
 .headerTitle {
   text-align: left;
-  margin-left: 24.7%;
-  margin-bottom: 0.5%;
+  margin-left: 16.2%;
 }
 
 .product-sub-title {
@@ -580,5 +597,9 @@ fetchThirdCategories();
 .headerTitle h6 {
   margin: 0
 }
-
+.pagination button {
+  border: none;
+  border-radius: 10px;
+  width: 75px;
+}
 </style>
