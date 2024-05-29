@@ -42,10 +42,12 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import { defineEmits } from 'vue';
 
 const askData = ref(null);
 const answer = ref('');
 const route = useRoute();
+const emit = defineEmits(['refreshData']);
 const props = defineProps({
   askCode: Object,
   closeRegist: Function
@@ -58,7 +60,7 @@ const fetchAskData = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://api.pioms.shop/admin/ask/${askCode}`, {
+    const response = await fetch(`http://localhost:5000/admin/ask/${askCode}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -94,7 +96,7 @@ const submitAnswer = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://api.pioms.shop/admin/ask/answer/${askCode}`, {
+    const response = await fetch(`http://localhost:5000/admin/ask/answer/${askCode}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -109,6 +111,7 @@ const submitAnswer = async () => {
     }
 
     console.log('Answer submitted successfully');
+    emit('refreshData');
     props.closeRegist(); // Close the popup after successful submission
   } catch (error) {
     console.error('Failed to submit answer:', error);
@@ -239,7 +242,7 @@ textarea {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   width: 50%;
   max-width: 2000px;
-  height: 90%;
+  height: 73%;
   overflow-y: auto;
   max-height: 90vh;
 }
