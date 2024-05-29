@@ -121,7 +121,7 @@ const franchises = ref([
 
 const fetchAsks = async () => {
   try {
-    const response = await fetch('http://localhost:5000/admin/ask/list', {
+    const response = await fetch('http://api.pioms.shop/admin/ask/list', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

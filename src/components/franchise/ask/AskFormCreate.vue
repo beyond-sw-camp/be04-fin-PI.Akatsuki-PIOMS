@@ -43,7 +43,7 @@ const askContent = ref('');
 
 const fetchFranchiseOwnerData = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/franchise/owner/${franchiseOwnerCode}`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/owner/${franchiseOwnerCode}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ const fetchFranchiseOwnerData = async () => {
 
 const submitAsk = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/franchise/ask/create/${franchiseOwnerCode}`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/ask/create/${franchiseOwnerCode}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
