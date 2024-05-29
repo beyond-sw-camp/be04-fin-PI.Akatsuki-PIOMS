@@ -197,7 +197,6 @@ const resetImage = () => {
   imagePreview.value = imageSrc;
   imgOn.value = false;
 };
-
 const previewImage = (event) => {
   const file = event.target.files[0];
   if (file) {
@@ -221,7 +220,7 @@ const uploadImage = async () => {
   formData.append('file', file);
 
   try {
-    const response = await fetch(`/api/admin/product/image`, {
+    const response = await fetch(`http://localhost:5000/admin/product/image`, {
       method: 'POST',
       credentials: 'include',
       body: formData
