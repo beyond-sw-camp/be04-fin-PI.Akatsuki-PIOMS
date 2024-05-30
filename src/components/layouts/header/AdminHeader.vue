@@ -329,16 +329,17 @@ hr.hr1 {
   border: 0;
   height: 0;
   border-top: 0.5px solid #B9B9B9;
+  position: relative;
 }
 
 hr.hr2 {
   padding: 0;
   width: 2100px;
   height: 0;
+  border: 0;
   border-top: 0.5px solid #B9B9B9;
-  margin: 25px;
   position: relative;
-  right: 15px;
+  top: 22px;
 }
 hr.hr3 {
   padding: 0;
