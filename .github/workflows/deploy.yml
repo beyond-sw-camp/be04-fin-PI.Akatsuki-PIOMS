@@ -24,6 +24,9 @@ jobs:
       - name: List node_modules
         run: ls -la node_modules
 
+      - name: Print environment variables
+        run: printenv
+
       - name: Build
         run: |
           echo "Starting build process..."
