@@ -1,4 +1,8 @@
 <template>
+  <div class="breadcrumbs">
+    <img src="../../assets/icon/List.png" alt="List Icon" class="breadcrumb-icon" />
+    <span>발주 조회 및 관리</span>
+  </div>
   <div>
     <div class="filter-section">
       <table class="filter-table">
@@ -6,38 +10,29 @@
           <td class="filter-label">반품상태</td>
           <td class="filter-input">
             <div class="radio-group">
-              <label> 반송신청 <input type="radio" value="반송신청" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
-              <label> 반송중 <input type="radio" value="반송중" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
-              <label> 처리완료 <input type="radio" value="처리완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
-              <label> 반환대기 <input type="radio" value="반환대기" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
-              <label> 반환중 <input type="radio" value="반환중" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
-              <label> 반환완료 <input type="radio" value="반환완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
+              <label> 반송신청 <input type="radio" value="반송신청" name="ConditionOrder" v-model="conditionFilter" ></label>
+              <label> 반송중 <input type="radio" value="반송중" name="ConditionOrder" v-model="conditionFilter" ></label>
+              <label> 처리완료 <input type="radio" value="처리완료" name="ConditionOrder" v-model="conditionFilter" ></label>
+              <label> 반환대기 <input type="radio" value="반환대기" name="ConditionOrder" v-model="conditionFilter" ></label>
+              <label> 반환중 <input type="radio" value="반환중" name="ConditionOrder" v-model="conditionFilter" ></label>
+              <label> 반환완료 <input type="radio" value="반환완료" name="ConditionOrder" v-model="conditionFilter" ></label>
             </div>
           </td>
-
+        </tr>
+        <tr>
           <td class="filter-label">반품/교환 코드</td>
           <td class="filter-input">
-            <input type="text" v-model="filterExchangeCode" />
+            <input type="text" v-model="filterExchangeCode"  />
           </td>
         </tr>
         <tr>
-          <td class="filter-label">가맹점명</td>
-          <td class="filter-input">
-            <input type="text" v-model="filterFranchiseName" />
-          </td>
-          <td class="filter-label">점주명</td>
-          <td class="filter-input">
-            <input type="text" v-model="filterFranchiseOwnerName" />
+          <td class="filter-label">등록일</td>
+          <td colspan="3" class="filter-input">
+            <input type="date" id="startDate" v-model="startDate" placeholder="시작 날짜 선택" title="시작 날짜 선택" >
+            <span>~</span>
+            <input type="date" id="endDate" v-model="endDate" placeholder="종료 날짜 선택" title="종료 날짜 선택" >
           </td>
         </tr>
-        
-        <tr>
-          <td class="filter-label">반품/교환 신청일</td>
-          <td class="filter-input">
-            <input type="date" v-model="filterExchangeDate" />
-          </td>
-        </tr>
-        
       </table>
     </div>
     <div class="action-buttons">
@@ -48,29 +43,28 @@
         <img src="@/assets/icon/search.png" alt="Search" />
       </button>
     </div>
-
-    <input class="create-button" type="button" value="발주하기" @click="showPopup" style="  cursor : pointer; border:0; ">
-
+    <input class="create-button" type="button" value="발주하기" @click="showPopup" style="cursor: pointer; border:0;">
     <exchangePopup 
-        v-if="createPopup"
-        :showPopup="showPopup" 
-        :popupVisible="createPopup"
-        :franchiseCode="franchiseCode"
-        :franchiseOwnerCode="franchiseOwnerCode"
-        />
-
+      v-if="createPopup"
+      :showPopup="showPopup" 
+      :popupVisible="createPopup"
+      :franchiseCode="franchiseCode"
+      :franchiseOwnerCode="franchiseOwnerCode"
+    />
     <ExchangeDetail 
-        v-if="createDetailPopup" 
-        :showDetailPopup="showDetailPopup" 
-        :popupVisible="createDetailPopup" 
-        :detailItem="detailItem"
-        :franchiseCode="franchiseCode"
-        :franchiseOwnerCode="franchiseOwnerCode"/>
-
-    <table style=" margin-top: 5%;">
-      <thead >
-        <tr >
-          <th v-for="(header, index) in headers" :key="index" > <div align="center">{{ header.label }}</div></th>
+      v-if="createDetailPopup" 
+      :showDetailPopup="showDetailPopup" 
+      :popupVisible="createDetailPopup" 
+      :detailItem="detailItem"
+      :franchiseCode="franchiseCode"
+      :franchiseOwnerCode="franchiseOwnerCode"
+    />
+    <table style="margin-top: 5%;">
+      <thead>
+        <tr>
+          <th v-for="(header, index) in headers" :key="index">
+            <div align="center">{{ header.label }}</div>
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -78,8 +72,7 @@
             :id="'row-' + rowIndex"
             @dblclick="showDetailPopup(item)"
             @mouseenter="highlightRow(rowIndex)"
-            @mouseleave="resetRowColor(rowIndex)"
-        >
+            @mouseleave="resetRowColor(rowIndex)">
           <td v-for="(header, colIndex) in headers" :key="colIndex" align="center">
             {{ item[header.key] }}
           </td>
@@ -94,33 +87,23 @@
   </div>
 </template>
 
-
-
 <script setup>
 import { ref, computed } from 'vue';
 import exchangePopup from './exchangePopup.vue';
 import ExchangeDetail from './FranchiseExchangeDetail.vue';
 
 const lists = ref([]);
-
-// 추후 토큰으로 받을 예정
+const startDate = ref('');
+const endDate = ref('');
 const franchiseCode = 3;
 const franchiseOwnerCode = 3;
 
 const headers = ref([
   { key: 'exchangeCode', label: '주문 코드' },
   { key: 'exchangeStatus', label: '주문 상태' },
-  { key: 'exchangeDate', label: '가맹점 이름' },
-  { key: 'franchiseName', label: '주문 날짜' },
-  { key: 'franchiseOwnerName', label: '가맹점주 이름' },
-]);
+  { key: 'exchangeDate', label: '주문날짜' },
 
-const filter = ref('');
-const filteredLists = ref([]);
-const currentPage = ref(1);
-const itemsPerPage = 15;
-const dateFilter = ref('');
-const conditionFilter = ref('');
+]);
 
 const filterExchangeCode = ref('');
 const filterFranchiseName = ref('');
@@ -128,9 +111,14 @@ const filterFranchiseOwnerName = ref('');
 const filterInvoiceCode = ref('');
 const filterExchangeDate = ref('');
 
+const conditionFilter = ref('');
+const filteredLists = ref([]);
+const currentPage = ref(1);
+const itemsPerPage = 15;
+
 const getExchangeList = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/franchise/exchanges?franchiseOwnerCode=${franchiseOwnerCode}`, {
+    const response = await fetch(`http://localhost:5000/franchise/exchanges`, {
       method: 'GET',
       headers: {
         'access': `${localStorage.getItem('access')}`, // 인증 토큰을 포함하는 경우
@@ -138,14 +126,12 @@ const getExchangeList = async () => {
       }
     });
 
-    // 서버 응답 확인
     const contentType = response.headers.get('content-type');
     if (contentType && contentType.indexOf('application/json') !== -1) {
       const data = await response.json();
       if (data.length > 0) {
         lists.value = data.map(({ ...rest }) => rest);
         filteredLists.value = lists.value;
-        console.log(lists);
       } else {
         lists.value = [];
         filteredLists.value = [];
@@ -165,34 +151,19 @@ const resetFilters = () => {
   filterFranchiseOwnerName.value = "";
   filterInvoiceCode.value = "";
   filterExchangeDate.value = "";
+  startDate.value = '';
+  endDate.value = '';
   filteredLists.value = lists.value;
 };
 
 const applyFilter = () => {
-  currentPage.value = 1; // 필터 적용 시 페이지를 초기화합니다.
+  currentPage.value = 1;
   filteredLists.value = lists.value.filter(item =>
     (conditionFilter.value ? item.exchangeStatus === conditionFilter.value : true) &&
     (filterExchangeCode.value ? String(item.exchangeCode).includes(filterExchangeCode.value) : true) &&
-    (filterFranchiseName.value ? String(item.franchiseName).includes(filterFranchiseName.value) : true) &&
-    (filterFranchiseOwnerName.value ? String(item.franchiseOwnerName).includes(filterFranchiseOwnerName.value) : true) &&
-    (filterExchangeDate.value ? String(item.exchangeDate).includes(filterExchangeDate.value) : true)
+    (!startDate.value || item.exchangeDate >= startDate.value) &&
+    (!endDate.value || item.exchangeDate<= endDate.value)
   );
-
-  // 날짜를 오래된 순으로 정렬합니다.
-  if (dateFilter.value === 'old') {
-    filteredLists.value.sort((a, b) => compareDate(a.orderDate, b.orderDate));
-  } else if (dateFilter.value === 'recent') {
-    // 최근 순으로 정렬합니다.
-    filteredLists.value.sort((a, b) => compareDate(b.orderDate, a.orderDate));
-  }
-
-  console.log("Filtered Lists:", filteredLists.value);
-};
-
-const compareDate = (orderDateA, orderDateB) => {
-  const dateA = new Date(orderDateA);
-  const dateB = new Date(orderDateB);
-  return dateA - dateB; // 오래된 순으로 정렬
 };
 
 const paginatedLists = computed(() => {
@@ -206,15 +177,11 @@ const totalPages = computed(() => {
 });
 
 const nextPage = () => {
-  if (currentPage.value < totalPages.value) {
-    currentPage.value++;
-  }
+  if (currentPage.value < totalPages.value) currentPage.value++;
 };
 
 const prevPage = () => {
-  if (currentPage.value > 1) {
-    currentPage.value--;
-  }
+  if (currentPage.value > 1) currentPage.value--;
 };
 
 getExchangeList();
@@ -222,9 +189,7 @@ getExchangeList();
 const createPopup = ref(false);
 const createDetailPopup = ref(false);
 
-const showPopup = () => {
-  createPopup.value = !createPopup.value;
-};
+const showPopup = () => createPopup.value = !createPopup.value;
 
 const detailItem = ref(null);
 
@@ -233,17 +198,15 @@ const showDetailPopup = (item) => {
   createDetailPopup.value = !createDetailPopup.value;
 };
 
-const highlightRow = (index) => {
-  document.querySelector(`#row-${index}`).classList.add('highlighted');
-};
+const highlightRow = (index) => document.querySelector(`#row-${index}`).classList.add('highlighted');
 
-const resetRowColor = (index) => {
-  document.querySelector(`#row-${index}`).classList.remove('highlighted');
-};
+const resetRowColor = (index) => document.querySelector(`#row-${index}`).classList.remove('highlighted');
+
 </script>
 
-
-
 <style>
-  @import "../../assets/css/order.css" ;
+@import "../../assets/css/order.css";
+@import "../../assets/css/Breadcrumb.css";
+
 </style>
+

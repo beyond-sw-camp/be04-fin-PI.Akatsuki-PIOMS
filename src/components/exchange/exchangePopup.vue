@@ -118,7 +118,7 @@
   const getProducts = async () => {
     try {
 
-      const response = await fetch(`/api/warehouse/list?franchiseOwnerCode=${franchiseOwnerCode}`, {
+      const response = await fetch(`/api/warehouse/list`, {
         method: "GET",
       });
       if (!response.ok) {
@@ -182,7 +182,7 @@
   };
 
   try {
-    const response = await fetch(`/api/franchise/exchange?franchiseOwnerCode=${franchiseOwnerCode}`, {
+    const response = await fetch(`/api/franchise/exchange`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
