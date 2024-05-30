@@ -15,19 +15,19 @@
                 </td>
                 <td class="second-insert-input">
                   <select v-model="updateFirst" @change="fetchCategories('second')" class="categories">
-                    <option value="">대분류</option>
+                    <option value="">{{ props.currentCategoryFirstName }}</option> <!-- 변경된 부분 -->
                     <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">
                       {{ category.categoryFirstName }}
                     </option>
                   </select>
                   <select v-model="updateSecond" @change="fetchCategories('third')" class="categories-g">
-                    <option value="">중분류</option>
+                    <option value="">{{ props.currentCategorySecondName }}</option> <!-- 변경된 부분 -->
                     <option v-for="category in secondCategories" :key="category.categorySecondCode" :value="category.categorySecondCode">
                       {{ category.categorySecondName }}
                     </option>
                   </select>
                   <select v-model="updateThird" class="categories-g">
-                    <option value="">소분류</option>
+                    <option value="">{{ props.currentCategoryThirdName }}</option> <!-- 변경된 부분 -->
                     <option v-for="category in thirdCategories" :key="category.categoryThirdCode" :value="category.categoryThirdCode">
                       {{ category.categoryThirdName }}
                     </option>
@@ -147,9 +147,9 @@ const props = defineProps({
   currentProductExposureStatus: Boolean,
   currentProductColor: String,
   currentProductSize: String,
-  currentCategoryFirstCode: String,
-  currentCategorySecondCode: String,
-  currentCategoryThirdCode: String,
+  currentCategoryFirstName: String,
+  currentCategorySecondName: String,
+  currentCategoryThirdName: String,
   currentProductContent: String,
   closeEdit: Function
 });
@@ -162,58 +162,13 @@ const submitProduct = async () => {
     productExposureStatus: updateExposureStatus.value,
     productColor: updateColor.value,
     productSize: updateSize.value,
-    categoryFirstCode: updateFirst.value,
-    categorySecondCode: updateSecond.value,
-    categoryThirdCode: updateThird.value,
+    categoryFirstName: updateFirst.value,
+    categorySecondName: updateSecond.value,
+    categoryThirdName: updateThird.value,
     productContent: updateContent.value
   };
 
-  // 수정된 값을 저장할 객체
-  const updatedData = {};
-
-  // 수정된 값이 있는지 확인하고, 없으면 updatedData에 추가
-  if (updateName.value !== props.currentProductName) {
-    updatedData.productName = updateName.value;
-  }
-  if (updateCount.value !== props.currentProductCount) {
-    updatedData.productCount = updateCount.value;
-  }
-  if (updatePrice.value !== props.currentProductPrice) {
-    updatedData.productPrice = updatePrice.value;
-  }
-  if (updateStatus.value !== props.currentProductStatus) {
-    updatedData.productStatus = updateStatus.value;
-  }
-  if (updateExposureStatus.value !== props.currentProductExposureStatus) {
-    updatedData.productExposureStatus = updateExposureStatus.value;
-  }
-  if (updateColor.value !== props.currentProductColor) {
-    updatedData.productColor = updateColor.value;
-  }
-  if (updateSize.value !== props.currentProductSize) {
-    updatedData.productSize = updateSize.value;
-  }
-  if (updateFirst.value !== props.currentCategoryFirstCode) {
-    updatedData.categoryFirstCode = updateFirst.value;
-  }
-  if (updateSecond.value !== props.currentCategorySecondCode) {
-    updatedData.categorySecondCode = updateSecond.value;
-  }
-  if (updateThird.value !== props.currentCategoryThirdCode) {
-    updatedData.categoryThirdCode = updateThird.value;
-  }
-  if (updateContent.value !== props.currentProductContent) {
-    updatedData.productContent = updateContent.value;
-  }
-
-  // 수정된 값이 없는 경우에는 현재 표시된 값을 updatedData에 추가
-  if (Object.keys(updatedData).length === 0) {
-    for (const [key, value] of Object.entries(requestData)) {
-      updatedData[key] = value;
-    }
-  }
-
-  console.log('Request Data : ', updatedData);
+  console.log('Request Data : ', requestData);
 
   try {
     const response = await fetch(`http://localhost:5000/admin/product/update/${props.currentProductCode}`, {
@@ -221,7 +176,7 @@ const submitProduct = async () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(updatedData)
+      body: JSON.stringify(requestData)
     });
 
     if (!response.ok) {
@@ -235,8 +190,6 @@ const submitProduct = async () => {
     console.error('수정 실패:', error);
   }
 };
-
-
 
 const fetchCategories = async (level) => {
   let url = '';

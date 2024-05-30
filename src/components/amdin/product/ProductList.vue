@@ -109,7 +109,7 @@
         <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" 
             class="allpost"
             @dblclick="showModifyPopup(item.productCode,item.productName,item.productCount,item.productPrice,item.productStatus,item.productExposureStatus,
-                                        item.productColor,item.productSize,item.categoryFirstCode,item.categorySecondCode,item.categoryThirdCode,item.productContent)">
+                                        item.productColor,item.productSize,item.categoryFirstName,item.categorySecondName,item.categoryThirdName,item.productContent)">
           <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">
               {{ item[header.key] }}
             <template v-if="header.key === 'imgUrl'">
@@ -133,9 +133,9 @@
                                          :currentProductExposureStatus="currentProductExposureStatus"
                                          :currentProductColor="currentProductColor"
                                          :currentProductSize="currentProductSize"
-                                         :currentCategoryFirstCode="currentCategoryFirstCode"
-                                         :currentCategorySecondCode="currentCategorySecondCode"
-                                         :currentCategoryThirdCode="currentCategoryThirdCode"
+                                         :currentCategoryFirstName="currentCategoryFirstName"
+                                         :currentCategorySecondName="currentCategorySecondName"
+                                         :currentCategoryThirdName="currentCategoryThirdName"
                                          :currentProductContent="currentProductContent"
                                          :closeEdit="closeEdit"/>
   </div>
@@ -166,6 +166,7 @@ const filteredLists = ref([]);
 const currentPage = ref(1);
 const itemsPerPage = 15;
 const selectedExposureStatus = ref('전체');
+const filterProductName = ref('');
 const filterStatus = ref('');
 const filterColor = ref('');
 const filterSize = ref('');
@@ -187,15 +188,15 @@ const currentProductStatus = ref('');
 const currentProductExposureStatus = ref('');
 const currentProductColor = ref('');
 const currentProductSize = ref('');
-const currentCategoryFirstCode = ref('');
-const currentCategorySecondCode = ref('');
-const currentCategoryThirdCode = ref('');
+const currentCategoryFirstName = ref('');
+const currentCategorySecondName = ref('');
+const currentCategoryThirdName = ref('');
 const currentProductContent = ref('');
 const productImages = ref({});
 const editPopup = ref(false);
 
 const showModifyPopup = (productCode, productName, productCount, productPrice, productStatus, productExposureStatus, productColor, productSize,
-                          categoryFirstCode, categorySecondCode, categoryThirdCode, productContent) => {
+                          categoryFirstName, categorySecondName, categoryThirdName, productContent) => {
   editPopup.value = !editPopup.value;
   setCurrentProductCode(productCode);
   setCurrentProductName(productName);
@@ -205,9 +206,9 @@ const showModifyPopup = (productCode, productName, productCount, productPrice, p
   setCurrentProductExposureStatus(productExposureStatus);
   setCurrentProductColor(productColor);
   setCurrentProductSize(productSize);
-  setCurrentCategoryFirstCode(categoryFirstCode);
-  setCurrentCategorySecondCode(categorySecondCode);
-  setCurrentCategoryThirdCode(categoryThirdCode);
+  setCurrentCategoryFirstName(categoryFirstName);
+  setCurrentCategorySecondName(categorySecondName);
+  setCurrentCategoryThirdName(categoryThirdName);
   setCurrentProductContent(productContent);
 }
 const closeEdit = () => {
@@ -283,17 +284,20 @@ const fetchThirdCategories = async () => {
 };
 const applyFilters = () => {
   filteredLists.value = lists.value.filter(list => {
+    const matchesProductName = !filterProductName.value || list.productName.includes(filterProductName.value);
     const matchesExposureStatus = selectedExposureStatus.value === '전체' || list.productExposureStatus === (selectedExposureStatus.value === '노출');
     const matchesStatus = !filterStatus.value || list.productStatus === filterStatus.value;
     const matchesColor = !filterColor.value || list.productColor === filterColor.value;
     const matchesSize = !filterSize.value || list.productSize === parseInt(filterSize.value, 10);
     const matchesCategory = !selectedThirdCategory.value || list.categoryThirdCode === selectedThirdCategory.value;
 
-    return matchesExposureStatus && matchesStatus && matchesColor && matchesSize && matchesCategory;
+    return matchesProductName && matchesExposureStatus && matchesStatus && matchesColor && matchesSize && matchesCategory;
   });
 };
+
 const resetFilters = () => {
   selectedExposureStatus.value = '전체';
+  filterProductName.value = '';
   filterStatus.value = '';
   filterColor.value = '';
   filterSize.value = '';
@@ -330,14 +334,14 @@ const setCurrentProductSize = (productSize) => {
 const setCurrentProductContent = (productContent) => {
   currentProductContent.value = productContent;
 }
-const setCurrentCategoryFirstCode = (categoryFirstCode) => {
-  currentCategoryFirstCode.value = categoryFirstCode;
+const setCurrentCategoryFirstName = (categoryFirstName) => {
+  currentCategoryFirstName.value = categoryFirstName;
 }
-const setCurrentCategorySecondCode = (categorySecondCode) => {
-  currentCategorySecondCode.value = categorySecondCode;
+const setCurrentCategorySecondName = (categorySecondName) => {
+  currentCategorySecondName.value = categorySecondName;
 }
-const setCurrentCategoryThirdCode = (categoryThirdCode) => {
-  currentCategoryThirdCode.value = categoryThirdCode;
+const setCurrentCategoryThirdName = (categoryThirdName) => {
+  currentCategoryThirdName.value = categoryThirdName;
 }
 
 const getMemberId = async () => {
@@ -379,19 +383,12 @@ const downloadExcel = () => {
   });
 };
 const paginatedLists = computed(() => {
-  let items = [];
   const start = (currentPage.value - 1) * itemsPerPage;
   const end = start + itemsPerPage;
 
-  if (filteredLists.value.length < itemsPerPage) {
-    const remainingItems = itemsPerPage - filteredLists.value.length;
-    items = [...filteredLists.value, ...Array.from({ length: remainingItems }).map(() => ({}))];
-  } else {
-    items = filteredLists.value.slice(start, end);
-  }
-
-  return items;
+  return filteredLists.value.slice(start, end);
 });
+
 const totalPages = computed(() => {
   return Math.ceil(filteredLists.value.length / itemsPerPage);
 });
