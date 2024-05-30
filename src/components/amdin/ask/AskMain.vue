@@ -86,8 +86,8 @@
       <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
     </div>
   </div>
-  <Register v-if = "registPopup" :askCode="askCode" :closeRegist="closeRegist"/>
-  <Edit v-if = "editPopup" :askCode="askCode" :closeEdit="closeEdit"/>
+  <Register v-if="registPopup" :askCode="askCode" :closeRegist="closeRegist" @refreshData="refreshData"/>
+  <Edit v-if="editPopup" :askCode="askCode" :closeEdit="closeEdit" @refreshData="refreshData"/>
 </template>
 
 <script setup>
@@ -118,6 +118,11 @@ const franchises = ref([
   { code: 5, name: 'PIOMS 성수점' },
   { code: 6, name: 'PIOMS 논현점' },
 ]);
+
+const refreshData = () => {
+  fetchAsks(); // 데이터를 새로고침
+};
+
 
 const fetchAsks = async () => {
   try {
@@ -236,7 +241,7 @@ const closeEdit = () =>{
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 10px;
-  width: 1200px;
+  width: 1300px;
 }
 
 .filter-table td {
@@ -265,6 +270,7 @@ const closeEdit = () =>{
   display: flex;
   justify-content: center;
   margin-top: 10px;
+  margin-bottom: 20px;
 }
 
 .reset-btn, .search-btn {
@@ -290,8 +296,8 @@ const closeEdit = () =>{
 }
 
 .table {
-  width: 1200px;
-  max-width: 1200px;
+  width: 1300px;
+  max-width: 1300px;
   border-collapse: collapse;
   background-color: #fff;
   border-radius: 10px;
@@ -306,10 +312,19 @@ const closeEdit = () =>{
   text-align: center;
 }
 
-.boardname {
+.table th,td {
+  width: 50px;
+}
+
+.table th:nth-child(5), .table td:nth-child(5) {
+  width: 100px; /* 원하는 너비로 설정 */
+}
+
+td.boardname {
   text-decoration: none;
   color: black;
   cursor: pointer;
+  width: 150px;
 }
 
 .header1 {

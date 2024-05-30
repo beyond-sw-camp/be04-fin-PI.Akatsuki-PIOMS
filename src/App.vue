@@ -15,7 +15,6 @@
 <!--  </aside>-->
 
   <footer>
-     <Footer/>
   </footer>
 
 </template>

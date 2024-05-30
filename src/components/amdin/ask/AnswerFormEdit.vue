@@ -41,9 +41,11 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { defineEmits } from 'vue';
 
 const askData = ref(null);
 const answer = ref('');
+const emit = defineEmits(['refreshData']);
 const props = defineProps({
   askCode: Object,
   closeEdit: Function
@@ -108,6 +110,7 @@ const submitAnswer = async () => {
     }
 
     // Close the form after successful submission
+    emit('refreshData');
     props.closeEdit();
   } catch (error) {
     console.error('Failed to submit answer:', error);
@@ -132,7 +135,6 @@ onMounted(fetchAskData);
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  //padding: 20px;
   box-sizing: border-box;
 }
 
@@ -232,12 +234,12 @@ textarea {
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: #f5f5f5;
-  padding: 20px;
+  padding: 40px;
   border-radius: 30px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   width: 50%;
   max-width: 2000px;
-  height: 80%;
+  height: 65%;
   overflow-y: auto;
   max-height: 84vh;
 }

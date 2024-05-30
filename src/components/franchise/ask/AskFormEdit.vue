@@ -41,8 +41,10 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { defineEmits } from 'vue';
 
 const askData = ref(null);
+const emit = defineEmits(['refreshData']);
 const props = defineProps({
   askCode: Object,
   closeEdit: Function
@@ -106,6 +108,7 @@ const submitUpdate = async () => {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
+    emit('refreshData');
     props.closeEdit();
   } catch (error) {
     console.error('Failed to submit update:', error);
@@ -229,12 +232,12 @@ textarea {
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: #f5f5f5;
-  padding: 20px;
+  padding: 40px;
   border-radius: 30px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   width: 50%;
   max-width: 2000px;
-  height: 80%;
+  height: 65%;
   overflow-y: auto;
   max-height: 80vh;
 }
