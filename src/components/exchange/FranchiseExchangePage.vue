@@ -130,21 +130,28 @@ const filterExchangeDate = ref('');
 
 const getExchangeList = async () => {
   try {
-    const response = await fetch(`/api/franchise/exchanges?franchiseOwnerCode=${franchiseOwnerCode}`, {
+    const response = await fetch(`http://localhost:5000/franchise/exchanges?franchiseOwnerCode=${franchiseOwnerCode}`, {
       method: 'GET',
+      headers: {
+        'access': `${localStorage.getItem('access')}`, // 인증 토큰을 포함하는 경우
+        'Content-Type': 'application/json'
+      }
     });
 
-    if (!response.ok) {
-      throw new Error('네트워크 오류 발생');
-    }
-    const data = await response.json();
-    if (data.length > 0) {
-      lists.value = data.map(({ ...rest }) => rest);
-      filteredLists.value = lists.value;
-      console.log(lists);
+    // 서버 응답 확인
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.indexOf('application/json') !== -1) {
+      const data = await response.json();
+      if (data.length > 0) {
+        lists.value = data.map(({ ...rest }) => rest);
+        filteredLists.value = lists.value;
+        console.log(lists);
+      } else {
+        lists.value = [];
+        filteredLists.value = [];
+      }
     } else {
-      lists.value = [];
-      filteredLists.value = [];
+      console.error('Expected JSON, got:', await response.text());
     }
   } catch (error) {
     console.error('오류 발생:', error);
