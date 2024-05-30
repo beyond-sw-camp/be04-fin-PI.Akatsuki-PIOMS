@@ -86,8 +86,8 @@
       <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
     </div>
   </div>
-  <Register v-if="registPopup" :askCode="askCode" :closeRegist="closeRegist" @refreshData="refreshData"/>
-  <Edit v-if="editPopup" :askCode="askCode" :closeEdit="closeEdit" @refreshData="refreshData"/>
+  <Register v-if="registPopup" :askCode="askCode" :closeRegist="closeRegist"/>
+  <Edit v-if="editPopup" :askCode="askCode" :closeEdit="closeEdit"/>
 </template>
 
 <script setup>
@@ -95,6 +95,9 @@ import { ref, computed, onMounted } from 'vue';
 import Register from './AnswerFormRegister.vue';
 import Edit from './AnswerFormEdit.vue';
 import Breadcrumb from '@/components/amdin/ask/Breadcrumb.vue'; // Breadcrumb 컴포넌트 임포트
+import { useStore } from 'vuex'; // Vuex store 임포트
+
+const store = useStore(); // Vuex store 사용
 
 const asks = ref([]);
 const filteredAsks = ref([]);
@@ -126,12 +129,19 @@ const refreshData = () => {
 
 const fetchAsks = async () => {
   try {
+    const accessToken = store.state.accessToken;
+    if (!accessToken) {
+      throw new Error('No access token found');
+    }
+
     const response = await fetch('http://localhost:5000/admin/ask/list', {
       method: 'GET',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     });
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -143,6 +153,7 @@ const fetchAsks = async () => {
     console.error('Failed to fetch asks:', error);
   }
 };
+
 
 const applyFilters = () => {
   filteredAsks.value = asks.value.filter(ask => {
@@ -164,16 +175,21 @@ const resetFilters = () => {
   currentPage.value = 1; // 페이지 리셋
 };
 
-const formatDate = (dateArray) => {
-  if (!dateArray || dateArray.length === 0) return '날짜 없음';
-  const [year, month, day, hour = 0, minute = 0, second = 0] = dateArray;
-  const date = new Date(year, month - 1, day, hour, minute, second);
-  return date.toLocaleDateString('ko-KR', {
+const formatDate = (dateString) => {
+  if (!dateString) return '-';
+  const date = new Date(dateString);
+  if (isNaN(date)) return 'Invalid Date';
+  return date.toLocaleString('ko-KR', {
     year: 'numeric',
     month: '2-digit',
-    day: '2-digit'
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
   });
 };
+
 
 const paginatedAsks = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;

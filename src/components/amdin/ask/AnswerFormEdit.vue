@@ -77,14 +77,18 @@ const fetchAskData = async () => {
   }
 };
 
-const formatDate = (dateArray) => {
-  if (!dateArray || dateArray.length === 0) return '날짜 없음';
-  const [year, month, day, hour = 0, minute = 0, second = 0] = dateArray;
-  const date = new Date(year, month - 1, day, hour, minute, second);
-  return date.toLocaleDateString('ko-KR', {
+const formatDate = (dateString) => {
+  if (!dateString) return '-';
+  const date = new Date(dateString);
+  if (isNaN(date)) return 'Invalid Date';
+  return date.toLocaleString('ko-KR', {
     year: 'numeric',
     month: '2-digit',
-    day: '2-digit'
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
   });
 };
 
@@ -135,7 +139,6 @@ onMounted(fetchAskData);
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  //padding: 20px;
   box-sizing: border-box;
 }
 
@@ -213,11 +216,11 @@ textarea {
 }
 
 .cancel-btn:hover {
-  background-color: rgba(217, 217, 233, 0.56);
+  background-color: red; /* hover 시 빨간색으로 변경 */
 }
 
 .submit-btn:hover {
-  background-color: rgba(253, 111, 135, 0.63);
+  background-color: limegreen; /* hover 시 녹색으로 변경 */
 }
 .popup-overlay {
   position: fixed;
@@ -277,7 +280,4 @@ textarea {
   cursor: pointer;
 }
 
-.popup-content button:hover {
-  background-color: #45a049;
-}
 </style>
