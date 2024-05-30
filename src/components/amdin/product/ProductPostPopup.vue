@@ -69,7 +69,9 @@
             </table>
             <table class="second-insert-table">
               <tr>
-                <td class="second-insert-label"><div class="second-insert-label0">카테고리 구분</div></td>
+                <td class="second-insert-label">
+                  <div class="second-insert-label0">카테고리 구분</div>
+                </td>
                 <td class="second-insert-input">
                   <select v-model="selectedFirstCategory" @change="fetchCategories('second')" class="categories">
                     <option value="">대분류</option>
@@ -150,6 +152,7 @@ const selectedFirstCategory = ref('');
 const selectedSecondCategory = ref('');
 const selectedThirdCategory = ref('');
 let imageUrl = '';
+
 const fetchCategories = async (level) => {
   let url = '';
   switch (level) {
@@ -191,7 +194,6 @@ const resetImage = () => {
   imagePreview.value = imageSrc;
   imgOn.value = false;
 };
-
 const previewImage = (event) => {
   const file = event.target.files[0];
   if(file) {
@@ -233,7 +235,6 @@ const uploadImage = async () => {
     console.error('오류:', error);
   }
 };
-
 const saveProduct = async (imageUrl) => {
   const requestData = {
     productName: insertProductName.value,
@@ -272,11 +273,9 @@ const saveProduct = async (imageUrl) => {
     console.error('오류:', error);
   }
 };
-
 const closePopup = () => {
   emit('close');
 };
-
 onMounted(() => {
   const numberInputs = document.querySelectorAll('input[type="number"]');
   numberInputs.forEach(input => {
@@ -290,7 +289,6 @@ onMounted(() => {
       input.value = input.value.replace(/[^0-9]/g, '');
     });
   });
-
   fetchCategories('first');
 });
 

@@ -108,16 +108,14 @@
         <tbody>
         <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" 
             class="allpost"
-            @dblclick="showModifyPopup(item)">
+            @dblclick="showModifyPopup(item.productCode,item.productName,item.productCount,item.productPrice,item.productStatus,item.productExposureStatus,
+                                        item.productColor,item.productSize,item.categoryFirstCode,item.categorySecondCode,item.categoryThirdCode,item.productContent)">
           <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">
               {{ item[header.key] }}
             <template v-if="header.key === 'imgUrl'">
               <img :src="getProductImageUrl(item.productCode)" class="product-img" />
             </template>
           </td>
-        </tr>
-        <tr v-for="row in emptyRows" :key="'empty-' + row">
-          <td v-for="header in headers" :key="header.key"></td>
         </tr>
         </tbody>
       </table>
@@ -127,7 +125,19 @@
       <span> {{currentPage}} / {{totalPages}} </span>
       <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
     </div>
-    <ProductDetailPopup v-if="editPopup" :productCode="productCode" :closeEdit="closeEdit"/>
+    <ProductDetailPopup v-if="editPopup" :currentProductCode="currentProductCode"
+                                         :currentProductName="currentProductName"
+                                         :currentProductCount="currentProductCount"
+                                         :currentProductPrice="currentProductPrice"
+                                         :currentProductStatus="currentProductStatus"
+                                         :currentProductExposureStatus="currentProductExposureStatus"
+                                         :currentProductColor="currentProductColor"
+                                         :currentProductSize="currentProductSize"
+                                         :currentCategoryFirstCode="currentCategoryFirstCode"
+                                         :currentCategorySecondCode="currentCategorySecondCode"
+                                         :currentCategoryThirdCode="currentCategoryThirdCode"
+                                         :currentProductContent="currentProductContent"
+                                         :closeEdit="closeEdit"/>
   </div>
 </template>
 
@@ -173,20 +183,36 @@ const currentProductCode = ref('');
 const currentProductName = ref('');
 const currentProductCount = ref('');
 const currentProductPrice = ref('');
+const currentProductStatus = ref('');
+const currentProductExposureStatus = ref('');
+const currentProductColor = ref('');
 const currentProductSize = ref('');
+const currentCategoryFirstCode = ref('');
+const currentCategorySecondCode = ref('');
+const currentCategoryThirdCode = ref('');
 const currentProductContent = ref('');
 const productImages = ref({});
-const productCode = ref(null);
 const editPopup = ref(false);
 
-const showModifyPopup = (productCode1) => {
+const showModifyPopup = (productCode, productName, productCount, productPrice, productStatus, productExposureStatus, productColor, productSize,
+                          categoryFirstCode, categorySecondCode, categoryThirdCode, productContent) => {
   editPopup.value = !editPopup.value;
-  productCode.value = productCode1;
+  setCurrentProductCode(productCode);
+  setCurrentProductName(productName);
+  setCurrentProductCount(productCount);
+  setCurrentProductPrice(productPrice);
+  setCurrentProductStatus(productStatus);
+  setCurrentProductExposureStatus(productExposureStatus);
+  setCurrentProductColor(productColor);
+  setCurrentProductSize(productSize);
+  setCurrentCategoryFirstCode(categoryFirstCode);
+  setCurrentCategorySecondCode(categorySecondCode);
+  setCurrentCategoryThirdCode(categoryThirdCode);
+  setCurrentProductContent(productContent);
 }
 const closeEdit = () => {
   editPopup.value = !editPopup.value;
 }
-
 const getProductImageUrl = (productCode) => {
   return productImages.value[productCode] || 'path/to/default-image.jpg';
 };
@@ -210,7 +236,6 @@ const fetchProductImages = async () => {
     console.error('Error:', error);
   }
 };
-
 const fetchFirstCategories = async () => {
   try {
     const response = await fetch('http://localhost:5000/admin/category/first', {
@@ -224,7 +249,6 @@ const fetchFirstCategories = async () => {
     console.error('Error:', error);
   }
 };
-
 const fetchSecondCategories = async () => {
   if (selectedFirstCategory.value === '') {
     secondCategories.value = [];
@@ -242,7 +266,6 @@ const fetchSecondCategories = async () => {
     console.error('Error:', error);
   }
 };
-
 const fetchThirdCategories = async () => {
   if (selectedSecondCategory.value === '') {
     thirdCategories.value = [];
@@ -258,7 +281,6 @@ const fetchThirdCategories = async () => {
     console.error('Error:', error);
   }
 };
-
 const applyFilters = () => {
   filteredLists.value = lists.value.filter(list => {
     const matchesExposureStatus = selectedExposureStatus.value === '전체' || list.productExposureStatus === (selectedExposureStatus.value === '노출');
@@ -270,7 +292,6 @@ const applyFilters = () => {
     return matchesExposureStatus && matchesStatus && matchesColor && matchesSize && matchesCategory;
   });
 };
-
 const resetFilters = () => {
   selectedExposureStatus.value = '전체';
   filterStatus.value = '';
@@ -294,11 +315,29 @@ const setCurrentProductCount = (productCount) => {
 const setCurrentProductPrice = (productPrice) => {
   currentProductPrice.value = productPrice;
 }
+const setCurrentProductStatus = (productStatus) => {
+  currentProductStatus.value = productStatus;
+}
+const setCurrentProductExposureStatus = (productExposureStatus) => {
+  currentProductExposureStatus.value = productExposureStatus;
+}
+const setCurrentProductColor = (productColor) => {
+  currentProductColor.value = productColor;
+}
 const setCurrentProductSize = (productSize) => {
   currentProductSize.value = productSize;
 }
 const setCurrentProductContent = (productContent) => {
   currentProductContent.value = productContent;
+}
+const setCurrentCategoryFirstCode = (categoryFirstCode) => {
+  currentCategoryFirstCode.value = categoryFirstCode;
+}
+const setCurrentCategorySecondCode = (categorySecondCode) => {
+  currentCategorySecondCode.value = categorySecondCode;
+}
+const setCurrentCategoryThirdCode = (categoryThirdCode) => {
+  currentCategoryThirdCode.value = categoryThirdCode;
 }
 
 const getMemberId = async () => {
@@ -323,7 +362,6 @@ const getMemberId = async () => {
     console.error('오류 발생:', error);
   }
 };
-
 const downloadExcel = () => {
   axios({
     url: 'http://localhost:5000/admin/exceldownload/product-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
@@ -340,7 +378,6 @@ const downloadExcel = () => {
     console.error('Excel 다운로드 중 오류 발생:', error);
   });
 };
-
 const paginatedLists = computed(() => {
   let items = [];
   const start = (currentPage.value - 1) * itemsPerPage;
@@ -355,17 +392,14 @@ const paginatedLists = computed(() => {
 
   return items;
 });
-
 const totalPages = computed(() => {
   return Math.ceil(filteredLists.value.length / itemsPerPage);
 });
-
 const nextPage = () => {
   if (currentPage.value < totalPages.value) {
     currentPage.value++;
   }
 };
-
 const prevPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--;

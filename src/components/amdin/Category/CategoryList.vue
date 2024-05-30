@@ -78,7 +78,6 @@ import DeleteFirstPopup from "@/components/amdin/Category/DeleteFirstPopup.vue";
 import DeleteSecondPopup from "@/components/amdin/Category/DeleteSecondPopup.vue";
 import DeleteThirdPopup from "@/components/amdin/Category/DeleteThirdPopup.vue";
 
-
 const firstCategories = ref([]);
 const secondCategories = ref([]);
 const thirdCategories = ref([]);
@@ -120,7 +119,6 @@ const getCategoryFirstId = async () => {
     console.error('오류 발생: ', error);
   }
 };
-
 const fetchFirstCategories = async () => {
   try {
     const response = await fetch('http://localhost:5000/admin/category/first', {
@@ -134,7 +132,6 @@ const fetchFirstCategories = async () => {
     console.error('Error:', error);
   }
 };
-
 const fetchSecondCategories = async (categoryFirstCode) => {
   if (!categoryFirstCode) {
     secondCategories.value = [];
@@ -153,7 +150,6 @@ const fetchSecondCategories = async (categoryFirstCode) => {
     console.error('Error:', error);
   }
 };
-
 const fetchThirdCategories = async (categorySecondCode) => {
   if (!categorySecondCode) {
     thirdCategories.value = [];
