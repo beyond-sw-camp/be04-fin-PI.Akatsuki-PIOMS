@@ -25,7 +25,12 @@ jobs:
         run: ls -la node_modules
 
       - name: Build
-        run: npm run build
+        run: |
+          echo "Starting build process..."
+          npm run build
+        env:
+          # 필요한 환경 변수를 여기에 추가합니다.
+          NODE_ENV: production
 
       - name: Zip Artifacts
         run: zip -r deploy.zip dist server.js package.json Procfile
