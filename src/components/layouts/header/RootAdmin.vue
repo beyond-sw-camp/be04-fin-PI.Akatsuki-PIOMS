@@ -327,9 +327,8 @@ document.addEventListener('DOMContentLoaded', function() {
     height: 0;
     border: 0;
     border-top: 0.5px solid #B9B9B9;
-    margin: 25px;
     position: relative;
-    right: 15px;
+    top: 22px;
   }
   hr.hr3 {
     padding: 0;
