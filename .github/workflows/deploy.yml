@@ -30,31 +30,31 @@ jobs:
       - name: Zip Artifacts
         run: zip -r deploy.zip dist server.js package.json Procfile
 
-      - name: Upload to S3
-        run: aws s3 cp deploy.zip s3://elasticbeanstalk-ap-northeast-2-730335325274/${{ github.run_id }}.zip
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ap-northeast-2
-
-      - name: Deploy to Elastic Beanstalk (Green)
-        id: deploy
-        uses: einaregilsson/beanstalk-deploy@v22
-        with:
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          region: ap-northeast-2
-          application_name: AkatsukiFE
-          environment_name: AkatsukiFE-green-env
-          version_label: ${{ github.sha }}
-          deployment_package: deploy.zip
-          use_existing_version_if_available: true
-
-      - name: Check Green Environment Health
+      - name: Install AWS CLI
         run: |
-          STATUS=$(aws elasticbeanstalk describe-environments --environment-names AkatsukiFE-green-env --query 'Environments[0].Health' --output text)
+          sudo apt-get update
+          sudo apt-get install -y awscli
+
+      - name: Install Elastic Beanstalk CLI
+        run: |
+          pip install awsebcli
+
+      - name: Configure AWS CLI
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set default.region ap-northeast-2
+
+      - name: Deploy to Elastic Beanstalk
+        run: |
+          eb init AkatsukiFE --platform node.js --region ap-northeast-2
+          eb deploy AkatsukiFE-env
+
+      - name: Check Environment Health
+        run: |
+          STATUS=$(aws elasticbeanstalk describe-environments --environment-names AkatsukiFE-env --query 'Environments[0].Health' --output text)
           if [ "$STATUS" != "Green" ]; then
-            echo "Green environment health is not 'Green'. Current status: $STATUS"
+            echo "Environment health is not 'Green'. Current status: $STATUS"
             exit 1
           fi
         env:
@@ -62,37 +62,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ap-northeast-2
 
-      - name: Swap CNAME
+      - name: Get Logs
         run: |
-          echo "Swapping CNAMEs between AkatsukiFE-env and AkatsukiFE-green-env"
-          aws elasticbeanstalk swap-environment-cnames --source-environment-name AkatsukiFE-env --destination-environment-name AkatsukiFE-green-env
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ap-northeast-2
-
-      - name: Terminate Old Environment
-        run: |
-          echo "Checking if old environment AkatsukiFE-env exists"
-          EXISTS=$(aws elasticbeanstalk describe-environments --environment-names AkatsukiFE-env --query 'Environments' --output text)
-          if [ "$EXISTS" != "[]" ]; then
-            echo "Terminating old environment AkatsukiFE-env"
-            aws elasticbeanstalk terminate-environment --environment-name AkatsukiFE-env --terminate-resources
-          else
-            echo "Old environment AkatsukiFE-env does not exist. Skipping termination."
-          fi
-        if: always()
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ap-northeast-2
-
-      - name: Clean up old deployment packages
-        run: |
-          echo "Cleaning up old deployment packages from S3"
-          aws s3 rm s3://elasticbeanstalk-ap-northeast-2-730335325274/${{ github.run_id }}.zip
-        if: always()
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ap-northeast-2
+          eb logs AkatsukiFE-env
