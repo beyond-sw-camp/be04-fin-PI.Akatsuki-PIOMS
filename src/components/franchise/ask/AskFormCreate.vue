@@ -19,6 +19,7 @@
               <td colspan="3" class="content-td"><textarea v-model="askContent"></textarea></td>
             </tr>
           </table>
+          <div v-show="errorMessage" class="error-message">{{ errorMessage }}</div>
           <div class="action-buttons">
             <button @click="closeCreate" class="cancel-btn">취소</button>
             <button @click="submitAsk" class="submit-btn">등록</button>
@@ -62,6 +63,11 @@ const fetchFranchiseOwnerData = async () => {
 };
 
 const submitAsk = async () => {
+  if (!askTitle.value.trim() || !askContent.value.trim()) {
+    alert('제목과 내용은 필수 작성 요소입니다.');
+    return;
+  }
+
   try {
     const response = await fetch(`http://localhost:5000/franchise/ask/create/${franchiseOwnerCode}`, {
       method: 'POST',
@@ -181,7 +187,7 @@ textarea {
 }
 
 .submit-btn:hover {
-  background-color: green; /* hover 시 녹색으로 변경 */
+  background-color: limegreen; /* hover 시 녹색으로 변경 */
 }
 
 .popup-overlay {
@@ -248,5 +254,11 @@ textarea {
 
 .popup-content.submit-btn:hover {
   background-color: #45a049;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+  font-weight: bold;
 }
 </style>

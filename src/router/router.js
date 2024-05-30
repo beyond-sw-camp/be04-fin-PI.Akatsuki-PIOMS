@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import store from '@/store/store.js'; // Vuex 스토어 임포트
+
 import AnswerFormRegister from "@/components/amdin/ask/AnswerFormRegister.vue";
 import FranchiseLogin from "@/components/login/FranchiseLogin.vue";
 import DriverLogin from "@/components/login/DriverLogin.vue";
@@ -17,10 +19,7 @@ import CategoryList from "@/components/amdin/Category/CategoryList.vue";
 import OrderPage from '@/components/order/orderPage.vue';
 
 import ExchangePage from '@/components/exchange/exchangePage.vue';
-import NoticeList from "@/components/notice/noticeList.vue";
-
 import PostCategory from "@/components/amdin/Category/PostCategory.vue";
-
 import FavoriteRegister from "@/components/franchise/favorite/FavoriteRegister.vue";
 import FavoriteList from "@/components/franchise/favorite/FavoriteList.vue";
 import Log from "@/components/log/Log.vue";
@@ -50,67 +49,80 @@ const routes = [
     {
         path: '/admin/ask',
         name: 'AskMain',
-        component: AskMain
+        component: AskMain,
+        meta: { requiresAuth: true, role: ['ROLE_ADMIN', 'ROLE_ROOT'] }
     },
     {
         path: '/admin/answerform/register',
         name: 'AnswerFormRegister',
-        component: AnswerFormRegister
+        component: AnswerFormRegister,
+        meta: { requiresAuth: true, role: ['ROLE_ADMIN', 'ROLE_ROOT'] }
     },
     {
         path: '/admin/answerform/edit',
         name: 'AnswerFormEdit',
-        component: AnswerFormEdit
+        component: AnswerFormEdit,
+        meta: { requiresAuth: true, role: ['ROLE_ADMIN', 'ROLE_ROOT'] }
     },
     {
         path: '/franchise/ask',
         name: 'AskFRMain',
-        component: AskFRMain
+        component: AskFRMain,
+        meta: { requiresAuth: true, role: 'ROLE_OWNER' }
     },
     {
         path: '/franchise/askform/edit',
         name: 'AskFromEdit',
-        component: AskFormEdit
+        component: AskFormEdit,
+        meta: { requiresAuth: true, role: 'ROLE_OWNER' }
     },
     {
         path: '/franchise/askform/view',
         name: 'AskFormView',
-        component: AskFormView
+        component: AskFormView,
+        meta: { requiresAuth: true, role: 'ROLE_OWNER' }
     },
     {
         path: '/franchise/askform/create',
         name: 'AskFormCreate',
-        component: AskFormCreate
+        component: AskFormCreate,
+        meta: { requiresAuth: true, role: 'ROLE_OWNER' }
     },
     {
         path: '/order/list',
         name: 'orderList',
-        component: OrderPage
+        component: OrderPage,
+        meta: { requiresAuth: true, role: 'ROLE_ADMIN' }
     },
     {
         path: '/admin/product/list',
         name: 'AdminProductList',
-        component: ProductList
+        component: ProductList,
+        meta: { requiresAuth: true, role: ['ROLE_ADMIN', 'ROLE_ROOT'] }
     },
     {
         path: '/franchise/product/list',
         name: 'FranchiseProductList',
-        component: FrProductList
+        component: FrProductList,
+        meta: { requiresAuth: true, role: 'ROLE_OWNER' }
     },
     {
         path: '/admin/category/list',
         name: 'AdminProductCategoryList',
-        component: CategoryList
+        component: CategoryList,
+        meta: { requiresAuth: true, role: ['ROLE_ADMIN', 'ROLE_ROOT'] }
     },
     {
         path: '/admin/category/post',
         name: 'AdminProductCategoryPost',
-        component: PostCategory
+        component: PostCategory,
+        meta: { requiresAuth: true, role: ['ROLE_ADMIN', 'ROLE_ROOT'] }
     },
     {
         path: '/exchange/list',
         name: 'exchangeList',
-        component: ExchangePage
+        component: ExchangePage,
+        meta: { requiresAuth: true, role: 'ROLE_ADMIN' }
     },
     {
         path: '/admin/notice/list',
@@ -120,17 +132,20 @@ const routes = [
     {
         path: '/franchise/favorite/register',
         name: 'FranchiseFavoriteRegister',
-        component: FavoriteRegister
+        component: FavoriteRegister,
+        meta: { requiresAuth: true, role: 'ROLE_OWNER' }
     },
     {
         path: '/franchise/favorite/list',
         name: 'FranchiseFavoriteList',
-        component: FavoriteList
+        component: FavoriteList,
+        meta: { requiresAuth: true, role: 'ROLE_OWNER' }
     },
     {
         path: '/admin/logs',
         name: 'AdminLogs',
-        component: Log
+        component: Log,
+        meta: { requiresAuth: true, role: 'ROLE_ROOT' }
     },
     {
         path: '/driver/home',
@@ -143,4 +158,27 @@ const router = createRouter({
     history: createWebHistory(),
     routes
 });
+
+// 네비게이션 가드 설정
+router.beforeEach(async (to, from, next) => {
+    const isAuthenticated = store.getters.isAuthenticated;
+    const userRole = store.getters.userRole;
+
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        if (!isAuthenticated) {
+            next({ name: 'AdminLogin' });
+        } else {
+            const requiredRoles = to.meta.role;
+            if (requiredRoles && !requiredRoles.includes(userRole)) {
+                // 사용자가 해당 경로에 접근할 권한이 없는 경우
+                next({ name: 'AdminLogin' });
+            } else {
+                next();
+            }
+        }
+    } else {
+        next();
+    }
+});
+
 export default router;
