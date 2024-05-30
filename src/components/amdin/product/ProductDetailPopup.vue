@@ -121,6 +121,9 @@
 
 <script setup>
 import { onMounted, ref, defineProps } from 'vue';
+import { useStore } from 'vuex';
+const store = useStore();
+const accessToken = store.state.accessToken;
 
 const firstCategories = ref([]);
 const secondCategories = ref([]);
@@ -174,6 +177,7 @@ const submitProduct = async () => {
     const response = await fetch(`http://localhost:5000/admin/product/update/${props.currentProductCode}`, {
       method: 'PUT',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(requestData)
@@ -206,7 +210,13 @@ const fetchCategories = async (level) => {
   }
 
   try {
-    const response = await fetch(url, { method: 'GET' });
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
     if (!response.ok) {
       throw new Error(`${level} 카테고리를 불러오는 데 실패했습니다.`);
     }
@@ -228,6 +238,7 @@ const fetchCategories = async (level) => {
     console.error('Error:', error);
   }
 };
+
 onMounted(() => {
   const numberInputs = document.querySelectorAll('input[type="number"]');
   numberInputs.forEach(input => {
