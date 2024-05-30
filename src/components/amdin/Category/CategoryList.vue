@@ -11,8 +11,8 @@
       <ul>
         <li v-for="category in firstCategories" :key="category.categoryFirstCode" class="category-item">
           <div class="category-content">
-            <button style="width: 200px">
-              <span @click="fetchSecondCategories(category.categoryFirstCode)">
+            <button @click="fetchSecondCategories(category.categoryFirstCode)" style="width: 200px">
+              <span>
                 {{ category.categoryFirstName }}
               </span>
             </button>
@@ -29,8 +29,8 @@
       <ul>
         <li v-for="category in secondCategories" :key="category.categorySecondCode" class="category-item">
           <div class="category-content">
-            <button style="width: 200px">
-              <span @click="fetchThirdCategories(category.categorySecondCode)">
+            <button @click="fetchThirdCategories(category.categorySecondCode)" style="width: 200px">
+              <span>
                 {{ category.categorySecondName }}
               </span>
             </button>

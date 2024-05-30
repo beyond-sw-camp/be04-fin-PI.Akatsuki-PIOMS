@@ -124,7 +124,6 @@ const accessToken = store.state.accessToken;
 const firstCategories = ref([]);
 const secondCategories = ref([]);
 const thirdCategories = ref([]);
-
 const updateName = ref('');
 const updateCount = ref('');
 const updatePrice = ref('');
