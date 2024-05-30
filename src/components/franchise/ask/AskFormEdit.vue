@@ -41,8 +41,10 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { defineEmits } from 'vue';
 
 const askData = ref(null);
+const emit = defineEmits(['refreshData']);
 const props = defineProps({
   askCode: Object,
   closeEdit: Function
@@ -55,7 +57,7 @@ const fetchAskData = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://api.pioms.shop/franchise/ask/${askCode}`, {
+    const response = await fetch(`http://localhost:5000/franchise/ask/${askCode}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -74,14 +76,18 @@ const fetchAskData = async () => {
   }
 };
 
-const formatDate = (dateArray) => {
-  if (!dateArray || dateArray.length === 0) return '날짜 없음';
-  const [year, month, day, hour = 0, minute = 0, second = 0] = dateArray;
-  const date = new Date(year, month - 1, day, hour, minute, second);
-  return date.toLocaleDateString('ko-KR', {
+const formatDate = (dateString) => {
+  if (!dateString) return '-';
+  const date = new Date(dateString);
+  if (isNaN(date)) return 'Invalid Date';
+  return date.toLocaleString('ko-KR', {
     year: 'numeric',
     month: '2-digit',
-    day: '2-digit'
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
   });
 };
 
@@ -91,8 +97,12 @@ const submitUpdate = async () => {
     console.error('askCode is not defined');
     return;
   }
+  if (!askData.value.askTitle.trim() || !askData.value.askContent.trim()) {
+    alert('제목과 내용은 필수 작성 요소입니다.');
+    return;
+  }
   try {
-    const response = await fetch(`http://api.pioms.shop/franchise/update/${askCode}`, {
+    const response = await fetch(`http://localhost:5000/franchise/update/${askCode}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -106,6 +116,7 @@ const submitUpdate = async () => {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
+    emit('refreshData');
     props.closeEdit();
   } catch (error) {
     console.error('Failed to submit update:', error);
@@ -210,7 +221,7 @@ textarea {
 }
 
 .submit-btn:hover {
-  background-color: green;
+  background-color: limegreen;
 }
 
 .popup-overlay {
@@ -229,12 +240,12 @@ textarea {
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: #f5f5f5;
-  padding: 20px;
+  padding: 40px;
   border-radius: 30px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   width: 50%;
   max-width: 2000px;
-  height: 80%;
+  height: 65%;
   overflow-y: auto;
   max-height: 80vh;
 }

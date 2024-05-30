@@ -33,11 +33,12 @@
       <button @click="applyFilters" class="search-btn">
         <img src="@/assets/icon/search.png" alt="Search" />
       </button>
-    </div>
-
-    <div class="table-header">
       <button @click="showCreate" class="create-btn">문의작성</button>
     </div>
+
+<!--    <div class="table-header">-->
+<!--      <button @click="showCreate" class="create-btn">문의작성</button>-->
+<!--    </div>-->
 
     <div class="table-container">
       <table class="table">
@@ -81,9 +82,9 @@
       <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
     </div>
   </div>
-  <Create v-if = "createPopup" :closeCreate="closeCreate"/>
-  <Edit v-if = "editPopup" :askCode="askCode" :closeEdit="closeEdit"/>
-  <View v-if = "viewPopup" :askCode="askCode" :closeView="closeView"/>
+  <Create v-if = "createPopup" @refreshData="refreshData" :closeCreate="closeCreate"/>
+  <Edit v-if = "editPopup" @refreshData="refreshData" :askCode="askCode" :closeEdit="closeEdit"/>
+  <View v-if = "viewPopup" @refreshData="refreshData" :askCode="askCode" :closeView="closeView"/>
 </template>
 
 <script setup>
@@ -105,12 +106,11 @@ const itemsPerPage = 15;
 const breadcrumbs = [
   { label: '문의사항 조회 및 관리', link: null },
 ];
-
 const franchiseOwnerId = 1; // 점주 ID를 하드코딩합니다. 실제 구현에서는 로그인 시 세션이나 로컬스토리지에서 가져옵니다.
 
 const fetchAsks = async () => {
   try {
-    const response = await fetch(`http://api.pioms.shop/franchise/asklist/${franchiseOwnerId}`, {
+    const response = await fetch(`http://localhost:5000/franchise/asklist/${franchiseOwnerId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -145,16 +145,21 @@ const resetFilters = () => {
   currentPage.value = 1; // 페이지 리셋
 };
 
-const formatDate = (dateArray) => {
-  if (!dateArray || dateArray.length === 0) return '날짜 없음';
-  const [year, month, day, hour = 0, minute = 0, second = 0] = dateArray;
-  const date = new Date(year, month - 1, day, hour, minute, second);
-  return date.toLocaleDateString('ko-KR', {
+const formatDate = (dateString) => {
+  if (!dateString) return '-';
+  const date = new Date(dateString);
+  if (isNaN(date)) return 'Invalid Date';
+  return date.toLocaleString('ko-KR', {
     year: 'numeric',
     month: '2-digit',
-    day: '2-digit'
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
   });
 };
+
 
 const paginatedAsks = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
@@ -177,30 +182,6 @@ const nextPage = () => {
     currentPage.value++;
   }
 };
-
-// const openAskForm = (askCode, mode) => {
-//   const width = 800;
-//   const height = 650;
-//   const left = (window.screen.width / 2) - (width / 2);
-//   const top = (window.screen.height / 2) - (height / 2);
-//   const url = `http://localhost:5173/franchise/askform/${mode}?askCode=${askCode}`;
-//   window.open(url, 'popup', `width=${width},height=${height},top=${top},left=${left},toolbar=no,scrollbars=no,resizable=no`);
-// };
-//
-// // 문의 작성 버튼 클릭 시
-// const createAsk = () => {
-//   openAskForm(null, 'create');
-// };
-//
-// // 답변 등록 버튼 클릭 시
-// const editAsk = (askCode) => {
-//   openAskForm(askCode, 'edit');
-// };
-
-// 답변 수정 버튼 클릭 시
-// const viewAsk = (askCode) => {
-//   openAskForm(askCode, 'view');
-// };
 
 const askCode = ref(null);
 const createPopup = ref(false);
@@ -233,6 +214,11 @@ const closeView = () =>{
 onMounted(() => {
   fetchAsks();
 });
+
+const refreshData = () => {
+  fetchAsks(); // 데이터를 새로고침
+};
+
 </script>
 
 <style scoped>
@@ -253,7 +239,7 @@ onMounted(() => {
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 10px;
-  width: 1200px;
+  width: 1300px;
 }
 
 .filter-table td {
@@ -285,12 +271,14 @@ onMounted(() => {
 }
 
 .action-buttons {
-  display: flex;
+  display: grid;
+  grid-template-columns: 25% 5% 3% 3% 27% 6%;
   justify-content: center; /* 가운데 정렬 */
   margin-top: 10px;
+  margin-bottom: 20px;
 }
 
-.reset-btn, .search-btn {
+.reset-btn{
   background-color: #fff;
   color: black;
   border: none;
@@ -299,16 +287,23 @@ onMounted(() => {
   padding: 8px 8px;
   font-size: 14px;
   margin: 0 5px;
+  grid-column-start: 3;
+}
+
+.search-btn {
+  background-color: #fff;
+  color: black;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 8px 8px;
+  font-size: 14px;
+  margin: 0 5px;
+  grid-column-start: 4;
 }
 
 .reset-btn:hover, .search-btn:hover {
   background-color: #f0f0f0;
-}
-
-.table-header {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 10px;
 }
 
 .create-btn {
@@ -319,10 +314,10 @@ onMounted(() => {
   cursor: pointer;
   padding: 8px 16px;
   font-size: 14px;
-  margin: 0 5px;
-  position: relative;
-  top: 10px; /* 원하는 위치로 이동 */
-  right: 178px; /* 원하는 위치로 이동 */
+  //position: relative;
+  bottom: 3px; /* 원하는 위치로 이동 */
+  left: 546px ; /* 원하는 위치로 이동 */
+  grid-column-start:6 ;
 }
 
 .create-btn:hover {
@@ -331,15 +326,14 @@ onMounted(() => {
 
 .table-container {
   width: 100%;
-  margin-top: 10px; /* 리스트와의 간격 조정 */
   margin-bottom: 10px;
   display: flex;
   justify-content: center;
 }
 
 .table {
-  width: 1200px;
-  max-width: 1200px;
+  width: 1300px;
+  max-width: 1300px;
   border-collapse: collapse;
   background-color: #fff;
   border-radius: 10px;
@@ -354,10 +348,15 @@ onMounted(() => {
   text-align: center;
 }
 
-.boardname {
+.table th,td {
+  width: 40px;
+}
+
+td.boardname {
   text-decoration: none;
   color: black;
   cursor: pointer;
+  width: 150px;
 }
 
 .header1 {

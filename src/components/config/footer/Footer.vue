@@ -8,18 +8,25 @@
 </template>
 
 <style scoped>
-  /* footer css */
-  .footer {
-    //width: 100%;
-    height: 30px;
-    bottom: 10px;
-    padding: 10px 20px; /* 상하 좌우 여백 */
-    //box-shadow: 0 -1px 5px rgba(0,0,0,0.1); /* 약간의 그림자 효과 */
-  }
-  .footer_text {
-    font-size: 12px;
-    color: #B9B9B9;
-    top: 10px;
-    text-align: center;
-  }
+/* footer css */
+.footer {
+  width: 2100px;
+  height: 30px;
+  position: fixed;
+  bottom: 10px;
+  left: 0;
+  background-color: #ffffff;
+  padding: 10px 20px; /* 상하 좌우 여백 */
+  box-shadow: 0 -1px 5px rgba(0,0,0,0.1); /* 약간의 그림자 효과 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+.footer_text {
+  font-size: 12px;
+  color: #B9B9B9;
+  top: 10px;
+  text-align: center;
+}
 </style>

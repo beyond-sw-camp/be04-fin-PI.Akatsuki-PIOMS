@@ -23,6 +23,7 @@ import PostCategory from "@/components/amdin/Category/PostCategory.vue";
 import FavoriteRegister from "@/components/franchise/favorite/FavoriteRegister.vue";
 import FavoriteList from "@/components/franchise/favorite/FavoriteList.vue";
 import Log from "@/components/log/Log.vue";
+import DriverDashBoard from "@/components/driver/driverDashBoard.vue";
 
 const routes = [
     {
@@ -124,6 +125,11 @@ const routes = [
         meta: { requiresAuth: true, role: 'ROLE_ADMIN' }
     },
     {
+        path: '/admin/notice/list',
+        name: 'noticeList',
+        component: NoticeList
+    },
+    {
         path: '/franchise/favorite/register',
         name: 'FranchiseFavoriteRegister',
         component: FavoriteRegister,
@@ -140,6 +146,11 @@ const routes = [
         name: 'AdminLogs',
         component: Log,
         meta: { requiresAuth: true, role: 'ROLE_ROOT' }
+    },
+    {
+        path: '/driver/home',
+        name: 'DriverDashboard',
+        component: DriverDashBoard
     }
 ];
 

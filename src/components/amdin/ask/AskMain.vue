@@ -122,6 +122,11 @@ const franchises = ref([
   { code: 6, name: 'PIOMS 논현점' },
 ]);
 
+const refreshData = () => {
+  fetchAsks(); // 데이터를 새로고침
+};
+
+
 const fetchAsks = async () => {
   try {
     const accessToken = store.state.accessToken;
@@ -170,16 +175,21 @@ const resetFilters = () => {
   currentPage.value = 1; // 페이지 리셋
 };
 
-const formatDate = (dateArray) => {
-  if (!dateArray || dateArray.length === 0) return '날짜 없음';
-  const [year, month, day, hour = 0, minute = 0, second = 0] = dateArray;
-  const date = new Date(year, month - 1, day, hour, minute, second);
-  return date.toLocaleDateString('ko-KR', {
+const formatDate = (dateString) => {
+  if (!dateString) return '-';
+  const date = new Date(dateString);
+  if (isNaN(date)) return 'Invalid Date';
+  return date.toLocaleString('ko-KR', {
     year: 'numeric',
     month: '2-digit',
-    day: '2-digit'
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
   });
 };
+
 
 const paginatedAsks = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
@@ -247,7 +257,7 @@ const closeEdit = () =>{
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 10px;
-  width: 1200px;
+  width: 1300px;
 }
 
 .filter-table td {
@@ -276,6 +286,7 @@ const closeEdit = () =>{
   display: flex;
   justify-content: center;
   margin-top: 10px;
+  margin-bottom: 20px;
 }
 
 .reset-btn, .search-btn {
@@ -301,8 +312,8 @@ const closeEdit = () =>{
 }
 
 .table {
-  width: 1200px;
-  max-width: 1200px;
+  width: 1300px;
+  max-width: 1300px;
   border-collapse: collapse;
   background-color: #fff;
   border-radius: 10px;
@@ -317,10 +328,19 @@ const closeEdit = () =>{
   text-align: center;
 }
 
-.boardname {
+.table th,td {
+  width: 50px;
+}
+
+.table th:nth-child(5), .table td:nth-child(5) {
+  width: 100px; /* 원하는 너비로 설정 */
+}
+
+td.boardname {
   text-decoration: none;
   color: black;
   cursor: pointer;
+  width: 150px;
 }
 
 .header1 {

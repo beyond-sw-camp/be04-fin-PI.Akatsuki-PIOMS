@@ -7,10 +7,11 @@
   </div>
   <div class="category-select">
     <div class="categoryFirst-select">
+      <div class="select-title"><p>1차 카테고리(대분류)</p></div>
       <ul>
         <li v-for="category in firstCategories" :key="category.categoryFirstCode" class="category-item">
           <div class="category-content">
-            <button style="width: 300px">
+            <button style="width: 200px">
               <span @click="fetchSecondCategories(category.categoryFirstCode)">
                 {{ category.categoryFirstName }}
               </span>
@@ -24,10 +25,11 @@
       </ul>
     </div>
     <div class="categorySecond-select">
+      <div class="select-title"><p>2차 카테고리(중분류)</p></div>
       <ul>
         <li v-for="category in secondCategories" :key="category.categorySecondCode" class="category-item">
           <div class="category-content">
-            <button style="width: 300px">
+            <button style="width: 200px">
               <span @click="fetchThirdCategories(category.categorySecondCode)">
                 {{ category.categorySecondName }}
               </span>
@@ -41,10 +43,11 @@
       </ul>
     </div>
     <div class="categoryThird-select">
+      <div class="select-title"><p>3차 카테고리(소분류)</p></div>
       <ul>
         <li v-for="category in thirdCategories" :key="category.categoryThirdCode" class="category-item">
           <div class="category-content">
-            <button style="width: 300px">
+            <button style="width: 200px">
               <span>
                 {{ category.categoryThirdName }}
               </span>
@@ -98,7 +101,7 @@ const currentThirdName = ref('');
 
 const getCategoryFirstId = async () => {
   try {
-    const response = await fetch('api/admin/category/first', {
+    const response = await fetch('http://localhost:5000/admin/category/first', {
       method: 'GET',
     });
     if (!response.ok) {
@@ -120,7 +123,7 @@ const getCategoryFirstId = async () => {
 
 const fetchFirstCategories = async () => {
   try {
-    const response = await fetch('/api/admin/category/first', {
+    const response = await fetch('http://localhost:5000/admin/category/first', {
       method: 'GET',
     });
     if (!response.ok) {
@@ -139,7 +142,7 @@ const fetchSecondCategories = async (categoryFirstCode) => {
   }
   selectedFirstCategory.value = categoryFirstCode;
   try {
-    const response = await fetch(`/api/admin/category/second/list/detail/categoryfirst/${categoryFirstCode}`);
+    const response = await fetch(`http://localhost:5000/admin/category/second/list/detail/categoryfirst/${categoryFirstCode}`);
     if (!response.ok) {
       throw new Error('중분류를 불러오는 데 실패했습니다.');
     }
@@ -158,7 +161,7 @@ const fetchThirdCategories = async (categorySecondCode) => {
   }
   selectedSecondCategory.value = categorySecondCode;
   try {
-    const response = await fetch(`/api/admin/category/third/list/detail/categorysecond/${categorySecondCode}`);
+    const response = await fetch(`http://localhost:5000/admin/category/third/list/detail/categorysecond/${categorySecondCode}`);
     if (!response.ok) {
       throw new Error('소분류를 불러오는 데 실패했습니다.');
     }
@@ -230,9 +233,7 @@ fetchThirdCategories();
 
 <style scoped>
 .category-top {
-  display: inline-block;
-  vertical-align: middle;
-  line-height: 50px; /* 이미지 높이와 일치하게 설정 */
+  margin-left: 8%;
 }
 .category-top img {
   vertical-align: middle;
@@ -258,6 +259,7 @@ fetchThirdCategories();
 }
 .category-content button {
   width: 50px;
+  border-radius: 5px;
 }
 .category-actions {
   display: flex;
@@ -272,32 +274,40 @@ fetchThirdCategories();
   width: 100%;
   table-layout: fixed;
 }
-
-.category-select {
-  margin-top: 3%;
-  width: 1500px;
+.select-title {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  text-align: center;
+  background-color: #888888;
+  border-radius: 10px;
+  height: 50px;
+}
+.category-select {
+  width: 1450px;
+  display: flex;
+  justify-content: center;
   align-items: flex-start; /* Align items to the top */
   height: auto; /* Set height to auto */
   padding: 30px;
 }
 
 .categoryFirst-select, .categorySecond-select, .categoryThird-select {
-  border: 1px solid black;
-  width: 450px;
+  width: 370px;
   min-height: 400px; /* Set a minimum height */
   padding: 10px;
   overflow-y: auto; /* Enable vertical scrolling */
   max-height: 400px; /* Set a maximum height */
-
+  margin-left: 5%;
+  border: none;
+  border-radius: 15px;
+  background-color: #d9d9d9;
 }
 
 .categoryFirst-select ul, .categorySecond-select ul, .categoryThird-select ul {
   list-style: none;
   padding: 0;
   margin: 0;
-
+  border-radius: 5px;
 }
 
 .categoryFirst-select li, .categorySecond-select li, .categoryThird-select li {
@@ -313,9 +323,6 @@ fetchThirdCategories();
 }
 
 .categoryFirst-select button:hover, .categorySecond-select button:hover, .categoryThird-select button:hover {
-  background-color: #ddd;
-}
-.MD-btn {
-
+  background-color: #f0f0f0;
 }
 </style>

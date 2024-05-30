@@ -106,21 +106,14 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost">
+        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" 
+            class="allpost"
+            @dblclick="showModifyPopup(item)">
           <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">
-            <button v-if="header.key === 'productName'"
-                    class="button-as-text"
-                    @click="showModifyPopup(
-                        item.productCode,
-                        item.productName,
-                        item.productCount,
-                        item.productPrice,
-                        item.productSize,
-                        item.productContent
-                        )">
               {{ item[header.key] }}
-            </button>
-            <span v-else>{{ item[header.key] }}</span>
+            <template v-if="header.key === 'imgUrl'">
+              <img :src="getProductImageUrl(item.productCode)" class="product-img" />
+            </template>
           </td>
         </tr>
         <tr v-for="row in emptyRows" :key="'empty-' + row">
@@ -134,14 +127,7 @@
       <span> {{currentPage}} / {{totalPages}} </span>
       <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
     </div>
-    <ProductDetailPopup v-if="currentProductCode"
-                        :currentProductCode="currentProductCode"
-                        :currentProductName="currentProductName"
-                        :currentProductCount="currentProductCount"
-                        :currentProductPrice="currentProductPrice"
-                        :currentProductSize="currentProductSize"
-                        :currentProductContent="currentProductContent"
-                        @close="currentProductCode = null"/>
+    <ProductDetailPopup v-if="editPopup" :productCode="productCode" :closeEdit="closeEdit"/>
   </div>
 </template>
 
@@ -155,7 +141,7 @@ const lists = ref([]);
 const headers = ref([
   { key: 'productCode', label: '상품 코드'},
   { key: 'productName', label: '상품명'},
-  { key: 'url', label: '상품 이미지'},
+  { key: 'imgUrl', label: '상품 이미지'},
   { key: 'productCount', label: '본사 보유량'},
   { key: 'productDiscount', label: '본사 폐기량'},
   { key: 'productNoticeCount', label: '알림 기준 수량'},
@@ -182,19 +168,52 @@ const selectedSecondCategory = ref('');
 const selectedThirdCategory = ref('');
 
 const showPostPopup = ref(false);
+
 const currentProductCode = ref('');
 const currentProductName = ref('');
 const currentProductCount = ref('');
 const currentProductPrice = ref('');
-const currentProductStatus = ref('');
-const currentProductExposureStatus = ref('');
-const currentProductColor = ref('');
 const currentProductSize = ref('');
 const currentProductContent = ref('');
+const productImages = ref({});
+const productCode = ref(null);
+const editPopup = ref(false);
+
+const showModifyPopup = (productCode1) => {
+  editPopup.value = !editPopup.value;
+  productCode.value = productCode1;
+}
+const closeEdit = () => {
+  editPopup.value = !editPopup.value;
+}
+
+const getProductImageUrl = (productCode) => {
+  return productImages.value[productCode] || 'path/to/default-image.jpg';
+};
+const fetchProductImages = async () => {
+  try {
+    const response = await fetch(`http://localhost:5000/admin/product/productImage`, {
+      method: 'GET',
+    });
+    if(!response.ok) {
+      throw new Error('이미지를 불러오지 못했습니다.');
+    }
+    const productImagesData = await response.json();
+
+    productImages.value = productImagesData.reduce((map, item) => {
+      map[item.productCode] = item.imgUrl;
+      return map;
+    }, {});
+
+    console.log(productImages);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
 
 const fetchFirstCategories = async () => {
   try {
-    const response = await fetch('/api/admin/category/first', {
+    const response = await fetch('http://localhost:5000/admin/category/first', {
       method: 'GET',
     });
     if (!response.ok) {
@@ -212,7 +231,7 @@ const fetchSecondCategories = async () => {
     return;
   }
   try {
-    const response = await fetch(`/api/admin/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`);
+    const response = await fetch(`http://localhost:5000/admin/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`);
     if (!response.ok) {
       throw new Error('중분류를 불러오는 데 실패했습니다.');
     }
@@ -230,7 +249,7 @@ const fetchThirdCategories = async () => {
     return;
   }
   try {
-    const response = await fetch(`/api/admin/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`);
+    const response = await fetch(`http://localhost:5000/admin/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`);
     if (!response.ok) {
       throw new Error('소분류를 불러오는 데 실패했습니다.');
     }
@@ -269,7 +288,6 @@ const setCurrentProductCode = (productCode) => {
 const setCurrentProductName = (productName) => {
   currentProductName.value = productName;
 }
-
 const setCurrentProductCount = (productCount) => {
   currentProductCount.value = productCount;
 }
@@ -282,23 +300,10 @@ const setCurrentProductSize = (productSize) => {
 const setCurrentProductContent = (productContent) => {
   currentProductContent.value = productContent;
 }
-const showModifyPopup = (productCode,
-                         productName,
-                         productCount,
-                         productPrice,
-                         productSize,
-                         productContent) => {
-  setCurrentProductCode(productCode);
-  setCurrentProductName(productName);
-  setCurrentProductCount(productCount);
-  setCurrentProductPrice(productPrice);
-  setCurrentProductSize(productSize);
-  setCurrentProductContent(productContent);
-};
 
 const getMemberId = async () => {
   try {
-    const response = await fetch('/api/admin/product', {
+    const response = await fetch('http://localhost:5000/admin/product', {
       method: 'GET',
     });
 
@@ -328,7 +333,7 @@ const downloadExcel = () => {
     const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }));
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', 'productList.xlsx'); // 원하는 파일 이름 설정
+    link.setAttribute('download', 'ProductList.xlsx'); // 원하는 파일 이름 설정
     document.body.appendChild(link);
     link.click();
   }).catch((error) => {
@@ -368,12 +373,22 @@ const prevPage = () => {
 };
 
 getMemberId();
+fetchProductImages();
 fetchFirstCategories();
 fetchSecondCategories();
 fetchThirdCategories();
 </script>
 
 <style scoped>
+.product-img {
+  width: 30px;
+  height: 30px;
+  transition: transform 0.5s ease;
+}
+.product-img:hover {
+  transform: scale(3.3);
+}
+
 .pagination {
   margin-top: 10px;
   margin-bottom: 100px;
@@ -385,7 +400,6 @@ fetchThirdCategories();
 .filter-section {
   display: flex;
   justify-content: center;
-  margin: 0;
 }
 
 .filter-table {
@@ -483,7 +497,7 @@ fetchThirdCategories();
 .table th {
   font-weight: bold;
   color: #000;
-  width: 100px;
+  width: 100%;
   height: 10px;
   table-layout: fixed;
 }
@@ -548,8 +562,7 @@ fetchThirdCategories();
 }
 .headerTitle {
   text-align: left;
-  margin-left: 24.7%;
-  margin-bottom: 0.5%;
+  margin-left: 16.2%;
 }
 
 .product-sub-title {
@@ -566,5 +579,9 @@ fetchThirdCategories();
 .headerTitle h6 {
   margin: 0
 }
-
+.pagination button {
+  border: none;
+  border-radius: 10px;
+  width: 75px;
+}
 </style>

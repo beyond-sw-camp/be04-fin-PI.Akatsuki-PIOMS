@@ -36,7 +36,7 @@ const closeDeleteModal = () => {
 const deleteCategorySecond = async () => {
 
   try {
-    const response = await fetch(`/api/admin/category/second/delete/${props.currentSecondCode}?requesterAdminCode=1`, {
+    const response = await fetch(`http://localhost:5000/admin/category/second/delete/${props.currentSecondCode}?requesterAdminCode=1`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
