@@ -125,10 +125,11 @@ const checkExchange = async () => {
   console.log(requestData);
 
   try {
-    const response = await fetch(`/api/admin/exchange/${item.exchangeCode}?adminCode=${adminCode}`, {
+    const response = await fetch(`/api/admin/exchange/${item.exchangeCode}`, {
       method: 'PUT',
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        'access': `${localStorage.getItem('access')}`, // 인증 토큰을 포함하는 경우
       },
       body: JSON.stringify(requestData)
     });

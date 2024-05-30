@@ -97,8 +97,12 @@ const franchiseOwnerCode = ref(1);
 
 const deleteExchange = async () => {
   try {
-    const response = await fetch(`/api/franchise/exchange/${item.exchangeCode}?franchiseOwnerCode=${franchiseOwnerCode.value}`, {
-      method: 'DELETE'
+    const response = await fetch(`/api/franchise/exchange/${item.exchangeCode}`, {
+      method: 'DELETE',
+      headers: {
+        "Content-Type": "application/json",
+        'access': `${localStorage.getItem('access')}`, // 인증 토큰을 포함하는 경우
+      },
       });
     if (response.status == 406) {
       alert("삭제 불가..");

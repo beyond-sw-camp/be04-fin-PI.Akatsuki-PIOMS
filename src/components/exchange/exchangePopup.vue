@@ -118,8 +118,12 @@
   const getProducts = async () => {
     try {
 
-      const response = await fetch(`/api/warehouse/list`, {
+      const response = await fetch(`http://localhost:5000/warehouse/list`, {
         method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          'access': `${localStorage.getItem('access')}`, // 인증 토큰을 포함하는 경우
+        },
       });
       if (!response.ok) {
         throw new Error("네트워크 오류 발생");
@@ -185,7 +189,8 @@
     const response = await fetch(`/api/franchise/exchange`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        'access': `${localStorage.getItem('access')}`, // 인증 토큰을 포함하는 경우
       },
       body: JSON.stringify(exchangeData)
     });

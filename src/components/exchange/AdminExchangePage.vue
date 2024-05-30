@@ -1,4 +1,8 @@
 <template>
+  <div class="breadcrumbs">
+    <img src="../../assets/icon/List.png" alt="List Icon" class="breadcrumb-icon" />
+    <span>교환 조회 및 관리</span>
+  </div>
   <div>
     <div class="filter-section">
       <table class="filter-table">
@@ -115,8 +119,13 @@ const filterExchangeDate = ref('');
 
 const getExchangeList = async () => {
   try {
-    const response = await fetch(`/api/admin/exchanges?adminCode=${adminCode.value}`, {
+    // const response = await fetch(`/api/admin/exchanges`, {
+    const response = await fetch(`http://localhost:5000/admin/exchanges`, {
       method: 'GET',
+      headers: {
+        "Content-Type": "application/json",
+        'access': `${localStorage.getItem('access')}`, // 인증 토큰을 포함하는 경우
+      },
     });
 
     if (!response.ok) {
