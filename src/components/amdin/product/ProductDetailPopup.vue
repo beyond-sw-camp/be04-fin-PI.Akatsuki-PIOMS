@@ -8,6 +8,33 @@
       <div class="popup-body">
         <div class="insert-section">
           <div class="table-wrapper">
+            <table class="category-table">
+              <tr>
+                <td class="second-insert-label">
+                  <div class="second-insert-label0">카테고리 구분</div>
+                </td>
+                <td class="second-insert-input">
+                  <select v-model="updateFirst" @change="fetchCategories('second')" class="categories">
+                    <option value="">대분류</option>
+                    <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">
+                      {{ category.categoryFirstName }}
+                    </option>
+                  </select>
+                  <select v-model="updateSecond" @change="fetchCategories('third')" class="categories-g">
+                    <option value="">중분류</option>
+                    <option v-for="category in secondCategories" :key="category.categorySecondCode" :value="category.categorySecondCode">
+                      {{ category.categorySecondName }}
+                    </option>
+                  </select>
+                  <select v-model="updateThird" class="categories-g">
+                    <option value="">소분류</option>
+                    <option v-for="category in thirdCategories" :key="category.categoryThirdCode" :value="category.categoryThirdCode">
+                      {{ category.categoryThirdName }}
+                    </option>
+                  </select>
+                </td>
+              </tr>
+            </table>
             <table class="insert-table">
               <tr>
                 <td class="insert-label">상품명</td>
@@ -65,31 +92,6 @@
               </tr>
             </table>
             <table class="second-insert-table">
-              <tr>
-                <td class="second-insert-label">
-                  <div class="second-insert-label0">카테고리 구분</div>
-                </td>
-                <td class="second-insert-input">
-                  <select v-model="updateFirst" @change="fetchCategories('second')" class="categories">
-                    <option value="">대분류</option>
-                    <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">
-                      {{ category.categoryFirstName }}
-                    </option>
-                  </select>
-                  <select v-model="updateSecond" @change="fetchCategories('third')" class="categories-g">
-                    <option value="">중분류</option>
-                    <option v-for="category in secondCategories" :key="category.categorySecondCode" :value="category.categorySecondCode">
-                      {{ category.categorySecondName }}
-                    </option>
-                  </select>
-                  <select v-model="updateThird" class="categories-g">
-                    <option value="">소분류</option>
-                    <option v-for="category in thirdCategories" :key="category.categoryThirdCode" :value="category.categoryThirdCode">
-                      {{ category.categoryThirdName }}
-                    </option>
-                  </select>
-                </td>
-              </tr>
               <tr>
                 <td class="second-insert-label">
                   <div class="second-insert-label0">상세정보</div>
@@ -421,7 +423,14 @@ h2 {
   height: 30px;
 
 }
-
+.category-table {
+  border-collapse: collapse;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  border-top: none;
+}
 .second-insert-table {
   border-collapse: collapse;
   background-color: #f9f9f9;
@@ -430,7 +439,9 @@ h2 {
   padding: 10px;
   border-top: none;
 }
-
+.category-table tr {
+  text-align: left;
+}
 .second-insert-table tr {
   text-align: center;
 }
