@@ -52,6 +52,28 @@ thead {
   justify-content: center;
   align-items: center;
 }
+.pagination button{
+  padding: 5px 10px;
+  background-color: white;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.pagination button:hover{
+  padding: 5px 10px;
+  background-color: rgb(101, 101, 101);
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.pagination button:active{
+  padding: 5px 10px;
+  background-color: black;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
 
 button {
   margin: 0 5px;
@@ -231,11 +253,14 @@ button {
 .popup-content button:hover {
   background-color: #45a049;
 }
-
+/* 
 .img {
   height: 90%;
   width: 90%;
+  bv
 }
+
+
 
 .imgForm {
   background-color: #b7b7b7;
@@ -246,7 +271,7 @@ button {
   border-radius: 30px;
   padding: 1px 15px 15px;
   margin: 10px;
-}
+} */
 
 .but-group {
   display: flex;
@@ -329,9 +354,14 @@ button {
   border: none;
   border-radius: 4px;
   /* cursor: pointer; */
-  padding: 8px 8px;
+
   font-size: 14px;
   margin: 0 5px;
 }
 
- 
+
+.reset-btn img:hover, .search-btn img:hover{
+  filter: 
+      /* blur(2px)  */
+      brightness(1.2);
+}
