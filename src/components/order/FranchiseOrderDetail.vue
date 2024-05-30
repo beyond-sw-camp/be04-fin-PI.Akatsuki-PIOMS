@@ -116,6 +116,8 @@
 <script setup>
    import { ref } from "vue";
    import axios from 'axios';
+   import { useStore } from 'vuex'; // Vuex store 임포트
+   const store = useStore(); // Vuex store 사용
 
   const exchangeHeaders = ref([
     { key: 'productName', label: '상품명' },
@@ -160,11 +162,17 @@ const gumsoo = async () => {
   console.log(requestData);
 
   try {
+
+    const accessToken = store.state.accessToken;
+    if (!accessToken) {
+      throw new Error('No access token found');
+    }
     const response = await fetch(`/api/franchise/order/check?franchiseOwnerCode=${franchiseOwnerCode}`, {
       method: 'PUT',
       headers: {
-          "Content-Type": "application/json"
-        },
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
         body: JSON.stringify(requestData)
     });
     if(response.status ==406){

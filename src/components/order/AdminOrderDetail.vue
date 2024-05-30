@@ -174,6 +174,9 @@
 <script setup>
    import { ref } from "vue";
    import axios from 'axios';
+   import { useStore } from 'vuex'; // Vuex store 임포트
+  const store = useStore(); // Vuex store 사용
+
 
    const headers = ref([
     /*{ key: 'requestProductCode', label: '상품 코드' },*/
@@ -200,15 +203,18 @@
  const adminCode = 2;
  const franchiseCode = 1;
 const accpetOrder = async () => {
-    const authToken = localStorage.getItem('access');
-    const headers = {
-            'access': authToken,
-            'Content-Type': 'application/json',
-        };
     try {
+
+      const accessToken = store.state.accessToken;
+        if (!accessToken) {
+          throw new Error('No access token found');
+      }
       const response = await fetch(`http://localhost:5000/admin/order/${item.orderCode}/accept`, {
         method: 'PUT',
-        headers: headers,
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
         credentials: 'include'
       });
       if(response.status ==406){
@@ -238,15 +244,19 @@ const clickDeny = () =>{
 }
 
 const denyOrder = async () => {
-    const authToken = localStorage.getItem('access');
-    const headers = {
-            'access': authToken,
-            'Content-Type': 'application/json',
-        };
+
     try {
+      const accessToken = store.state.accessToken;
+      if (!accessToken) {
+        throw new Error('No access token found');
+      }
+
       const response = await fetch(`http://localhost:5000/admin/order/${item.orderCode}/deny?denyMessage=${reason.value}`, {
         method: 'PUT',
-        headers: headers,
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
         credentials: 'include'
       });
       if(response.status ==406){

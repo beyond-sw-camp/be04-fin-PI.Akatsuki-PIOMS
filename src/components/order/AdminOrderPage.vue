@@ -96,6 +96,9 @@
 <script setup>
 import { ref, computed } from 'vue';
 import OrderDetail from './AdminOrderDetail.vue';
+import { useStore } from 'vuex'; // Vuex store 임포트
+const store = useStore(); // Vuex store 사용
+
 
 const lists = ref([]);
 
@@ -129,14 +132,16 @@ const filterOrderDate = ref('');
 const getOrderList = async () => {
 
   try {
-    const authToken = localStorage.getItem('access');
-    const headers = {
-            'access': authToken,
-            'Content-Type': 'application/json',
-        };
+    const accessToken = store.state.accessToken;
+    if (!accessToken) {
+      throw new Error('No access token found');
+    }
     const response = await fetch(`http://localhost:5000/admin/orders`, {
       method: 'GET',
-      headers: headers,
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
       credentials: 'include'
     });
 

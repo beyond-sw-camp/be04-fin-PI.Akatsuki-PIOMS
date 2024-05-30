@@ -104,6 +104,9 @@
   
 <script setup>
   import { ref } from "vue";
+  import { useStore } from 'vuex'; // Vuex store 임포트
+  const store = useStore(); // Vuex store 사용
+
 
   const props = defineProps({
     showPopup: Function,
@@ -202,16 +205,18 @@
     products: productsData,
     franchiseCode: franchiseCode
   };
-  const authToken = localStorage.getItem('access');
-    const headers = {
-            'access': authToken,
-            'Content-Type': 'application/json',
-            "Content-Type": "application/json"
-        };
+
   try {
+    const accessToken = store.state.accessToken;
+    if (!accessToken) {
+      throw new Error('No access token found');
+    }
     const response = await fetch(`http://localhost:5000/franchise/order`, {
-        method: "POST",
-        headers: headers,
+        method: "POST",        
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
         credentials: 'include',
         body: JSON.stringify(orderData)
       });

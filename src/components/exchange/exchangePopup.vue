@@ -83,6 +83,8 @@
   
 <script setup>
   import { ref } from "vue";
+  import { useStore } from 'vuex'; // Vuex store 임포트
+  const store = useStore(); // Vuex store 사용e
   
   const props = defineProps({
     showPopup: Function,
@@ -117,12 +119,15 @@
 
   const getProducts = async () => {
     try {
-
+      const accessToken = store.state.accessToken;
+      if (!accessToken) {
+        throw new Error('No access token found');
+      }
       const response = await fetch(`http://localhost:5000/warehouse/list`, {
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
-          'access': `${localStorage.getItem('access')}`, // 인증 토큰을 포함하는 경우
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
         },
       });
       if (!response.ok) {

@@ -88,6 +88,8 @@
 <script setup>
 import { ref } from "vue";
 import axios from 'axios';
+import { useStore } from 'vuex'; // Vuex store 임포트
+const store = useStore(); // Vuex store 사용
 
 const headers = ref([
   { key: 'productName', label: '상품명' },
@@ -125,11 +127,16 @@ const checkExchange = async () => {
   console.log(requestData);
 
   try {
+
+ const accessToken = store.state.accessToken;
+    if (!accessToken) {
+      throw new Error('No access token found');
+    }
     const response = await fetch(`/api/admin/exchange/${item.exchangeCode}`, {
       method: 'PUT',
       headers: {
-        "Content-Type": "application/json",
-        'access': `${localStorage.getItem('access')}`, // 인증 토큰을 포함하는 경우
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(requestData)
     });
