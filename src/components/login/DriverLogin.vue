@@ -22,10 +22,12 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import Swal from 'sweetalert2';
+import { useStore } from 'vuex';
 
 const username = ref('');
 const password = ref('');
 const router = useRouter();
+const store = useStore();
 
 const login = async () => {
   try {
@@ -37,33 +39,46 @@ const login = async () => {
       body: JSON.stringify({
         driverId: username.value,
         driverPassword: password.value,
-      })
+      }),
+      credentials: 'include' // 쿠키를 포함하기 위해 설정
     });
 
     if (response.ok) {
-      await router.push('/driver/home');
+      console.log('로그인 성공, 응답 헤더:', response.headers);
+
+      const accessToken = response.headers.get('Authorization')?.substring(7).trim();
+      localStorage.setItem('accessToken', accessToken);
+      console.log('추출한 accessToken:', accessToken);
+
+      if (accessToken) {
+        await store.dispatch('login', { accessToken });
+        await router.push('/driver/home');
+      } else {
+        throw new Error('Access token not found');
+      }
     } else {
-      Swal.fire({
+      await Swal.fire({
         icon: 'error',
         title: '로그인 실패',
         text: '자격 증명을 확인하세요.',
         position: 'center',
-        backdrop: `rgba(0,0,0,0.4)`,
+        backdrop: `rgba(0, 0, 0, 0.4)`,
         allowOutsideClick: false,
       });
     }
   } catch (error) {
-    Swal.fire({
+    await Swal.fire({
       icon: 'error',
       title: '오류 발생',
       text: '오류가 발생했습니다. 다시 시도하세요.',
       position: 'center',
-      backdrop: `rgba(0,0,0,0.4)`,
+      backdrop: `rgba(0, 0, 0, 0.4)`,
       allowOutsideClick: false,
     });
   }
 };
 </script>
+
 
 <style scoped>
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
@@ -73,11 +88,7 @@ const login = async () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  position: absolute; /* 절대 위치로 설정 */
-  top: 50%; /* 세로 중앙 정렬 */
-  left: 50%; /* 가로 중앙 정렬 */
-  transform: translate(-50%, -50%); /* 중앙 정렬을 위한 변환 */
+  height: 90vh;
 }
 
 .logo {
