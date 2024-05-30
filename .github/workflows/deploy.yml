@@ -73,8 +73,24 @@ jobs:
 
       - name: Terminate Old Environment
         run: |
-          echo "Terminating old environment AkatsukiFE-env"
-          aws elasticbeanstalk terminate-environment --environment-name AkatsukiFE-env --terminate-resources
+          echo "Checking if old environment AkatsukiFE-env exists"
+          EXISTS=$(aws elasticbeanstalk describe-environments --environment-names AkatsukiFE-env --query 'Environments' --output text)
+          if [ "$EXISTS" != "[]" ]; then
+            echo "Terminating old environment AkatsukiFE-env"
+            aws elasticbeanstalk terminate-environment --environment-name AkatsukiFE-env --terminate-resources
+          else
+            echo "Old environment AkatsukiFE-env does not exist. Skipping termination."
+          fi
+        if: always()
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-northeast-2
+
+      - name: Clean up old deployment packages
+        run: |
+          echo "Cleaning up old deployment packages from S3"
+          aws s3 rm s3://elasticbeanstalk-ap-northeast-2-730335325274/${{ github.run_id }}.zip
         if: always()
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
