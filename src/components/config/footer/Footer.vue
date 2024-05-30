@@ -15,11 +15,13 @@
   position: fixed;
   bottom: 10px;
   left: 0;
+  background-color: #ffffff;
   padding: 10px 20px; /* 상하 좌우 여백 */
   box-shadow: 0 -1px 5px rgba(0,0,0,0.1); /* 약간의 그림자 효과 */
   display: flex;
-  justify-content: flex-end;
-  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
 }
 .footer_text {
   font-size: 12px;

@@ -1,6 +1,6 @@
 <template>
   <div class="notice-form">
-    <h2>공지사항 등록</h2>
+    <h2>공지사항 수정</h2>
     <button class="close-btn" @click="closeForm">X</button>
     <form @submit.prevent="submitForm">
       <div>
@@ -11,7 +11,7 @@
         <label for="noticeContent">내용</label>
         <textarea v-model="noticeContent" required></textarea>
       </div>
-      <button type="submit">등록</button>
+      <button type="submit">수정</button>
     </form>
   </div>
 </template>
@@ -30,12 +30,6 @@ const submitForm = () => {
     noticeContent: noticeContent.value
   };
   emit('submit', notice);
-  resetForm();
-};
-
-const resetForm = () => {
-  noticeTitle.value = '';
-  noticeContent.value = '';
 };
 
 const closeForm = () => {

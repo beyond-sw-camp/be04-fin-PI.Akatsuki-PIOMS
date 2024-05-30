@@ -24,6 +24,7 @@ import PostCategory from "@/components/amdin/Category/PostCategory.vue";
 import FavoriteRegister from "@/components/franchise/favorite/FavoriteRegister.vue";
 import FavoriteList from "@/components/franchise/favorite/FavoriteList.vue";
 import Log from "@/components/log/Log.vue";
+import DriverDashBoard from "@/components/driver/driverDashBoard.vue";
 
 const routes = [
     {
@@ -130,6 +131,11 @@ const routes = [
         path: '/admin/logs',
         name: 'AdminLogs',
         component: Log
+    },
+    {
+        path: '/driver/home',
+        name: 'DriverDashboard',
+        component: DriverDashBoard
     }
 ];
 

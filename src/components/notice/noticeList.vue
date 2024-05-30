@@ -7,7 +7,7 @@
       <span class="F-title">공지사항 조회 관리</span>
     </div>
 
-    <br />
+    <br/>
     <table class="read-filter">
       <tr>
         <td class="filter-label">공지 조회 조건</td>
@@ -42,9 +42,11 @@
     </div>
 
     <!-- 공지사항 등록 버튼 -->
-    <button type="button" class="btn-saveNotice" :class="{ 'btn-saveNotice-pending': isFormVisible }" @click="toggleForm">
-      공지사항 등록
-    </button>
+
+    <button class="btn-saveNotice" @click="showRegisterForm">공지사항 등록</button>
+
+    <!-- 공지사항 등록 팝업 -->
+    <NoticeResisterPopup v-if="isFormVisible && !isEditMode" :notice="newNotice" @close="toggleForm" @submit="submitNotice" />
 
     <!-- 오버레이 -->
     <div v-if="isFormVisible" class="overlay" @click="toggleForm"></div>
@@ -70,43 +72,33 @@
     <table class="data-table">
       <thead>
       <tr>
-        <th v-for="header in headers" :key="header.key">{{ header.label }}</th>
+        <th v-for="header in headers" :key="header.key || header.label">{{ header.label }}</th>
       </tr>
       </thead>
       <tbody>
       <tr v-for="item in paginatedLists" :key="item.noticeCode">
         <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">
-          <button v-if="header.key === 'noticeTitle'" @click="showDetailsNoticePopup(item)"> {{ item[header.key] }} </button>
-        </td>
-        <td>{{ item.noticeCode }}</td>
-        <td>{{ item.noticeTitle }}</td>
-        <td>{{ item.noticeContent }}</td>
-        <td>{{ formatDate(item.noticeEnrollDate) }}</td>
-        <td>
-          <button @click="toggleForm(true, item)">수정</button>
-          <button @click="deleteNotice(item.noticeCode)">삭제</button>
+          <template v-if="header.key">
+            <button v-if="header.key === 'noticeTitle'" @click="showDetailsNoticePopup(item)">
+              {{ item[header.key] }}
+            </button>
+            <span v-else>{{ item[header.key] }}</span>
+          </template>
+          <template v-else>
+            <button @click="toggleForm(true, item)">수정</button>
+            <button @click="deleteNotice(item.noticeCode)">삭제</button>
+          </template>
         </td>
       </tr>
       </tbody>
     </table>
 
     <!-- 공지사항 상세 정보 팝업 -->
-    <div v-if="isDetailPopupVisible" class="overlay">
-      <div class="notice-form">
-        <button class="close-btn" @click="closeDetailsPopup">X</button>
-        <h2>공지사항 상세 정보</h2>
-        <form>
-          <div>
-            <label for="detailTitle">제목</label>
-            <input type="text" id="detailTitle" v-model="selectedNotice.noticeTitle" disabled />
-          </div>
-          <div>
-            <label for="detailContent">내용</label>
-            <textarea id="detailContent" v-model="selectedNotice.noticeContent" disabled></textarea>
-          </div>
-        </form>
-      </div>
-    </div>
+    <NoticeDetailsPopup v-if="viewPopup" :notice="selectedNotice" @close="closeDetailsPopup"/>
+
+    <!-- 공지사항 수정 팝업 -->
+    <NoticeEditPopup v-if="isFormVisible && isEditMode" :notice="newNotice" @close="toggleForm" @submit="submitNotice" />
+  </div>
 
     <!-- 페이지네이션 -->
     <div class="pagination">
@@ -114,32 +106,23 @@
       <span>{{ currentPage }} / {{ totalPages }}</span>
       <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
     </div>
-  </div>
 </template>
 
 
 <script setup>
-import { ref, computed } from 'vue';
+import {ref, computed, onMounted} from 'vue';
+import NoticeResisterPopup from "@/components/notice/noticeResisterPopup.vue";
+import NoticeDetailsPopup from "@/components/notice/noticeDetailsPopup.vue";
+import NoticeEditPopup from "@/components/notice/noticeEditPopup.vue";
 
 const lists = ref([]);
 const headers = ref([
-  { key: 'noticeCode', label: '공지사항 코드' },
+  { key: 'noticeCode', label: 'No' },
   { key: 'noticeTitle', label: '공지사항 제목' },
   { key: 'noticeContent', label: '공지사항 내용' },
-  { key: 'noticeEnrollDate', label: '등록일' }
+  { key: 'noticeEnrollDate', label: '등록일' },
+  { label: '관리' } // 관리 열 추가
 ]);
-
-const isDetailsPopupVisible = ref(false);
-const selectedNotice = ref({});
-
-const showDetailsNoticePopup = (notice) => {
-  selectedNotice.value = notice;
-  isDetailsPopupVisible.value = true;
-};
-
-const closeDetailsPopup = () => {
-  isDetailsPopupVisible.value = false;
-};
 
 const filteredLists = ref([]);
 const currentPage = ref(1);
@@ -147,7 +130,7 @@ const itemsPerPage = 15;
 
 const getNotice = async () => {
   try {
-    const response = await fetch('http://api.pioms.shop/admin/notice/list', {
+    const response = await fetch('http://localhost:5000/admin/notice/list', {
       method: 'GET',
     });
 
@@ -237,29 +220,29 @@ const toggleForm = (isEdit = false, notice = {}) => {
   isEditMode.value = isEdit;
 
   if (isEdit) {
-    newNotice.value.noticeCode = notice.noticeCode;
-    newNotice.value.noticeTitle = notice.noticeTitle;
-    newNotice.value.noticeContent = notice.noticeContent;
+    newNotice.value = { ...notice };
   } else {
-    newNotice.value.noticeCode = '';
-    newNotice.value.noticeTitle = '';
-    newNotice.value.noticeContent = '';
+    newNotice.value = {
+      noticeCode: '',
+      noticeTitle: '',
+      noticeContent: ''
+    };
   }
 };
 
-const submitNotice = async () => {
+const submitNotice = async (notice) => {
   try {
     const method = isEditMode.value ? 'PUT' : 'POST';
     const url = isEditMode.value
-        ? `http://api.pioms.shop/admin/notice/list/update/${newNotice.value.noticeCode}?requesterAdminCode=1`
-        : 'http://api.pioms.shop/admin/notice/list/register?requesterAdminCode=1';
+        ? `http://localhost:5000/admin/notice/list/update/${notice.noticeCode}?requesterAdminCode=1`
+        : 'http://localhost:5000/admin/notice/list/register?requesterAdminCode=1';
 
     const response = await fetch(url, {
       method: method,
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(newNotice.value),
+      body: JSON.stringify(notice),
     });
 
     if (!response.ok) {
@@ -276,22 +259,39 @@ const submitNotice = async () => {
 
 const deleteNotice = async (noticeCode) => {
   try {
-    const response = await fetch(`http://api.pioms.shop/admin/notice/list/delete/${noticeCode}?requesterAdminCode=1`, {
-      method: 'DELETE',
-    });
+    // 확인 또는 취소를 선택할 때까지 대기
+    if (confirm('해당 공지사항을 삭제하시겠습니까?')) {
+      const response = await fetch(`http://localhost:5000/admin/notice/list/delete/${noticeCode}?requesterAdminCode=1`, {
+        method: 'DELETE',
+      });
 
-    if (!response.ok) {
-      throw new Error('공지사항 삭제 실패');
+      if (!response.ok) {
+        throw new Error('공지사항 삭제 실패');
+      }
+
+      getNotice();
+    } else {
+      // 사용자가 취소를 선택한 경우 아무런 동작도 하지 않음
     }
-
-    alert('공지사항이 삭제되었습니다.');
-    getNotice();
   } catch (error) {
     console.error('공지사항 삭제 오류:', error);
   }
 };
 
-getNotice();
+
+const viewPopup = ref(false);
+const selectedNotice = ref({});
+
+const showDetailsNoticePopup = (item) => {
+  selectedNotice.value = item;
+  viewPopup.value = true;
+};
+
+const closeDetailsPopup = () => {
+  viewPopup.value = false;
+};
+
+onMounted(getNotice);
 </script>
 
 <style>
@@ -494,14 +494,6 @@ align-items: center; /* 버튼을 수직 가운데에 정렬 */
 gap: 10px; /* 버튼 사이의 간격을 설정 */
 }
 
-.notice-list {
-border: none;
-}
-
-.list1 {
-width: 120px;
-}
-
 .btn-saveNotice {
 display: flex;
 width: 100px;
@@ -513,7 +505,7 @@ border-radius: 5px;
 border-color: #344DAF;
 background-color: #344DAF;
 color: #ffffff;
-justify-content: center;
+justify-content: flex-end;
 align-items: center;
 cursor: pointer;
 border: 0;
@@ -530,22 +522,6 @@ width: 40px;
 height: 40px;
 justify-content: center;
 border: none;
-}
-
-/* 팝업에서 닫기 버튼 */
-.close-btn {
-position: absolute;
-top: 10px;
-right: 10px;
-font-size: 20px;
-color: #333;
-background: transparent;
-border: none;
-cursor: pointer;
-}
-
-.close-btn:hover {
-color: #999;
 }
 
 </style>
