@@ -1,11 +1,13 @@
 <template>
   <header>
-    <RootAdmin />
+    <RootAdmin/>
   </header>
+
   <div class="content">
     <aside>
-      <Sidebar :currentLoc="currentLoc" />
+      <Sidebar />
     </aside>
+
     <main>
       <router-view />
     </main>
@@ -51,6 +53,7 @@ header, footer {
 }
 
 .content {
+  
   display: flex;
   box-sizing: border-box;
 }

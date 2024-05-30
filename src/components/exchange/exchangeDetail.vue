@@ -150,3 +150,8 @@ const checkExchange = async () => {
 
 
 </script>
+
+
+<style scoped>
+  @import "../../assets/css/order.css" ;
+</style>

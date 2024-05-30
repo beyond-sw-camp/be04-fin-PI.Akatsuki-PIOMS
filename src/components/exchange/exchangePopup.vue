@@ -217,7 +217,7 @@
 
   </script>
   
-  <style scoped>
 
+<style scoped>
+  @import "../../assets/css/order.css" ;
 </style>
-  

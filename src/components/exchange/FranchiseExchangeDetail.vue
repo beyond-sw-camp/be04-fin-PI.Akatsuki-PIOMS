@@ -121,3 +121,8 @@ const deleteExchange = async () => {
 
 
 </script>
+
+
+<style scoped>
+  @import "../../assets/css/order.css" ;
+</style>

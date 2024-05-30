@@ -204,7 +204,7 @@ const resetRowColor = (index) => document.querySelector(`#row-${index}`).classLi
 
 </script>
 
-<style>
+<style scoped>
 @import "../../assets/css/order.css";
 @import "../../assets/css/Breadcrumb.css";
 

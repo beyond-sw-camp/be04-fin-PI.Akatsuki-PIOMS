@@ -294,7 +294,7 @@ const closeDetailsPopup = () => {
 onMounted(getNotice);
 </script>
 
-<style>
+<style scoped>
 /* 공통 스타일 */
 .container {
 display: flex;
