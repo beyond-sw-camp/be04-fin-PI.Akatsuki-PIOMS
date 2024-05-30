@@ -28,7 +28,7 @@ jobs:
         run: npm run build
 
       - name: Zip Artifacts
-        run: zip -r deploy.zip dist server.js
+        run: zip -r deploy.zip dist server.js package.json Procfile
 
       - name: Upload to S3
         run: aws s3 cp deploy.zip s3://elasticbeanstalk-ap-northeast-2-730335325274/${{ github.run_id }}.zip
