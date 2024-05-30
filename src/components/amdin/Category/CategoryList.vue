@@ -77,6 +77,9 @@ import CategoryThirdPopup from "@/components/amdin/Category/CategoryThirdPopup.v
 import DeleteFirstPopup from "@/components/amdin/Category/DeleteFirstPopup.vue";
 import DeleteSecondPopup from "@/components/amdin/Category/DeleteSecondPopup.vue";
 import DeleteThirdPopup from "@/components/amdin/Category/DeleteThirdPopup.vue";
+import { useStore } from 'vuex';
+const store = useStore();
+const accessToken = store.state.accessToken;
 
 const firstCategories = ref([]);
 const secondCategories = ref([]);
@@ -102,6 +105,10 @@ const getCategoryFirstId = async () => {
   try {
     const response = await fetch('http://localhost:5000/admin/category/first', {
       method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
     });
     if (!response.ok) {
       throw new Error('네트워크 오류 발생');
@@ -123,6 +130,10 @@ const fetchFirstCategories = async () => {
   try {
     const response = await fetch('http://localhost:5000/admin/category/first', {
       method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
     });
     if (!response.ok) {
       throw new Error('대분류를 불러오는 데 실패했습니다.');
@@ -139,7 +150,13 @@ const fetchSecondCategories = async (categoryFirstCode) => {
   }
   selectedFirstCategory.value = categoryFirstCode;
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/second/list/detail/categoryfirst/${categoryFirstCode}`);
+    const response = await fetch(`http://localhost:5000/admin/category/second/list/detail/categoryfirst/${categoryFirstCode}`,{
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
     if (!response.ok) {
       throw new Error('중분류를 불러오는 데 실패했습니다.');
     }
@@ -157,7 +174,13 @@ const fetchThirdCategories = async (categorySecondCode) => {
   }
   selectedSecondCategory.value = categorySecondCode;
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/third/list/detail/categorysecond/${categorySecondCode}`);
+    const response = await fetch(`http://localhost:5000/admin/category/third/list/detail/categorysecond/${categorySecondCode}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
     if (!response.ok) {
       throw new Error('소분류를 불러오는 데 실패했습니다.');
     }

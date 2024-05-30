@@ -15,19 +15,16 @@
                 </td>
                 <td class="second-insert-input">
                   <select v-model="updateFirst" @change="fetchCategories('second')" class="categories">
-                    <option value="">{{ props.currentCategoryFirstName }}</option> <!-- 변경된 부분 -->
                     <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">
                       {{ category.categoryFirstName }}
                     </option>
                   </select>
                   <select v-model="updateSecond" @change="fetchCategories('third')" class="categories-g">
-                    <option value="">{{ props.currentCategorySecondName }}</option> <!-- 변경된 부분 -->
                     <option v-for="category in secondCategories" :key="category.categorySecondCode" :value="category.categorySecondCode">
                       {{ category.categorySecondName }}
                     </option>
                   </select>
                   <select v-model="updateThird" class="categories-g">
-                    <option value="">{{ props.currentCategoryThirdName }}</option> <!-- 변경된 부분 -->
                     <option v-for="category in thirdCategories" :key="category.categoryThirdCode" :value="category.categoryThirdCode">
                       {{ category.categoryThirdName }}
                     </option>
@@ -35,7 +32,6 @@
                 </td>
                 <td class="insert-label">상품명</td>
                 <td class="insert-input-name">
-<!--                  <input type="text" v-bind:value="currentProductName" v-on:input="updateName = $event.target.value" class="textInput" />-->
                   <input type="text" :value="currentProductName" @input="updateName = $event.target.value" class="textInput" />
                 </td>
               </tr>
@@ -150,9 +146,9 @@ const props = defineProps({
   currentProductExposureStatus: Boolean,
   currentProductColor: String,
   currentProductSize: String,
-  currentCategoryFirstName: String,
-  currentCategorySecondName: String,
-  currentCategoryThirdName: String,
+  currentCategoryFirstCode: String,
+  currentCategorySecondCode: String,
+  currentCategoryThirdCode: String,
   currentProductContent: String,
   closeEdit: Function
 });
@@ -165,9 +161,9 @@ const submitProduct = async () => {
     productExposureStatus: updateExposureStatus.value,
     productColor: updateColor.value,
     productSize: updateSize.value,
-    categoryFirstName: updateFirst.value,
-    categorySecondName: updateSecond.value,
-    categoryThirdName: updateThird.value,
+    categoryFirstCode: updateFirst.value,
+    categorySecondCode: updateSecond.value,
+    categoryThirdCode: updateThird.value,
     productContent: updateContent.value
   };
 

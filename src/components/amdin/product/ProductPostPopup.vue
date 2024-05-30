@@ -133,6 +133,9 @@
 <script setup>
 import { onMounted, defineEmits, ref } from 'vue';
 import imageSrc from '@/assets/icon/picture.png';
+import { useStore } from 'vuex';
+const store = useStore();
+const accessToken = store.state.accessToken;
 
 const emit = defineEmits(['close']);
 const imagePreview = ref(imageSrc);
@@ -168,7 +171,13 @@ const fetchCategories = async (level) => {
   }
 
   try {
-    const response = await fetch(url, { method: 'GET' });
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
     if (!response.ok) {
       throw new Error(`${level} 카테고리를 불러오는 데 실패했습니다.`);
     }
@@ -220,7 +229,11 @@ const uploadImage = async () => {
     const response = await fetch(`http://localhost:5000/admin/product/image`, {
       method: 'POST',
       credentials: 'include',
-      body: formData
+      body: formData,
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
     });
 
     if (!response.ok) {
@@ -257,7 +270,8 @@ const saveProduct = async (imageUrl) => {
     const response = await fetch('http://localhost:5000/admin/product/create?requesterAdminCode=1', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(requestData)
     });
@@ -321,7 +335,11 @@ const uploadAndSaveProduct = async () => {
     const response = await fetch('http://localhost:5000/admin/product/image', {
       method: 'POST',
       credentials: 'include',
-      body: formData
+      body: formData,
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
     });
 
     if (!response.ok) {
