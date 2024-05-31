@@ -33,7 +33,7 @@ const saveCategoryThird = async () => {
   console.log('Request Data:', requestData);
 
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/third/update/${props.currentThirdCode}?requesterAdminCode=1`, {
+    const response = await fetch(`http://localhost:5000/admin/category/third/update/${props.currentThirdCode}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

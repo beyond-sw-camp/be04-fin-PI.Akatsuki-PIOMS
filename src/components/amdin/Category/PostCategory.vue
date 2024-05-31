@@ -201,7 +201,7 @@ const saveCategorySecond = async () => {
   console.log('savedSecondData: ', savedSecondData);
 
   try {
-    const responseSecond = await fetch(`http://localhost:5000/admin/category/second/create?requesterAdminCode=1`, {
+    const responseSecond = await fetch(`http://localhost:5000/admin/category/second/create`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -248,7 +248,7 @@ const saveCategoryThird = async () => {
   console.log('savedThirdData: ', savedThirdData);
 
   try {
-    const responseThird = await fetch(`http://localhost:5000/admin/category/third/create?requesterAdminCode=1`, {
+    const responseThird = await fetch(`http://localhost:5000/admin/category/third/create`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

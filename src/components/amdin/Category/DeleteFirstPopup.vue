@@ -42,7 +42,7 @@ const closeDeleteModal = () => {
 const deleteCategoryFirst = async () => {
 
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/first/delete/${props.currentFirstCode}?requesterAdminCode=1`, {
+    const response = await fetch(`http://localhost:5000/admin/category/first/delete/${props.currentFirstCode}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
