@@ -93,7 +93,10 @@ import Create from './AskFormCreate.vue';
 import Edit from './AskFormEdit.vue';
 import View from './AskFormView.vue';
 import Breadcrumb from '@/components/amdin/ask/Breadcrumb.vue'; // Breadcrumb 컴포넌트 임포트
+import { useStore } from 'vuex';
 
+const store = useStore();
+const accessToken = store.state.accessToken;
 const asks = ref([]);
 const filteredAsks = ref([]);
 const filterStatus = ref('전체');
@@ -113,6 +116,7 @@ const fetchAsks = async () => {
     const response = await fetch(`http://localhost:5000/franchise/asklist/${franchiseOwnerId}`, {
       method: 'GET',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     });

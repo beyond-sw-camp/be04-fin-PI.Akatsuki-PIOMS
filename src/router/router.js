@@ -23,8 +23,10 @@ import PostCategory from "@/components/amdin/Category/PostCategory.vue";
 import FavoriteRegister from "@/components/franchise/favorite/FavoriteRegister.vue";
 import FavoriteList from "@/components/franchise/favorite/FavoriteList.vue";
 import Log from "@/components/log/Log.vue";
+
 import DriverDashBoard from "@/components/driver/DriverDashBoard.vue";
 import NoticeList from "@/components/notice/NoticeList.vue";
+
 
 const routes = [
     {
@@ -105,7 +107,7 @@ const routes = [
         path: '/franchise/product/list',
         name: 'FranchiseProductList',
         component: FrProductList,
-        meta: { requiresAuth: true, role: 'ROLE_OWNER' }
+        meta: { requiresAuth: true, role: 'ROLE_ROOT' }
     },
     {
         path: '/admin/category/list',
@@ -128,7 +130,7 @@ const routes = [
     {
         path: '/admin/notice/list',
         name: 'noticeList',
-        component: NoticeList
+        component: noticeList
     },
     {
         path: '/franchise/favorite/register',
