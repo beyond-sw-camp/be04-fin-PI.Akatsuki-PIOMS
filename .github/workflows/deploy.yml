@@ -46,16 +46,8 @@ jobs:
                     error_log /var/log/nginx/error.log;
 
                     location / {
-                        proxy_pass http://localhost:8080;
-                        proxy_http_version 1.1;
-                        proxy_set_header Upgrade \$http_upgrade;
-                        proxy_set_header Connection 'upgrade';
-                        proxy_set_header Host \$host;
-                        proxy_cache_bypass \$http_upgrade;
-                    }
-
-                    location /static/ {
-                        alias /usr/share/nginx/html/static/;
+                        root /var/app/current/dist;
+                        try_files \$uri \$uri/ /index.html;
                     }
 
                     error_page 500 502 503 504 /50x.html;
@@ -67,7 +59,7 @@ jobs:
             01_reload_nginx:
               command: "ln -sfn /etc/nginx/sites-available/myapp /etc/nginx/sites-enabled/myapp && nginx -s reload"
           EOF
-          zip -r deploy.zip dist server.js package.json Procfile .ebextensions .platform
+          zip -r deploy.zip dist server.js package.json Procfile .ebextensions
 
       - name: Install AWS CLI
         run: |
