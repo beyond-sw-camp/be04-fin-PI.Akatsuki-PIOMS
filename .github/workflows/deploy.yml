@@ -37,14 +37,10 @@ jobs:
       - name: Prepare deployment package
         run: |
           mkdir -p .ebextensions
-          echo "container_commands:
-            01_npm_install:
-              command: 'npm install'
-            02_npm_build:
-              command: 'npm run build'
+          cat <<EOF > .ebextensions/nginx.config
           files:
-            \"/etc/nginx/conf.d/proxy.conf\":
-              mode: \"000644\"
+            "/etc/nginx/conf.d/myapp.conf":
+              mode: "000644"
               owner: root
               group: root
               content: |
@@ -73,9 +69,9 @@ jobs:
                     root /usr/share/nginx/html;
                   }
                 }
-          " > .ebextensions/nginx.conf
+          EOF
 
-          zip -r deploy.zip dist server.js package.json Procfile .ebextensions
+          zip -r deploy.zip dist server.js package.json Procfile .ebextensions .platform
 
       - name: Install AWS CLI
         run: |
