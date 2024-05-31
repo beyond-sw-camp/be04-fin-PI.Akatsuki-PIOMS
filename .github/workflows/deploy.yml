@@ -83,11 +83,11 @@ jobs:
 
       - name: Create Environment
         run: |
-          eb create AkatsukiFE-env --platform "Node.js 20 running on 64bit Amazon Linux 2/3.4.13" --region ap-northeast-2
+          eb create AkatsukiFE-env-1 --platform "Node.js 20 running on 64bit Amazon Linux 2/3.4.13" --region ap-northeast-2
 
       - name: Deploy to Elastic Beanstalk
         run: |
-          eb use AkatsukiFE-env
+          eb use AkatsukiFE-env-1
           eb deploy
 
       - name: Check Environment Health
@@ -96,10 +96,10 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ap-northeast-2
         run: |
-          STATUS=$(aws elasticbeanstalk describe-environments --environment-names AkatsukiFE-env --query 'Environments[0].Health' --output text)
+          STATUS=$(aws elasticbeanstalk describe-environments --environment-names AkatsukiFE-env-1 --query 'Environments[0].Health' --output text)
           if [ "$STATUS" != "Green" ]; then
             echo "Environment health is not 'Green'. Current status: $STATUS"
             exit 1
 
       - name: Get Logs
-        run: eb logs AkatsukiFE-env
+        run: eb logs AkatsukiFE-env-1
