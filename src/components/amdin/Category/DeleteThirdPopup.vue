@@ -17,6 +17,9 @@
 
 <script setup>
 import {defineProps, defineEmits, ref} from 'vue';
+import { useStore } from 'vuex';
+const store = useStore();
+const accessToken = store.state.accessToken;
 
 const props = defineProps({
   currentThirdCode: String,
@@ -39,8 +42,9 @@ const deleteCategoryThird = async () => {
     const productResponse = await fetch(`http://localhost:5000/admin/product/category/${props.currentThirdCode}`, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
     });
     const products = await productResponse.json();
 
@@ -53,8 +57,9 @@ const deleteCategoryThird = async () => {
     const response = await fetch(`http://localhost:5000/admin/category/third/delete/${props.currentThirdCode}?requesterAdminCode=1`, {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
     });
 
     if (!response.ok) {

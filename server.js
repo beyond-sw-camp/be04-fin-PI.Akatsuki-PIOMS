@@ -1,22 +1,16 @@
 const express = require('express');
 const path = require('path');
-
 const app = express();
-const port = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8080;
 
-// Define the path to the distribution directory
-const distPath = path.resolve(__dirname, 'dist');
+// 정적 파일 서빙
+app.use(express.static(path.join(__dirname, 'dist')));
 
-// Serve static files from the distribution directory
-app.use(express.static(distPath));
-
-// Handle every other route with index.html, which will contain
-// a script tag to your application's JavaScript file(s).
+// 모든 경로에 대해 index.html 서빙
 app.get('*', (req, res) => {
-    res.sendFile(path.join(distPath, 'index.html'));
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
-// Start the server on the specified port
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });

@@ -24,16 +24,21 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
 import Swal from 'sweetalert2';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 const username = ref('');
 const password = ref('');
 const accessNumber = ref('');
+
 const router = useRouter();
+const store = useStore();
 
 const login = async () => {
   try {
+    console.log('로그인 시도:', { username: username.value, password: password.value, accessNumber: accessNumber.value });
+
     const response = await fetch('http://localhost:5000/admin/login', {
       method: 'POST',
       headers: {
@@ -43,11 +48,23 @@ const login = async () => {
         adminId: username.value,
         password: password.value,
         accessNumber: accessNumber.value
-      })
+      }),
+      credentials: 'include' // 쿠키를 포함하기 위해 설정
     });
 
     if (response.ok) {
-      await router.push('/admin/home');
+      console.log('로그인 성공, 응답 헤더:', response.headers);
+
+      const accessToken = response.headers.get('Authorization')?.substring(7).trim();
+      localStorage.setItem('accessToken', accessToken);
+      console.log('추출한 accessToken:', accessToken);
+
+      if (accessToken) {
+        await store.dispatch('login', { accessToken });
+        await router.push('/admin/home');
+      } else {
+        throw new Error('Access token not found');
+      }
     } else {
       Swal.fire({
         icon: 'error',
@@ -56,6 +73,7 @@ const login = async () => {
       });
     }
   } catch (error) {
+    console.error('로그인 오류:', error);
     Swal.fire({
       icon: 'error',
       title: '오류 발생',
@@ -73,7 +91,7 @@ const login = async () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  height: 90vh;
 }
 
 .logo {

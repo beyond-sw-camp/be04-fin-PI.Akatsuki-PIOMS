@@ -43,7 +43,11 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { defineEmits } from 'vue';
+import { useStore } from 'vuex';
+import Swal from "sweetalert2";
 
+const store = useStore();
+const accessToken = store.state.accessToken;
 const askData = ref(null);
 const answer = ref('');
 const route = useRoute();
@@ -59,10 +63,12 @@ const fetchAskData = async () => {
     console.error('askCode is not defined');
     return;
   }
+
   try {
     const response = await fetch(`http://localhost:5000/admin/ask/${askCode}`, {
       method: 'GET',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     });
@@ -78,14 +84,18 @@ const fetchAskData = async () => {
   }
 };
 
-const formatDate = (dateArray) => {
-  if (!dateArray || dateArray.length === 0) return '날짜 없음';
-  const [year, month, day, hour = 0, minute = 0, second = 0] = dateArray;
-  const date = new Date(year, month - 1, day, hour, minute, second);
-  return date.toLocaleDateString('ko-KR', {
+const formatDate = (dateString) => {
+  if (!dateString) return '-';
+  const date = new Date(dateString);
+  if (isNaN(date)) return 'Invalid Date';
+  return date.toLocaleString('ko-KR', {
     year: 'numeric',
     month: '2-digit',
-    day: '2-digit'
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
   });
 };
 
@@ -99,6 +109,7 @@ const submitAnswer = async () => {
     const response = await fetch(`http://localhost:5000/admin/ask/answer/${askCode}`, {
       method: 'POST',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -111,8 +122,14 @@ const submitAnswer = async () => {
     }
 
     console.log('Answer submitted successfully');
+    await Swal.fire({
+      icon: 'success',
+      title: '등록 성공',
+      text: '답변이 작성되었습니다.',
+    });
     emit('refreshData');
     props.closeRegist(); // Close the popup after successful submission
+    window.location.reload(); // 페이지 새로고침
   } catch (error) {
     console.error('Failed to submit answer:', error);
   }
@@ -120,6 +137,7 @@ const submitAnswer = async () => {
 
 onMounted(fetchAskData);
 </script>
+
 
 <style scoped>
 .container {
@@ -214,11 +232,11 @@ textarea {
 }
 
 .cancel-btn:hover {
-  background-color: rgba(217, 217, 233, 0.56);
+  background-color: red; /* hover 시 빨간색으로 변경 */
 }
 
 .submit-btn:hover {
-  background-color: rgba(255, 205, 75, 0.69);
+  background-color: limegreen; /* hover 시 녹색으로 변경 */
 }
 
 .popup-overlay {
@@ -279,7 +297,4 @@ textarea {
   cursor: pointer;
 }
 
-.popup-content button:hover {
-  background-color: #45a049;
-}
 </style>
