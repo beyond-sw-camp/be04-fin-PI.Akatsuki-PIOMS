@@ -14,6 +14,7 @@
 <script setup>
 import { defineProps, defineEmits, ref } from 'vue';
 import { useStore } from 'vuex';
+import CategoryList from "@/components/amdin/Category/CategoryList.vue";
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -33,7 +34,7 @@ const saveCategorySecond = async () => {
   console.log('Request Data:', requestData);
 
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/second/update/${props.currentSecondCode}?requesterAdminCode=1`, {
+    const response = await fetch(`http://localhost:5000/admin/category/second/update/${props.currentSecondCode}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -48,6 +49,7 @@ const saveCategorySecond = async () => {
     }
 
     console.log('카테고리 중분류가 성공적으로 수정되었습니다.')
+    location.reload(CategoryList);
     emits('close');
   } catch (error) {
     console.error('오류:', error);

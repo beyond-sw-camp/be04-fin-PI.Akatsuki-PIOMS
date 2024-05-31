@@ -18,6 +18,7 @@
 <script setup>
 import { defineProps, defineEmits, ref } from 'vue';
 import { useStore } from 'vuex';
+import CategoryList from "@/components/amdin/Category/CategoryList.vue";
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -41,7 +42,7 @@ const closeDeleteModal = () => {
 const deleteCategoryFirst = async () => {
 
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/first/delete/${props.currentFirstCode}?requesterAdminCode=1`, {
+    const response = await fetch(`http://localhost:5000/admin/category/first/delete/${props.currentFirstCode}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -55,6 +56,7 @@ const deleteCategoryFirst = async () => {
     }
 
     console.log('카테고리 대분류를 삭제하였습니다.');
+    location.reload(CategoryList);
     emits('close');
   } catch (error) {
     console.error('오류:', error);
