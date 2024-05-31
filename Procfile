@@ -1,1 +1,1 @@
-web: cp -r * /var/app/current/
+web: node server.js

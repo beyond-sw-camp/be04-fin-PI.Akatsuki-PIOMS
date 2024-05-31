@@ -43,9 +43,12 @@ jobs:
                     server_name   _;
 
                     location / {
-                        root   /var/app/current/dist;
-                        index  index.html index.htm;
-                        try_files $uri $uri/ /index.html;
+                        proxy_pass http://127.0.0.1:8080;
+                        proxy_http_version 1.1;
+                        proxy_set_header Upgrade \$http_upgrade;
+                        proxy_set_header Connection 'upgrade';
+                        proxy_set_header Host \$host;
+                        proxy_cache_bypass \$http_upgrade;
                     }
 
                     error_page  500 502 503 504  /50x.html;
@@ -55,9 +58,9 @@ jobs:
                 }
           EOF
           cat <<EOF > Procfile
-          web: cp -r * /var/app/current/
+          web: node server.js
           EOF
-          zip -r deploy.zip dist package.json .ebextensions Procfile
+          zip -r deploy.zip dist package.json server.js .ebextensions Procfile
 
       - name: Install AWS CLI
         run: |
@@ -83,11 +86,11 @@ jobs:
 
       - name: Create Environment
         run: |
-          eb create AkatsukiFE-env-1 --platform "Node.js 20 running on 64bit Amazon Linux 2/3.4.13" --region ap-northeast-2
+          eb create AkatsukiFE-env --platform "Node.js 20 running on 64bit Amazon Linux 2/3.4.13" --region ap-northeast-2
 
       - name: Deploy to Elastic Beanstalk
         run: |
-          eb use AkatsukiFE-env-1
+          eb use AkatsukiFE-env
           eb deploy
 
       - name: Check Environment Health
@@ -96,10 +99,10 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ap-northeast-2
         run: |
-          STATUS=$(aws elasticbeanstalk describe-environments --environment-names AkatsukiFE-env-1 --query 'Environments[0].Health' --output text)
+          STATUS=$(aws elasticbeanstalk describe-environments --environment-names AkatsukiFE-env --query 'Environments[0].Health' --output text)
           if [ "$STATUS" != "Green" ]; then
             echo "Environment health is not 'Green'. Current status: $STATUS"
             exit 1
 
       - name: Get Logs
-        run: eb logs AkatsukiFE-env-1
+        run: eb logs AkatsukiFE-env
