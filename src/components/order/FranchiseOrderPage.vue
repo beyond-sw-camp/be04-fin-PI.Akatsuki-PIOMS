@@ -153,9 +153,14 @@ const getOrderList = async () => {
       },
       credentials: 'include'
     });
+    if(response.status == 204){
+      alert("발주 내역이 없습니다.")
+      return;
+    }
 
     if (!response.ok) {
       throw new Error('네트워크 오류 발생');
+      
     }
 
     const data = await response.json();

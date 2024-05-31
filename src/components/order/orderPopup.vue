@@ -146,8 +146,16 @@
   
   const getProducts = async () => {
     try {
-      const response = await fetch("/api/franchise/product", {
+      const accessToken = store.state.accessToken;
+    if (!accessToken) {
+      throw new Error('No access token found');
+    }
+      const response = await fetch("http://localhost:5000/franchise/product", {
         method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': `Bearer ${accessToken}`,
+        },
       });
       if (!response.ok) {
         throw new Error("네트워크 오류 발생");

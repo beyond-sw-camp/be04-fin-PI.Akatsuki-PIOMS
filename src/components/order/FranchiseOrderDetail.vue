@@ -167,7 +167,7 @@ const gumsoo = async () => {
     if (!accessToken) {
       throw new Error('No access token found');
     }
-    const response = await fetch(`/api/franchise/order/check?franchiseOwnerCode=${franchiseOwnerCode}`, {
+    const response = await fetch(`http://localhost:5000/franchise/order/check?franchiseOwnerCode=${franchiseOwnerCode}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

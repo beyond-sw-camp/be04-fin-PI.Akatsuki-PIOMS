@@ -96,7 +96,7 @@ const routes = [
         path: '/admin/order/list',
         name: 'AdminOrderList',
         component: AdminOrderPage,
-        meta: { requiresAuth: true, role: ['ROLE_OWNER', 'ROLE_ROOT'] }
+        meta: { requiresAuth: true, role: ['ROLE_ADMIN', 'ROLE_ROOT'] }
     },
     {
         path: '/franchise/order/list',
@@ -132,7 +132,7 @@ const routes = [
         path: '/franchise/exchange/list',
         name: 'FranchiseExchangeList',
         component: FranchiseExchangePage,
-        meta: { requiresAuth: true, role: ['ROLE_ADMIN', 'ROLE_ROOT'] }
+        meta: { requiresAuth: true, role: ['ROLE_OWNER', 'ROLE_ROOT'] }
     },
     {
         path: '/admin/exchange/list',

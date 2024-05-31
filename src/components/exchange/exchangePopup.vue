@@ -90,11 +90,8 @@
     showPopup: Function,
     popupVisible: Boolean,
     writeActive: Boolean,
-    franchiseCode:Number,
-    franchiseOwnerCode:Number
   });
-  const franchiseOwnerCode = props.franchiseOwnerCode;
-  const franchiseCode = props.franchiseCode;
+
   const writeActive = ref(true);
   const filter = ref("");
   const conditionFilter = ref("");
@@ -185,17 +182,21 @@
   }));
 
   const exchangeData = {
-    franchiseCode: franchiseCode, // 실제 프랜차이즈 코드를 사용 예정
+
     exchangeStatus: "반송신청",
     products: productsData
   };
 
   try {
-    const response = await fetch(`/api/franchise/exchange`, {
+    const accessToken = store.state.accessToken;
+      if (!accessToken) {
+        throw new Error('No access token found');
+      }
+    const response = await fetch(`http://localhost:5000/franchise/exchange`, {
       method: "POST",
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         "Content-Type": "application/json",
-        'access': `${localStorage.getItem('access')}`, // 인증 토큰을 포함하는 경우
       },
       body: JSON.stringify(exchangeData)
     });

@@ -108,8 +108,6 @@ const props = defineProps({
 const item = props.detailItem;
 const list = props.detailItem.products;
 
-// 추후 개선 예정
-const adminCode = 2;
 
 
 const checkExchange = async () => {
@@ -132,7 +130,7 @@ const checkExchange = async () => {
     if (!accessToken) {
       throw new Error('No access token found');
     }
-    const response = await fetch(`/api/admin/exchange/${item.exchangeCode}`, {
+    const response = await fetch(`http://localhost:5000/admin/exchange/${item.exchangeCode}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
