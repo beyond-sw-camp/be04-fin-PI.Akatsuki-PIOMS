@@ -13,6 +13,9 @@
 
 <script setup>
 import { defineProps, defineEmits, ref } from 'vue';
+import { useStore } from 'vuex';
+const store = useStore();
+const accessToken = store.state.accessToken;
 
 const props = defineProps({
   currentFirstCode: String,
@@ -32,7 +35,8 @@ const saveCategoryFirst = async () => {
     const response = await fetch(`http://localhost:5000/admin/category/first/update/${props.currentFirstCode}?requesterAdminCode=1`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(requestData)
     });

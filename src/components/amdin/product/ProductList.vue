@@ -108,16 +108,14 @@
         <tbody>
         <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" 
             class="allpost"
-            @dblclick="showModifyPopup(item)">
+            @dblclick="showModifyPopup(item.productCode,item.productName,item.productCount,item.productPrice,item.productStatus,item.productExposureStatus,
+                                        item.productColor,item.productSize,item.categoryFirstCode,item.categorySecondCode,item.categoryThirdCode,item.productContent)">
           <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">
               {{ item[header.key] }}
             <template v-if="header.key === 'imgUrl'">
               <img :src="getProductImageUrl(item.productCode)" class="product-img" />
             </template>
           </td>
-        </tr>
-        <tr v-for="row in emptyRows" :key="'empty-' + row">
-          <td v-for="header in headers" :key="header.key"></td>
         </tr>
         </tbody>
       </table>
@@ -127,7 +125,19 @@
       <span> {{currentPage}} / {{totalPages}} </span>
       <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
     </div>
-    <ProductDetailPopup v-if="editPopup" :productCode="productCode" :closeEdit="closeEdit"/>
+    <ProductDetailPopup v-if="editPopup" :currentProductCode="currentProductCode"
+                                         :currentProductName="currentProductName"
+                                         :currentProductCount="currentProductCount"
+                                         :currentProductPrice="currentProductPrice"
+                                         :currentProductStatus="currentProductStatus"
+                                         :currentProductExposureStatus="currentProductExposureStatus"
+                                         :currentProductColor="currentProductColor"
+                                         :currentProductSize="currentProductSize"
+                                         :currentCategoryFirstCode="currentCategoryFirstCode"
+                                         :currentCategorySecondCode="currentCategorySecondCode"
+                                         :currentCategoryThirdCode="currentCategoryThirdCode"
+                                         :currentProductContent="currentProductContent"
+                                         :closeEdit="closeEdit"/>
   </div>
 </template>
 
@@ -136,6 +146,9 @@ import { ref, computed } from 'vue';
 import ProductPostPopup from "@/components/amdin/product/ProductPostPopup.vue"
 import ProductDetailPopup from "@/components/amdin/product/ProductDetailPopup.vue";
 import axios from "axios";
+import { useStore } from 'vuex';
+const store = useStore();
+const accessToken = store.state.accessToken;
 
 const lists = ref([]);
 const headers = ref([
@@ -156,6 +169,7 @@ const filteredLists = ref([]);
 const currentPage = ref(1);
 const itemsPerPage = 15;
 const selectedExposureStatus = ref('전체');
+const filterProductName = ref('');
 const filterStatus = ref('');
 const filterColor = ref('');
 const filterSize = ref('');
@@ -173,20 +187,36 @@ const currentProductCode = ref('');
 const currentProductName = ref('');
 const currentProductCount = ref('');
 const currentProductPrice = ref('');
+const currentProductStatus = ref('');
+const currentProductExposureStatus = ref('');
+const currentProductColor = ref('');
 const currentProductSize = ref('');
+const currentCategoryFirstCode = ref('');
+const currentCategorySecondCode = ref('');
+const currentCategoryThirdCode = ref('');
 const currentProductContent = ref('');
 const productImages = ref({});
-const productCode = ref(null);
 const editPopup = ref(false);
 
-const showModifyPopup = (productCode1) => {
+const showModifyPopup = (productCode, productName, productCount, productPrice, productStatus, productExposureStatus, productColor, productSize,
+                          categoryFirstCode, categorySecondCode, categoryThirdCode, productContent) => {
   editPopup.value = !editPopup.value;
-  productCode.value = productCode1;
+  setCurrentProductCode(productCode);
+  setCurrentProductName(productName);
+  setCurrentProductCount(productCount);
+  setCurrentProductPrice(productPrice);
+  setCurrentProductStatus(productStatus);
+  setCurrentProductExposureStatus(productExposureStatus);
+  setCurrentProductColor(productColor);
+  setCurrentProductSize(productSize);
+  setCurrentCategoryFirstCode(categoryFirstCode);
+  setCurrentCategorySecondCode(categorySecondCode);
+  setCurrentCategoryThirdCode(categoryThirdCode);
+  setCurrentProductContent(productContent);
 }
 const closeEdit = () => {
   editPopup.value = !editPopup.value;
 }
-
 const getProductImageUrl = (productCode) => {
   return productImages.value[productCode] || 'path/to/default-image.jpg';
 };
@@ -194,6 +224,10 @@ const fetchProductImages = async () => {
   try {
     const response = await fetch(`http://localhost:5000/admin/product/productImage`, {
       method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
     });
     if(!response.ok) {
       throw new Error('이미지를 불러오지 못했습니다.');
@@ -210,11 +244,14 @@ const fetchProductImages = async () => {
     console.error('Error:', error);
   }
 };
-
 const fetchFirstCategories = async () => {
   try {
     const response = await fetch('http://localhost:5000/admin/category/first', {
       method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
     });
     if (!response.ok) {
       throw new Error('대분류를 불러오는 데 실패했습니다.');
@@ -224,14 +261,19 @@ const fetchFirstCategories = async () => {
     console.error('Error:', error);
   }
 };
-
 const fetchSecondCategories = async () => {
   if (selectedFirstCategory.value === '') {
     secondCategories.value = [];
     return;
   }
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`);
+    const response = await fetch(`http://localhost:5000/admin/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
     if (!response.ok) {
       throw new Error('중분류를 불러오는 데 실패했습니다.');
     }
@@ -242,14 +284,19 @@ const fetchSecondCategories = async () => {
     console.error('Error:', error);
   }
 };
-
 const fetchThirdCategories = async () => {
   if (selectedSecondCategory.value === '') {
     thirdCategories.value = [];
     return;
   }
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`);
+    const response = await fetch(`http://localhost:5000/admin/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
     if (!response.ok) {
       throw new Error('소분류를 불러오는 데 실패했습니다.');
     }
@@ -258,21 +305,21 @@ const fetchThirdCategories = async () => {
     console.error('Error:', error);
   }
 };
-
 const applyFilters = () => {
   filteredLists.value = lists.value.filter(list => {
+    const matchesProductName = !filterProductName.value || list.productName.includes(filterProductName.value);
     const matchesExposureStatus = selectedExposureStatus.value === '전체' || list.productExposureStatus === (selectedExposureStatus.value === '노출');
     const matchesStatus = !filterStatus.value || list.productStatus === filterStatus.value;
     const matchesColor = !filterColor.value || list.productColor === filterColor.value;
     const matchesSize = !filterSize.value || list.productSize === parseInt(filterSize.value, 10);
     const matchesCategory = !selectedThirdCategory.value || list.categoryThirdCode === selectedThirdCategory.value;
 
-    return matchesExposureStatus && matchesStatus && matchesColor && matchesSize && matchesCategory;
+    return matchesProductName && matchesExposureStatus && matchesStatus && matchesColor && matchesSize && matchesCategory;
   });
 };
-
 const resetFilters = () => {
   selectedExposureStatus.value = '전체';
+  filterProductName.value = '';
   filterStatus.value = '';
   filterColor.value = '';
   filterSize.value = '';
@@ -281,7 +328,6 @@ const resetFilters = () => {
   selectedThirdCategory.value = '';
   filteredLists.value = lists.value;
 };
-
 const setCurrentProductCode = (productCode) => {
   currentProductCode.value = productCode;
 };
@@ -294,17 +340,38 @@ const setCurrentProductCount = (productCount) => {
 const setCurrentProductPrice = (productPrice) => {
   currentProductPrice.value = productPrice;
 }
+const setCurrentProductStatus = (productStatus) => {
+  currentProductStatus.value = productStatus;
+}
+const setCurrentProductExposureStatus = (productExposureStatus) => {
+  currentProductExposureStatus.value = productExposureStatus;
+}
+const setCurrentProductColor = (productColor) => {
+  currentProductColor.value = productColor;
+}
 const setCurrentProductSize = (productSize) => {
   currentProductSize.value = productSize;
 }
 const setCurrentProductContent = (productContent) => {
   currentProductContent.value = productContent;
 }
-
+const setCurrentCategoryFirstCode = (categoryFirstCode) => {
+  currentCategoryFirstCode.value = categoryFirstCode;
+}
+const setCurrentCategorySecondCode = (categorySecondCode) => {
+  currentCategorySecondCode.value = categorySecondCode;
+}
+const setCurrentCategoryThirdCode = (categoryThirdCode) => {
+  currentCategoryThirdCode.value = categoryThirdCode;
+}
 const getMemberId = async () => {
   try {
     const response = await fetch('http://localhost:5000/admin/product', {
       method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
     });
 
     if (!response.ok) {
@@ -323,11 +390,14 @@ const getMemberId = async () => {
     console.error('오류 발생:', error);
   }
 };
-
 const downloadExcel = () => {
   axios({
     url: 'http://localhost:5000/admin/exceldownload/product-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
     method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
     responseType: 'blob', // 서버에서 반환되는 데이터의 형식을 명시
   }).then((response) => {
     const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }));
@@ -340,32 +410,20 @@ const downloadExcel = () => {
     console.error('Excel 다운로드 중 오류 발생:', error);
   });
 };
-
 const paginatedLists = computed(() => {
-  let items = [];
   const start = (currentPage.value - 1) * itemsPerPage;
   const end = start + itemsPerPage;
 
-  if (filteredLists.value.length < itemsPerPage) {
-    const remainingItems = itemsPerPage - filteredLists.value.length;
-    items = [...filteredLists.value, ...Array.from({ length: remainingItems }).map(() => ({}))];
-  } else {
-    items = filteredLists.value.slice(start, end);
-  }
-
-  return items;
+  return filteredLists.value.slice(start, end);
 });
-
 const totalPages = computed(() => {
   return Math.ceil(filteredLists.value.length / itemsPerPage);
 });
-
 const nextPage = () => {
   if (currentPage.value < totalPages.value) {
     currentPage.value++;
   }
 };
-
 const prevPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--;

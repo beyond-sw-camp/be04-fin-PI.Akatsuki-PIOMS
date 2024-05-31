@@ -24,6 +24,7 @@ import FavoriteRegister from "@/components/franchise/favorite/FavoriteRegister.v
 import FavoriteList from "@/components/franchise/favorite/FavoriteList.vue";
 import Log from "@/components/log/Log.vue";
 import DriverDashBoard from "@/components/driver/driverDashBoard.vue";
+import noticeList from "@/components/notice/noticeList.vue";
 
 const routes = [
     {
@@ -127,7 +128,7 @@ const routes = [
     {
         path: '/admin/notice/list',
         name: 'noticeList',
-        component: NoticeList
+        component: noticeList
     },
     {
         path: '/franchise/favorite/register',

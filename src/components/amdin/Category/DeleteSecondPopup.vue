@@ -17,6 +17,9 @@
 
 <script setup>
 import { defineProps, defineEmits, ref } from 'vue';
+import { useStore } from 'vuex';
+const store = useStore();
+const accessToken = store.state.accessToken;
 
 const props = defineProps({
   currentSecondCode: String,
@@ -39,8 +42,9 @@ const deleteCategorySecond = async () => {
     const response = await fetch(`http://localhost:5000/admin/category/second/delete/${props.currentSecondCode}?requesterAdminCode=1`, {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
     });
 
     if (!response.ok) {
