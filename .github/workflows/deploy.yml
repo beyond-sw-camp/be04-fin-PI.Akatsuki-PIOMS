@@ -31,7 +31,7 @@ jobs:
       - name: Prepare deployment package
         run: |
           mkdir -p .ebextensions
-          cat <<EOF > .ebextensions/nginx.config
+          cat <<EOF > .ebextensions/00-makeFiles.config
           files:
             "/etc/nginx/conf.d/vueapp.conf":
               mode: "000755"
@@ -39,28 +39,25 @@ jobs:
               group: root
               content: |
                 server {
-                    listen 80;
-                    server_name _;
-
-                    access_log /var/log/nginx/access.log;
-                    error_log /var/log/nginx/error.log;
+                    listen        80;
+                    server_name   _;
 
                     location / {
-                        root /var/app/current/dist;
-                        index index.html;
-                        try_files \$uri \$uri/ /index.html;
+                        root   /var/app/current/dist;
+                        index  index.html index.htm;
+                        try_files $uri $uri/ /index.html;
                     }
 
-                    error_page 500 502 503 504 /50x.html;
+                    error_page  500 502 503 504  /50x.html;
                     location = /50x.html {
-                        root /usr/share/nginx/html;
+                        root   /usr/share/nginx/html;
                     }
                 }
-          container_commands:
-            01_reload_nginx:
-              command: "nginx -s reload"
           EOF
-          zip -r deploy.zip dist package.json .ebextensions
+          cat <<EOF > Procfile
+          web: cp -r * /var/app/current/
+          EOF
+          zip -r deploy.zip dist package.json .ebextensions Procfile
 
       - name: Install AWS CLI
         run: |
