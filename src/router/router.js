@@ -105,7 +105,7 @@ const routes = [
         path: '/franchise/product/list',
         name: 'FranchiseProductList',
         component: FrProductList,
-        meta: { requiresAuth: true, role: 'ROLE_OWNER' }
+        meta: { requiresAuth: true, role: 'ROLE_ROOT' }
     },
     {
         path: '/admin/category/list',

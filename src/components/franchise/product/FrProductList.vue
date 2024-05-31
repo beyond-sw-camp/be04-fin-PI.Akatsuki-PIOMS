@@ -143,6 +143,7 @@ const selectedExposureStatus = ref('전체');
 const filterStatus = ref('');
 const filterColor = ref('');
 const filterSize = ref('');
+const filterProductName = ref('');
 
 const firstCategories = ref([]);
 const secondCategories = ref([]);
@@ -243,16 +244,18 @@ const fetchThirdCategories = async () => {
 const applyFilters = () => {
   filteredLists.value = lists.value.filter(list => {
     const matchesExposureStatus = selectedExposureStatus.value === '전체' || list.productExposureStatus === (selectedExposureStatus.value === '노출');
+    const matchesProductName = !filterProductName.value || list.productName.includes(filterProductName.value);
     const matchesStatus = !filterStatus.value || list.productStatus === filterStatus.value;
     const matchesColor = !filterColor.value || list.productColor === filterColor.value;
     const matchesSize = !filterSize.value || list.productSize === parseInt(filterSize.value, 10);
     const matchesCategory = !selectedThirdCategory.value || list.categoryThirdCode === selectedThirdCategory.value;
 
-    return matchesExposureStatus && matchesStatus && matchesColor && matchesSize && matchesCategory;
+    return matchesExposureStatus && matchesProductName && matchesStatus && matchesColor && matchesSize && matchesCategory;
   });
 };
 const resetFilters = () => {
   selectedExposureStatus.value = '전체';
+  filterProductName.value = '';
   filterStatus.value = '';
   filterColor.value = '';
   filterSize.value = '';
