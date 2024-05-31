@@ -230,7 +230,7 @@ const fetchProductImages = async () => {
       },
     });
     if(!response.ok) {
-      throw new Error('이미지를 불러오지 못했습니다.');
+      throw new Error('Bad request');
     }
     const productImagesData = await response.json();
 
@@ -254,7 +254,7 @@ const fetchFirstCategories = async () => {
       },
     });
     if (!response.ok) {
-      throw new Error('대분류를 불러오는 데 실패했습니다.');
+      throw new Error('Bad request');
     }
     firstCategories.value = await response.json();
   } catch (error) {
@@ -275,7 +275,7 @@ const fetchSecondCategories = async () => {
       },
     });
     if (!response.ok) {
-      throw new Error('중분류를 불러오는 데 실패했습니다.');
+      throw new Error('Bad request');
     }
     secondCategories.value = await response.json();
     thirdCategories.value = [];
@@ -298,7 +298,7 @@ const fetchThirdCategories = async () => {
       },
     });
     if (!response.ok) {
-      throw new Error('소분류를 불러오는 데 실패했습니다.');
+      throw new Error('Bad request');
     }
     thirdCategories.value = await response.json();
   } catch (error) {
@@ -375,7 +375,7 @@ const getMemberId = async () => {
     });
 
     if (!response.ok) {
-      throw new Error('네트워크 오류 발생');
+      throw new Error('Bad request');
     }
 
     const data = await response.json();
@@ -387,7 +387,7 @@ const getMemberId = async () => {
       filteredLists.value = [];
     }
   } catch (error) {
-    console.error('오류 발생:', error);
+    console.error('Bad request:', error);
   }
 };
 const downloadExcel = () => {
@@ -407,7 +407,7 @@ const downloadExcel = () => {
     document.body.appendChild(link);
     link.click();
   }).catch((error) => {
-    console.error('Excel 다운로드 중 오류 발생:', error);
+    console.error('EBad request:', error);
   });
 };
 const paginatedLists = computed(() => {

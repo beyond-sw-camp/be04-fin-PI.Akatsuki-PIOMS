@@ -338,7 +338,6 @@ const uploadAndSaveProduct = async () => {
       body: formData,
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
     });
 

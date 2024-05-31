@@ -1,14 +1,8 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
+# .gitignore 파일에서 'dist' 항목 제거
+# 기존 .gitignore 내용에서 dist 항목 삭제
 node_modules
 .DS_Store
+dist-ssr
 coverage
 *.local
 
