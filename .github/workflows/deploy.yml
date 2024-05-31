@@ -94,16 +94,15 @@ jobs:
           eb deploy
 
       - name: Check Environment Health
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-northeast-2
         run: |
           STATUS=$(aws elasticbeanstalk describe-environments --environment-names AkatsukiFE-env --query 'Environments[0].Health' --output text)
           if [ "$STATUS" != "Green" ]; then
             echo "Environment health is not 'Green'. Current status: $STATUS"
             exit 1
-          fi
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ap-northeast-2
 
       - name: Get Logs
         run: eb logs AkatsukiFE-env
