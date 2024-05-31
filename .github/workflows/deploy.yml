@@ -25,7 +25,7 @@ jobs:
         run: npm run build
 
       - name: Zip Artifacts
-        run: zip -r deploy.zip dist
+        run: zip -r deploy.zip dist server.js
 
       - name: Upload to S3
         run: aws s3 cp deploy.zip s3://elasticbeanstalk-ap-northeast-2-730335325274/${{ github.run_id }}.zip
@@ -45,6 +45,7 @@ jobs:
           environment_name: AkatsukiFE-green-env
           version_label: ${{ github.sha }}
           deployment_package: deploy.zip
+          use_existing_version_if_available: true
 
       - name: Check Green Environment Health
         run: |
@@ -61,7 +62,7 @@ jobs:
       - name: Swap CNAME
         run: |
           echo "Swapping CNAMEs between AkatsukiFE-env and AkatsukiFE-green-env"
-          aws elasticbeanstalk swap-environment-cnames --source-environment-name AkatsukiFE-green-env --destination-environment-name AkatsukiFE-env
+          aws elasticbeanstalk swap-environment-cnames --source-environment-name AkatsukiFE-env --destination-environment-name AkatsukiFE-green-env
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
