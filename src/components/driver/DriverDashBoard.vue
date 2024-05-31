@@ -1,4 +1,6 @@
 <template>
+<main class="main">
+
  <div class = "delivery-list-box">
      <div class="delivery-count">
        <img class = "list" src="@/assets/icon/List.png"/>
@@ -52,6 +54,7 @@
     </div>
   </div>
 
+</main>
 </template>
 
 <script setup>
@@ -100,7 +103,7 @@ import {computed, onMounted, ref} from "vue";
 
  /* 큰 박스 단위들 */
 .delivery-list-box {
-  margin-top: 28px !important;
+  margin-top: 42px !important;
   width: 500px;
   height: 300px;
 }
@@ -108,18 +111,19 @@ import {computed, onMounted, ref} from "vue";
   margin-top: 28px !important;
   width: 500px;
   height: 530px;
-  max-height: 530px;
+  max-height: 500px;
   overflow-y: auto;
 }
 
 .my-delivery-list {
   border: 1px solid #d9d9d9;
-  width: 1200px;
-  height: 900px;
+  margin-top: 0 !important;
+  width: 900px;
+  height: 870px;
   display: flex;
   position: absolute;
+  top: 1px;
   right: 50px;
-  top: 70px;
 }
 
 .delivery-list-box,
@@ -186,7 +190,8 @@ hr.hr1-1 {
 }
 
 hr.hr2 {
-  width: 1200px;
+  width: 900px;
+  top: 8px;
   position: relative;
 }
 
