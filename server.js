@@ -3,10 +3,10 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-// 'dist' 폴더를 정적 파일로 제공
+// 정적 파일 서빙
 app.use(express.static(path.join(__dirname, 'dist')));
 
-// 모든 요청에 대해 'index.html'을 제공
+// 모든 경로에 대해 index.html 서빙
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
