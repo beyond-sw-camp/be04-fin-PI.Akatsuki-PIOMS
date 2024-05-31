@@ -21,18 +21,23 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: List node_modules
+        run: ls -la node_modules
+
+      - name: Print environment variables
+        run: printenv
+
       - name: Build
-        run: npm run build
+        run: |
+          echo "Starting build process..."
+          npm run build
         env:
           NODE_ENV: production
 
       - name: Prepare deployment package
         run: |
-          mkdir -p deploy
-          cp -r dist deploy/
-          cp server.js package.json Procfile deploy/
-          mkdir -p deploy/.ebextensions
-          cat <<EOF > deploy/.ebextensions/nginx.config
+          mkdir -p .ebextensions
+          cat <<EOF > .ebextensions/nginx.config
           files:
             "/etc/nginx/conf.d/myapp.conf":
               mode: "000644"
@@ -68,19 +73,29 @@ jobs:
             01_reload_nginx:
               command: "ln -sfn /etc/nginx/conf.d/myapp.conf /etc/nginx/sites-enabled/myapp && nginx -s reload"
           EOF
-          cd deploy
-          zip -r ../deploy.zip .
 
-      - name: Beanstalk Deploy
-        uses: einaregilsson/beanstalk-deploy@v22
-        with:
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: AkatsukiFE
-          environment_name: AkatsukiFE-env
-          version_label: github-action-${{ github.run_id }}
-          region: ap-northeast-2
-          deployment_package: deploy.zip
+          zip -r deploy.zip dist server.js package.json Procfile .ebextensions .platform
+
+      - name: Install AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli
+
+      - name: Install Elastic Beanstalk CLI
+        run: |
+          pip install awsebcli
+
+      - name: Configure AWS CLI
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set default.region ap-northeast-2
+
+      - name: Deploy to Elastic Beanstalk
+        run: |
+          eb init AkatsukiFE --platform node.js --region ap-northeast-2
+          eb use AkatsukiFE-env
+          eb deploy
 
       - name: Check Environment Health
         run: |
