@@ -43,7 +43,11 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { defineEmits } from 'vue';
+import { useStore } from 'vuex';
+import Swal from "sweetalert2";
 
+const store = useStore();
+const accessToken = store.state.accessToken;
 const askData = ref(null);
 const answer = ref('');
 const route = useRoute();
@@ -59,10 +63,12 @@ const fetchAskData = async () => {
     console.error('askCode is not defined');
     return;
   }
+
   try {
     const response = await fetch(`http://localhost:5000/admin/ask/${askCode}`, {
       method: 'GET',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     });
@@ -103,6 +109,7 @@ const submitAnswer = async () => {
     const response = await fetch(`http://localhost:5000/admin/ask/answer/${askCode}`, {
       method: 'POST',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -115,8 +122,14 @@ const submitAnswer = async () => {
     }
 
     console.log('Answer submitted successfully');
+    await Swal.fire({
+      icon: 'success',
+      title: '등록 성공',
+      text: '답변이 작성되었습니다.',
+    });
     emit('refreshData');
     props.closeRegist(); // Close the popup after successful submission
+    window.location.reload(); // 페이지 새로고침
   } catch (error) {
     console.error('Failed to submit answer:', error);
   }
@@ -124,6 +137,7 @@ const submitAnswer = async () => {
 
 onMounted(fetchAskData);
 </script>
+
 
 <style scoped>
 .container {
