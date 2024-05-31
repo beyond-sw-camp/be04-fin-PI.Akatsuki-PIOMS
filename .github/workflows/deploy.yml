@@ -69,6 +69,9 @@ jobs:
                     root /usr/share/nginx/html;
                   }
                 }
+          container_commands:
+            01_reload_nginx:
+              command: "ln -sfn /etc/nginx/conf.d/myapp.conf /etc/nginx/sites-enabled/myapp && nginx -s reload"
           EOF
 
           zip -r deploy.zip dist server.js package.json Procfile .ebextensions .platform
