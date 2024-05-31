@@ -99,6 +99,9 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import Breadcrumb from '@/components/amdin/ask/Breadcrumb.vue'; // Breadcrumb 컴포넌트 임포트
+import { useStore } from 'vuex';
+const store = useStore();
+const accessToken = store.state.accessToken;
 
 const histories = ref([]);
 const filteredHistories = ref([]);
@@ -111,8 +114,8 @@ const currentPage = ref(1);
 const itemsPerPage = 15;
 
 const breadcrumbs = [
-  { label: '통계 및 이력 관리', link: null },
-  { label: '이력 관리', link: null },
+  {label: '통계 및 이력 관리', link: null},
+  {label: '이력 관리', link: null},
 ];
 
 const fetchHistories = async () => {
@@ -120,6 +123,7 @@ const fetchHistories = async () => {
     const response = await fetch('http://localhost:5000/admin/log', {
       method: 'GET',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     });
@@ -217,6 +221,7 @@ onMounted(() => {
 .container {
   padding: 20px;
 }
+
 .filter-section {
   display: flex;
   justify-content: center;
