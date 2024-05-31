@@ -80,9 +80,13 @@ jobs:
           aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
           aws configure set default.region ap-northeast-2
 
+      - name: Initialize Elastic Beanstalk
+        run: |
+          eb init -p "Node.js 20 running on 64bit Amazon Linux 2023 v6.1.5" AkatsukiFE --region ap-northeast-2
+          eb create AkatsukiFE-env --platform "Node.js 20 running on 64bit Amazon Linux 2023 v6.1.5" --region ap-northeast-2
+
       - name: Deploy to Elastic Beanstalk
         run: |
-          eb init AkatsukiFE --platform "Node.js 20 running on 64bit Amazon Linux 2023/6.1.5" --region ap-northeast-2
           eb use AkatsukiFE-env
           eb deploy
 
