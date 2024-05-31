@@ -105,7 +105,10 @@ import { ref, computed, onMounted } from 'vue';
 import NoticeResisterPopup from '@/components/notice/NoticeResisterPopup.vue';
 import NoticeDetailsPopup from '@/components/notice/NoticeDetailsPopup.vue';
 import NoticeEditPopup from '@/components/notice/NoticeEditPopup.vue';
+import { useStore } from 'vuex';
 
+const store = useStore();
+const accessToken = store.state.accessToken;
 const lists = ref([]);
 const headers = ref([
   { key: 'noticeCode', label: 'No' },
@@ -123,6 +126,10 @@ const getNotice = async () => {
   try {
     const response = await fetch('http://localhost:5000/admin/notice/list', {
       method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
     });
 
     if (!response.ok) {
@@ -235,6 +242,7 @@ const submitNotice = async (notice) => {
     const response = await fetch(url, {
       method: method,
       headers: {
+          'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(notice),
@@ -259,7 +267,12 @@ const deleteNotice = async (noticeCode) => {
     if (confirm('해당 공지사항을 삭제하시겠습니까?')) {
       const response = await fetch(`http://localhost:5000/admin/notice/list/delete/${noticeCode}?requesterAdminCode=1`, {
         method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
       });
+
 
       if (!response.ok) {
         throw new Error('공지사항 삭제 실패');
@@ -283,19 +296,18 @@ const closeDetailsPopup = () => {
 
 const viewPopup = ref(false);
 
+const sortedNotices = computed(() => {
+  return notices.value.slice().sort((a, b) => {
+    return new Date(b.noticeEnrollDate) - new Date(a.noticeEnrollDate);
+  });
+});
+
 onMounted(() => {
   getNotice();
 });
 </script>
 
   <style scoped>
-  .main {
-    width: 1900px;
-    position: relative;
-    left: 100px;
-    height: 1085px;
-  }
-
   .modify,
   .delete {
     border: 1px !important;
