@@ -118,6 +118,7 @@
 <script setup>
 import { onMounted, ref, defineProps } from 'vue';
 import { useStore } from 'vuex';
+import ProductList from "@/components/amdin/product/ProductList.vue";
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -184,6 +185,7 @@ const submitProduct = async () => {
     }
 
     console.log('드디어 수정 성공!');
+    location.reload(ProductList);
     props.closeEdit();
   } catch (error) {
     console.error('수정 실패:', error);

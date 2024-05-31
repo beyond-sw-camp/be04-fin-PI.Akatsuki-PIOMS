@@ -106,12 +106,14 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" 
-            class="allpost"
-            @dblclick="showModifyPopup(item.productCode,item.productName,item.productCount,item.productPrice,item.productStatus,item.productExposureStatus,
-                                        item.productColor,item.productSize,item.categoryFirstCode,item.categorySecondCode,item.categoryThirdCode,item.productContent)">
+        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost" @dblclick="showModifyPopup(item.productCode,item.productName,item.productCount,item.productPrice,item.productStatus,item.productExposureStatus,item.productColor,item.productSize,item.categoryFirstCode,item.categorySecondCode,item.categoryThirdCode,item.productContent)">
           <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">
+            <template v-if="header.key !== 'productExposureStatus'">
               {{ item[header.key] }}
+            </template>
+            <template v-else>
+              {{ item.productExposureStatus ? '노출' : '미노출' }}
+            </template>
             <template v-if="header.key === 'imgUrl'">
               <img :src="getProductImageUrl(item.productCode)" class="product-img" />
             </template>
@@ -312,7 +314,17 @@ const applyFilters = () => {
     const matchesStatus = !filterStatus.value || list.productStatus === filterStatus.value;
     const matchesColor = !filterColor.value || list.productColor === filterColor.value;
     const matchesSize = !filterSize.value || list.productSize === parseInt(filterSize.value, 10);
-    const matchesCategory = !selectedThirdCategory.value || list.categoryThirdCode === selectedThirdCategory.value;
+
+    let matchesCategory = true;
+    if (selectedFirstCategory.value) {
+      matchesCategory = list.categoryFirstCode === selectedFirstCategory.value;
+      if (matchesCategory && selectedSecondCategory.value) {
+        matchesCategory = list.categorySecondCode === selectedSecondCategory.value;
+        if (matchesCategory && selectedThirdCategory.value) {
+          matchesCategory = list.categoryThirdCode === selectedThirdCategory.value;
+        }
+      }
+    }
 
     return matchesProductName && matchesExposureStatus && matchesStatus && matchesColor && matchesSize && matchesCategory;
   });
