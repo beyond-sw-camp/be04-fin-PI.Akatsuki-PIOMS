@@ -1,1 +1,1 @@
-web: npm start
+web: cp -r * /var/app/current/

@@ -33,20 +33,21 @@ jobs:
           mkdir -p .ebextensions
           cat <<EOF > .ebextensions/nginx.config
           files:
-            "/etc/nginx/sites-available/myapp":
-              mode: "000644"
+            "/etc/nginx/conf.d/vueapp.conf":
+              mode: "000755"
               owner: root
               group: root
               content: |
                 server {
                     listen 80;
-                    server_name localhost;
+                    server_name _;
 
                     access_log /var/log/nginx/access.log;
                     error_log /var/log/nginx/error.log;
 
                     location / {
                         root /var/app/current/dist;
+                        index index.html;
                         try_files \$uri \$uri/ /index.html;
                     }
 
@@ -57,9 +58,9 @@ jobs:
                 }
           container_commands:
             01_reload_nginx:
-              command: "ln -sfn /etc/nginx/sites-available/myapp /etc/nginx/sites-enabled/myapp && nginx -s reload"
+              command: "nginx -s reload"
           EOF
-          zip -r deploy.zip dist server.js package.json Procfile .ebextensions
+          zip -r deploy.zip dist package.json .ebextensions
 
       - name: Install AWS CLI
         run: |
@@ -81,7 +82,7 @@ jobs:
 
       - name: Deploy to Elastic Beanstalk
         run: |
-          eb init AkatsukiFE --platform node.js --region ap-northeast-2
+          eb init AkatsukiFE --platform "Node.js 20 running on 64bit Amazon Linux 2023/6.1.5" --region ap-northeast-2
           eb use AkatsukiFE-env
           eb deploy
 
