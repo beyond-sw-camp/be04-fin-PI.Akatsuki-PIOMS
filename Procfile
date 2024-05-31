@@ -1,1 +1,1 @@
-web: npm run start
+web: /etc/nginx/sites-available/myapp
