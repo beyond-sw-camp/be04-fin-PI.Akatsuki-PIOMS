@@ -151,13 +151,13 @@ const routes = [
         path: '/franchise/favorite/register',
         name: 'FranchiseFavoriteRegister',
         component: FavoriteRegister,
-        meta: { requiresAuth: true, role: 'ROLE_ROOT' }
+        meta: { requiresAuth: true, role: 'ROLE_OWNER' }
     },
     {
         path: '/franchise/favorite/list',
         name: 'FranchiseFavoriteList',
         component: FavoriteList,
-        meta: { requiresAuth: true, role: 'ROLE_ROOT' }
+        meta: { requiresAuth: true, role: 'ROLE_OWNER' }
     },
     {
 
@@ -174,18 +174,14 @@ const routes = [
     {
         path: '/driver/home',
         name: 'DriverDashboard',
-        component: DriverDashBoard
+        component: DriverDashBoard,
+        meta: { requiresAuth: true, role: 'ROLE_DRIVER' }
     },
     // {
     //     path: '/franchise/home',
     //     name: 'FranchiseDashBoard',
     //     component: FranchiseDashBoard
     // },
-    {
-        component: DriverDashBoard,
-        meta: { requiresAuth: true, role: 'ROLE_ROOT' }
-    }
-
 ];
 
 const router = createRouter({

@@ -50,11 +50,6 @@ const deleteCategoryFirst = async () => {
       },
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`카테고리 대분류 수정에 실패했습니다. 상태 코드: ${response.status}, 메시지: ${errorText}`);
-    }
-
     console.log('카테고리 대분류를 삭제하였습니다.');
     location.reload(CategoryList);
     emits('close');

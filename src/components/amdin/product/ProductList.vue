@@ -108,40 +108,24 @@
         <tbody>
         <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost">
           <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">
-            <template v-if="header.key !== 'productExposureStatus'">
-              <!-- productName 열인 경우 버튼 추가 -->
-              <template v-if="header.key === 'productName'">
-                <button class="button-as-text" @click="showModifyPopup(item.productCode,item.productName,item.productCount,item.productPrice,item.productStatus,item.productColor,item.productSize,item.categoryFirstCode,item.categorySecondCode,item.categoryThirdCode,item.productContent)">{{ item[header.key] }}</button>
-              </template>
-              <!-- productName 열이 아닌 경우 텍스트로 표시 -->
-              <template v-else>
+            <template v-if="header.key === 'productName'">
+              <button class="button-as-text" @click="showModifyPopup(item.productCode,item.productName,item.productCount,item.productPrice,item.productStatus,item.productColor,item.productSize,item.categoryFirstName,item.categorySecondName,item.categoryThirdName,item.productContent)">
                 {{ item[header.key] }}
-              </template>
+              </button>
             </template>
-            <!-- productExposureStatus 열인 경우 노출 상태에 따라 텍스트로 표시 -->
+            <template v-else-if="header.key === 'productExposureStatus'">
+              <button class="button-as-text" @click="showDeletePopup(item.productCode, item.productName, item.productExposureStatus)">
+                {{ item.productExposureStatus ? '노출' : '미노출' }}
+              </button>
+            </template>
             <template v-else>
-              {{ item.productExposureStatus ? '노출' : '미노출' }}
+              {{ item[header.key] }}
             </template>
-            <!-- imgUrl 열인 경우 이미지로 표시 -->
             <template v-if="header.key === 'imgUrl'">
               <img :src="getProductImageUrl(item.productCode)" class="product-img" />
             </template>
           </td>
         </tr>
-
-        <!--        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost" @dblclick="showModifyPopup(item.productCode,item.productName,item.productCount,item.productPrice,item.productStatus,item.productExposureStatus,item.productColor,item.productSize,item.categoryFirstCode,item.categorySecondCode,item.categoryThirdCode,item.productContent)">-->
-<!--          <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">-->
-<!--            <template v-if="header.key !== 'productExposureStatus'">-->
-<!--              {{ item[header.key] }}-->
-<!--            </template>-->
-<!--            <template v-else>-->
-<!--              {{ item.productExposureStatus ? '노출' : '미노출' }}-->
-<!--            </template>-->
-<!--            <template v-if="header.key === 'imgUrl'">-->
-<!--              <img :src="getProductImageUrl(item.productCode)" class="product-img" />-->
-<!--            </template>-->
-<!--          </td>-->
-<!--        </tr>-->
         </tbody>
       </table>
     </div>
@@ -157,11 +141,15 @@
                                          :currentProductStatus="currentProductStatus"
                                          :currentProductColor="currentProductColor"
                                          :currentProductSize="currentProductSize"
-                                         :currentCategoryFirstCode="currentCategoryFirstCode"
-                                         :currentCategorySecondCode="currentCategorySecondCode"
-                                         :currentCategoryThirdCode="currentCategoryThirdCode"
+                                         :currentCategoryFirstName="currentCategoryFirstName"
+                                         :currentCategorySecondName="currentCategorySecondName"
+                                         :currentCategoryThirdName="currentCategoryThirdName"
                                          :currentProductContent="currentProductContent"
                                          :closeEdit="closeEdit"/>
+    <ProductDeletePopup v-if="deletePopup" :currentProductCode="currentProductCode"
+                                           :currentProductName="currentProductName"
+                                           :currentProductExposureStatus="currentProductExposureStatus"
+                                           :closeDeletePopup="closeDeletePopup"/>
   </div>
 </template>
 
@@ -169,6 +157,7 @@
 import { ref, computed } from 'vue';
 import ProductPostPopup from "@/components/amdin/product/ProductPostPopup.vue"
 import ProductDetailPopup from "@/components/amdin/product/ProductDetailPopup.vue";
+import ProductDeletePopup from "@/components/amdin/product/ProductDeletePopup.vue";
 import axios from "axios";
 import { useStore } from 'vuex';
 const store = useStore();
@@ -186,7 +175,9 @@ const headers = ref([
   { key: 'productExposureStatus', label: '상품 노출 상태'},
   { key: 'productColor', label: '색상'},
   { key: 'productSize', label: '사이즈'},
-  { key: 'categoryThirdCode', label: '카테고리 코드'},
+  { key: 'categoryThirdName', label: '카테고리 코드'},
+  { key: 'categorySecondName', label: '카테고리 코드'},
+  { key: 'categoryFirstName', label: '카테고리 코드'},
 ]);
 
 const filteredLists = ref([]);
@@ -215,15 +206,16 @@ const currentProductStatus = ref('');
 const currentProductExposureStatus = ref('');
 const currentProductColor = ref('');
 const currentProductSize = ref('');
-const currentCategoryFirstCode = ref('');
-const currentCategorySecondCode = ref('');
-const currentCategoryThirdCode = ref('');
+const currentCategoryFirstName = ref('');
+const currentCategorySecondName = ref('');
+const currentCategoryThirdName = ref('');
 const currentProductContent = ref('');
 const productImages = ref({});
 const editPopup = ref(false);
+const deletePopup = ref(false);
 
 const showModifyPopup = (productCode, productName, productCount, productPrice, productStatus, productColor, productSize,
-                          categoryFirstCode, categorySecondCode, categoryThirdCode, productContent) => {
+                          categoryFirstName, categorySecondName, categoryThirdName, productContent) => {
   editPopup.value = !editPopup.value;
   setCurrentProductCode(productCode);
   setCurrentProductName(productName);
@@ -232,13 +224,22 @@ const showModifyPopup = (productCode, productName, productCount, productPrice, p
   setCurrentProductStatus(productStatus);
   setCurrentProductColor(productColor);
   setCurrentProductSize(productSize);
-  setCurrentCategoryFirstCode(categoryFirstCode);
-  setCurrentCategorySecondCode(categorySecondCode);
-  setCurrentCategoryThirdCode(categoryThirdCode);
+  setCurrentCategoryFirstName(categoryFirstName);
+  setCurrentCategorySecondName(categorySecondName);
+  setCurrentCategoryThirdName(categoryThirdName);
   setCurrentProductContent(productContent);
+}
+const showDeletePopup = (productCode, productName, productExposureStatus) => {
+  deletePopup.value = !deletePopup.value;
+  setCurrentProductCode(productCode);
+  setCurrentProductName(productName);
+  setCurrentProductExposureStatus(productExposureStatus);
 }
 const closeEdit = () => {
   editPopup.value = !editPopup.value;
+}
+const closeDeletePopup = () => {
+  deletePopup.value = !deletePopup.value;
 }
 const getProductImageUrl = (productCode) => {
   return productImages.value[productCode] || 'path/to/default-image.jpg';
@@ -382,17 +383,20 @@ const setCurrentProductColor = (productColor) => {
 const setCurrentProductSize = (productSize) => {
   currentProductSize.value = productSize;
 }
+const setCurrentProductExposureStatus = (productExposureStatus) => {
+  currentProductExposureStatus.value = productExposureStatus;
+}
 const setCurrentProductContent = (productContent) => {
   currentProductContent.value = productContent;
 }
-const setCurrentCategoryFirstCode = (categoryFirstCode) => {
-  currentCategoryFirstCode.value = categoryFirstCode;
+const setCurrentCategoryFirstName = (categoryFirstName) => {
+  currentCategoryFirstName.value = categoryFirstName;
 }
-const setCurrentCategorySecondCode = (categorySecondCode) => {
-  currentCategorySecondCode.value = categorySecondCode;
+const setCurrentCategorySecondName = (categorySecondName) => {
+  currentCategorySecondName.value = categorySecondName;
 }
-const setCurrentCategoryThirdCode = (categoryThirdCode) => {
-  currentCategoryThirdCode.value = categoryThirdCode;
+const setCurrentCategoryThirdName = (categoryThirdName) => {
+  currentCategoryThirdName.value = categoryThirdName;
 }
 const getMemberId = async () => {
   try {
