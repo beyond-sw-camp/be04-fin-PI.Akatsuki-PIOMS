@@ -100,11 +100,11 @@ const franchiseCode = ref(1);
 const adminCode = ref(2);
 
 const headers = ref([
-  { key: 'exchangeCode', label: '주문 코드' },
+  { key: 'exchangeCode', label: '반품코드' },
+  { key: 'franchiseName', label: '신청일' },
+  { key: 'exchangeDate', label: '가맹점' },
+  { key: 'franchiseOwnerName', label: '점주' },
   { key: 'exchangeStatus', label: '주문 상태' },
-  { key: 'exchangeDate', label: '가맹점 이름' },
-  { key: 'franchiseName', label: '주문 날짜' },
-  { key: 'franchiseOwnerName', label: '가맹점주 이름' },
 ]);
 
 const filter = ref('');

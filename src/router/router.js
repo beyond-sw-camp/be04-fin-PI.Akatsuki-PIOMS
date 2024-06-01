@@ -26,7 +26,7 @@ import FavoriteList from "@/components/franchise/favorite/FavoriteList.vue";
 import AdminMembers from "@/components/amdin/member/AdminMemberPage.vue";
 import Log from "@/components/log/Log.vue";
 import NoticeList from "@/components/notice/NoticeList.vue";
-import FranchiseDashBoard from "@/components/franchise/FranchiseDashBoard.vue";
+// import FranchiseDashBoard from "@/components/franchise/FranchiseDashBoard.vue";
 import DriverDashBoard from "@/components/driver/DriverDashBoard.vue";
 
 
@@ -176,11 +176,11 @@ const routes = [
         name: 'DriverDashboard',
         component: DriverDashBoard
     },
-    {
-        path: '/franchise/home',
-        name: 'FranchiseDashBoard',
-        component: FranchiseDashBoard
-    },
+    // {
+    //     path: '/franchise/home',
+    //     name: 'FranchiseDashBoard',
+    //     component: FranchiseDashBoard
+    // },
     {
         component: DriverDashBoard,
         meta: { requiresAuth: true, role: 'ROLE_ROOT' }
@@ -200,12 +200,12 @@ router.beforeEach(async (to, from, next) => {
 
     if (to.matched.some(record => record.meta.requiresAuth)) {
         if (!isAuthenticated) {
-            next({ name: 'AdminLogin' });
+            next({ name: 'CommonLogin' });
         } else {
             const requiredRoles = to.meta.role;
             if (requiredRoles && !requiredRoles.includes(userRole)) {
                 // 사용자가 해당 경로에 접근할 권한이 없는 경우
-                next({ name: 'AdminLogin' });
+                next({ name: 'CommonLogin' });
             } else {
                 next();
             }

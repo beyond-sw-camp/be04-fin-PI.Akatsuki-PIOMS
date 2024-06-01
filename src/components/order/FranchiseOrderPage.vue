@@ -3,7 +3,7 @@
     <img src="../../assets/icon/List.png" alt="List Icon" class="breadcrumb-icon" />
     <span>주문 조회 및 관리</span>
   </div>
-  <div>
+  <div class="container" >
     <div class="filter-section">
       <table class="filter-table">
         <tr>
@@ -72,7 +72,9 @@
         :franchiseCode="franchiseCode"
         :franchiseOwnerCode="franchiseOwnerCode"
         />
-
+  <div style="justify-content: center;
+  display: flex;
+  align-items: center;">
     <table style=" margin-top: 5%;">
       <thead >
         <tr>
@@ -112,7 +114,7 @@
         </tr>
       </tbody>
     </table>
-
+  </div>
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage === 1">이전</button>
       <span>페이지 {{ currentPage }} / {{ totalPages }}</span>

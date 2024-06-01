@@ -3,7 +3,8 @@
     <img src="../../assets/icon/List.png" alt="List Icon" class="breadcrumb-icon" />
     <span>발주 조회 및 관리</span>
   </div>
-  <div>
+
+
     <div class="filter-section">
       <table class="filter-table">
         <tr>
@@ -63,11 +64,13 @@
         :detailItem="detailItem"
         :getOrderList="getOrderList"
     />
-
-    <table style=" margin-top: 5%;">
+    <div class="table-container">
+    <table class="table">
       <thead >
-        <tr >
-          <th v-for="(header, index) in headers" :key="index" > <div align="center">{{ header.label }}</div></th>
+        <tr class="header1">
+          <th v-for="(header, index) in headers" :key="index" > 
+            {{ header.label }}
+          </th>
           <th>발주상태</th>
         </tr>
       </thead>
@@ -77,35 +80,45 @@
             @dblclick="showDetailPopup(item)"
             @mouseenter="highlightRow(rowIndex)"
             @mouseleave="resetRowColor(rowIndex)"
-            align="center"
+            class="allpost"
         >
-          <td v-for="(header, colIndex) in headers" :key="colIndex" >
-            {{ item[header.key] }}
-          </td>
-          <td v-if="item.orderCondition=='승인대기'">
+          <td class="num">{{ item.orderCode }}</td>
+          <td>{{ item.franchiseName }}</td>
+          <td>{{ item.franchiseOwnerName }}</td>
+          
+          <td >{{ item.orderDate }}</td>
+
+          <td v-if="item.invoiceCode!=0" class="num" style="width:5%">{{ item.invoiceCode }}</td>
+          <td v-else class="num" style="width:5%">-</td>
+
+          <td v-if="item.invoiceDate!=null">{{ item.invoiceDate }}</td>
+          <td v-else>-</td>
+
+          <td v-if="item.orderCondition=='승인대기'" >
             <div class="condition-button pending">승인대기</div>
           </td>
-          <td v-else-if="item.orderCondition=='승인완료'">
+          <td v-else-if="item.orderCondition=='승인완료'" >
             <div class="condition-button approved">승인완료</div>
           </td>
-          <td v-else-if="item.orderCondition=='승인거부'">
+          <td v-else-if="item.orderCondition=='승인거부'" >
             <div class="condition-button rejected">승인거부</div>
           </td>
-          <td v-else-if="item.orderCondition=='검수대기'">
+          <td v-else-if="item.orderCondition=='검수대기'" >
             <div class="condition-button inspection-pending">검수대기</div>
           </td>
-          <td v-else-if="item.orderCondition=='검수완료'">
+          <td v-else-if="item.orderCondition=='검수완료'" >
             <div class="condition-button inspection-completed">검수완료</div>
           </td>
         </tr>
       </tbody>
     </table>
+  </div>
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage === 1">이전</button>
       <span>페이지 {{ currentPage }} / {{ totalPages }}</span>
       <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
     </div>
-  </div>
+
 </template>
 
 
@@ -267,4 +280,5 @@ const resetRowColor = (index) => {
 
 <style>
   @import "../../assets/css/order.css" ;
+  
 </style>
