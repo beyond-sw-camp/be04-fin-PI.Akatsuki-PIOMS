@@ -38,41 +38,8 @@
             </table>
             <table class="top-table">
               <tr>
-                <td class="insert-label">재고량</td>
-                <td class="insert-input">
-<!--                  <input type="number" v-bind:value="currentProductCount" v-on:input="updateCount = $event.target.value" class="textInput" />-->
-                  <input type="number" :value="currentProductCount" @input="updateCount = $event.target.value" class="textInput" />
-                </td>
-                <td class="insert-label">가격</td>
-                <td class="insert-input">
-<!--                  <input type="number" v-bind:value="currentProductPrice" v-on:input="updatePrice = $event.target.value" class="textInput" />-->
-                  <input type="number" :value="currentProductPrice" @input="updatePrice = $event.target.value" class="textInput" />
-                </td>
-                <td class="insert-label">상품상태</td>
-                <td class="insert-input">
-<!--                  <select v-bind:value="currentProductStatus" v-on:change="updateStatus = $event.target.value" class="textInput">-->
-                  <select :value="currentProductStatus" @change="updateStatus = $event.target.value" class="textInput">
-                    <option value="공급가능">공급가능</option>
-                    <option value="일시제한">일시제한</option>
-                    <option value="단종">단종</option>
-                    <option value="품절">품절</option>
-                  </select>
-                </td>
-              </tr>
-            </table>
-            <table class="insert-table">
-              <tr>
-                <td class="insert-label">상품노출상태</td>
-                <td class="insert-input">
-<!--                  <select v-bind:value="currentProductExposureStatus" v-on:change="updateExposureStatus = $event.target.value" class="textInput">-->
-                  <select :value="currentProductExposureStatus" @change="updateExposureStatus = $event.target.value" class="textInput">
-                    <option value="true">노출</option>
-                    <option value="false">미노출</option>
-                  </select>
-                </td>
                 <td class="insert-label">색상</td>
                 <td class="insert-input">
-<!--                  <select v-bind:value="currentProductColor" v-on:change="updateColor = $event.target.value" class="textInput">-->
                   <select :value="currentProductColor" @change="updateColor = $event.target.value" class="textInput">
                     <option value="빨간색">빨간색</option>
                     <option value="주황색">주황색</option>
@@ -85,13 +52,33 @@
                 </td>
                 <td class="insert-label">사이즈</td>
                 <td class="insert-input">
-<!--                  <select v-bind:value="currentProductSize" v-on:change="updateSize = $event.target.value" class="textInput">-->
                   <select :value="currentProductSize" @change="updateSize = $event.target.value" class="textInput">
                     <option value="90">90</option>
                     <option value="95">95</option>
                     <option value="100">100</option>
                     <option value="105">105</option>
                     <option value="110">110</option>
+                  </select>
+                </td>
+              </tr>
+            </table>
+            <table class="insert-table">
+              <tr>
+                <td class="insert-label">재고량</td>
+                <td class="insert-input">
+                  <input type="number" :value="currentProductCount" @input="updateCount = $event.target.value" class="textInput" />
+                </td>
+                <td class="insert-label">가격</td>
+                <td class="insert-input">
+                  <input type="number" :value="currentProductPrice" @input="updatePrice = $event.target.value" class="textInput" />
+                </td>
+                <td class="insert-label">상품상태</td>
+                <td class="insert-input">
+                  <select :value="currentProductStatus" @change="updateStatus = $event.target.value" class="textInput">
+                    <option value="공급가능">공급가능</option>
+                    <option value="일시제한">일시제한</option>
+                    <option value="단종">단종</option>
+                    <option value="품절">품절</option>
                   </select>
                 </td>
               </tr>
@@ -129,7 +116,6 @@ const updateName = ref('');
 const updateCount = ref('');
 const updatePrice = ref('');
 const updateStatus = ref('');
-const updateExposureStatus = ref('');
 const updateColor = ref('');
 const updateSize = ref('');
 const updateFirst = ref('');
@@ -143,7 +129,6 @@ const props = defineProps({
   currentProductCount: String,
   currentProductPrice: String,
   currentProductStatus: String,
-  currentProductExposureStatus: Boolean,
   currentProductColor: String,
   currentProductSize: String,
   currentCategoryFirstCode: String,
@@ -158,7 +143,6 @@ const submitProduct = async () => {
     productCount: updateCount.value,
     productPrice: updatePrice.value,
     productStatus: updateStatus.value,
-    productExposureStatus: updateExposureStatus.value,
     productColor: updateColor.value,
     productSize: updateSize.value,
     categoryFirstCode: updateFirst.value,
