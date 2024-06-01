@@ -25,6 +25,7 @@ import FavoriteList from "@/components/franchise/favorite/FavoriteList.vue";
 import Log from "@/components/log/Log.vue";
 
 import NoticeList from "@/components/notice/NoticeList.vue";
+import FranchiseDashBoard from "@/components/franchise/FranchiseDashBoard.vue";
 import DriverDashBoard from "@/components/driver/DriverDashBoard.vue";
 
 
@@ -137,13 +138,13 @@ const routes = [
         path: '/franchise/favorite/register',
         name: 'FranchiseFavoriteRegister',
         component: FavoriteRegister,
-        meta: { requiresAuth: true, role: 'ROLE_OWNER' }
+        meta: { requiresAuth: true, role: 'ROLE_ROOT' }
     },
     {
         path: '/franchise/favorite/list',
         name: 'FranchiseFavoriteList',
         component: FavoriteList,
-        meta: { requiresAuth: true, role: 'ROLE_OWNER' }
+        meta: { requiresAuth: true, role: 'ROLE_ROOT' }
     },
     {
         path: '/admin/logs',
@@ -154,6 +155,14 @@ const routes = [
     {
         path: '/driver/home',
         name: 'DriverDashboard',
+        component: DriverDashBoard
+    },
+    {
+        path: '/franchise/home',
+        name: 'FranchiseDashBoard',
+        component: FranchiseDashBoard
+    },
+    {
         component: DriverDashBoard,
         meta: { requiresAuth: true, role: 'ROLE_ROOT' }
     }
