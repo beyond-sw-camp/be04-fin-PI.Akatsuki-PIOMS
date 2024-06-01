@@ -37,6 +37,7 @@
                 <td class="insert-label">상품노출상태</td>
                 <td class="insert-input">
                   <select v-model="selectedExposureStatus" class="textInput">
+                    <option value="">전체 노출상태</option>
                     <option value="true">노출</option>
                     <option value="false">미노출</option>
                   </select>
@@ -69,7 +70,9 @@
             </table>
             <table class="second-insert-table">
               <tr>
-                <td class="second-insert-label"><div class="second-insert-label0">카테고리 구분</div></td>
+                <td class="second-insert-label">
+                  <div class="second-insert-label0">카테고리 구분</div>
+                </td>
                 <td class="second-insert-input">
                   <select v-model="selectedFirstCategory" @change="fetchCategories('second')" class="categories">
                     <option value="">대분류</option>
@@ -131,6 +134,10 @@
 <script setup>
 import { onMounted, defineEmits, ref } from 'vue';
 import imageSrc from '@/assets/icon/picture.png';
+import { useStore } from 'vuex';
+import ProductList from "@/components/amdin/product/ProductList.vue";
+const store = useStore();
+const accessToken = store.state.accessToken;
 
 const emit = defineEmits(['close']);
 const imagePreview = ref(imageSrc);
@@ -139,7 +146,7 @@ const insertProductName = ref('');
 const insertProductCount = ref('');
 const insertProductPrice = ref('');
 const insertStatus = ref('');
-const selectedExposureStatus = ref('true');
+const selectedExposureStatus = ref('');
 const insertColor = ref('');
 const insertSize = ref('');
 const insertContent = ref('');
@@ -150,6 +157,7 @@ const selectedFirstCategory = ref('');
 const selectedSecondCategory = ref('');
 const selectedThirdCategory = ref('');
 let imageUrl = '';
+
 const fetchCategories = async (level) => {
   let url = '';
   switch (level) {
@@ -165,7 +173,13 @@ const fetchCategories = async (level) => {
   }
 
   try {
-    const response = await fetch(url, { method: 'GET' });
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
     if (!response.ok) {
       throw new Error(`${level} 카테고리를 불러오는 데 실패했습니다.`);
     }
@@ -191,7 +205,6 @@ const resetImage = () => {
   imagePreview.value = imageSrc;
   imgOn.value = false;
 };
-
 const previewImage = (event) => {
   const file = event.target.files[0];
   if(file) {
@@ -218,7 +231,11 @@ const uploadImage = async () => {
     const response = await fetch(`http://localhost:5000/admin/product/image`, {
       method: 'POST',
       credentials: 'include',
-      body: formData
+      body: formData,
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
     });
 
     if (!response.ok) {
@@ -233,7 +250,6 @@ const uploadImage = async () => {
     console.error('오류:', error);
   }
 };
-
 const saveProduct = async (imageUrl) => {
   const requestData = {
     productName: insertProductName.value,
@@ -256,7 +272,8 @@ const saveProduct = async (imageUrl) => {
     const response = await fetch('http://localhost:5000/admin/product/create?requesterAdminCode=1', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(requestData)
     });
@@ -272,11 +289,9 @@ const saveProduct = async (imageUrl) => {
     console.error('오류:', error);
   }
 };
-
 const closePopup = () => {
   emit('close');
 };
-
 onMounted(() => {
   const numberInputs = document.querySelectorAll('input[type="number"]');
   numberInputs.forEach(input => {
@@ -290,16 +305,64 @@ onMounted(() => {
       input.value = input.value.replace(/[^0-9]/g, '');
     });
   });
-
   fetchCategories('first');
 });
 
 
 const uploadAndSaveProduct = async () => {
+  if(!insertProductName.value.trim()) {
+    alert('상품명을 입력해주세요.');
+    return;
+  }
+  if(!insertProductCount.value) {
+    alert('상품의 재고량을 입력해주세요.');
+    return;
+  }
+  if(!insertProductPrice.value) {
+    alert('상품 가격을 입력해주세요.');
+    return;
+  }
+  if(!insertStatus.value.trim()) {
+    alert('상품의 상태를 정해주세요.');
+    return;
+  }
+  if(!selectedExposureStatus.value.trim()) {
+    alert('상품의 노출상태를 정해주세요.');
+    return;
+  }
+  if(!insertColor.value.trim()) {
+    alert('상품의 색상을 정해주세요.');
+    return;
+  }
+  if(!insertSize.value.trim()) {
+    alert('상품의 사이즈를 정해주세요.');
+    return;
+  }
+  if(!selectedFirstCategory.value) {
+    alert('대분류 카테고리를 정해주세요.');
+    return;
+  }
+  if(!selectedSecondCategory.value) {
+    alert('중분류 카테고리를 정해주세요.');
+    return;
+  }
+  if(!selectedThirdCategory.value) {
+    alert('소분류 카테고리를 정해주세요.');
+    return;
+  }
+  if(!insertContent.value.trim()) {
+    alert('상품의 상세정보를 입력해주세요.');
+    return;
+  }
   const fileInput = document.querySelector('input[type="file"]');
   const file = fileInput.files[0];
 
   const formData = new FormData();
+
+  if(!file) {
+    alert('상품의 사진을 첨부해주세요.');
+    return;
+  }
 
   // 이미지 파일 추가
   if (file) {
@@ -323,7 +386,10 @@ const uploadAndSaveProduct = async () => {
     const response = await fetch('http://localhost:5000/admin/product/image', {
       method: 'POST',
       credentials: 'include',
-      body: formData
+      body: formData,
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
     });
 
     if (!response.ok) {
@@ -333,13 +399,12 @@ const uploadAndSaveProduct = async () => {
 
     const data = await response.json();
     console.log('상품이 성공적으로 등록되었습니다:', data);
+    location.reload(ProductList);
     emit('close');
   } catch (error) {
     console.error('오류:', error);
   }
 };
-
-
 </script>
 
 <style scoped>

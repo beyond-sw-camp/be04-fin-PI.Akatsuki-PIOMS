@@ -25,8 +25,9 @@ import FavoriteRegister from "@/components/franchise/favorite/FavoriteRegister.v
 import FavoriteList from "@/components/franchise/favorite/FavoriteList.vue";
 import AdminMembers from "@/components/amdin/member/AdminMemberPage.vue";
 import Log from "@/components/log/Log.vue";
-import DriverDashBoard from "@/components/driver/driverDashBoard.vue";
-import noticeList from '@/components/notice/noticeList.vue'; 
+import NoticeList from "@/components/notice/NoticeList.vue";
+import FranchiseDashBoard from "@/components/franchise/FranchiseDashBoard.vue";
+import DriverDashBoard from "@/components/driver/DriverDashBoard.vue";
 
 
 const routes = [
@@ -114,7 +115,7 @@ const routes = [
         path: '/franchise/product/list',
         name: 'FranchiseProductList',
         component: FrProductList,
-        meta: { requiresAuth: true, role: 'ROLE_OWNER' }
+        meta: { requiresAuth: true, role: 'ROLE_ROOT' }
     },
     {
         path: '/admin/category/list',
@@ -143,19 +144,20 @@ const routes = [
     {
         path: '/admin/notice/list',
         name: 'noticeList',
-        component: noticeList
+        component: NoticeList,
+        meta: { requiresAuth: true, role: 'ROLE_ROOT' }
     },
     {
         path: '/franchise/favorite/register',
         name: 'FranchiseFavoriteRegister',
         component: FavoriteRegister,
-        meta: { requiresAuth: true, role: 'ROLE_OWNER' }
+        meta: { requiresAuth: true, role: 'ROLE_ROOT' }
     },
     {
         path: '/franchise/favorite/list',
         name: 'FranchiseFavoriteList',
         component: FavoriteList,
-        meta: { requiresAuth: true, role: 'ROLE_OWNER' }
+        meta: { requiresAuth: true, role: 'ROLE_ROOT' }
     },
     {
 
@@ -173,6 +175,15 @@ const routes = [
         path: '/driver/home',
         name: 'DriverDashboard',
         component: DriverDashBoard
+    },
+    {
+        path: '/franchise/home',
+        name: 'FranchiseDashBoard',
+        component: FranchiseDashBoard
+    },
+    {
+        component: DriverDashBoard,
+        meta: { requiresAuth: true, role: 'ROLE_ROOT' }
     }
 
 ];

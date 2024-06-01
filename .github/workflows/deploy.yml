@@ -19,61 +19,90 @@ jobs:
           node-version: '20.x'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build
-        run: npm run build
+        run: |
+          echo "Starting build process..."
+          npm run build
+        env:
+          NODE_ENV: production
 
-      - name: Zip Artifacts
-        run: zip -r deploy.zip dist server.js
+      - name: Prepare deployment package
+        run: |
+          mkdir -p .ebextensions
+          cat <<EOF > .ebextensions/00-makeFiles.config
+          files:
+            "/etc/nginx/conf.d/vueapp.conf":
+              mode: "000755"
+              owner: root
+              group: root
+              content: |
+                server {
+                    listen        80;
+                    server_name   _;
 
-      - name: Upload to S3
-        run: aws s3 cp deploy.zip s3://elasticbeanstalk-ap-northeast-2-730335325274/${{ github.run_id }}.zip
+                    location / {
+                        proxy_pass http://127.0.0.1:8080;
+                        proxy_http_version 1.1;
+                        proxy_set_header Upgrade \$http_upgrade;
+                        proxy_set_header Connection 'upgrade';
+                        proxy_set_header Host \$host;
+                        proxy_cache_bypass \$http_upgrade;
+                    }
+
+                    error_page  500 502 503 504  /50x.html;
+                    location = /50x.html {
+                        root   /usr/share/nginx/html;
+                    }
+                }
+          EOF
+          cat <<EOF > Procfile
+          web: node server.js
+          EOF
+          zip -r deploy.zip dist package.json server.js .ebextensions Procfile
+
+      - name: Install AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli
+
+      - name: Install Elastic Beanstalk CLI
+        run: |
+          pip install awsebcli
+
+      - name: Configure AWS CLI
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+          aws configure set default.region ap-northeast-2
+
+      - name: Initialize Elastic Beanstalk
+        run: |
+          eb init -p "Node.js 20 running on 64bit Amazon Linux 2/3.4.13" AkatsukiFE --region ap-northeast-2
+
+      - name: Create Environment
+        run: |
+          eb create AkatsukiFE-env --platform "Node.js 20 running on 64bit Amazon Linux 2/3.4.13" --region ap-northeast-2
+
+      - name: Deploy to Elastic Beanstalk
+        run: |
+          eb use AkatsukiFE-env
+          eb deploy
+
+      - name: Check Environment Health
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ap-northeast-2
-
-      - name: Deploy to Elastic Beanstalk (Green)
-        id: deploy
-        uses: einaregilsson/beanstalk-deploy@v22
-        with:
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          region: ap-northeast-2
-          application_name: AkatsukiFE
-          environment_name: AkatsukiFE-green-env
-          version_label: ${{ github.sha }}
-          deployment_package: deploy.zip
-          use_existing_version_if_available: true
-
-      - name: Check Green Environment Health
         run: |
-          STATUS=$(aws elasticbeanstalk describe-environments --environment-names AkatsukiFE-green-env --query 'Environments[0].Health' --output text)
+          STATUS=$(aws elasticbeanstalk describe-environments --environment-names AkatsukiFE-env --query 'Environments[0].Health' --output text)
           if [ "$STATUS" != "Green" ]; then
-            echo "Green environment health is not 'Green'. Current status: $STATUS"
+            echo "Environment health is not 'Green'. Current status: $STATUS"
             exit 1
-          fi
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ap-northeast-2
 
-      - name: Swap CNAME
-        run: |
-          echo "Swapping CNAMEs between AkatsukiFE-env and AkatsukiFE-green-env"
-          aws elasticbeanstalk swap-environment-cnames --source-environment-name AkatsukiFE-env --destination-environment-name AkatsukiFE-green-env
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ap-northeast-2
-
-      - name: Terminate Old Environment
-        run: |
-          echo "Terminating old environment AkatsukiFE-env"
-          aws elasticbeanstalk terminate-environment --environment-name AkatsukiFE-env --terminate-resources
-        if: always()
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ap-northeast-2
+      - name: Get Logs
+        run: eb logs AkatsukiFE-env

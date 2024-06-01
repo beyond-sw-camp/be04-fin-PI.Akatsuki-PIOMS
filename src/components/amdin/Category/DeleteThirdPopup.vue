@@ -17,6 +17,10 @@
 
 <script setup>
 import {defineProps, defineEmits, ref} from 'vue';
+import { useStore } from 'vuex';
+import CategoryList from "@/components/amdin/Category/CategoryList.vue";
+const store = useStore();
+const accessToken = store.state.accessToken;
 
 const props = defineProps({
   currentThirdCode: String,
@@ -39,8 +43,9 @@ const deleteCategoryThird = async () => {
     const productResponse = await fetch(`http://localhost:5000/admin/product/category/${props.currentThirdCode}`, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
     });
     const products = await productResponse.json();
 
@@ -50,11 +55,12 @@ const deleteCategoryThird = async () => {
     }
 
 
-    const response = await fetch(`http://localhost:5000/admin/category/third/delete/${props.currentThirdCode}?requesterAdminCode=1`, {
+    const response = await fetch(`http://localhost:5000/admin/category/third/delete/${props.currentThirdCode}`, {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
     });
 
     if (!response.ok) {
@@ -63,6 +69,7 @@ const deleteCategoryThird = async () => {
     }
 
     console.log('카테고리 대분류가 성공적으로 수정되었습니다.');
+    location.reload(CategoryList);
     emits('close');
   } catch (error) {
     console.error('오류:', error);

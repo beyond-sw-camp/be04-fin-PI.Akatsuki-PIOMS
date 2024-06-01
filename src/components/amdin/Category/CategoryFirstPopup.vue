@@ -13,6 +13,10 @@
 
 <script setup>
 import { defineProps, defineEmits, ref } from 'vue';
+import { useStore } from 'vuex';
+import CategoryList from "@/components/amdin/Category/CategoryList.vue";
+const store = useStore();
+const accessToken = store.state.accessToken;
 
 const props = defineProps({
   currentFirstCode: String,
@@ -29,10 +33,11 @@ const saveCategoryFirst = async () => {
   console.log('Request Data:', requestData);
 
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/first/update/${props.currentFirstCode}?requesterAdminCode=1`, {
+    const response = await fetch(`http://localhost:5000/admin/category/first/update/${props.currentFirstCode}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(requestData)
     });
@@ -43,6 +48,7 @@ const saveCategoryFirst = async () => {
     }
 
     console.log('카테고리 대분류가 성공적으로 수정되었습니다.');
+    location.reload(CategoryList);
     emits('close');
   } catch (error) {
     console.error('오류:', error);

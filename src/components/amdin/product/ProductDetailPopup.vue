@@ -7,42 +7,73 @@
       </div>
       <div class="popup-body">
         <div class="insert-section">
-          <div v-if="productData" class="table-wrapper">
-            <table class="insert-table">
+          <div class="table-wrapper">
+            <table class="category-table">
               <tr>
-                <td class="insert-label">상품명</td>
-                <td class="insert-input">
-                  <input type="text" id="name" v-model="name" class="textInput" />
+                <td class="second-insert-label">
+                  <div class="second-insert-label0">카테고리 구분</div>
                 </td>
+                <td class="second-insert-input">
+                  <select v-model="updateFirst" @change="fetchCategories('second')" class="categories">
+                    <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">
+                      {{ category.categoryFirstName }}
+                    </option>
+                  </select>
+                  <select v-model="updateSecond" @change="fetchCategories('third')" class="categories-g">
+                    <option v-for="category in secondCategories" :key="category.categorySecondCode" :value="category.categorySecondCode">
+                      {{ category.categorySecondName }}
+                    </option>
+                  </select>
+                  <select v-model="updateThird" class="categories-g">
+                    <option v-for="category in thirdCategories" :key="category.categoryThirdCode" :value="category.categoryThirdCode">
+                      {{ category.categoryThirdName }}
+                    </option>
+                  </select>
+                </td>
+                <td class="insert-label">상품명</td>
+                <td class="insert-input-name">
+                  <input type="text" :value="currentProductName" @input="updateName = $event.target.value" class="textInput" />
+                </td>
+              </tr>
+            </table>
+            <table class="top-table">
+              <tr>
                 <td class="insert-label">재고량</td>
                 <td class="insert-input">
-                  <input type="number" id="count" v-model="count" class="textInput" />
+<!--                  <input type="number" v-bind:value="currentProductCount" v-on:input="updateCount = $event.target.value" class="textInput" />-->
+                  <input type="number" :value="currentProductCount" @input="updateCount = $event.target.value" class="textInput" />
                 </td>
                 <td class="insert-label">가격</td>
                 <td class="insert-input">
-                  <input type="number" id="price" v-model="price" class="textInput" />
+<!--                  <input type="number" v-bind:value="currentProductPrice" v-on:input="updatePrice = $event.target.value" class="textInput" />-->
+                  <input type="number" :value="currentProductPrice" @input="updatePrice = $event.target.value" class="textInput" />
                 </td>
-              </tr>
-              <tr>
                 <td class="insert-label">상품상태</td>
                 <td class="insert-input">
-                  <select id="status" v-model="status" class="textInput">
+<!--                  <select v-bind:value="currentProductStatus" v-on:change="updateStatus = $event.target.value" class="textInput">-->
+                  <select :value="currentProductStatus" @change="updateStatus = $event.target.value" class="textInput">
                     <option value="공급가능">공급가능</option>
                     <option value="일시제한">일시제한</option>
                     <option value="단종">단종</option>
                     <option value="품절">품절</option>
                   </select>
                 </td>
+              </tr>
+            </table>
+            <table class="insert-table">
+              <tr>
                 <td class="insert-label">상품노출상태</td>
                 <td class="insert-input">
-                  <select id="exposureStatus" v-model="exposureStatus" class="textInput">
+<!--                  <select v-bind:value="currentProductExposureStatus" v-on:change="updateExposureStatus = $event.target.value" class="textInput">-->
+                  <select :value="currentProductExposureStatus" @change="updateExposureStatus = $event.target.value" class="textInput">
                     <option value="true">노출</option>
                     <option value="false">미노출</option>
                   </select>
                 </td>
                 <td class="insert-label">색상</td>
                 <td class="insert-input">
-                  <select id="color" v-model="color" class="textInput">
+<!--                  <select v-bind:value="currentProductColor" v-on:change="updateColor = $event.target.value" class="textInput">-->
+                  <select :value="currentProductColor" @change="updateColor = $event.target.value" class="textInput">
                     <option value="빨간색">빨간색</option>
                     <option value="주황색">주황색</option>
                     <option value="노란색">노란색</option>
@@ -54,7 +85,8 @@
                 </td>
                 <td class="insert-label">사이즈</td>
                 <td class="insert-input">
-                  <select id="size" v-model="size" class="textInput">
+<!--                  <select v-bind:value="currentProductSize" v-on:change="updateSize = $event.target.value" class="textInput">-->
+                  <select :value="currentProductSize" @change="updateSize = $event.target.value" class="textInput">
                     <option value="90">90</option>
                     <option value="95">95</option>
                     <option value="100">100</option>
@@ -67,56 +99,10 @@
             <table class="second-insert-table">
               <tr>
                 <td class="second-insert-label">
-                  <div class="second-insert-label0">카테고리 구분</div>
-                </td>
-                <td class="second-insert-input">
-                  <select id="firstCategory" v-model="firstCategory" @change="fetchCategories('second')" class="categories">
-                    <option value="">대분류</option>
-                    <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">
-                      {{ category.categoryFirstName }}
-                    </option>
-                  </select>
-                  <select id="secondCategory" class="categories-g" v-model="secondCategory" @change="fetchCategories('third')">
-                    <option value="">중분류</option>
-                    <option v-for="category in secondCategories" :key="category.categorySecondCode" :value="category.categorySecondCode">
-                      {{ category.categorySecondName }}
-                    </option>
-                  </select>
-                  <select id="thirdCategory" class="categories-g" v-model="thirdCategory">
-                    <option value="">소분류</option>
-                    <option v-for="category in thirdCategories" :key="category.categoryThirdCode" :value="category.categoryThirdCode">
-                      {{ category.categoryThirdName }}
-                    </option>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td class="second-insert-label">
                   <div class="second-insert-label0">상세정보</div>
                 </td>
                 <td class="second-insert-input">
-                  <textarea id="content" v-model="content" class="textInput" style="width: 99%; height: 150px"></textarea>
-                </td>
-              </tr>
-              <tr>
-                <td class="second-insert-label1">
-                  <div class="label-content">
-                    이미지<br />
-                    (최대 3장)
-                  </div>
-                </td>
-                <td class="second-insert-input1">
-                  <div class="imgForm">
-                    <form @submit.prevent="uploadImage">
-                      <input id="imgUpload" type="file" @change="previewImage" hidden />
-                      <button v-if="imagePreview !== imageSrc && imgOn" @click="resetImage" class="img-close-button">X</button>
-                      <label for="imgUpload">
-                        <img class="img" v-if="!imgOn" :src="imageSrc" />
-                        <img class="img" v-if="imgOn" :src="imagePreview" />
-                      </label>
-                      <br />
-                    </form>
-                  </div>
+                  <textarea :value="currentProductContent" @input="updateContent = $event.target.value" class="textInput" style="width: 99%; height: 150px"></textarea>
                 </td>
               </tr>
             </table>
@@ -131,100 +117,75 @@
 
 <script setup>
 import { onMounted, ref, defineProps } from 'vue';
-import imageSrc from '@/assets/icon/picture.png';
+import { useStore } from 'vuex';
+import ProductList from "@/components/amdin/product/ProductList.vue";
+const store = useStore();
+const accessToken = store.state.accessToken;
 
-const imagePreview = ref(imageSrc);
-const imgOn = ref(false);
 const firstCategories = ref([]);
 const secondCategories = ref([]);
 const thirdCategories = ref([]);
-const productData = ref(null);
-const name = ref('');
-const count = ref('');
-const price = ref('');
-const status = ref('');
-const exposureStatus = ref('');
-const color = ref('');
-const size = ref('');
-const firstCategory = ref('');
-const secondCategory = ref('');
-const thirdCategory = ref('');
-const content = ref('');
-const imageUrl = ref('');
+const updateName = ref('');
+const updateCount = ref('');
+const updatePrice = ref('');
+const updateStatus = ref('');
+const updateExposureStatus = ref('');
+const updateColor = ref('');
+const updateSize = ref('');
+const updateFirst = ref('');
+const updateSecond = ref('');
+const updateThird = ref('');
+const updateContent = ref('');
 
 const props = defineProps({
-  productCode: Object,
+  currentProductCode: String,
+  currentProductName: String,
+  currentProductCount: String,
+  currentProductPrice: String,
+  currentProductStatus: String,
+  currentProductExposureStatus: Boolean,
+  currentProductColor: String,
+  currentProductSize: String,
+  currentCategoryFirstCode: String,
+  currentCategorySecondCode: String,
+  currentCategoryThirdCode: String,
+  currentProductContent: String,
   closeEdit: Function
 });
-
-const fetchProductData = async () => {
-  const productCode = props.productCode.productCode;
-  if (!productCode) {
-    console.error('그런거 없다.');
-    return;
-  }
-  try {
-    const response = await fetch(`http://localhost:5000/admin/product/list/detail/${productCode}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`못불러옴: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    productData.value = data;
-    name.value = data.productName || '';
-    count.value = data.productCount || '';
-    price.value = data.productPrice || '';
-    status.value = data.productStatus || '';
-    exposureStatus.value = data.productExposureStatus || '';
-    color.value = data.productColor || '';
-    size.value = data.productSize || '';
-    firstCategory.value = data.categoryFirstCode || '';
-    secondCategory.value = data.categorySecondCode || '';
-    thirdCategory.value = data.categoryThirdCode || '';
-    content.value = data.productContent || '';
-  } catch (error) {
-    console.error('못불러옴:', error);
-  }
-};
-
 const submitProduct = async () => {
-  const productCode = props.productCode.productCode;
-  if (!productCode) {
-    console.error('그런거 없다');
-    return;
-  }
+  const requestData = {
+    productName: updateName.value,
+    productCount: updateCount.value,
+    productPrice: updatePrice.value,
+    productStatus: updateStatus.value,
+    productExposureStatus: updateExposureStatus.value,
+    productColor: updateColor.value,
+    productSize: updateSize.value,
+    categoryFirstCode: updateFirst.value,
+    categorySecondCode: updateSecond.value,
+    categoryThirdCode: updateThird.value,
+    productContent: updateContent.value
+  };
+
+  console.log('Request Data : ', requestData);
+
   try {
-    const response = await fetch(`http://localhost:5000/admin/product/update/${productCode}`, {
+    const response = await fetch(`http://localhost:5000/admin/product/update/${props.currentProductCode}`, {
       method: 'PUT',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        productName: name.value,
-        productCount: count.value,
-        productPrice: price.value,
-        productStatus: status.value,
-        productExposureStatus: exposureStatus.value,
-        productColor: color.value,
-        productSize: size.value,
-        categoryFirstCode: firstCategory.value,
-        categorySecondCode: secondCategory.value,
-        categoryThirdCode: thirdCategory.value,
-        productContent: content.value,
-        productImageUrl: imageUrl.value
-      }),
+      body: JSON.stringify(requestData)
     });
+
     if (!response.ok) {
       const errorMessage = await response.text();
       throw new Error(`수정 실패: ${errorMessage}`);
     }
 
+    console.log('드디어 수정 성공!');
+    location.reload(ProductList);
     props.closeEdit();
   } catch (error) {
     console.error('수정 실패:', error);
@@ -238,15 +199,21 @@ const fetchCategories = async (level) => {
       url = 'http://localhost:5000/admin/category/first';
       break;
     case 'second':
-      url = `http://localhost:5000/admin/category/second/list/detail/categoryfirst/${firstCategory.value}`;
+      url = `http://localhost:5000/admin/category/second/list/detail/categoryfirst/${updateFirst.value}`;
       break;
     case 'third':
-      url = `http://localhost:5000/admin/category/third/list/detail/categorysecond/${secondCategory.value}`;
+      url = `http://localhost:5000/admin/category/third/list/detail/categorysecond/${updateSecond.value}`;
       break;
   }
 
   try {
-    const response = await fetch(url, { method: 'GET' });
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
     if (!response.ok) {
       throw new Error(`${level} 카테고리를 불러오는 데 실패했습니다.`);
     }
@@ -258,7 +225,7 @@ const fetchCategories = async (level) => {
       case 'second':
         secondCategories.value = data;
         thirdCategories.value = [];
-        secondCategory.value = '';
+        updateSecond.value = '';
         break;
       case 'third':
         thirdCategories.value = data;
@@ -266,53 +233,6 @@ const fetchCategories = async (level) => {
     }
   } catch (error) {
     console.error('Error:', error);
-  }
-};
-
-const resetImage = () => {
-  imagePreview.value = imageSrc;
-  imgOn.value = false;
-};
-const previewImage = (event) => {
-  const file = event.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      imagePreview.value = reader.result;
-      imgOn.value = true;
-    };
-    reader.readAsDataURL(file);
-  }
-};
-
-const uploadImage = async () => {
-  const fileInput = document.querySelector('input[type="file"]');
-  const file = fileInput.files[0];
-  if (!file) {
-    await submitProduct();
-    return;
-  }
-
-  const formData = new FormData();
-  formData.append('file', file);
-
-  try {
-    const response = await fetch(`http://localhost:5000/admin/product/image`, {
-      method: 'POST',
-      credentials: 'include',
-      body: formData
-    });
-
-    if (!response.ok) {
-      throw new Error('이미지 업로드에 실패했습니다.');
-    }
-
-    const data = await response.json();
-    console.log('이미지 URL:', data);
-    imageUrl.value = data.imgUrl;
-    await submitProduct();
-  } catch (error) {
-    console.error('오류:', error);
   }
 };
 
@@ -324,13 +244,11 @@ onMounted(() => {
         event.preventDefault();
       }
     });
-
     input.addEventListener('input', (event) => {
       input.value = input.value.replace(/[^0-9]/g, '');
     });
   });
   fetchCategories('first');
-  fetchProductData();
 });
 </script>
 
@@ -444,17 +362,32 @@ h2 {
   width: 10%;
   background-color: #D9D9D9;
   border: 1px solid #ddd;
+  height: 50px;
 }
 
 .insert-input {
-  width: 500px;
+  width: 200px;
   text-align: left;
   border: 1px solid lightgray;
   border-right: none;
   height: 30px;
 
 }
-
+.insert-input-name {
+  width: 500px;
+  text-align: left;
+  border: 1px solid lightgray;
+  border-right: none;
+  height: 30px;
+}
+.category-table {
+  border-collapse: collapse;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  border-top: none;
+}
 .second-insert-table {
   border-collapse: collapse;
   background-color: #f9f9f9;
@@ -463,7 +396,9 @@ h2 {
   padding: 10px;
   border-top: none;
 }
-
+.category-table tr {
+  text-align: left;
+}
 .second-insert-table tr {
   text-align: center;
 }
@@ -484,41 +419,11 @@ h2 {
 }
 
 .second-insert-input {
-  width: 1400px;
+  width: 490px;
   border: 1px solid lightgray;
   border-right: none;
 }
 
-.label-content {
-  text-align: center;
-  font-size: 12px;
-}
-
-.second-insert-label1 {
-  font-weight: bold;
-  text-align: center;
-  width: 33px;
-  height: 300px;
-  background-color: #D9D9D9;
-  border: 1px solid #ddd;
-}
-
-.imgForm {
-  text-align: center;
-}
-
-.img-close-button {
-  background: none;
-  border: none;
-  font-size: 1.5em;
-  cursor: pointer;
-  color: #333;
-}
-
-.img-close-button:hover {
-  background-color: #00ff0000;
-  color: #ff0000;
-}
 .textInput {
   border: 1px solid rgba(217, 217, 217, 0.7);
   border-radius: 5px;
@@ -560,5 +465,16 @@ h2 {
 .second-insert-label0 {
   text-align: center;
   font-size: 12px;
+}
+.top-table {
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+.top-table td {
+  padding: 5px 10px ;
+}
+.top-table tr {
+  text-align: center;
 }
 </style>

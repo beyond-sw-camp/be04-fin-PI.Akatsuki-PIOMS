@@ -44,12 +44,14 @@
           <td>이미지</td>
           <td>{{ item.franchiseWarehouseTotal }}</td>
           <td>{{ item.franchiseWarehouseEnable }}</td>
-          <td>{{ item.product.productStatus }}</td>
+          <td :class="{'status-temporary': item.product.productStatus === '일시제한', 'status-available': item.product.productStatus === '공급가능'}">
+            {{ item.product.productStatus }}
+          </td>
           <td>{{ item.product.productColor }}</td>
           <td>{{ item.product.productSize }}</td>
-          <td>{{ item.product.categoryFirstName}}</td>
+          <td>{{ item.product.categoryFirstName }}</td>
           <td>{{ item.product.categorySecondName }}</td>
-          <td>{{ item.product.categoryThirdName}}</td>
+          <td>{{ item.product.categoryThirdName }}</td>
           <td>
             <input type="checkbox" @change="toggleProductSelection(item)" :checked="isSelected(item.franchiseWarehouseCode)" />
           </td>
@@ -85,12 +87,14 @@
           <td>이미지</td>
           <td>{{ item.franchiseWarehouseTotal }}</td>
           <td>{{ item.franchiseWarehouseEnable }}</td>
-          <td>{{ item.product.productStatus }}</td>
+          <td :class="{'status-temporary': item.product.productStatus === '일시제한', 'status-available': item.product.productStatus === '공급가능'}">
+            {{ item.product.productStatus }}
+          </td>
           <td>{{ item.product.productColor }}</td>
           <td>{{ item.product.productSize }}</td>
-          <td>{{ item.product.categoryFirstName}}</td>
+          <td>{{ item.product.categoryFirstName }}</td>
           <td>{{ item.product.categorySecondName }}</td>
-          <td>{{ item.product.categoryThirdName}}</td>
+          <td>{{ item.product.categoryThirdName }}</td>
           <td><button @click="removeProductFromList(item.franchiseWarehouseCode)">삭제</button></td>
         </tr>
         </tbody>
@@ -104,19 +108,23 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useStore } from 'vuex';
 
+const store = useStore();
+const accessToken = store.state.accessToken;
 const filterProductName = ref('');
 const filteredProducts = ref([]);
 const selectedProducts = ref([]);
 const products = ref([]);
+const franchiseCode = 1;
 
 // Fetch products from the server
 const fetchProducts = async () => {
   try {
-    const response = await fetch('http://api.pioms.shop/warehouse', {
-
+    const response = await fetch(`http://localhost:5000/warehouse/list/product/${franchiseCode}`, {
       method: 'GET',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     });
@@ -164,10 +172,10 @@ const saveFavorites = async () => {
 
   const promises = selectedProducts.value.map(async (item) => {
     try {
-      const response = await fetch(`http://api.pioms.shop/warehouse/toggleFavorite/${item.franchiseWarehouseCode}`, {
-
+      const response = await fetch(`http://localhost:5000/warehouse/toggleFavorite/${item.franchiseWarehouseCode}`, {
         method: 'PUT',
         headers: {
+          'Authorization': `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
       });
@@ -200,10 +208,6 @@ const saveFavorites = async () => {
   }
   alert(message);
 };
-
-
-
-
 
 // Mock functions to get category names
 const getCategoryFirstName = (categoryThirdCode) => {
@@ -270,6 +274,14 @@ onMounted(() => {
 
 .header1 {
   background-color: #f0f0f0;
+}
+
+.status-temporary {
+  color: red;
+}
+
+.status-available {
+  color: blue;
 }
 
 .save-btn-container {

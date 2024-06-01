@@ -55,6 +55,10 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
+import { useStore } from 'vuex';
+import CategoryList from "@/components/amdin/Category/CategoryList.vue";
+const store = useStore();
+const accessToken = store.state.accessToken;
 
 const insertCategoryFirstName = ref('');
 const insertCategorySecondName = ref('');
@@ -70,6 +74,10 @@ const fetchFirstCategories = async () => {
   try {
     const response = await fetch('http://localhost:5000/admin/category/first', {
       method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
     });
     if (!response.ok) {
       throw new Error('대분류를 불러오는 데 실패했습니다.');
@@ -87,7 +95,13 @@ const fetchSecondCategories = async (categoryFirstCode) => {
   }
   selectedFirstCategory.value = categoryFirstCode;
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/second/list/detail/categoryfirst/${categoryFirstCode}`);
+    const response = await fetch(`http://localhost:5000/admin/category/second/list/detail/categoryfirst/${categoryFirstCode}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
     if (!response.ok) {
       throw new Error('중분류를 불러오는 데 실패했습니다.');
     }
@@ -106,7 +120,13 @@ const fetchThirdCategories = async (categorySecondCode) => {
   }
   selectedSecondCategory.value = categorySecondCode;
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/third/list/detail/categorysecond/${categorySecondCode}`);
+    const response = await fetch(`http://localhost:5000/admin/category/third/list/detail/categorysecond/${categorySecondCode}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
     if (!response.ok) {
       throw new Error('소분류를 불러오는 데 실패했습니다.');
     }
@@ -136,7 +156,8 @@ const saveCategoryFirst = async () => {
     const responseFirst = await fetch(`http://localhost:5000/admin/category/first/post?requesterAdminCode=1`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(savedFirstData)
     });
@@ -180,10 +201,11 @@ const saveCategorySecond = async () => {
   console.log('savedSecondData: ', savedSecondData);
 
   try {
-    const responseSecond = await fetch(`http://localhost:5000/admin/category/second/create?requesterAdminCode=1`, {
+    const responseSecond = await fetch(`http://localhost:5000/admin/category/second/create`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(savedSecondData)
     });
@@ -226,10 +248,11 @@ const saveCategoryThird = async () => {
   console.log('savedThirdData: ', savedThirdData);
 
   try {
-    const responseThird = await fetch(`http://localhost:5000/admin/category/third/create?requesterAdminCode=1`, {
+    const responseThird = await fetch(`http://localhost:5000/admin/category/third/create`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(savedThirdData)
     });
@@ -244,7 +267,7 @@ const saveCategoryThird = async () => {
     // 데이터를 새로고침하고 화면을 갱신합니다.
     fetchThirdCategories(selectedSecondCategory.value);
     insertCategoryThirdName.value = ''; // 입력 필드 초기화
-
+    location.reload(CategoryList);
   } catch (error) {
     console.error('오류: ', error);
   }

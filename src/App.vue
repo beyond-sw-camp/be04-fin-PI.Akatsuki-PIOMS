@@ -1,27 +1,33 @@
 <template>
   <header>
     <RootAdmin/>
+<!--    <AdminHeader/>-->
+<!--    <FranchiseHeader/>-->
+<!--    <DriverHeader/>-->
   </header>
 
-  <div class="content">
-    <aside>
-      <Sidebar />
-    </aside>
+  <main class="main">
+  <router-view/>
+  </main>
+
+  <aside>
+    <!-- <Sidebar/> -->
+  </aside>
 
     <main>
       <router-view />
     </main>
   </div>
   <footer>
-<!--    <Footer />-->
+    <Footer/>
   </footer>
 
 </template>
 
 <script setup>
 import Footer from "@/components/layouts/footer/Footer.vue";
-import RootAdmin from "@/components/layouts/header/RootAdmin.vue";
-import Sidebar from "@/components/layouts/sidebar/sidebar.vue";
+import RootAdmin from "@/components/layouts/header/RootAdminHeader.vue";
+import Sidebar from "@/components/layouts/sidebar/SideBar.vue";
 import DriverHeader from "@/components/layouts/header/DriverHeader.vue";
 import FranchiseHeader from "@/components/layouts/header/FranchiseHeader.vue";
 import AdminHeader from "@/components/layouts/header/AdminHeader.vue";
@@ -48,44 +54,10 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-header, footer {
-  width: 100%;
-}
-
-.content {
-  
-  display: flex;
-  box-sizing: border-box;
-}
-
-aside {
-  width: 20%;
-  box-sizing: border-box;
-}
-
-main {
-  width: 80%;
-  box-sizing: border-box;
-}
-</style>
-
-<style scoped>
-header, footer {
-  width: 100%;
-}
-
-.content {
-  display: flex;
-  box-sizing: border-box;
-}
-
-aside {
-  width: 20%;
-  box-sizing: border-box;
-}
-
-main {
-  width: 80%;
-  box-sizing: border-box;
+.main {
+  width: 1900px;
+  position: relative;
+  left: 110px;
+  height: 1200px;
 }
 </style>

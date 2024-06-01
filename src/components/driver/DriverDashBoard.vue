@@ -44,18 +44,63 @@
     </div>
   </div>
 
+  <!-- 배송기사 배송 조회 -->
   <div class="my-delivery-list">
     <div>
       <img class = "delivery" src="@/assets/icon/Delivery.png"/>
       내 배송 조회
       <hr class ="hr2"/>
+
+  <table class="read-filter">
+    <tr class="paTable">
+      <td class="filter-label">배송상태</td>
+      <td class="filter1">
+        <div class="radio-group">
+          <div class="title">
+          <label id="delivery-status"><input type="radio" value="" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter" checked> 전체 </label>
+          <label id="delivery-status"><input type="radio" value="배송전" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"> 배송전 </label>
+          <label id="delivery-status"><input type="radio" value="배송중" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"> 배송중 </label>
+          <label id="delivery-status"><input type="radio" value="배송완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"> 배송완료 </label>
+          </div>
+        </div>
+      </td>
+      <td class="filter-label1">주문(발주)번호</td>
+      <td class="filter1">
+        <input type="text" class="filter-input" placeholder="주문(발주)번호를 입력해주세요." v-model="filterText" />
+      </td>
+    </tr>
+    <tr class="paTable">
+      <td class="filter-label">배송지</td>
+      <td>
+        <input type="text" class="filter-input" placeholder="배송지를 입력해주세요." v-model="filterText" />
+      </td>
+      <td class="filter-label1">배송(송장)번호</td>
+      <td>
+        <input type="text" class="filter-input" placeholder="배송지를 입력해주세요." v-model="filterText" />
+      </td>
+    </tr>
+      </table>
+
+      <!-- 리셋, 검색 버튼 -->
+      <div class="button-container">
+        <button type="button" class="btn-reset" @click="resetFilters">
+          <img class="reset-icon" src="@/assets/icon/reset.png" />
+        </button>
+        <button type="button" class="btn-search" @click="applyFilters">
+          <img class="search-icon" src="@/assets/icon/search.png" />
+        </button>
+      </div>
+
     </div>
   </div>
-
 </template>
 
 <script setup>
 import {computed, onMounted, ref} from "vue";
+import { useStore } from 'vuex';
+
+const store = useStore();
+const accessToken = store.state.accessToken;
 
   const headers = ref([
     { key: 'noticeTitle', label: '공지사항 제목'},
@@ -68,7 +113,14 @@ import {computed, onMounted, ref} from "vue";
 
   const getNotice = async () => {
     try {
-      const response = await fetch('http://localhost:5000/admin/notice/list');
+      const response = await fetch('http://localhost:5000/admin/notice/list', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
       const data = await response.json();
       notices.value = data;
     } catch (error) {
@@ -97,29 +149,30 @@ import {computed, onMounted, ref} from "vue";
 </script>
 
 <style scoped>
-
  /* 큰 박스 단위들 */
 .delivery-list-box {
-  margin-top: 28px !important;
+  margin-top: 42px !important;
   width: 500px;
   height: 300px;
 }
+
 .notice-list {
   margin-top: 28px !important;
   width: 500px;
   height: 530px;
-  max-height: 530px;
+  max-height: 500px;
   overflow-y: auto;
 }
 
 .my-delivery-list {
   border: 1px solid #d9d9d9;
-  width: 1200px;
-  height: 900px;
+  margin-top: 0 !important;
+  width: 1000px;
+  height: 870px;
   display: flex;
   position: absolute;
-  right: 50px;
-  top: 70px;
+  top: 1px;
+  right: 25px;
 }
 
 .delivery-list-box,
@@ -136,6 +189,8 @@ import {computed, onMounted, ref} from "vue";
    padding: 20px;
    margin: 10px;
    color: #444444;
+   font-size: 16px;
+   font-weight: bold;
  }
 
 /* 그 홈 박스에 각각 들어가는 요소들 */
@@ -186,7 +241,8 @@ hr.hr1-1 {
 }
 
 hr.hr2 {
-  width: 1200px;
+  width: 1000px;
+  top: 8px;
   position: relative;
 }
 
@@ -262,4 +318,77 @@ hr.hr2 {
  h2 {
    margin-top: 0;
  }
+
+ /* 배송기사 배송조회 CSS */
+ .read-filter {
+   position: relative;
+   top: 15px;
+   left: 10px;
+   display: inline;
+ }
+ .paTable {
+   font-weight: bold;
+   text-align: center;
+   width: 200px;
+   height: 10px;
+   border: 1px solid #ddd;
+ }
+ .filter1 {
+   width: 360px;
+   padding: 8px;
+ }
+ .title {
+   display: flex;
+   justify-content: center;
+   font-size: 16px;
+   position: relative;
+   top: 5px;
+ }
+ .filter-label {
+   font-size: 16px;
+   width: 80px;
+ }
+ .filter-label1 {
+   font-size: 16px;
+   width: 110px;
+   background-color: #d9d9d9;
+   font-weight: bold;
+ }
+ .filter-input {
+   font-size: 16px;
+   width: 250px;
+   display: flex;
+   justify-content: flex-start;
+   border-right: 1px solid #d9d9d9;
+ }
+ #delivery-status {
+   display: flex;
+   justify-content: flex-start;
+   align-items: center;
+   position: relative;
+   right: 10px;
+ }
+ .filter-input {
+   padding: 10px;
+   height: 30px;
+ }
+
+ /* 리셋, 검색 버튼 */
+ .btn-reset,
+ .btn-search {
+   border: none;
+   background-color: #ffffff;
+
+ }
+ .button-container {
+   display: flex;
+   justify-content: center;
+   padding-top: 40px;
+ }
+ .reset-icon,
+ .search-icon {
+   width: 30px !important;
+   height: 30px !important;
+ }
+
 </style>
