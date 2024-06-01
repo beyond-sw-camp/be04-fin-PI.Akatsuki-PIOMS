@@ -14,21 +14,20 @@
                   <div class="second-insert-label0">카테고리 구분</div>
                 </td>
                 <td class="second-insert-input">
-<!--                  <h6 style="margin: 0">{{currentCategoryFirstName}} > {{currentCategorySecondName}} > {{currentCategoryThirdName}}</h6>-->
                   <select v-model="updateFirst" @change="fetchCategories('second')" class="categories">
-                    <option value="">{{currentCategoryFirstCode}}</option>
+                    <option value="">{{currentCategoryFirstName}}</option>
                     <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">
                       {{ category.categoryFirstName }}
                     </option>
                   </select>
                   <select v-model="updateSecond" @change="fetchCategories('third')" class="categories-g">
-                    <option value="">{{currentCategorySecondCode}}</option>
+                    <option value="">{{currentCategorySecondName}}</option>
                     <option v-for="category in secondCategories" :key="category.categorySecondCode" :value="category.categorySecondCode">
                       {{ category.categorySecondName }}
                     </option>
                   </select>
                   <select v-model="updateThird" class="categories-g">
-                    <option value="">{{currentCategoryThirdCode}}</option>
+                    <option value="">{{currentCategoryThirdName}}</option>
                     <option v-for="category in thirdCategories" :key="category.categoryThirdCode" :value="category.categoryThirdCode">
                       {{ category.categoryThirdName }}
                     </option>
@@ -126,6 +125,9 @@ const updateFirst = ref('');
 const updateSecond = ref('');
 const updateThird = ref('');
 const updateContent = ref('');
+const currentCategoryFirstName = ref('');
+const currentCategorySecondName = ref('');
+const currentCategoryThirdName = ref('');
 
 const props = defineProps({
   currentProductCode: String,
@@ -179,8 +181,6 @@ const submitProduct = async () => {
     console.error('수정 실패:', error);
   }
 };
-
-
 const fetchCategories = async (level) => {
   let url = '';
   switch (level) {
@@ -224,8 +224,39 @@ const fetchCategories = async (level) => {
     console.error('Error:', error);
   }
 };
+const getCategoryName = async (categoryCode, level) => {
+  let url = '';
+  switch (level) {
+    case 'first':
+      url = `http://localhost:5000/admin/category/first/${categoryCode}`;
+      break;
+    case 'second':
+      url = `http://localhost:5000/admin/category/second/${categoryCode}`;
+      break;
+    case 'third':
+      url = `http://localhost:5000/admin/category/third/${categoryCode}`;
+      break;
+  }
 
-onMounted(() => {
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`${level} 카테고리 이름을 불러오는 데 실패했습니다.`);
+    }
+    const data = await response.json();
+    return data.categoryName;
+  } catch (error) {
+    console.error('Error:', error);
+    return '';
+  }
+};
+onMounted(async () => {
   const numberInputs = document.querySelectorAll('input[type="number"]');
   numberInputs.forEach(input => {
     input.addEventListener('keypress', (event) => {
@@ -237,7 +268,11 @@ onMounted(() => {
       input.value = input.value.replace(/[^0-9]/g, '');
     });
   });
-  fetchCategories('first');
+  currentCategoryFirstName.value = await getCategoryName(props.currentCategoryFirstCode, 'first');
+  currentCategorySecondName.value = await getCategoryName(props.currentCategorySecondCode, 'second');
+  currentCategoryThirdName.value = await getCategoryName(props.currentCategoryThirdCode, 'third');
+
+  await fetchCategories('first');
 });
 </script>
 
