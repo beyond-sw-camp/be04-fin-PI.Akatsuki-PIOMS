@@ -40,6 +40,9 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useStore } from 'vuex';
+const store = useStore();
+const accessToken = store.state.accessToken;
 
 const askData = ref(null);
 const answer = ref('');
@@ -55,9 +58,10 @@ const fetchAskData = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://localhost:5000/admin/ask/${askCode}`, {
+    const response = await fetch(`http://localhost:5000/franchise/ask/${askCode}`, {
       method: 'GET',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     });

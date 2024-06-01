@@ -23,8 +23,11 @@ import PostCategory from "@/components/amdin/Category/PostCategory.vue";
 import FavoriteRegister from "@/components/franchise/favorite/FavoriteRegister.vue";
 import FavoriteList from "@/components/franchise/favorite/FavoriteList.vue";
 import Log from "@/components/log/Log.vue";
-import DriverDashBoard from "@/components/driver/driverDashBoard.vue";
-import noticeList from "@/components/notice/noticeList.vue";
+
+import NoticeList from "@/components/notice/NoticeList.vue";
+// import FranchiseDashBoard from "@/components/franchise/FranchiseDashBoard.vue";
+import DriverDashBoard from "@/components/driver/DriverDashBoard.vue";
+
 
 const routes = [
     {
@@ -90,10 +93,10 @@ const routes = [
         meta: { requiresAuth: true, role: 'ROLE_OWNER' }
     },
     {
-        path: '/order/list',
+        path: 'admin/order/list',
         name: 'orderList',
         component: OrderPage,
-        meta: { requiresAuth: true, role: 'ROLE_ADMIN' }
+        meta: { requiresAuth: true, role: ['ROLE_ADMIN', 'ROLE_ROOT'] }
     },
     {
         path: '/admin/product/list',
@@ -120,15 +123,16 @@ const routes = [
         meta: { requiresAuth: true, role: ['ROLE_ADMIN', 'ROLE_ROOT'] }
     },
     {
-        path: '/exchange/list',
+        path: 'admin/exchange/list',
         name: 'exchangeList',
         component: ExchangePage,
-        meta: { requiresAuth: true, role: 'ROLE_ADMIN' }
+        meta: { requiresAuth: true, role: ['ROLE_ADMIN', 'ROLE_ROOT'] }
     },
     {
         path: '/admin/notice/list',
         name: 'noticeList',
-        component: noticeList
+        component: NoticeList,
+        meta: { requiresAuth: true, role: 'ROLE_ROOT' }
     },
     {
         path: '/franchise/favorite/register',
@@ -151,8 +155,14 @@ const routes = [
     {
         path: '/driver/home',
         name: 'DriverDashboard',
-        component: DriverDashBoard
-    }
+        component: DriverDashBoard,
+        meta: { requiresAuth: true, role: 'ROLE_DRIVER' }
+    },
+    // {
+    //     path: '/franchise/home',
+    //     name: 'FranchiseDashBoard',
+    //     component: FranchiseDashBoard
+    // },
 ];
 
 const router = createRouter({
@@ -167,12 +177,12 @@ router.beforeEach(async (to, from, next) => {
 
     if (to.matched.some(record => record.meta.requiresAuth)) {
         if (!isAuthenticated) {
-            next({ name: 'AdminLogin' });
+            next({ name: 'CommonLogin' });
         } else {
             const requiredRoles = to.meta.role;
             if (requiredRoles && !requiredRoles.includes(userRole)) {
                 // 사용자가 해당 경로에 접근할 권한이 없는 경우
-                next({ name: 'AdminLogin' });
+                next({ name: 'CommonLogin' });
             } else {
                 next();
             }

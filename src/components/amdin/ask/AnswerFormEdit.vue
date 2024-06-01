@@ -42,7 +42,11 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { defineEmits } from 'vue';
+import { useStore } from 'vuex';
+import Swal from "sweetalert2";
 
+const store = useStore();
+const accessToken = store.state.accessToken;
 const askData = ref(null);
 const answer = ref('');
 const emit = defineEmits(['refreshData']);
@@ -61,6 +65,7 @@ const fetchAskData = async () => {
     const response = await fetch(`http://localhost:5000/admin/ask/${askCode}`, {
       method: 'GET',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     });
@@ -102,6 +107,7 @@ const submitAnswer = async () => {
     const response = await fetch(`http://localhost:5000/admin/ask/answer/${askCode}`, {
       method: 'POST',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -113,9 +119,14 @@ const submitAnswer = async () => {
       throw new Error(`Failed to submit answer: ${response.statusText}`);
     }
 
-    // Close the form after successful submission
+    await Swal.fire({
+      icon: 'success',
+      title: '수정 성공',
+      text: '수정이 완료되었습니다.',
+    });
     emit('refreshData');
     props.closeEdit();
+    window.location.reload(); // 페이지 새로고침
   } catch (error) {
     console.error('Failed to submit answer:', error);
   }
@@ -123,6 +134,7 @@ const submitAnswer = async () => {
 
 onMounted(fetchAskData);
 </script>
+
 
 <style scoped>
 .container {
