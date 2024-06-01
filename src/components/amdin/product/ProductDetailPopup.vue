@@ -16,19 +16,19 @@
                 <td class="second-insert-input">
 <!--                  <h6 style="margin: 0">{{currentCategoryFirstName}} > {{currentCategorySecondName}} > {{currentCategoryThirdName}}</h6>-->
                   <select v-model="updateFirst" @change="fetchCategories('second')" class="categories">
-                    <option value="">{{currentCategoryFirstName}}</option>
+                    <option value="">{{currentCategoryFirstCode}}</option>
                     <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">
                       {{ category.categoryFirstName }}
                     </option>
                   </select>
                   <select v-model="updateSecond" @change="fetchCategories('third')" class="categories-g">
-                    <option value="">{{currentCategorySecondName}}</option>
+                    <option value="">{{currentCategorySecondCode}}</option>
                     <option v-for="category in secondCategories" :key="category.categorySecondCode" :value="category.categorySecondCode">
                       {{ category.categorySecondName }}
                     </option>
                   </select>
                   <select v-model="updateThird" class="categories-g">
-                    <option value="">{{currentCategoryThirdName}}</option>
+                    <option value="">{{currentCategoryThirdCode}}</option>
                     <option v-for="category in thirdCategories" :key="category.categoryThirdCode" :value="category.categoryThirdCode">
                       {{ category.categoryThirdName }}
                     </option>
@@ -135,9 +135,9 @@ const props = defineProps({
   currentProductStatus: String,
   currentProductColor: String,
   currentProductSize: String,
-  currentCategoryFirstName: String,
-  currentCategorySecondName: String,
-  currentCategoryThirdName: String,
+  currentCategoryFirstCode: String,
+  currentCategorySecondCode: String,
+  currentCategoryThirdCode: String,
   currentProductContent: String,
   closeEdit: Function
 });
@@ -149,9 +149,9 @@ const submitProduct = async () => {
     productStatus: updateStatus.value !== '' ? updateStatus.value : props.currentProductStatus,
     productColor: updateColor.value !== '' ? updateColor.value : props.currentProductColor,
     productSize: updateSize.value !== '' ? updateSize.value : props.currentProductSize,
-    categoryFirstCode: updateFirst.value !== '' ? updateFirst.value : props.currentCategoryFirstName,
-    categorySecondCode: updateSecond.value !== '' ? updateSecond.value : props.currentCategorySecondName,
-    categoryThirdCode: updateThird.value !== '' ? updateThird.value : props.currentCategoryThirdName,
+    categoryFirstCode: updateFirst.value !== '' ? updateFirst.value : props.currentCategoryFirstCode,
+    categorySecondCode: updateSecond.value !== '' ? updateSecond.value : props.currentCategorySecondCode,
+    categoryThirdCode: updateThird.value !== '' ? updateThird.value : props.currentCategoryThirdCode,
     productContent: updateContent.value !== '' ? updateContent.value : props.currentProductContent
   };
 
