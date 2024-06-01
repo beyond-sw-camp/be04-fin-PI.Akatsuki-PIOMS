@@ -1,5 +1,10 @@
 <template>
-  <div>
+    <div class="breadcrumbs">
+    <img src="../../assets/icon/List.png" alt="List Icon" class="breadcrumb-icon" />
+    <span>발주 조회 및 관리</span>
+  </div>
+
+
     <div class="filter-section">
       <table class="filter-table">
         <tr>
@@ -52,15 +57,21 @@
       </button>
     </div>
 
-    <input class="create-button" type="button" value="발주하기" @click="showPopup" style="  cursor : pointer; border:0; ">
-
-    <popup v-if="createPopup" :showPopup="showPopup" :popupVisible="createPopup"/>
-    <OrderDetail v-if="createDetailPopup" :showDetailPopup="showDetailPopup" :popupVisible="createDetailPopup" :detailItem="detailItem"/>
-
-    <table style=" margin-top: 5%;">
+    <OrderDetail 
+        v-if="createDetailPopup" 
+        :showDetailPopup="showDetailPopup" 
+        :popupVisible="createDetailPopup" 
+        :detailItem="detailItem"
+        :getOrderList="getOrderList"
+    />
+    <div class="table-container">
+    <table class="table">
       <thead >
-        <tr >
-          <th v-for="(header, index) in headers" :key="index" > <div align="center">{{ header.label }}</div></th>
+        <tr class="header1">
+          <th v-for="(header, index) in headers" :key="index" > 
+            {{ header.label }}
+          </th>
+          <th>발주상태</th>
         </tr>
       </thead>
       <tbody>
@@ -69,27 +80,55 @@
             @dblclick="showDetailPopup(item)"
             @mouseenter="highlightRow(rowIndex)"
             @mouseleave="resetRowColor(rowIndex)"
+            class="allpost"
         >
-          <td v-for="(header, colIndex) in headers" :key="colIndex" align="center">
-            {{ item[header.key] }}
+          <td class="num">{{ item.orderCode }}</td>
+          <td>{{ item.franchiseName }}</td>
+          <td>{{ item.franchiseOwnerName }}</td>
+          
+          <td >{{ item.orderDate }}</td>
+
+          <td v-if="item.invoiceCode!=0" class="num" style="width:5%">{{ item.invoiceCode }}</td>
+          <td v-else class="num" style="width:5%">-</td>
+
+          <td v-if="item.invoiceDate!=null">{{ item.invoiceDate }}</td>
+          <td v-else>-</td>
+
+          <td v-if="item.orderCondition=='승인대기'" >
+            <div class="condition-button pending">승인대기</div>
+          </td>
+          <td v-else-if="item.orderCondition=='승인완료'" >
+            <div class="condition-button approved">승인완료</div>
+          </td>
+          <td v-else-if="item.orderCondition=='승인거부'" >
+            <div class="condition-button rejected">승인거부</div>
+          </td>
+          <td v-else-if="item.orderCondition=='검수대기'" >
+            <div class="condition-button inspection-pending">검수대기</div>
+          </td>
+          <td v-else-if="item.orderCondition=='검수완료'" >
+            <div class="condition-button inspection-completed">검수완료</div>
           </td>
         </tr>
       </tbody>
     </table>
+  </div>
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage === 1">이전</button>
       <span>페이지 {{ currentPage }} / {{ totalPages }}</span>
       <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
     </div>
-  </div>
+
 </template>
 
 
 
 <script setup>
 import { ref, computed } from 'vue';
-import popup from './orderPopup.vue';
-import OrderDetail from './orderDetail.vue';
+import OrderDetail from './AdminOrderDetail.vue';
+import { useStore } from 'vuex'; // Vuex store 임포트
+const store = useStore(); // Vuex store 사용
+
 
 const lists = ref([]);
 
@@ -98,13 +137,12 @@ const franchiseCode = ref(1);
 const adminCode = ref(2);
 
 const headers = ref([
-  { key: 'orderCode', label: '주문 코드' },
-  { key: 'orderCondition', label: '주문 상태' },
-  { key: 'franchiseName', label: '가맹점 이름' },
-  { key: 'orderDate', label: '주문 날짜' },
-  { key: 'invoiceCode', label: '배송 코드' },
-  { key: 'invoiceDate', label: '배송 예정일' },
-  { key: 'franchiseOwnerName', label: '가맹점주 이름' },
+  { key: 'orderCode', label: '발주번호' },
+  { key: 'franchiseName', label: '가맹점' },
+  { key: 'franchiseOwnerName', label: '점주' },
+  { key: 'orderDate', label: '발주일' },
+  { key: 'invoiceCode', label: '송장번호' },
+  { key: 'invoiceDate', label: '배송예정일' },
 ]);
 
 const filter = ref('');
@@ -121,9 +159,19 @@ const filterInvoiceCode = ref('');
 const filterOrderDate = ref('');
 
 const getOrderList = async () => {
+
   try {
-    const response = await fetch(`/api/admin/orders?adminCode=${adminCode.value}`, {
+    const accessToken = store.state.accessToken;
+    if (!accessToken) {
+      throw new Error('No access token found');
+    }
+    const response = await fetch(`http://localhost:5000/admin/orders`, {
       method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include'
     });
 
     if (!response.ok) {
@@ -232,4 +280,5 @@ const resetRowColor = (index) => {
 
 <style>
   @import "../../assets/css/order.css" ;
+  
 </style>
