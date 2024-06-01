@@ -14,6 +14,10 @@
     <!-- <Sidebar/> -->
   </aside>
 
+    <main>
+      <router-view />
+    </main>
+  </div>
   <footer>
     <Footer/>
   </footer>
@@ -21,7 +25,6 @@
 </template>
 
 <script setup>
-
 import Footer from "@/components/layouts/footer/Footer.vue";
 import RootAdmin from "@/components/layouts/header/RootAdminHeader.vue";
 import Sidebar from "@/components/layouts/sidebar/SideBar.vue";

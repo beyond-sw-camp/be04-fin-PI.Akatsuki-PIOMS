@@ -120,7 +120,8 @@
             <br>
             <br>
             <br>
-            <div class="but-group">
+
+            <div class="but-group" v-if="item.orderCondition == '승인대기'">
               <input class="but" type="button" value="발주승인" @click="accpetOrder">
               <input class="but" type="button" value="발주반려" @click="clickDeny">
             </div>
@@ -173,6 +174,9 @@
 <script setup>
    import { ref } from "vue";
    import axios from 'axios';
+   import { useStore } from 'vuex'; // Vuex store 임포트
+  const store = useStore(); // Vuex store 사용
+
 
    const headers = ref([
     /*{ key: 'requestProductCode', label: '상품 코드' },*/
@@ -189,6 +193,7 @@
    popupVisible: Boolean,
    writeActive: Boolean,
    detailItem: Object,
+   getOrderList: Function,
  });
  const item = props.detailItem;
  const list = props.detailItem.orderProductList;
@@ -197,30 +202,38 @@
  // 추후 개선 예정 
  const adminCode = 2;
  const franchiseCode = 1;
-
- console.log(item);
- console.log(list);
- console.log(exchangeList);
-
-
 const accpetOrder = async () => {
     try {
-      const response = await fetch(`/api/admin/order/${item.orderCode}/accept?adminCode=${adminCode}`, {
+
+      const accessToken = store.state.accessToken;
+        if (!accessToken) {
+          throw new Error('No access token found');
+      }
+      const response = await fetch(`http://localhost:5000/admin/order/${item.orderCode}/accept`, {
         method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include'
       });
       if(response.status ==406){
         alert("이 발주는 이미 처리되어 있습니다.");
         props.showDetailPopup();
+        
         return;
       }
       if (!response.ok) {
         alert("헉 왜 주문 승인 안되지????????????")
+        props.showDetailPopup();
         throw new Error('네트워크 오류 발생');
       }
+    
       props.showDetailPopup();
-
+      props.getOrderList();
     } catch (error) {
       console.error('오류 발생:', error);
+      props.showDetailPopup();
     }
 };
 
@@ -231,23 +244,36 @@ const clickDeny = () =>{
 }
 
 const denyOrder = async () => {
-  console.log(item.orderCode);
+
     try {
-      const response = await fetch(`/api/admin/order/${item.orderCode}/deny?adminCode=${adminCode}&denyMessage=${reason.value}`, {
+      const accessToken = store.state.accessToken;
+      if (!accessToken) {
+        throw new Error('No access token found');
+      }
+
+      const response = await fetch(`http://localhost:5000/admin/order/${item.orderCode}/deny?denyMessage=${reason.value}`, {
         method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include'
       });
       if(response.status ==406){
         alert("이 발주는 이미 처리되어 있습니다.");
         clickDeny();
         props.showDetailPopup();
+        props.getOrderList();
         return;
       }
       if (!response.ok) {
         alert("헉 왜 주문 거절 안되지????????????")
+        props.showDetailPopup();
         throw new Error('네트워크 오류 발생');
       }
     } catch (error) {
       alert("헉 왜 주문 거절 안되지????????????");
+      props.showDetailPopup();
       console.error('오류 발생:', error);
     }
 };

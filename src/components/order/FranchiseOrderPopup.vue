@@ -40,7 +40,7 @@
           <table>
             <thead>
               <tr>
-                <th>상품 코드</th><th>상품 이름</th><th>상품 가격</th><th>본사 수량</th><th>상품 상태</th><th>색상</th><th>상품 설명</th><th>상품카테고리</th><th>성별</th>
+                <th>상품 코드</th><th>상품 이름</th><th>상품 가격</th><th>본사 수량</th><th>상품 상태</th><th>색상</th><th>상품 설명</th><th>카테고리(대)</th><th>카테고리(중)</th><th>카테고리(소)</th><th>성별</th>
               </tr>
             </thead>
 
@@ -58,7 +58,9 @@
                 <td>{{ product.productStatus }}</td>
                 <td>{{ product.productColor }}</td>
                 <td>{{ product.productContent }}</td>
-                <td>{{ product.categoryThirdCode }}</td>
+                <td>{{ product.categoryFirstName }}</td>
+                <td>{{ product.categorySecondName }}</td>
+                <td>{{ product.categoryThirdName }}</td>
                 <td>{{ product.productGender }}</td>
               </tr>
             </tbody>
@@ -102,12 +104,19 @@
   
 <script setup>
   import { ref } from "vue";
-  
+  import { useStore } from 'vuex'; // Vuex store 임포트
+  const store = useStore(); // Vuex store 사용
+
+
   const props = defineProps({
     showPopup: Function,
     popupVisible: Boolean,
     writeActive: Boolean,
+    franchiseCode:Number,
+    franchiseOwnerCode:Number
   });
+  const franchiseOwnerCode = props.franchiseOwnerCode;
+  const franchiseCode = props.franchiseCode;
   
   const writeActive = ref(true);
   const filter = ref("");
@@ -137,9 +146,16 @@
   
   const getProducts = async () => {
     try {
-
-      const response = await fetch("/api/franchise/product", {
+      const accessToken = store.state.accessToken;
+    if (!accessToken) {
+      throw new Error('No access token found');
+    }
+      const response = await fetch("http://localhost:5000/franchise/product", {
         method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': `Bearer ${accessToken}`,
+        },
       });
       if (!response.ok) {
         throw new Error("네트워크 오류 발생");
@@ -190,18 +206,26 @@
     acc[product.productCode] = product.quantity;
     return acc;
   }, {});
+  
 
   const orderData = {
-    // products: productsData,
-    franchiseCode: 1 // 실제 프랜차이즈 코드를 사용 예정
+    orderTotalPrice: totalPrice.value,
+    products: productsData,
+    franchiseCode: franchiseCode
   };
 
   try {
-    const response = await fetch("/api/franchise/1/order", {
-        method: "POST",
+    const accessToken = store.state.accessToken;
+    if (!accessToken) {
+      throw new Error('No access token found');
+    }
+    const response = await fetch(`http://localhost:5000/franchise/order`, {
+        method: "POST",        
         headers: {
-          "Content-Type": "application/json"
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify(orderData)
       });
     if (response.status == 406) {
@@ -222,11 +246,4 @@
   }
 
 };
-
-
-  </script>
-  
-  <style scoped>
-
-</style>
-  
+</script>
