@@ -13,13 +13,14 @@
         <tr>
           <td class="filter-label">상품명</td>
           <td class="filter-input">
-            <input type="text" v-model="filterProductName" class="textInput"/>
+            <input type="text" v-model="filterProductName" class="textInput" placeholder="상품명을 입력하세요."/>
           </td>
         </tr>
         <tr>
           <td class="filter-label">상품상태</td>
           <td class="filter-input">
             <select id="filterStatus" v-model="filterStatus" class="textInput">
+              <option hidden="hidden" value="">전체</option>
               <option value="공급가능">공급가능</option>
               <option value="일시제한">일시제한</option>
               <option value="단종">단종</option>
@@ -29,6 +30,7 @@
           <td class="filter-label">상품노출상태</td>
           <td class="filter-input">
             <select id="selectedExposureStatus" v-model="selectedExposureStatus" class="textInput">
+              <option hidden="hidden" value="">전체</option>
               <option value="노출">노출</option>
               <option value="미노출">미노출</option>
             </select>
@@ -38,6 +40,7 @@
           <td class="filter-label">색상</td>
           <td class="filter-input">
             <select id="filterColor" v-model="filterColor" class="textInput">
+              <option hidden="hidden" value="">전체</option>
               <option value="빨간색">빨간색</option>
               <option value="주황색">주황색</option>
               <option value="노란색">노란색</option>
@@ -50,6 +53,7 @@
           <td class="filter-label">사이즈</td>
           <td class="filter-input">
             <select id="filterSize" v-model="filterSize" class="textInput">
+              <option hidden="hidden" value="">전체</option>
               <option value="90">90</option>
               <option value="95">95</option>
               <option value="100">100</option>
@@ -183,7 +187,7 @@ const headers = ref([
 const filteredLists = ref([]);
 const currentPage = ref(1);
 const itemsPerPage = 15;
-const selectedExposureStatus = ref('전체');
+const selectedExposureStatus = ref('');
 const filterProductName = ref('');
 const filterStatus = ref('');
 const filterColor = ref('');
