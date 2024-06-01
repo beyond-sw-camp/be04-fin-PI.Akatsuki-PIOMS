@@ -97,6 +97,9 @@
               </table>
             </div>
             <br>
+             <div class="but-group">
+               <input class="but" type="button" value="검수하기" @click="gumsoo" v-if="item.orderCondition == '검수대기'">
+             </div>
            <div v-if="item.orderCondition == '승인거부' || item.orderCondition=='승인대기'">
              <div v-if="item.orderCondition == '승인거부'" >
                <div class="divvv-title">거절 사유</div>
@@ -105,7 +108,6 @@
              <button class="close" @click="clickUpdate" >
                수정하기
              </button>
-
            </div>
 
           </div>
@@ -113,6 +115,7 @@
            <br>
            주문코드 : {{ item.orderCode }}<br>   
        </div>
+
     <FranchiseOrderUpdatePopup
         v-if="updateStatus==true"
         :item="item"
@@ -156,9 +159,7 @@
  const exchangeList = props.detailItem.exchangeProductList;
 
  // 추후 개선 예정 
- const franchiseCode = props.franchiseCode;
  const franchiseOwnerCode = props.franchiseOwnerCode;
- console.log(franchiseCode);
  console.log(item);
  console.log(list);
  console.log(exchangeList);

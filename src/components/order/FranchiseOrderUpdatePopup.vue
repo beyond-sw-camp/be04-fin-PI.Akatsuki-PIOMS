@@ -61,7 +61,6 @@
                 <td>{{ product.categoryFirstName }}</td>
                 <td>{{ product.categorySecondName }}</td>
                 <td>{{ product.categoryThirdName }}</td>
-                <td>{{ product.productGender }}</td>
               </tr>
             </tbody>
           </table>
@@ -82,6 +81,8 @@
             </tr>
           </thead>
           <tr v-for="(selectedProduct, index) in selectedProducts" :key="index">
+<!--            <div>{{selectedProduct.productCode}}</div>-->
+            <!-- 중간에 미노출 상품으로 변경될 시 에러 발생-->
             <td>{{ selectedProduct.productCode }}</td>
             <td>{{ selectedProduct.productName }}</td>
             <td>{{ selectedProduct.productCount }}</td>
@@ -114,8 +115,7 @@
     showDetailPopup: Function
   });
   const franchiseOwnerCode = props.franchiseOwnerCode;
-  const franchiseCode = props.franchiseCode;
-  
+
   const writeActive = ref(true);
   const filter = ref("");
   const conditionFilter = ref("");
@@ -167,7 +167,7 @@
         const obj = props.item.orderProductList[i];
         console.log(obj);
         selectedProducts.value.push(products.value.find(element => element.productCode == obj.productCode));
-
+        console.log(selectedProducts.value);
       }
       console.log(products);
       
