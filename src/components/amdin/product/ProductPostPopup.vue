@@ -69,7 +69,9 @@
             </table>
             <table class="second-insert-table">
               <tr>
-                <td class="second-insert-label"><div class="second-insert-label0">카테고리 구분</div></td>
+                <td class="second-insert-label">
+                  <div class="second-insert-label0">카테고리 구분</div>
+                </td>
                 <td class="second-insert-input">
                   <select v-model="selectedFirstCategory" @change="fetchCategories('second')" class="categories">
                     <option value="">대분류</option>
@@ -131,6 +133,9 @@
 <script setup>
 import { onMounted, defineEmits, ref } from 'vue';
 import imageSrc from '@/assets/icon/picture.png';
+import { useStore } from 'vuex';
+const store = useStore();
+const accessToken = store.state.accessToken;
 
 const emit = defineEmits(['close']);
 const imagePreview = ref(imageSrc);
@@ -150,6 +155,7 @@ const selectedFirstCategory = ref('');
 const selectedSecondCategory = ref('');
 const selectedThirdCategory = ref('');
 let imageUrl = '';
+
 const fetchCategories = async (level) => {
   let url = '';
   switch (level) {
@@ -165,7 +171,13 @@ const fetchCategories = async (level) => {
   }
 
   try {
-    const response = await fetch(url, { method: 'GET' });
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
     if (!response.ok) {
       throw new Error(`${level} 카테고리를 불러오는 데 실패했습니다.`);
     }
@@ -191,7 +203,6 @@ const resetImage = () => {
   imagePreview.value = imageSrc;
   imgOn.value = false;
 };
-
 const previewImage = (event) => {
   const file = event.target.files[0];
   if(file) {
@@ -218,7 +229,11 @@ const uploadImage = async () => {
     const response = await fetch(`http://localhost:5000/admin/product/image`, {
       method: 'POST',
       credentials: 'include',
-      body: formData
+      body: formData,
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
     });
 
     if (!response.ok) {
@@ -233,7 +248,6 @@ const uploadImage = async () => {
     console.error('오류:', error);
   }
 };
-
 const saveProduct = async (imageUrl) => {
   const requestData = {
     productName: insertProductName.value,
@@ -256,7 +270,8 @@ const saveProduct = async (imageUrl) => {
     const response = await fetch('http://localhost:5000/admin/product/create?requesterAdminCode=1', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(requestData)
     });
@@ -272,11 +287,9 @@ const saveProduct = async (imageUrl) => {
     console.error('오류:', error);
   }
 };
-
 const closePopup = () => {
   emit('close');
 };
-
 onMounted(() => {
   const numberInputs = document.querySelectorAll('input[type="number"]');
   numberInputs.forEach(input => {
@@ -290,7 +303,6 @@ onMounted(() => {
       input.value = input.value.replace(/[^0-9]/g, '');
     });
   });
-
   fetchCategories('first');
 });
 
@@ -323,7 +335,10 @@ const uploadAndSaveProduct = async () => {
     const response = await fetch('http://localhost:5000/admin/product/image', {
       method: 'POST',
       credentials: 'include',
-      body: formData
+      body: formData,
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
     });
 
     if (!response.ok) {

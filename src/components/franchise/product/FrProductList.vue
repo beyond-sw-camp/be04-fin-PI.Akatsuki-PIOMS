@@ -93,9 +93,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost"
-            :id="'row-' + rowIndex"
-            @dblclick="showDetailPopup(item)">
+        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost" :id="'row-' + rowIndex">
           <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">
               {{ item[header.key] }}
             <template v-if="header.key === 'imgUrl'">
@@ -114,16 +112,15 @@
       <span> {{currentPage}} / {{totalPages}} </span>
       <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
     </div>
-    <FrProductDetail v-if="openDetailPopup" :showDetailPopup="showDetailPopup" :popupVisible="openDetailPopup" :detailItem="detailItem"/>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
-import ProductPostPopup from "@/components/amdin/product/ProductPostPopup.vue"
-import ProductDetailPopup from "@/components/amdin/product/ProductDetailPopup.vue";
 import axios from "axios";
-import FrProductDetail from "@/components/franchise/product/FrProductDetail.vue";
+import { useStore } from 'vuex';
+const store = useStore();
+const accessToken = store.state.accessToken;
 
 const lists = ref([]);
 const headers = ref([
@@ -146,6 +143,7 @@ const selectedExposureStatus = ref('전체');
 const filterStatus = ref('');
 const filterColor = ref('');
 const filterSize = ref('');
+const filterProductName = ref('');
 
 const firstCategories = ref([]);
 const secondCategories = ref([]);
@@ -153,7 +151,6 @@ const thirdCategories = ref([]);
 const selectedFirstCategory = ref('');
 const selectedSecondCategory = ref('');
 const selectedThirdCategory = ref('');
-const openDetailPopup = ref(false);
 const productImages = ref({});
 
 const getProductImageUrl = (productCode) => {
@@ -163,6 +160,10 @@ const fetchProductImages = async () => {
   try {
     const response = await fetch(`http://localhost:5000/admin/product/productImage`, {
       method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
     });
     if(!response.ok) {
       throw new Error('이미지를 불러오지 못했습니다.');
@@ -179,17 +180,14 @@ const fetchProductImages = async () => {
     console.error('Error:', error);
   }
 };
-
-
-const showDetailPopup = (item) => {
-  detailItem.value = item;
-  openDetailPopup.value = !openDetailPopup.value;
-}
-
 const fetchFirstCategories = async () => {
   try {
     const response = await fetch('http://localhost:5000/admin/category/first', {
       method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
     });
     if (!response.ok) {
       throw new Error('대분류를 불러오는 데 실패했습니다.');
@@ -199,14 +197,19 @@ const fetchFirstCategories = async () => {
     console.error('Error:', error);
   }
 };
-
 const fetchSecondCategories = async () => {
   if (selectedFirstCategory.value === '') {
     secondCategories.value = [];
     return;
   }
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`);
+    const response = await fetch(`http://localhost:5000/admin/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
     if (!response.ok) {
       throw new Error('중분류를 불러오는 데 실패했습니다.');
     }
@@ -217,14 +220,19 @@ const fetchSecondCategories = async () => {
     console.error('Error:', error);
   }
 };
-
 const fetchThirdCategories = async () => {
   if (selectedSecondCategory.value === '') {
     thirdCategories.value = [];
     return;
   }
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`);
+    const response = await fetch(`http://localhost:5000/admin/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
     if (!response.ok) {
       throw new Error('소분류를 불러오는 데 실패했습니다.');
     }
@@ -233,21 +241,21 @@ const fetchThirdCategories = async () => {
     console.error('Error:', error);
   }
 };
-
 const applyFilters = () => {
   filteredLists.value = lists.value.filter(list => {
     const matchesExposureStatus = selectedExposureStatus.value === '전체' || list.productExposureStatus === (selectedExposureStatus.value === '노출');
+    const matchesProductName = !filterProductName.value || list.productName.includes(filterProductName.value);
     const matchesStatus = !filterStatus.value || list.productStatus === filterStatus.value;
     const matchesColor = !filterColor.value || list.productColor === filterColor.value;
     const matchesSize = !filterSize.value || list.productSize === parseInt(filterSize.value, 10);
     const matchesCategory = !selectedThirdCategory.value || list.categoryThirdCode === selectedThirdCategory.value;
 
-    return matchesExposureStatus && matchesStatus && matchesColor && matchesSize && matchesCategory;
+    return matchesExposureStatus && matchesProductName && matchesStatus && matchesColor && matchesSize && matchesCategory;
   });
 };
-
 const resetFilters = () => {
   selectedExposureStatus.value = '전체';
+  filterProductName.value = '';
   filterStatus.value = '';
   filterColor.value = '';
   filterSize.value = '';
@@ -256,11 +264,14 @@ const resetFilters = () => {
   selectedThirdCategory.value = '';
   filteredLists.value = lists.value;
 };
-
 const getMemberId = async () => {
   try {
     const response = await fetch('http://localhost:5000/franchise/product', {
       method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
     });
 
     if (!response.ok) {
@@ -279,11 +290,14 @@ const getMemberId = async () => {
     console.error('오류 발생:', error);
   }
 };
-
 const downloadExcel = () => {
   axios({
     url: 'http://localhost:5000/franchise/exceldownload/product-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
     method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
     responseType: 'blob', // 서버에서 반환되는 데이터의 형식을 명시
   }).then((response) => {
     const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }));
@@ -296,32 +310,20 @@ const downloadExcel = () => {
     console.error('Excel 다운로드 중 오류 발생:', error);
   });
 };
-
 const paginatedLists = computed(() => {
-  let items = [];
   const start = (currentPage.value - 1) * itemsPerPage;
   const end = start + itemsPerPage;
 
-  if (filteredLists.value.length < itemsPerPage) {
-    const remainingItems = itemsPerPage - filteredLists.value.length;
-    items = [...filteredLists.value, ...Array.from({ length: remainingItems }).map(() => ({}))];
-  } else {
-    items = filteredLists.value.slice(start, end);
-  }
-
-  return items;
+  return filteredLists.value.slice(start, end);
 });
-
 const totalPages = computed(() => {
   return Math.ceil(filteredLists.value.length / itemsPerPage);
 });
-
 const nextPage = () => {
   if (currentPage.value < totalPages.value) {
     currentPage.value++;
   }
 };
-
 const prevPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--;

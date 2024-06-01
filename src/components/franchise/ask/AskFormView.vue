@@ -40,6 +40,9 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useStore } from 'vuex';
+const store = useStore();
+const accessToken = store.state.accessToken;
 
 const askData = ref(null);
 const answer = ref('');
@@ -55,9 +58,10 @@ const fetchAskData = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://localhost:5000/admin/ask/${askCode}`, {
+    const response = await fetch(`http://localhost:5000/franchise/ask/${askCode}`, {
       method: 'GET',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     });
@@ -72,14 +76,18 @@ const fetchAskData = async () => {
   }
 };
 
-const formatDate = (dateArray) => {
-  if (!dateArray || dateArray.length === 0) return '날짜 없음';
-  const [year, month, day, hour = 0, minute = 0, second = 0] = dateArray;
-  const date = new Date(year, month - 1, day, hour, minute, second);
-  return date.toLocaleDateString('ko-KR', {
+const formatDate = (dateString) => {
+  if (!dateString) return '-';
+  const date = new Date(dateString);
+  if (isNaN(date)) return 'Invalid Date';
+  return date.toLocaleString('ko-KR', {
     year: 'numeric',
     month: '2-digit',
-    day: '2-digit'
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
   });
 };
 

@@ -19,6 +19,7 @@
               <td colspan="3" class="content-td"><textarea v-model="askContent"></textarea></td>
             </tr>
           </table>
+          <div v-show="errorMessage" class="error-message">{{ errorMessage }}</div>
           <div class="action-buttons">
             <button @click="closeCreate" class="cancel-btn">취소</button>
             <button @click="submitAsk" class="submit-btn">등록</button>
@@ -32,6 +33,11 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { defineEmits } from 'vue';
+import { useStore } from 'vuex';
+import Swal from "sweetalert2";
+
+const store = useStore();
+const accessToken = store.state.accessToken;
 
 const props = defineProps({
   closeCreate: Function
@@ -43,12 +49,14 @@ const franchiseOwnerCode = 1; // 테스트를 위한 하드코딩된 코드
 const franchiseOwnerData = ref(null);
 const askTitle = ref('');
 const askContent = ref('');
+const errorMessage = ref('');
 
 const fetchFranchiseOwnerData = async () => {
   try {
     const response = await fetch(`http://localhost:5000/franchise/owner/${franchiseOwnerCode}`, {
       method: 'GET',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     });
@@ -62,10 +70,20 @@ const fetchFranchiseOwnerData = async () => {
 };
 
 const submitAsk = async () => {
+  if (!askTitle.value.trim() || !askContent.value.trim()) {
+    await Swal.fire({
+      icon: 'warning',
+      title: '등록 실패',
+      text: '제목과 내용은 필수 작성요소 입니다.',
+    });
+    return;
+  }
+
   try {
     const response = await fetch(`http://localhost:5000/franchise/ask/create/${franchiseOwnerCode}`, {
       method: 'POST',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -77,8 +95,14 @@ const submitAsk = async () => {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
+    await Swal.fire({
+      icon: 'success',
+      title: '등록 성공',
+      text: '등록이 완료되었습니다.',
+    });
     emit('refreshData');
     props.closeCreate();
+    window.location.reload(); // 페이지 새로고침
   } catch (error) {
     console.error('Failed to submit ask:', error);
   }
@@ -86,6 +110,7 @@ const submitAsk = async () => {
 
 onMounted(fetchFranchiseOwnerData);
 </script>
+
 
 <style scoped>
 .container {
@@ -181,7 +206,7 @@ textarea {
 }
 
 .submit-btn:hover {
-  background-color: green; /* hover 시 녹색으로 변경 */
+  background-color: limegreen; /* hover 시 녹색으로 변경 */
 }
 
 .popup-overlay {
@@ -248,5 +273,11 @@ textarea {
 
 .popup-content.submit-btn:hover {
   background-color: #45a049;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+  font-weight: bold;
 }
 </style>

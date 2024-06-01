@@ -23,15 +23,17 @@ export default {
 
 <style scoped>
 .breadcrumbs {
-  font-size: 20px;
-  margin-bottom: 15px;
+  font-size: 16px;
   display: flex;
-  justify-content: left;
   font-weight: bold;
-  padding: 10px;
-  width: 1200px;
+  padding-top: 42px;
+  //width: 1300px;
   margin-left: auto;
   margin-right: auto;
+  justify-content: flex-start;
+  align-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .breadcrumbs span {
