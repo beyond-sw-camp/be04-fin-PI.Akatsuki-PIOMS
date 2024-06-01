@@ -99,8 +99,8 @@
           <td v-else-if="item.orderCondition=='승인완료'">
             <div class="condition-button approved">승인완료</div>
           </td>
-          <td v-else-if="item.orderCondition=='승인거절'">
-            <div class="condition-button rejected">승인거절</div>
+          <td v-else-if="item.orderCondition=='승인거부'">
+            <div class="condition-button rejected">승인거부</div>
           </td>
           <td v-else-if="item.orderCondition=='검수대기'">
             <div class="condition-button inspection-pending">검수대기</div>

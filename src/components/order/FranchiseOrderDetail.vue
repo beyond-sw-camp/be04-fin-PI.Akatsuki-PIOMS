@@ -97,15 +97,28 @@
               </table>
             </div>
             <br>
-            <div class="but-group">
-              <input class="but" type="button" value="검수하기" @click="gumsoo" v-if="item.orderCondition == '검수대기'">
-            </div>
-            
+           <div v-if="item.orderCondition == '승인거부' || item.orderCondition=='승인대기'">
+             <div v-if="item.orderCondition == '승인거부'" >
+               <div class="divvv-title">거절 사유</div>
+               <div class="divvv3"> {{item.orderReason}}</div>
+             </div>
+             <button class="close" @click="clickUpdate" >
+               수정하기
+             </button>
+
+           </div>
+
           </div>
           발주일자 : {{ item.orderDate }}
            <br>
            주문코드 : {{ item.orderCode }}<br>   
        </div>
+    <FranchiseOrderUpdatePopup
+        v-if="updateStatus==true"
+        :item="item"
+        :clickUpdate="clickUpdate"
+        :showDetailPopup = "showDetailPopup"
+    />
    </div>
 
    
@@ -114,10 +127,16 @@
 </template>
 
 <script setup>
-   import { ref } from "vue";
-   import axios from 'axios';
-   import { useStore } from 'vuex'; // Vuex store 임포트
-   const store = useStore(); // Vuex store 사용
+  import { ref } from "vue";
+  import axios from 'axios';
+  import { useStore } from 'vuex'; // Vuex store 임포트
+  const store = useStore(); // Vuex store 사용
+  import FranchiseOrderUpdatePopup from "@/components/order/FranchiseOrderUpdatePopup.vue";
+
+  const updateStatus = ref(false);
+  const clickUpdate = () =>{
+    updateStatus.value = !updateStatus.value;
+  }
 
   const exchangeHeaders = ref([
     { key: 'productName', label: '상품명' },
