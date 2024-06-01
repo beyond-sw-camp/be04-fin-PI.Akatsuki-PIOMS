@@ -14,17 +14,21 @@
                   <div class="second-insert-label0">카테고리 구분</div>
                 </td>
                 <td class="second-insert-input">
+<!--                  <h6 style="margin: 0">{{currentCategoryFirstName}} > {{currentCategorySecondName}} > {{currentCategoryThirdName}}</h6>-->
                   <select v-model="updateFirst" @change="fetchCategories('second')" class="categories">
+                    <option value="">{{currentCategoryFirstName}}</option>
                     <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">
                       {{ category.categoryFirstName }}
                     </option>
                   </select>
                   <select v-model="updateSecond" @change="fetchCategories('third')" class="categories-g">
+                    <option value="">{{currentCategorySecondName}}</option>
                     <option v-for="category in secondCategories" :key="category.categorySecondCode" :value="category.categorySecondCode">
                       {{ category.categorySecondName }}
                     </option>
                   </select>
                   <select v-model="updateThird" class="categories-g">
+                    <option value="">{{currentCategoryThirdName}}</option>
                     <option v-for="category in thirdCategories" :key="category.categoryThirdCode" :value="category.categoryThirdCode">
                       {{ category.categoryThirdName }}
                     </option>
@@ -38,41 +42,8 @@
             </table>
             <table class="top-table">
               <tr>
-                <td class="insert-label">재고량</td>
-                <td class="insert-input">
-<!--                  <input type="number" v-bind:value="currentProductCount" v-on:input="updateCount = $event.target.value" class="textInput" />-->
-                  <input type="number" :value="currentProductCount" @input="updateCount = $event.target.value" class="textInput" />
-                </td>
-                <td class="insert-label">가격</td>
-                <td class="insert-input">
-<!--                  <input type="number" v-bind:value="currentProductPrice" v-on:input="updatePrice = $event.target.value" class="textInput" />-->
-                  <input type="number" :value="currentProductPrice" @input="updatePrice = $event.target.value" class="textInput" />
-                </td>
-                <td class="insert-label">상품상태</td>
-                <td class="insert-input">
-<!--                  <select v-bind:value="currentProductStatus" v-on:change="updateStatus = $event.target.value" class="textInput">-->
-                  <select :value="currentProductStatus" @change="updateStatus = $event.target.value" class="textInput">
-                    <option value="공급가능">공급가능</option>
-                    <option value="일시제한">일시제한</option>
-                    <option value="단종">단종</option>
-                    <option value="품절">품절</option>
-                  </select>
-                </td>
-              </tr>
-            </table>
-            <table class="insert-table">
-              <tr>
-                <td class="insert-label">상품노출상태</td>
-                <td class="insert-input">
-<!--                  <select v-bind:value="currentProductExposureStatus" v-on:change="updateExposureStatus = $event.target.value" class="textInput">-->
-                  <select :value="currentProductExposureStatus" @change="updateExposureStatus = $event.target.value" class="textInput">
-                    <option value="true">노출</option>
-                    <option value="false">미노출</option>
-                  </select>
-                </td>
                 <td class="insert-label">색상</td>
                 <td class="insert-input">
-<!--                  <select v-bind:value="currentProductColor" v-on:change="updateColor = $event.target.value" class="textInput">-->
                   <select :value="currentProductColor" @change="updateColor = $event.target.value" class="textInput">
                     <option value="빨간색">빨간색</option>
                     <option value="주황색">주황색</option>
@@ -85,13 +56,33 @@
                 </td>
                 <td class="insert-label">사이즈</td>
                 <td class="insert-input">
-<!--                  <select v-bind:value="currentProductSize" v-on:change="updateSize = $event.target.value" class="textInput">-->
                   <select :value="currentProductSize" @change="updateSize = $event.target.value" class="textInput">
                     <option value="90">90</option>
                     <option value="95">95</option>
                     <option value="100">100</option>
                     <option value="105">105</option>
                     <option value="110">110</option>
+                  </select>
+                </td>
+              </tr>
+            </table>
+            <table class="insert-table">
+              <tr>
+                <td class="insert-label">재고량</td>
+                <td class="insert-input">
+                  <input type="number" :value="currentProductCount" @input="updateCount = $event.target.value" class="textInput" />
+                </td>
+                <td class="insert-label">가격</td>
+                <td class="insert-input">
+                  <input type="number" :value="currentProductPrice" @input="updatePrice = $event.target.value" class="textInput" />
+                </td>
+                <td class="insert-label">상품상태</td>
+                <td class="insert-input">
+                  <select :value="currentProductStatus" @change="updateStatus = $event.target.value" class="textInput">
+                    <option value="공급가능">공급가능</option>
+                    <option value="일시제한">일시제한</option>
+                    <option value="단종">단종</option>
+                    <option value="품절">품절</option>
                   </select>
                 </td>
               </tr>
@@ -129,7 +120,6 @@ const updateName = ref('');
 const updateCount = ref('');
 const updatePrice = ref('');
 const updateStatus = ref('');
-const updateExposureStatus = ref('');
 const updateColor = ref('');
 const updateSize = ref('');
 const updateFirst = ref('');
@@ -143,28 +133,26 @@ const props = defineProps({
   currentProductCount: String,
   currentProductPrice: String,
   currentProductStatus: String,
-  currentProductExposureStatus: Boolean,
   currentProductColor: String,
   currentProductSize: String,
-  currentCategoryFirstCode: String,
-  currentCategorySecondCode: String,
-  currentCategoryThirdCode: String,
+  currentCategoryFirstName: String,
+  currentCategorySecondName: String,
+  currentCategoryThirdName: String,
   currentProductContent: String,
   closeEdit: Function
 });
 const submitProduct = async () => {
   const requestData = {
-    productName: updateName.value,
-    productCount: updateCount.value,
-    productPrice: updatePrice.value,
-    productStatus: updateStatus.value,
-    productExposureStatus: updateExposureStatus.value,
-    productColor: updateColor.value,
-    productSize: updateSize.value,
-    categoryFirstCode: updateFirst.value,
-    categorySecondCode: updateSecond.value,
-    categoryThirdCode: updateThird.value,
-    productContent: updateContent.value
+    productName: updateName.value !== '' ? updateName.value : props.currentProductName,
+    productCount: updateCount.value !== '' ? updateCount.value : props.currentProductCount,
+    productPrice: updatePrice.value !== '' ? updatePrice.value : props.currentProductPrice,
+    productStatus: updateStatus.value !== '' ? updateStatus.value : props.currentProductStatus,
+    productColor: updateColor.value !== '' ? updateColor.value : props.currentProductColor,
+    productSize: updateSize.value !== '' ? updateSize.value : props.currentProductSize,
+    categoryFirstCode: updateFirst.value !== '' ? updateFirst.value : props.currentCategoryFirstName,
+    categorySecondCode: updateSecond.value !== '' ? updateSecond.value : props.currentCategorySecondName,
+    categoryThirdCode: updateThird.value !== '' ? updateThird.value : props.currentCategoryThirdName,
+    productContent: updateContent.value !== '' ? updateContent.value : props.currentProductContent
   };
 
   console.log('Request Data : ', requestData);
@@ -191,6 +179,7 @@ const submitProduct = async () => {
     console.error('수정 실패:', error);
   }
 };
+
 
 const fetchCategories = async (level) => {
   let url = '';
