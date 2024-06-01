@@ -16,19 +16,19 @@
                 <td class="second-insert-input">
 <!--                  <h6 style="margin: 0">{{currentCategoryFirstName}} > {{currentCategorySecondName}} > {{currentCategoryThirdName}}</h6>-->
                   <select v-model="updateFirst" @change="fetchCategories('second')" class="categories">
-                    <option hidden="hidden" value="">{{currentCategoryFirstName}}</option>
+                    <option value="">{{currentCategoryFirstName}}</option>
                     <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">
                       {{ category.categoryFirstName }}
                     </option>
                   </select>
                   <select v-model="updateSecond" @change="fetchCategories('third')" class="categories-g">
-                    <option hidden="hidden" value="">{{currentCategorySecondName}}</option>
+                    <option value="">{{currentCategorySecondName}}</option>
                     <option v-for="category in secondCategories" :key="category.categorySecondCode" :value="category.categorySecondCode">
                       {{ category.categorySecondName }}
                     </option>
                   </select>
                   <select v-model="updateThird" class="categories-g">
-                    <option hidden="hidden" value="">{{currentCategoryThirdName}}</option>
+                    <option value="">{{currentCategoryThirdName}}</option>
                     <option v-for="category in thirdCategories" :key="category.categoryThirdCode" :value="category.categoryThirdCode">
                       {{ category.categoryThirdName }}
                     </option>
@@ -143,16 +143,16 @@ const props = defineProps({
 });
 const submitProduct = async () => {
   const requestData = {
-    productName: updateName.value,
-    productCount: updateCount.value,
-    productPrice: updatePrice.value,
-    productStatus: updateStatus.value,
-    productColor: updateColor.value,
-    productSize: updateSize.value,
-    categoryFirstCode: updateFirst.value,
-    categorySecondCode: updateSecond.value,
-    categoryThirdCode: updateThird.value,
-    productContent: updateContent.value
+    productName: updateName.value !== '' ? updateName.value : props.currentProductName,
+    productCount: updateCount.value !== '' ? updateCount.value : props.currentProductCount,
+    productPrice: updatePrice.value !== '' ? updatePrice.value : props.currentProductPrice,
+    productStatus: updateStatus.value !== '' ? updateStatus.value : props.currentProductStatus,
+    productColor: updateColor.value !== '' ? updateColor.value : props.currentProductColor,
+    productSize: updateSize.value !== '' ? updateSize.value : props.currentProductSize,
+    categoryFirstCode: updateFirst.value !== '' ? updateFirst.value : props.currentCategoryFirstName,
+    categorySecondCode: updateSecond.value !== '' ? updateSecond.value : props.currentCategorySecondName,
+    categoryThirdCode: updateThird.value !== '' ? updateThird.value : props.currentCategoryThirdName,
+    productContent: updateContent.value !== '' ? updateContent.value : props.currentProductContent
   };
 
   console.log('Request Data : ', requestData);
@@ -179,6 +179,7 @@ const submitProduct = async () => {
     console.error('수정 실패:', error);
   }
 };
+
 
 const fetchCategories = async (level) => {
   let url = '';
