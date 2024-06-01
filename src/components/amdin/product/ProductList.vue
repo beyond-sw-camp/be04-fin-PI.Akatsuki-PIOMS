@@ -109,7 +109,7 @@
         <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost">
           <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">
             <template v-if="header.key === 'productName'">
-              <button class="button-as-text" @click="showModifyPopup(item.productCode,item.productName,item.productCount,item.productPrice,item.productStatus,item.productColor,item.productSize,item.categoryFirstCode,item.categorySecondCode,item.categoryThirdCode,item.productContent)">
+              <button class="button-as-text" @click="showModifyPopup(item.productCode,item.productName,item.productCount,item.productPrice,item.productStatus,item.productColor,item.productSize,item.categoryFirstName,item.categorySecondName,item.categoryThirdName,item.productContent)">
                 {{ item[header.key] }}
               </button>
             </template>
@@ -141,9 +141,9 @@
                                          :currentProductStatus="currentProductStatus"
                                          :currentProductColor="currentProductColor"
                                          :currentProductSize="currentProductSize"
-                                         :currentCategoryFirstCode="currentCategoryFirstCode"
-                                         :currentCategorySecondCode="currentCategorySecondCode"
-                                         :currentCategoryThirdCode="currentCategoryThirdCode"
+                                         :currentCategoryFirstName="currentCategoryFirstName"
+                                         :currentCategorySecondName="currentCategorySecondName"
+                                         :currentCategoryThirdName="currentCategoryThirdName"
                                          :currentProductContent="currentProductContent"
                                          :closeEdit="closeEdit"/>
     <ProductDeletePopup v-if="deletePopup" :currentProductCode="currentProductCode"
@@ -206,16 +206,16 @@ const currentProductStatus = ref('');
 const currentProductExposureStatus = ref('');
 const currentProductColor = ref('');
 const currentProductSize = ref('');
-const currentCategoryFirstCode = ref('');
-const currentCategorySecondCode = ref('');
-const currentCategoryThirdCode = ref('');
+const currentCategoryFirstName = ref('');
+const currentCategorySecondName = ref('');
+const currentCategoryThirdName = ref('');
 const currentProductContent = ref('');
 const productImages = ref({});
 const editPopup = ref(false);
 const deletePopup = ref(false);
 
 const showModifyPopup = (productCode, productName, productCount, productPrice, productStatus, productColor, productSize,
-                          categoryFirstCode, categorySecondCode, categoryThirdCode, productContent) => {
+                          categoryFirstName, categorySecondName, categoryThirdName, productContent) => {
   editPopup.value = !editPopup.value;
   setCurrentProductCode(productCode);
   setCurrentProductName(productName);
@@ -224,9 +224,9 @@ const showModifyPopup = (productCode, productName, productCount, productPrice, p
   setCurrentProductStatus(productStatus);
   setCurrentProductColor(productColor);
   setCurrentProductSize(productSize);
-  setCurrentCategoryFirstCode(categoryFirstCode);
-  setCurrentCategorySecondCode(categorySecondCode);
-  setCurrentCategoryThirdCode(categoryThirdCode);
+  setCurrentCategoryFirstName(categoryFirstName);
+  setCurrentCategorySecondName(categorySecondName);
+  setCurrentCategoryThirdName(categoryThirdName);
   setCurrentProductContent(productContent);
 }
 const showDeletePopup = (productCode, productName, productExposureStatus) => {
@@ -389,14 +389,14 @@ const setCurrentProductExposureStatus = (productExposureStatus) => {
 const setCurrentProductContent = (productContent) => {
   currentProductContent.value = productContent;
 }
-const setCurrentCategoryFirstCode = (categoryFirstCode) => {
-  currentCategoryFirstCode.value = categoryFirstCode;
+const setCurrentCategoryFirstName = (categoryFirstName) => {
+  currentCategoryFirstName.value = categoryFirstName;
 }
-const setCurrentCategorySecondCode = (categorySecondCode) => {
-  currentCategorySecondCode.value = categorySecondCode;
+const setCurrentCategorySecondName = (categorySecondName) => {
+  currentCategorySecondName.value = categorySecondName;
 }
-const setCurrentCategoryThirdCode = (categoryThirdCode) => {
-  currentCategoryThirdCode.value = categoryThirdCode;
+const setCurrentCategoryThirdName = (categoryThirdName) => {
+  currentCategoryThirdName.value = categoryThirdName;
 }
 const getMemberId = async () => {
   try {

@@ -14,17 +14,21 @@
                   <div class="second-insert-label0">카테고리 구분</div>
                 </td>
                 <td class="second-insert-input">
+<!--                  <h6 style="margin: 0">{{currentCategoryFirstName}} > {{currentCategorySecondName}} > {{currentCategoryThirdName}}</h6>-->
                   <select v-model="updateFirst" @change="fetchCategories('second')" class="categories">
+                    <option hidden="hidden" value="">{{currentCategoryFirstName}}</option>
                     <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">
                       {{ category.categoryFirstName }}
                     </option>
                   </select>
                   <select v-model="updateSecond" @change="fetchCategories('third')" class="categories-g">
+                    <option hidden="hidden" value="">{{currentCategorySecondName}}</option>
                     <option v-for="category in secondCategories" :key="category.categorySecondCode" :value="category.categorySecondCode">
                       {{ category.categorySecondName }}
                     </option>
                   </select>
                   <select v-model="updateThird" class="categories-g">
+                    <option hidden="hidden" value="">{{currentCategoryThirdName}}</option>
                     <option v-for="category in thirdCategories" :key="category.categoryThirdCode" :value="category.categoryThirdCode">
                       {{ category.categoryThirdName }}
                     </option>
@@ -131,9 +135,9 @@ const props = defineProps({
   currentProductStatus: String,
   currentProductColor: String,
   currentProductSize: String,
-  currentCategoryFirstCode: String,
-  currentCategorySecondCode: String,
-  currentCategoryThirdCode: String,
+  currentCategoryFirstName: String,
+  currentCategorySecondName: String,
+  currentCategoryThirdName: String,
   currentProductContent: String,
   closeEdit: Function
 });
