@@ -1,6 +1,6 @@
 <template>
   <header>
-    <RootAdmin/>
+    <!-- <RootAdmin/> -->
 <!--    <AdminHeader/>-->
 <!--    <FranchiseHeader/>-->
 <!--    <DriverHeader/>-->
@@ -9,17 +9,8 @@
   <main class="main">
   <router-view/>
   </main>
-
-  <aside>
-    <!-- <Sidebar/> -->
-  </aside>
-
-    <main>
-      <router-view />
-    </main>
-  </div>
   <footer>
-    <Footer/>
+    <!-- <Footer/> -->
   </footer>
 
 </template>
@@ -54,10 +45,10 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.main {
+/* .main {
   width: 1900px;
   position: relative;
   left: 110px;
   height: 1200px;
-}
+} */
 </style>
