@@ -1,20 +1,30 @@
 import { createRouter, createWebHistory } from 'vue-router';
-
+import store from '@/store/store.js'; // Vuex 스토어 임포트
 
 import AnswerFormRegister from "@/components/amdin/ask/AnswerFormRegister.vue";
-import AdminLogin from "@/components/login/AdminLogin.vue";
 import FranchiseLogin from "@/components/login/FranchiseLogin.vue";
 import DriverLogin from "@/components/login/DriverLogin.vue";
 import CommonLogin from "@/components/login/CommonLogin.vue";
 import AskMain from "@/components/amdin/ask/AskMain.vue";
 import AnswerFormEdit from "@/components/amdin/ask/AnswerFormEdit.vue";
-import ProductList from "@/components/amdin/product/ProductList.vue";
 
+import AdminLogin from "@/components/login/AdminLogin.vue";
+import AskFormCreate from "@/components/franchise/ask/AskFormCreate.vue";
+import AskFormView from "@/components/franchise/ask/AskFormView.vue";
+import AskFRMain from "@/components/franchise/ask/AskFRMain.vue";
+import AskFormEdit from "@/components/franchise/ask/AskFormEdit.vue";
+import ProductList from "@/components/amdin/product/ProductList.vue";
+import FrProductList from "@/components/franchise/product/FrProductList.vue";
+import CategoryList from "@/components/amdin/Category/CategoryList.vue";
 import OrderPage from '@/components/order/orderPage.vue';
 
 import ExchangePage from '@/components/exchange/exchangePage.vue';
-
-
+import PostCategory from "@/components/amdin/Category/PostCategory.vue";
+import FavoriteRegister from "@/components/franchise/favorite/FavoriteRegister.vue";
+import FavoriteList from "@/components/franchise/favorite/FavoriteList.vue";
+import Log from "@/components/log/Log.vue";
+import DriverDashBoard from "@/components/driver/driverDashBoard.vue";
+import noticeList from "@/components/notice/noticeList.vue";
 
 const routes = [
     {
@@ -33,39 +43,115 @@ const routes = [
         component: DriverLogin,
     },
     {
-        path: '/login',
+        path: '/',
         name: 'CommonLogin',
         component: CommonLogin,
     },
     {
-        path: '/',
+        path: '/admin/ask',
         name: 'AskMain',
-        component: AskMain
+        component: AskMain,
+        meta: { requiresAuth: true, role: ['ROLE_ADMIN', 'ROLE_ROOT'] }
     },
     {
         path: '/admin/answerform/register',
         name: 'AnswerFormRegister',
-        component: AnswerFormRegister // 답변 작성 폼 경로 설정
+        component: AnswerFormRegister,
+        meta: { requiresAuth: true, role: ['ROLE_ADMIN', 'ROLE_ROOT'] }
     },
     {
         path: '/admin/answerform/edit',
         name: 'AnswerFormEdit',
-        component: AnswerFormEdit
+        component: AnswerFormEdit,
+        meta: { requiresAuth: true, role: ['ROLE_ADMIN', 'ROLE_ROOT'] }
+    },
+    {
+        path: '/franchise/ask',
+        name: 'AskFRMain',
+        component: AskFRMain,
+        meta: { requiresAuth: true, role: 'ROLE_OWNER' }
+    },
+    {
+        path: '/franchise/askform/edit',
+        name: 'AskFromEdit',
+        component: AskFormEdit,
+        meta: { requiresAuth: true, role: 'ROLE_OWNER' }
+    },
+    {
+        path: '/franchise/askform/view',
+        name: 'AskFormView',
+        component: AskFormView,
+        meta: { requiresAuth: true, role: 'ROLE_OWNER' }
+    },
+    {
+        path: '/franchise/askform/create',
+        name: 'AskFormCreate',
+        component: AskFormCreate,
+        meta: { requiresAuth: true, role: 'ROLE_OWNER' }
     },
     {
         path: '/order/list',
         name: 'orderList',
-        component: OrderPage
+        component: OrderPage,
+        meta: { requiresAuth: true, role: 'ROLE_ADMIN' }
     },
     {
         path: '/admin/product/list',
         name: 'AdminProductList',
-        component: ProductList
+        component: ProductList,
+        meta: { requiresAuth: true, role: ['ROLE_ADMIN', 'ROLE_ROOT'] }
+    },
+    {
+        path: '/franchise/product/list',
+        name: 'FranchiseProductList',
+        component: FrProductList,
+        meta: { requiresAuth: true, role: 'ROLE_ROOT' }
+    },
+    {
+        path: '/admin/category/list',
+        name: 'AdminProductCategoryList',
+        component: CategoryList,
+        meta: { requiresAuth: true, role: ['ROLE_ADMIN', 'ROLE_ROOT'] }
+    },
+    {
+        path: '/admin/category/post',
+        name: 'AdminProductCategoryPost',
+        component: PostCategory,
+        meta: { requiresAuth: true, role: ['ROLE_ADMIN', 'ROLE_ROOT'] }
     },
     {
         path: '/exchange/list',
         name: 'exchangeList',
-        component: ExchangePage
+        component: ExchangePage,
+        meta: { requiresAuth: true, role: 'ROLE_ADMIN' }
+    },
+    {
+        path: '/admin/notice/list',
+        name: 'noticeList',
+        component: noticeList
+    },
+    {
+        path: '/franchise/favorite/register',
+        name: 'FranchiseFavoriteRegister',
+        component: FavoriteRegister,
+        meta: { requiresAuth: true, role: 'ROLE_OWNER' }
+    },
+    {
+        path: '/franchise/favorite/list',
+        name: 'FranchiseFavoriteList',
+        component: FavoriteList,
+        meta: { requiresAuth: true, role: 'ROLE_OWNER' }
+    },
+    {
+        path: '/admin/logs',
+        name: 'AdminLogs',
+        component: Log,
+        meta: { requiresAuth: true, role: 'ROLE_ROOT' }
+    },
+    {
+        path: '/driver/home',
+        name: 'DriverDashboard',
+        component: DriverDashBoard
     }
 ];
 
@@ -73,4 +159,27 @@ const router = createRouter({
     history: createWebHistory(),
     routes
 });
+
+// 네비게이션 가드 설정
+router.beforeEach(async (to, from, next) => {
+    const isAuthenticated = store.getters.isAuthenticated;
+    const userRole = store.getters.userRole;
+
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        if (!isAuthenticated) {
+            next({ name: 'AdminLogin' });
+        } else {
+            const requiredRoles = to.meta.role;
+            if (requiredRoles && !requiredRoles.includes(userRole)) {
+                // 사용자가 해당 경로에 접근할 권한이 없는 경우
+                next({ name: 'AdminLogin' });
+            } else {
+                next();
+            }
+        }
+    } else {
+        next();
+    }
+});
+
 export default router;

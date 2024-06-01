@@ -1,27 +1,34 @@
-import { fileURLToPath, URL } from 'node:url'
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import { fileURLToPath, URL } from 'node:url';
+import { defineConfig, loadEnv } from 'vite';
+import vue from '@vitejs/plugin-vue';
 
-export default defineConfig({
-  plugins: [
-    vue(),
-  ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
-  },
-  server: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:5000',
-        changeOrigin: true,
-        rewrite: path => path.replace(/^\/api/, ''),
-      },
+export default defineConfig(({ mode }) => {
+  // Load environment variables based on the mode (development, production, etc.)
+  const env = loadEnv(mode, process.cwd());
+
+  return {
+    plugins: [
+      vue(),
+    ],
+    resolve: {
+      alias: {
+        // Create an alias for '@' as the /src directory
+        '@': fileURLToPath(new URL('./src', import.meta.url))
+      }
     },
-    // https: {
-    //   key: fs.readFileSync('/Users/duck/Desktop/Keys/localhost-key.pem'),
-    //   cert: fs.readFileSync('/Users/duck/Desktop/Keys/localhost.pem')
-    // }
+    server: {
+      // Define the server's port number
+      port: 5173,
+    },
+    build: {
+      // Specify the output directory for the build files
+      outDir: 'dist',
+    },
+    define: {
+      'process.env': {
+        // Dynamically assign the backend URL from environment variables
+        VITE_APP_BACKEND_URL: env.VITE_APP_BACKEND_URL
+      }
+    }
   }
-})
+});

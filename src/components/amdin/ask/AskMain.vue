@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <!-- Breadcrumb 컴포넌트 추가 -->
     <Breadcrumb :crumbs="breadcrumbs" />
 
     <div class="filter-section">
@@ -49,7 +50,7 @@
           <th>문의상태</th>
           <th>문의제목</th>
           <th>작성자</th>
-          <th>가맹점명</th>
+          <th>가맹점명</th> <!-- 추가된 부분 -->
           <th>등록일</th>
           <th>수정일</th>
           <th>답변일</th>
@@ -58,11 +59,11 @@
         </thead>
         <tbody>
         <tr v-for="(ask, index) in paginatedAsks" :key="ask.askCode" class="allpost">
-          <td class="num">{{ (currentPage - 1) * pageSize + index + 1 }}</td>
+          <td class="num">{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
           <td>{{ ask.askStatus }}</td>
           <td class="boardname">{{ ask.askTitle }}</td>
           <td>{{ ask.franchiseOwnerName }}</td>
-          <td>{{ ask.franchiseName }}</td>
+          <td>{{ ask.franchiseName }}</td> <!-- 추가된 부분 -->
           <td>{{ formatDate(ask.askEnrollDate) }}</td>
           <td>{{ formatDate(ask.askUpdateDate) }}</td>
           <td>{{ formatDate(ask.askCommentDate) }}</td>
@@ -70,7 +71,7 @@
             <button
                 class="editbutton"
                 :class="{ 'editbutton-pending': ask.askStatus === '답변대기' }"
-                @click="ask.askStatus === '답변대기' ? registerAnswer(ask.askCode) : editAnswer(ask.askCode)"
+                @click="ask.askStatus === '답변대기' ? showRegist(ask) : showEdit(ask)"
             >
               {{ ask.askStatus === '답변대기' ? '답변 작성' : '답변 조회' }}
             </button>
@@ -85,12 +86,18 @@
       <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
     </div>
   </div>
+  <Register v-if="registPopup" :askCode="askCode" :closeRegist="closeRegist"/>
+  <Edit v-if="editPopup" :askCode="askCode" :closeEdit="closeEdit"/>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
-import axios from 'axios';
+import { ref, computed, onMounted } from 'vue';
+import Register from './AnswerFormRegister.vue';
+import Edit from './AnswerFormEdit.vue';
 import Breadcrumb from '@/components/amdin/ask/Breadcrumb.vue'; // Breadcrumb 컴포넌트 임포트
+import { useStore } from 'vuex'; // Vuex store 임포트
+
+const store = useStore(); // Vuex store 사용
 
 const asks = ref([]);
 const filteredAsks = ref([]);
@@ -100,36 +107,56 @@ const endDate = ref('');
 const selectedFranchise = ref('');
 
 const currentPage = ref(1);
-const pageSize = ref(15); // 페이지 당 항목 수
-const totalPages = ref(1);
+const itemsPerPage = 15;
 
 const breadcrumbs = [
-  {label: '공지 및 문의 관리', link: '/notice'},
-  {label: '문의사항 관리', link: '/notice/inquiry'},
-  {label: '문의사항 조회 및 관리', link: null},
+  { label: '문의사항 조회 및 관리', link: null },
 ];
 
 const franchises = ref([
-  {code: 1, name: 'PIOMS 신사점'},
-  {code: 2, name: 'PIOMS 강남점'},
-  {code: 3, name: 'PIOMS 더현대서울점'},
-  {code: 4, name: 'PIOMS 홍대점'},
-  {code: 5, name: 'PIOMS 성수점'},
-  {code: 6, name: 'PIOMS 논현점'},
+  { code: 1, name: 'PIOMS 신사점' },
+  { code: 2, name: 'PIOMS 강남점' },
+  { code: 3, name: 'PIOMS 더현대서울점' },
+  { code: 4, name: 'PIOMS 홍대점' },
+  { code: 5, name: 'PIOMS 성수점' },
+  { code: 6, name: 'PIOMS 논현점' },
 ]);
+
+const refreshData = () => {
+  fetchAsks(); // 데이터를 새로고침
+};
+
 
 const fetchAsks = async () => {
   try {
-    const response = await axios.get('http://localhost:9000/admin/ask/list');
-    asks.value = response.data.asks || response.data.askDTOs || [];
-    applyFilters(); // 필터를 적용하여 초기 데이터를 설정합니다.
+    const accessToken = store.state.accessToken;
+    if (!accessToken) {
+      throw new Error('No access token found');
+    }
+
+    const response = await fetch('http://localhost:5000/admin/ask/list', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    asks.value = data.asks || data.askDTOs || [];
+    filteredAsks.value = asks.value;
+    applyFilters();
   } catch (error) {
     console.error('Failed to fetch asks:', error);
   }
 };
 
+
 const applyFilters = () => {
-  const filtered = asks.value.filter(ask => {
+  filteredAsks.value = asks.value.filter(ask => {
     const matchesStatus = filterStatus.value === '전체' || ask.askStatus === filterStatus.value;
     const matchesFranchise = !selectedFranchise.value || ask.franchiseName === selectedFranchise.value; // 필터 조건 수정
     const matchesStartDate = !startDate.value || new Date(ask.askEnrollDate[0], ask.askEnrollDate[1] - 1, ask.askEnrollDate[2]) >= new Date(startDate.value);
@@ -137,9 +164,6 @@ const applyFilters = () => {
 
     return matchesStatus && matchesFranchise && matchesStartDate && matchesEndDate;
   });
-  filteredAsks.value = filtered;
-  totalPages.value = Math.ceil(filtered.length / pageSize.value);
-  currentPage.value = 1;
 };
 
 const resetFilters = () => {
@@ -147,43 +171,34 @@ const resetFilters = () => {
   startDate.value = '';
   endDate.value = '';
   selectedFranchise.value = '';
-  applyFilters();
+  filteredAsks.value = asks.value;
+  currentPage.value = 1; // 페이지 리셋
 };
 
-const formatDate = (dateArray) => {
-  if (!dateArray || dateArray.length === 0) return '날짜 없음';
-  const [year, month, day, hour = 0, minute = 0, second = 0] = dateArray;
-  const date = new Date(year, month - 1, day, hour, minute, second);
-  return date.toLocaleDateString('ko-KR', {
+const formatDate = (dateString) => {
+  if (!dateString) return '-';
+  const date = new Date(dateString);
+  if (isNaN(date)) return 'Invalid Date';
+  return date.toLocaleString('ko-KR', {
     year: 'numeric',
     month: '2-digit',
-    day: '2-digit'
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
   });
 };
 
-const openAnswerForm = (askCode, mode) => {
-  const width = 800;
-  const height = 600;
-  const left = (window.screen.width / 2) - (width / 2);
-  const top = (window.screen.height / 2) - (height / 2);
-  const url = `http://localhost:5173/admin/answerform/${mode}?askCode=${askCode}`;
-  window.open(url, 'popup', `width=${width},height=${height},top=${top},left=${left},toolbar=no,scrollbars=no,resizable=no`);
-};
-
-// 답변 등록 버튼 클릭 시
-const registerAnswer = (askCode) => {
-  openAnswerForm(askCode, 'register');
-};
-
-// 답변 수정 버튼 클릭 시
-const editAnswer = (askCode) => {
-  openAnswerForm(askCode, 'edit');
-};
 
 const paginatedAsks = computed(() => {
-  const start = (currentPage.value - 1) * pageSize.value;
-  const end = start + pageSize.value;
+  const start = (currentPage.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
   return filteredAsks.value.slice(start, end);
+});
+
+const totalPages = computed(() => {
+  return Math.ceil(filteredAsks.value.length / itemsPerPage);
 });
 
 const prevPage = () => {
@@ -197,10 +212,31 @@ const nextPage = () => {
     currentPage.value++;
   }
 };
-
 onMounted(() => {
   fetchAsks();
 });
+
+const registPopup = ref(false);
+const askCode = ref(null);
+const editPopup = ref(false);
+
+const showRegist = (askCode1) =>{
+  registPopup.value = !registPopup.value;
+  askCode.value = askCode1;
+}
+
+const showEdit = (askCode2) => {
+  editPopup.value = !editPopup.value;
+  askCode.value = askCode2;
+}
+const closeRegist = () =>{
+  registPopup.value = !registPopup.value;
+}
+
+const closeEdit = () =>{
+  editPopup.value = !editPopup.value;
+}
+
 </script>
 
 <style scoped>
@@ -221,11 +257,12 @@ onMounted(() => {
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 10px;
-  width: 1200px;
+  width: 1300px;
 }
 
 .filter-table td {
   padding: 5px 10px;
+  font-size: 16px;
 }
 
 .filter-label {
@@ -241,11 +278,6 @@ onMounted(() => {
   border: 1px solid lightgray;
 }
 
-.date-range {
-  display: flex;
-  align-items: center;
-}
-
 .date-range span {
   margin: 0 5px;
 }
@@ -254,11 +286,12 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   margin-top: 10px;
+  margin-bottom: 20px;
 }
 
 .reset-btn, .search-btn {
   background-color: #fff;
-  color: white;
+  color: black;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -268,21 +301,20 @@ onMounted(() => {
 }
 
 .reset-btn:hover, .search-btn:hover {
-  background-color: #fff;
+  background-color: #f0f0f0;
 }
 
 .table-container {
   width: 100%;
-  margin-top: 20px;
   margin-bottom: 10px;
   display: flex;
   justify-content: center;
 }
 
 .table {
-  width: 1200px;
-  max-width: 1200px;
-  border-collapse: separate;
+  width: 1300px;
+  max-width: 1300px;
+  border-collapse: collapse;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -292,12 +324,23 @@ onMounted(() => {
 .table th {
   font-weight: bold;
   color: #000;
+  font-size: 16px;
+  text-align: center;
 }
 
-.boardname {
+.table th,td {
+  width: 50px;
+}
+
+.table th:nth-child(5), .table td:nth-child(5) {
+  width: 100px; /* 원하는 너비로 설정 */
+}
+
+td.boardname {
   text-decoration: none;
   color: black;
   cursor: pointer;
+  width: 150px;
 }
 
 .header1 {
@@ -323,6 +366,7 @@ onMounted(() => {
 
 .allpost td {
   border-right: 1px solid #ddd;
+  font-size: 14px;
 }
 
 .editbutton {
@@ -348,13 +392,10 @@ onMounted(() => {
 }
 
 .pagination {
-  position: absolute;
-  bottom: 60px;
-  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: row;
+  margin-top: 10px;
 }
 
 .pagination button {
@@ -377,5 +418,4 @@ onMounted(() => {
   margin: 0 10px;
   font-weight: bold;
 }
-
 </style>

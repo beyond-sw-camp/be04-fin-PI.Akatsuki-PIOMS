@@ -1,33 +1,48 @@
 <template>
   <header>
     <!-- <RootAdmin/> -->
-   <AdminHeader/>
-<!--    <FranchiseHeader/>-->
-<!--    <DriverHeader/>-->
   </header>
-  
+
   <main>
-  <router-view></router-view>
-  <!-- <ProductList/> -->
+    <router-view />
   </main>
 
+  <aside>
+    <!-- <Sidebar/> -->
+  </aside>
+
   <footer>
-    <!-- <Footer/> -->
+    <Footer />
   </footer>
+
 </template>
 
 <script setup>
-// import AskMain from "@/components/amdin/ask/AskMain.vue";
-// import Breadcrumb from "@/components/amdin/ask/Breadcrumb.vue";
-// import CategoryList from "@/components/amdin/Category/CategoryList.vue";
-import RootAdmin from "@/components/config/header/RootAdmin.vue";
-import Footer from "@/components/config/footer/Footer.vue";
-import ProductList from "@/components/amdin/product/ProductList.vue";
-// import AdminHeader from "@/components/config/header/AdminHeader.vue";
-// import DriverHeader from "@/components/config/header/DriverHeader.vue";
-// import FranchiseHeader from "@/components/config/header/FranchiseHeader.vue";
+
+import Footer from "@/components/layouts/footer/Footer.vue";
+import RootAdmin from "@/components/layouts/header/RootAdmin.vue";
+import Sidebar from "@/components/layouts/sidebar/sidebar.vue";
+import DriverHeader from "@/components/layouts/header/DriverHeader.vue";
+import FranchiseHeader from "@/components/layouts/header/FranchiseHeader.vue";
+import AdminHeader from "@/components/layouts/header/AdminHeader.vue";
+
+
+import { onMounted } from 'vue';
+import {useStore} from 'vuex';
+
+const store = useStore();
+
+onMounted(async () => {
+  await store.dispatch('initializeAuth');
+
+  // URL에서 토큰이 있는 경우 로그인 처리
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get('token');
+
+  if (token) {
+    localStorage.setItem('accessToken', token);
+    await store.dispatch('initializeAuth');
+  }
+});
+
 </script>
-
-<style lang="scss" scoped>
-
-</style>
