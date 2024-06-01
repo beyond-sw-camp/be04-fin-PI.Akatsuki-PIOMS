@@ -25,7 +25,7 @@ import FavoriteList from "@/components/franchise/favorite/FavoriteList.vue";
 import Log from "@/components/log/Log.vue";
 
 import NoticeList from "@/components/notice/NoticeList.vue";
-import FranchiseDashBoard from "@/components/franchise/FranchiseDashBoard.vue";
+// import FranchiseDashBoard from "@/components/franchise/FranchiseDashBoard.vue";
 import DriverDashBoard from "@/components/driver/DriverDashBoard.vue";
 
 
@@ -93,10 +93,10 @@ const routes = [
         meta: { requiresAuth: true, role: 'ROLE_OWNER' }
     },
     {
-        path: '/order/list',
+        path: 'admin/order/list',
         name: 'orderList',
         component: OrderPage,
-        meta: { requiresAuth: true, role: 'ROLE_ADMIN' }
+        meta: { requiresAuth: true, role: ['ROLE_ADMIN', 'ROLE_ROOT'] }
     },
     {
         path: '/admin/product/list',
@@ -123,10 +123,10 @@ const routes = [
         meta: { requiresAuth: true, role: ['ROLE_ADMIN', 'ROLE_ROOT'] }
     },
     {
-        path: '/exchange/list',
+        path: 'admin/exchange/list',
         name: 'exchangeList',
         component: ExchangePage,
-        meta: { requiresAuth: true, role: 'ROLE_ADMIN' }
+        meta: { requiresAuth: true, role: ['ROLE_ADMIN', 'ROLE_ROOT'] }
     },
     {
         path: '/admin/notice/list',
@@ -138,13 +138,13 @@ const routes = [
         path: '/franchise/favorite/register',
         name: 'FranchiseFavoriteRegister',
         component: FavoriteRegister,
-        meta: { requiresAuth: true, role: 'ROLE_ROOT' }
+        meta: { requiresAuth: true, role: 'ROLE_OWNER' }
     },
     {
         path: '/franchise/favorite/list',
         name: 'FranchiseFavoriteList',
         component: FavoriteList,
-        meta: { requiresAuth: true, role: 'ROLE_ROOT' }
+        meta: { requiresAuth: true, role: 'ROLE_OWNER' }
     },
     {
         path: '/admin/logs',
@@ -155,17 +155,14 @@ const routes = [
     {
         path: '/driver/home',
         name: 'DriverDashboard',
-        component: DriverDashBoard
-    },
-    {
-        path: '/franchise/home',
-        name: 'FranchiseDashBoard',
-        component: FranchiseDashBoard
-    },
-    {
         component: DriverDashBoard,
-        meta: { requiresAuth: true, role: 'ROLE_ROOT' }
-    }
+        meta: { requiresAuth: true, role: 'ROLE_DRIVER' }
+    },
+    // {
+    //     path: '/franchise/home',
+    //     name: 'FranchiseDashBoard',
+    //     component: FranchiseDashBoard
+    // },
 ];
 
 const router = createRouter({
@@ -180,12 +177,12 @@ router.beforeEach(async (to, from, next) => {
 
     if (to.matched.some(record => record.meta.requiresAuth)) {
         if (!isAuthenticated) {
-            next({ name: 'AdminLogin' });
+            next({ name: 'CommonLogin' });
         } else {
             const requiredRoles = to.meta.role;
             if (requiredRoles && !requiredRoles.includes(userRole)) {
                 // 사용자가 해당 경로에 접근할 권한이 없는 경우
-                next({ name: 'AdminLogin' });
+                next({ name: 'CommonLogin' });
             } else {
                 next();
             }
