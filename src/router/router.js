@@ -23,7 +23,7 @@ import PostCategory from "@/components/amdin/Category/PostCategory.vue";
 import FavoriteRegister from "@/components/franchise/favorite/FavoriteRegister.vue";
 import FavoriteList from "@/components/franchise/favorite/FavoriteList.vue";
 import Log from "@/components/log/Log.vue";
-import DriverDashBoard from "@/components/driver/driverDashBoard.vue";
+import DriverDashBoard from "@/components/driver/DriverDashBoard.vue";
 import noticeList from "@/components/notice/noticeList.vue";
 
 const routes = [
