@@ -55,7 +55,10 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useStore } from 'vuex';
 
+const store = useStore();
+const accessToken = store.state.accessToken;
 const favoriteProducts = ref([]);
 
 // Fetch favorite products
@@ -64,6 +67,7 @@ const fetchFavorites = async () => {
     const response = await fetch('http://localhost:5000/warehouse/favorites', {
       method: 'GET',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     });
@@ -83,6 +87,7 @@ const removeFavorite = async (productId) => {
     const response = await fetch(`http://localhost:5000/warehouse/removeFavorite/${productId}`, {
       method: 'PUT',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     });

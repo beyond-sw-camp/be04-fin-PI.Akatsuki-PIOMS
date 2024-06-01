@@ -108,18 +108,23 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useStore } from 'vuex';
 
+const store = useStore();
+const accessToken = store.state.accessToken;
 const filterProductName = ref('');
 const filteredProducts = ref([]);
 const selectedProducts = ref([]);
 const products = ref([]);
+const franchiseCode = 1;
 
 // Fetch products from the server
 const fetchProducts = async () => {
   try {
-    const response = await fetch('http://localhost:5000/warehouse', {
+    const response = await fetch(`http://localhost:5000/warehouse/list/product/${franchiseCode}`, {
       method: 'GET',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     });
@@ -170,6 +175,7 @@ const saveFavorites = async () => {
       const response = await fetch(`http://localhost:5000/warehouse/toggleFavorite/${item.franchiseWarehouseCode}`, {
         method: 'PUT',
         headers: {
+          'Authorization': `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
       });
