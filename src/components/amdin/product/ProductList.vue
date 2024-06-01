@@ -2,7 +2,7 @@
   <div>
     <div class="headerTitle">
         <h3 class="product-title"><img src="@/assets/icon/Cloth.png">상품 및 상품 카테고리 관리 > 상품 관리 > 상품 전체 조회 및 관리</h3>
-    <h6 class="product-sub-title">조회할 상품의 조건을 선택 후
+    <h6 class="product-sub-title" style="margin-top: 1%; margin-bottom: 1%">조회할 상품의 조건을 선택 후
       <img src="@/assets/icon/reset.png">초기화 또는 <img src="@/assets/icon/search.png">검색을 눌러주세요.
     </h6>
     </div>
@@ -504,7 +504,7 @@ fetchThirdCategories();
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 10px;
-  width: 1200px;
+  width: 1250px;
 }
 
 .filter-table td {
@@ -563,9 +563,8 @@ fetchThirdCategories();
   justify-content: space-between; /* 양 끝에 정렬 */
   align-items: center; /* 수직 가운데 정렬 */
   position: absolute; /* 절대 위치 설정 */
-  left: 24.1%; /* 좌측 정렬 */
-  width: 1210px;
-
+  left: 14%; /* 좌측 정렬 */
+  width: 1270px;
 }
 
 .reset-btn:hover, .search-btn:hover {
@@ -668,6 +667,10 @@ fetchThirdCategories();
 .product-sub-title img {
   width: 20px;
   height: 20px;
+}
+.headerTitle img {
+  width: 30px;
+  height: 30px;
 }
 .headerTitle h6 {
   margin-bottom: 5%;

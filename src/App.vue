@@ -14,10 +14,6 @@
     <!-- <Sidebar/> -->
   </aside>
 
-    <main>
-      <router-view />
-    </main>
-  </div>
   <footer>
     <Footer/>
   </footer>
@@ -55,9 +51,6 @@ onMounted(async () => {
 
 <style scoped>
 .main {
-  width: 1900px;
-  position: relative;
-  left: 110px;
-  height: 1200px;
+  margin-top: 2%;
 }
 </style>
