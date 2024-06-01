@@ -99,6 +99,9 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import Breadcrumb from '@/components/amdin/ask/Breadcrumb.vue'; // Breadcrumb 컴포넌트 임포트
+import { useStore } from 'vuex';
+const store = useStore();
+const accessToken = store.state.accessToken;
 
 const histories = ref([]);
 const filteredHistories = ref([]);
@@ -111,15 +114,16 @@ const currentPage = ref(1);
 const itemsPerPage = 15;
 
 const breadcrumbs = [
-  { label: '통계 및 이력 관리', link: null },
-  { label: '이력 관리', link: null },
+  {label: '통계 및 이력 관리', link: null},
+  {label: '이력 관리', link: null},
 ];
 
 const fetchHistories = async () => {
   try {
-    const response = await fetch('http://api.pioms.shop/admin/log', {
+    const response = await fetch('http://localhost:5000/admin/log', {
       method: 'GET',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     });
@@ -159,18 +163,18 @@ const resetFilters = () => {
   currentPage.value = 1; // 페이지 리셋
 };
 
-const formatDate = (dateArray) => {
-  if (!dateArray || dateArray.length === 0) return '날짜 없음';
-  const [year, month, day, hour = 0, minute = 0, second = 0] = dateArray;
-  const date = new Date(year, month - 1, day, hour, minute, second);
-  return date.toLocaleDateString('ko-KR', {
+const formatDate = (dateString) => {
+  if (!dateString) return '-';
+  const date = new Date(dateString);
+  if (isNaN(date)) return 'Invalid Date';
+  return date.toLocaleString('ko-KR', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
-    hour12: false,
+    hour12: false
   });
 };
 
@@ -217,6 +221,7 @@ onMounted(() => {
 .container {
   padding: 20px;
 }
+
 .filter-section {
   display: flex;
   justify-content: center;
@@ -377,13 +382,13 @@ onMounted(() => {
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   max-width: 50%;
-  max-height: 20%;
+  max-height: 30%;
   overflow-y: auto;
   text-align: center;
 }
 
 .popup-text {
-  font-size: 40px;
+  font-size: 20px;
   white-space: pre-wrap;
 }
 
