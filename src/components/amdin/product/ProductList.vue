@@ -565,6 +565,7 @@ fetchThirdCategories();
   position: absolute; /* 절대 위치 설정 */
   left: 24.1%; /* 좌측 정렬 */
   width: 1210px;
+
 }
 
 .reset-btn:hover, .search-btn:hover {
