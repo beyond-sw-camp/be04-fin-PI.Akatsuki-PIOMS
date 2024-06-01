@@ -175,7 +175,9 @@ const headers = ref([
   { key: 'productExposureStatus', label: '상품 노출 상태'},
   { key: 'productColor', label: '색상'},
   { key: 'productSize', label: '사이즈'},
-  { key: 'categoryThirdCode', label: '카테고리 코드'},
+  { key: 'categoryThirdName', label: '카테고리 코드'},
+  { key: 'categorySecondName', label: '카테고리 코드'},
+  { key: 'categoryFirstName', label: '카테고리 코드'},
 ]);
 
 const filteredLists = ref([]);
