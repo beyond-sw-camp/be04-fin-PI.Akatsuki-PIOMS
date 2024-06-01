@@ -365,3 +365,32 @@ button {
       /* blur(2px)  */
       brightness(1.2);
 }
+
+
+.condition-button {
+  display: inline-block;
+  padding: 2px 5px; /* 최소한의 패딩으로 글씨 영역만큼만 색이 적용되도록 합니다 */
+  border-radius: 3px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.condition-button.pending {
+  background-color: #ffcc00; /* Color for 승인대기 */
+}
+
+.condition-button.approved {
+  background-color: #007bff; /* Color for 승인완료 */
+}
+
+.condition-button.rejected {
+  background-color: #ff6285; /* Color for 승인거절 */
+}
+
+.condition-button.inspection-pending {
+  background-color: #ffcc00; /* Color for 검수대기 */
+}
+
+.condition-button.inspection-completed {
+  background-color: #45a049; /* Color for 검수완료 */
+}

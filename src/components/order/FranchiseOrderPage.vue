@@ -75,23 +75,44 @@
 
     <table style=" margin-top: 5%;">
       <thead >
-        <tr >
-          <th v-for="(header, index) in headers" :key="index" > <div align="center">{{ header.label }}</div></th>
+        <tr>
+          <th>발주번호</th><th>발주일</th><th>송장번호</th><th>배송예정일</th><th>발주상태</th>
         </tr>
       </thead>
+
       <tbody>
         <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex"
             :id="'row-' + rowIndex"
             @dblclick="showDetailPopup(item)"
             @mouseenter="highlightRow(rowIndex)"
             @mouseleave="resetRowColor(rowIndex)"
+            align="center"
         >
-          <td v-for="(header, colIndex) in headers" :key="colIndex" align="center">
-            {{ item[header.key] }}
+          <td>{{ item.orderCode }}</td>
+          <td>{{ item.orderDate }}</td>
+          <td>{{ item.invoiceCode }}</td>
+          <td>{{ item.invoiceDate }}</td>
+
+          <td v-if="item.orderCondition=='승인대기'">
+            <div class="condition-button pending">승인대기</div>
           </td>
+          <td v-else-if="item.orderCondition=='승인완료'">
+            <div class="condition-button approved">승인완료</div>
+          </td>
+          <td v-else-if="item.orderCondition=='승인거절'">
+            <div class="condition-button rejected">승인거절</div>
+          </td>
+          <td v-else-if="item.orderCondition=='검수대기'">
+            <div class="condition-button inspection-pending">검수대기</div>
+          </td>
+          <td v-else-if="item.orderCondition=='검수완료'">
+            <div class="condition-button inspection-completed">검수완료</div>
+          </td>
+
         </tr>
       </tbody>
     </table>
+
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage === 1">이전</button>
       <span>페이지 {{ currentPage }} / {{ totalPages }}</span>
@@ -104,7 +125,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import popup from './orderPopup.vue';
+import popup from './FranchiseOrderPopup.vue';
 import OrderDetail from './FranchiseOrderDetail.vue';
 import { useStore } from 'vuex'; // Vuex store 임포트
 const store = useStore(); // Vuex store 사용
@@ -116,13 +137,11 @@ const franchiseCode = 3;
 const franchiseOwnerCode = 3;
 
 const headers = ref([
-  { key: 'orderCode', label: '주문 코드' },
-  { key: 'orderCondition', label: '주문 상태' },
-  { key: 'franchiseName', label: '가맹점 이름' },
-  { key: 'orderDate', label: '주문 날짜' },
-  { key: 'invoiceCode', label: '배송 코드' },
-  { key: 'invoiceDate', label: '배송 예정일' },
-  { key: 'franchiseOwnerName', label: '가맹점주 이름' },
+  { key: 'orderCode', label: '발주번호' },
+  { key: 'orderDate', label: '발주일' },
+  { key: 'invoiceCode', label: '송장번호' },
+  { key: 'invoiceDate', label: '배송예정일' },
+  { key: 'orderCondition', label: '발주상태' },
 ]);
 
 const filter = ref('');
@@ -266,6 +285,9 @@ const resetRowColor = (index) => {
 
 
 
-<style>
+<style scoped>
   @import "../../assets/css/order.css" ;
+
+
+
 </style>

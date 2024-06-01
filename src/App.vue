@@ -13,7 +13,7 @@
     </main>
   </div>
   <footer>
-    <Footer />
+<!--    <Footer />-->
   </footer>
 
 </template>

@@ -246,11 +246,4 @@
   }
 
 };
-
-
-  </script>
-  
-  <style scoped>
-
-</style>
-  
+</script>
