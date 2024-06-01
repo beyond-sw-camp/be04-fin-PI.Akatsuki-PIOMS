@@ -55,12 +55,15 @@
     </div>
     <ExchangeDetail v-if="createDetailPopup" :showDetailPopup="showDetailPopup" :popupVisible="createDetailPopup" :detailItem="detailItem"/>
 
+    <div class="table-container">
 
-    <table style=" margin-top: 5%;">
+      <table class="table">
       <thead >
-        <tr >
+        <tr class="header1">
           <th v-for="(header, index) in headers" :key="index" > <div align="center">{{ header.label }}</div></th>
+          <th>반품상태</th>
         </tr>
+        
       </thead>
       <tbody>
         <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex"
@@ -68,13 +71,36 @@
             @dblclick="showDetailPopup(item)"
             @mouseenter="highlightRow(rowIndex)"
             @mouseleave="resetRowColor(rowIndex)"
+            class="allpost"
         >
           <td v-for="(header, colIndex) in headers" :key="colIndex" align="center">
             {{ item[header.key] }}
           </td>
+          <td v-if="item.exchangeStatus=='반송신청'" >
+            <div class="condition-button pending">반송신청</div>
+          </td>
+          <td v-else-if="item.exchangeStatus=='반송중'" >
+            <div class="condition-button approved">반송중</div>
+          </td>
+          <td v-else-if="item.exchangeStatus=='처리대기'" >
+            <div class="condition-button rejected">처리대기</div>
+          </td>
+          <td v-else-if="item.exchangeStatus=='처리완료'" >
+            <div class="condition-button inspection-pending">처리완료</div>
+          </td>
+          <td v-else-if="item.exchangeStatus=='반환대기'" >
+            <div class="condition-button inspection-completed">반환대기</div>
+          </td>
+          <td v-else-if="item.exchangeStatus=='반환중'" >
+            <div class="condition-button inspection-completed">반환중</div>
+          </td>
+          <td v-else-if="item.exchangeStatus=='반환완료'" >
+            <div class="condition-button inspection-completed">반환완료</div>
+          </td>
         </tr>
       </tbody>
     </table>
+    </div>
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage === 1">이전</button>
       <span>페이지 {{ currentPage }} / {{ totalPages }}</span>
@@ -101,10 +127,9 @@ const adminCode = ref(2);
 
 const headers = ref([
   { key: 'exchangeCode', label: '반품코드' },
-  { key: 'franchiseName', label: '신청일' },
-  { key: 'exchangeDate', label: '가맹점' },
+  { key: 'exchangeDate', label: '교환신청일' },
+  { key: 'franchiseName', label: '가맹점' },
   { key: 'franchiseOwnerName', label: '점주' },
-  { key: 'exchangeStatus', label: '주문 상태' },
 ]);
 
 const filter = ref('');

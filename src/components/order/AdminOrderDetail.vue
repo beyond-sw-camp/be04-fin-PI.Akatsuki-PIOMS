@@ -1,7 +1,7 @@
 <template>
   <div class="popup-overlay" >
        <div class="popup-content">
-           <button class="close" @click="showDetailPopup" >돌아가기</button>
+           <button class="cancel-btn" @click="showDetailPopup" >돌아가기</button>
            <br>
           
            <br>
@@ -79,15 +79,15 @@
             <div class="divvv-title">
                 발주상품
             </div>
-            <div style="display: block; font-size: 1.5lh; display:flex; justify-content: center; font-weight: 1000; width:100%;" align = "center">
-              <table>
+            <div class="table-container">
+              <table class="table">
                 <thead>
-                  <tr>
+                  <tr class="header1">
                     <th v-for="(header, index) in headers" :key="index">{{ header.label }}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr class="table" v-for="(product, rowIndex) in list" :key="rowIndex">
+                  <tr class="allpost" v-for="(product, rowIndex) in list" :key="rowIndex">
                     <td v-for="(header, colIndex) in headers" :key="colIndex">
                       <div >{{ product[header.key] }}</div>
                     </td>
@@ -99,15 +99,15 @@
             <div class="divvv-title" style="border-top: 2px black solid;">
                 반품상품
             </div>
-            <div style="display: block; font-size: 1.5lh; display:flex; justify-content: center; font-weight: 1000; width:100%" align = "center">
-              <table>
+            <div class="table-container">
+              <table class="table">
                 <thead>
-                  <tr>
-                    <th v-for="(header, index) in exchangeHeaders" :key="index">{{ header.label }}</th>
+                  <tr class="header1">
+                    <th v-for="(header, index) in exchangeHeaders" :key="exchangeList">{{ header.label }}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr class="table" v-for="(product, rowIndex) in exchangeList" :key="rowIndex">
+                  <tr class="allpost" v-for="(product, rowIndex) in exchangeList" :key="rowIndex">
                     <td v-for="(header, colIndex) in exchangeHeaders" :key="colIndex">
                       <div >{{ product[header.key] }}</div>
                     </td>
@@ -121,10 +121,7 @@
             <br>
             <br>
 
-            <div class="but-group" v-if="item.orderCondition == '승인대기'">
-              <input class="but" type="button" value="발주승인" @click="accpetOrder">
-              <input class="but" type="button" value="발주반려" @click="clickDeny">
-            </div>
+            
 
             <div v-if="isDenied">
               <div class="popup-overlay"  >
@@ -133,15 +130,15 @@
                     <h2>반려사유 </h2>
                     <textarea v-model="reason" cols="30" rows="5"></textarea><br>
 
-                    <div style="display: block; font-size: 1.5lh; display:flex; justify-content: center; font-weight: 1000; width:100%;" align="center">
-                      <table>
+                    <div class="table-container">
+                      <table class="table">
                         <thead >
-                          <tr>
+                          <tr class="header1">
                             <th  v-for="(header, index) in headers" :key="index" >{{ header.label }}</th>
                           </tr>
                         </thead>
                         <tbody >
-                          <tr class="table" v-for="(product, rowIndex) in list" :key="rowIndex">
+                          <tr class="allpost" v-for="(product, rowIndex) in list" :key="rowIndex">
                             <td v-for="(header, colIndex) in headers" :key="colIndex">
                               <div>{{ product[header.key] }}</div>
                             </td>
@@ -150,9 +147,9 @@
                       </table>
                     </div>
                     <div class="but-group">
-                      <button type="button" class="close" @click="clickDeny">취소</button>
+                      <button type="button" class="cancel-btn" @click="clickDeny">취소</button>
                       &nbsp;&nbsp;&nbsp;
-                      <button type="submit" class="close">등록</button>
+                      <button type="submit" class="submit-btn">등록</button>
                     </div>
                   </form> 
                 </div>
@@ -160,6 +157,10 @@
             </div>
             
           </div>
+          <div class="action-buttons" v-if="item.orderCondition == '승인대기'">
+              <input class="cancel-btn" type="button" value="발주승인" @click="accpetOrder">
+              <input class="cancel-btn" type="button" value="발주반려" @click="clickDeny">
+            </div>
           발주일자 : {{ item.orderDate }}
            <br>
            주문코드 : {{ item.orderCode }}<br>   
@@ -279,13 +280,15 @@ const denyOrder = async () => {
 };
 
 
-
+console.log(props.detailItem);
+console.log(exchangeList);
 </script>
 
 
 <style scoped>
+  @import "../../assets/css/popup.css" ;
 
-
-
-  </style>
+  
+  
+</style>
   

@@ -63,7 +63,7 @@
     display: flex;
     gap: 10px;
     justify-content: flex-end;
-    background-color: white;
+    /* background-color: white; */
     padding: 5px;
   }
   
@@ -154,3 +154,67 @@
     border-radius: 5px;
     cursor: pointer;
   }
+
+
+
+  /* 발주서 관련 */
+  .divvv-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #d9d9d9;
+    height: 100%;
+    width: 99.9%;
+    font-size: 1lh;
+    font-weight: 1000;
+    border: 1px solid #000000;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+  
+  .divvv {
+    display: block;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    height: 100%;
+    width: 50%;
+    border: 1px solid #000000;
+  }
+  
+  .divvv2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    height: 33.33333333%;
+    width: 100%;
+    border-top: 1px solid #000000;
+    border-right: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+  }
+  
+  .divvv3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    font-size: 20px;
+    border-left: 1px solid #000000;
+  }
+  .divvv3-title{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 40%;
+    font-size: 20px;
+    border-left: 1px solid #000000;
+    background-color: #d9d9d9;
+  }
+  
+  .info {
+    border: 3px solid #000000;
+  }
+  

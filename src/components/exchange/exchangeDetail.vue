@@ -35,10 +35,10 @@
         <div class="divvv-title">
           반품 및 교환 항목
         </div>
-        <div style="display: block; font-size: 1.5lh; display:flex; justify-content: center; font-weight: 1000; width:100%;" align="center">
-          <table>
+        <div class="table-container">
+          <table class="table">
             <thead>
-              <tr align="center">
+              <tr class="header1">
                 <th>상품 코드</th>
                 <th>상품 이름</th>
                 <th>반품 수량</th>
@@ -48,7 +48,7 @@
               </tr>
             </thead>
             <!-- 처리 대기중인 교환인 경우 -->
-            <tr v-for="(product, index) in list" :key="index" align="center" v-if="item.exchangeStatus=='처리대기' ">
+            <tr class="allpost"v-for="(product, index) in list" :key="index" align="center" v-if="item.exchangeStatus=='처리대기' ">
               <td>{{ product.productCode }}</td>
               <td>{{ product.productName }}</td>
               <td>{{ product.exchangeProductCount }}</td>
@@ -61,25 +61,23 @@
               <td>{{ product.productCode }}</td>
               <td>{{ product.productName }}</td>
               <td>{{ product.exchangeProductCount }}</td>
-              <td>{{ product.exchangeNormalCount }}</td>
-              <td>{{ product.exchangeDiscount }}</td>
+              <td>{{ product.exchangeProductNormalCount }}</td>
+              <td>{{ product.exchangeProductDiscount }}</td>
               <td>{{ product.exchangeProductStatus }}</td>
             </tr>
           </table>
         </div>
         <br><br><br><br>
-
-        <br>
-        <div class="but-group" v-if="item.exchangeStatus=='처리대기' ">
+        
+      </div>
+      신청일자 : {{ item.exchangeDate }}
+        <div class="action-buttons" v-if="item.exchangeStatus=='처리대기' ">
           <input class="but" type="button" value="저장하기" @click="checkExchange">
           <input class="but" type="button" value="돌아가기" @click="showDetailPopup">
         </div>
-        <div class="but-group" v-else>
-          <input class="but" type="button" value="돌아가기" @click="showDetailPopup">
+        <div class="action-buttons" v-else>
+          <input class="cancel-btn" type="button" value="돌아가기" @click="showDetailPopup">
         </div>
-
-      </div>
-      신청일자 : {{ item.exchangeDate }}
       <br>
     </div>
   </div>
@@ -158,5 +156,5 @@ const checkExchange = async () => {
 
 
 <style scoped>
-  @import "../../assets/css/order.css" ;
+  @import "../../assets/css/popup.css" ;
 </style>

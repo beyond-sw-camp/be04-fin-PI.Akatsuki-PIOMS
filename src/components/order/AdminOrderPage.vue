@@ -64,6 +64,7 @@
         :detailItem="detailItem"
         :getOrderList="getOrderList"
     />
+    
     <div class="table-container">
     <table class="table">
       <thead >
@@ -278,7 +279,7 @@ const resetRowColor = (index) => {
 
 
 
-<style>
+<style scoped>
   @import "../../assets/css/order.css" ;
   
 </style>
