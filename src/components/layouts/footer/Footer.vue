@@ -22,7 +22,7 @@ html, body, #app {
   padding-top: 15px;
   z-index: 10000;
   position: fixed;
-  bottom: 20px; /* 바닥에서 20px 떨어뜨림 */
+  bottom: 20px;
 }
 
 .page-content {
