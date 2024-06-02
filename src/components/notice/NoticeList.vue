@@ -118,6 +118,7 @@ const headers = ref([
   { label: '관리' } // 관리 열 추가
 ]);
 
+
 const filteredLists = ref([]);
 const currentPage = ref(1);
 const itemsPerPage = 15;
@@ -171,10 +172,19 @@ const applyFilters = () => {
   currentPage.value = 1; // 필터 적용 후 페이지를 첫 페이지로 설정
 };
 
+
+const sortedNotices = computed(() => {
+  return lists.value.slice().sort((a, b) => {
+    return new Date(b.noticeEnrollDate) - new Date(a.noticeEnrollDate);
+  });
+});
+
 const paginatedLists = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-  return filteredLists.value.slice(start, end);
+  // 현재 페이지와 페이지당 항목 수
+  const startIndex = (currentPage.value - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  // 현재 페이지에 해당하는 공지사항 리스트 추출
+  return sortedNotices.value.slice(startIndex, endIndex);
 });
 
 const totalPages = computed(() => {
@@ -225,7 +235,6 @@ const toggleRegisterForm = () => {
 const toggleEditForm = () => {
   isEditFormVisible.value = !isEditFormVisible.value;
 };
-
 
 const closeOverlay = () => {
   isRegisterFormVisible.value = false;
@@ -296,11 +305,6 @@ const closeDetailsPopup = () => {
 
 const viewPopup = ref(false);
 
-const sortedNotices = computed(() => {
-  return notices.value.slice().sort((a, b) => {
-    return new Date(b.noticeEnrollDate) - new Date(a.noticeEnrollDate);
-  });
-});
 
 onMounted(() => {
   getNotice();
