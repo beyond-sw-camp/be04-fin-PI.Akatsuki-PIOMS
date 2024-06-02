@@ -6,12 +6,17 @@
 <!--    <DriverHeader/>-->
   </header>
 
-  <main class="main">
-  <router-view/>
-  </main>
-  <footer>
-    <!-- <Footer/> -->
-  </footer>
+  <aside>
+    <!-- <Sidebar/> -->
+  </aside>
+
+    <main class = "main">
+      <router-view />
+    </main>
+
+  <!-- <footer>
+    <Footer/>
+  </footer> -->
 
 </template>
 
@@ -44,11 +49,9 @@ onMounted(async () => {
 
 </script>
 
+
 <style scoped>
-/* .main {
-  width: 1900px;
-  position: relative;
-  left: 110px;
-  height: 1200px;
-} */
+.main {
+  margin-top: 2%;
+}
 </style>
