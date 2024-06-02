@@ -49,11 +49,9 @@ onMounted(async () => {
 
 </script>
 
-<!--<style>-->
-<!--  .main {-->
-<!--    width: 1900px;-->
-<!--    position: relative;-->
-<!--    left: 100px;-->
-<!--    height: 1085px;-->
-<!--  }-->
-<!--</style>-->
+
+<style scoped>
+.main {
+  margin-top: 2%;
+}
+</style>
