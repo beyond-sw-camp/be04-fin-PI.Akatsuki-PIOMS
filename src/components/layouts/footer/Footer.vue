@@ -10,16 +10,27 @@
 </template>
 
 <style scoped>
-/* footer css */
-.footer {
-  width: 2110px;
-  height: 30px;
-  bottom: 0;
-  background-color: #ffffff;
-  margin-top: 15px;
-  z-index: 10000;
-  position: sticky;
+html, body, #app {
+  height: 100%;
+  margin: 0;
 }
+
+.footer {
+  width: 100%;
+  height: 30px;
+  background-color: #ffffff;
+  padding-top: 15px;
+  z-index: 10000;
+  position: fixed;
+  bottom: 20px; /* 바닥에서 20px 떨어뜨림 */
+}
+
+.page-content {
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+
 .footer_text {
   font-size: 12px;
   color: #B9B9B9;
