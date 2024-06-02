@@ -15,19 +15,19 @@
                 </td>
                 <td class="second-insert-input">
                   <select v-model="updateFirst" @change="fetchCategories('second')" class="categories">
-                    <option value="">{{currentCategoryFirstCode}}</option>
+                    <option value="">{{ getCategoryFirstName(props.currentCategoryFirstCode) }}</option>
                     <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">
                       {{ category.categoryFirstName }}
                     </option>
                   </select>
                   <select v-model="updateSecond" @change="fetchCategories('third')" class="categories-g">
-                    <option value="">{{currentCategorySecondCode}}</option>
+                    <option value="">{{ getCategorySecondName(props.currentCategorySecondCode) }}</option>
                     <option v-for="category in secondCategories" :key="category.categorySecondCode" :value="category.categorySecondCode">
                       {{ category.categorySecondName }}
                     </option>
                   </select>
                   <select v-model="updateThird" class="categories-g">
-                    <option value="">{{currentCategoryThirdCode}}</option>
+                    <option value="">{{ getCategoryThirdName(props.currentCategoryThirdCode) }}</option>
                     <option v-for="category in thirdCategories" :key="category.categoryThirdCode" :value="category.categoryThirdCode">
                       {{ category.categoryThirdName }}
                     </option>
@@ -106,7 +106,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, defineProps } from 'vue';
+import {onMounted, ref, defineProps, watch} from 'vue';
 import { useStore } from 'vuex';
 import ProductList from "@/components/amdin/product/ProductList.vue";
 const store = useStore();
@@ -115,6 +115,10 @@ const accessToken = store.state.accessToken;
 const firstCategories = ref([]);
 const secondCategories = ref([]);
 const thirdCategories = ref([]);
+const categoryFirstMap = ref({});
+const categorySecondMap = ref({});
+const categoryThirdMap = ref({});
+
 const updateName = ref('');
 const updateCount = ref('');
 const updatePrice = ref('');
@@ -207,21 +211,40 @@ const fetchCategories = async (level) => {
     switch (level) {
       case 'first':
         firstCategories.value = data;
+        data.forEach(category => {
+          categoryFirstMap.value[category.categoryFirstCode] = category.categoryFirstName;
+        });
         break;
       case 'second':
         secondCategories.value = data;
+        data.forEach(category => {
+          categorySecondMap.value[category.categorySecondCode] = category.categorySecondName;
+        });
         thirdCategories.value = [];
         updateSecond.value = '';
         break;
       case 'third':
         thirdCategories.value = data;
+        data.forEach(category => {
+          categoryThirdMap.value[category.categoryThirdCode] = category.categoryThirdName;
+        });
         break;
     }
   } catch (error) {
     console.error('Error:', error);
   }
 };
+const getCategoryFirstName = (code) => {
+  return categoryFirstMap.value[code] || '';
+};
 
+const getCategorySecondName = (code) => {
+  return categorySecondMap.value[code] || '';
+};
+
+const getCategoryThirdName = (code) => {
+  return categoryThirdMap.value[code] || '';
+};
 onMounted(async () => {
   const numberInputs = document.querySelectorAll('input[type="number"]');
   numberInputs.forEach(input => {
@@ -236,6 +259,27 @@ onMounted(async () => {
   });
 
   await fetchCategories('first');
+
+  if (props.currentCategoryFirstCode) {
+    updateFirst.value = props.currentCategoryFirstCode;
+    await fetchCategories('second');
+  }
+  if (props.currentCategorySecondCode) {
+    updateSecond.value = props.currentCategorySecondCode;
+    await fetchCategories('third');
+  }
+});
+
+watch(updateFirst, async (newVal) => {
+  if (newVal) {
+    await fetchCategories('second');
+  }
+});
+
+watch(updateSecond, async (newVal) => {
+  if (newVal) {
+    await fetchCategories('third');
+  }
 });
 </script>
 
