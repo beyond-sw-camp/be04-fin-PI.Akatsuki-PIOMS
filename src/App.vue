@@ -6,17 +6,17 @@
 <!--    <DriverHeader/>-->
   </header>
 
-  <main class="main">
-  <router-view/>
-  </main>
-
   <aside>
     <!-- <Sidebar/> -->
   </aside>
 
-  <footer>
+    <main class = "main">
+      <router-view />
+    </main>
+
+  <!-- <footer>
     <Footer/>
-  </footer>
+  </footer> -->
 
 </template>
 
@@ -48,6 +48,7 @@ onMounted(async () => {
 });
 
 </script>
+
 
 <style scoped>
 .main {
