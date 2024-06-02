@@ -205,49 +205,47 @@
 
 
   const exportOrder = async () => {
-  console.log("exportOrder");
 
-  const productsData = selectedProducts.value.reduce((acc, product) => {
-    acc[product.productCode] = product.quantity;
-    return acc;
-  }, {});
-  
+    const productsData = selectedProducts.value.reduce((acc, product) => {
+      acc[product.productCode] = product.quantity;
+      return acc;
+    }, {});
 
-  const orderData = {
-    orderCode: props.item.orderCode,
-    products: productsData,
-  };
+    const orderData = {
+      orderCode: props.item.orderCode,
+      products: productsData,
+    };
 
-  try {
-    const accessToken = store.state.accessToken;
-    if (!accessToken) {
-      throw new Error('No access token found');
-    }
-    const response = await fetch(`http://localhost:5000/franchise/order`, {
-        method: "PUT",
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify(orderData)
-      });
-    if (response.status == 406) {
-      alert("생각은 하셨나요? 신청 재고량 너무 많거나, 이미 승인 대기중인 발주가 존재합니다.");
+    try {
+      const accessToken = store.state.accessToken;
+      if (!accessToken) {
+        throw new Error('No access token found');
+      }
+      const response = await fetch(`http://localhost:5000/franchise/order`, {
+          method: "PUT",
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify(orderData)
+        });
+      if (response.status == 406) {
+        alert("생각은 하셨나요? 신청 재고량 너무 많거나, 이미 승인 대기중인 발주가 존재합니다.");
+        props.clickUpdate();
+        throw new Error("");
+      }
+      if (!response.ok) {
+        alert("불가불가불가사리");
+        props.clickUpdate();
+        throw new Error("네트워크 오류 발생");
+      }
+      const result = await response.json();
+      console.log("주문 성공:", result);
       props.clickUpdate();
-      throw new Error("");
+    } catch (error) {
+      console.error("주문 오류 발생:", error);
     }
-    if (!response.ok) {
-      alert("불가불가불가사리");
-      props.clickUpdate();
-      throw new Error("네트워크 오류 발생");
-    }
-    const result = await response.json();
-    console.log("주문 성공:", result);
-    props.clickUpdate();
-  } catch (error) {
-    console.error("주문 오류 발생:", error);
-  }
 
 };
 </script>

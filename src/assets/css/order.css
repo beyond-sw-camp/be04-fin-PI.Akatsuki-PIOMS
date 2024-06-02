@@ -97,27 +97,58 @@
     margin: 0 5px;
   }
 
-  .action-buttons {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-    margin-bottom: 20px;
-  }
+.action-buttons {
+  display: grid;
+  grid-template-columns: 25% 5% 3% 3% 27% 6%;
+  justify-content: center; /* 가운데 정렬 */
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
 
-  .reset-btn, .search-btn {
-    background-color: #fff;
-    color: black;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    padding: 8px 8px;
-    font-size: 14px;
-    margin: 0 5px;
-  }
+.reset-btn{
+  background-color: #fff;
+  color: black;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 8px 8px;
+  font-size: 14px;
+  margin: 0 5px;
+  grid-column-start: 3;
+}
 
-  .reset-btn:hover, .search-btn:hover {
-    background-color: #f0f0f0;
-  }
+.search-btn {
+  background-color: #fff;
+  color: black;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 8px 8px;
+  font-size: 14px;
+  margin: 0 5px;
+  grid-column-start: 4;
+}
+
+.reset-btn:hover, .search-btn:hover {
+  background-color: #f0f0f0;
+}
+.create-btn {
+  background-color: #fff;
+  color: black;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 8px 16px;
+  font-size: 14px;
+//position: relative;
+  bottom: 3px; /* 원하는 위치로 이동 */
+  left: 546px ; /* 원하는 위치로 이동 */
+  grid-column-start:6 ;
+}
+
+.create-btn:hover {
+  background-color: #f0f0f0;
+}
 
   .table-container {
     width: 100%;

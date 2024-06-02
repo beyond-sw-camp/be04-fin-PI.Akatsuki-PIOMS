@@ -225,9 +225,8 @@ const accpetOrder = async () => {
         return;
       }
       if (!response.ok) {
-        alert("헉 왜 주문 승인 안되지????????????")
+        alert("잘못된 주문")
         props.showDetailPopup();
-        throw new Error('네트워크 오류 발생');
       }
     
       props.showDetailPopup();
@@ -265,7 +264,6 @@ const denyOrder = async () => {
         clickDeny();
         props.showDetailPopup();
         props.getOrderList();
-        return;
       }
       if (!response.ok) {
         alert("헉 왜 주문 거절 안되지????????????")
@@ -275,7 +273,6 @@ const denyOrder = async () => {
     } catch (error) {
       alert("헉 왜 주문 거절 안되지????????????");
       props.showDetailPopup();
-      console.error('오류 발생:', error);
     }
 };
 
@@ -287,8 +284,9 @@ console.log(exchangeList);
 
 <style scoped>
   @import "../../assets/css/popup.css" ;
+  @import "../../assets/css/order.css" ;
 
-  
+
   
 </style>
   

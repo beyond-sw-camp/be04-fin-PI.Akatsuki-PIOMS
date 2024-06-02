@@ -54,9 +54,9 @@
       <button @click="applyFilter" class="search-btn">
         <img src="@/assets/icon/search.png" alt="Search" />
       </button>
+      <button class="create-btn"  @click="showPopup" >발주하기</button>
     </div>
 
-    <input class="create-button" type="button" value="발주하기" @click="showPopup" style="  cursor : pointer; border:0; ">
 
     <popup 
         v-if="createPopup"    
