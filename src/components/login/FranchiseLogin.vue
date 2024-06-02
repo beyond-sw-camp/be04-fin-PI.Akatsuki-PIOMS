@@ -20,12 +20,13 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
 import Swal from 'sweetalert2';
+import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
 const username = ref('');
 const password = ref('');
+
 const router = useRouter();
 const store = useStore();
 
@@ -40,7 +41,7 @@ const login = async () => {
         frOwnerId: username.value,
         frOwnerPassword: password.value,
       }),
-      credentials: 'include' // 쿠키를 포함하기 위해 설정
+      credentials: 'include'
     });
 
     if (response.ok) {
@@ -57,7 +58,7 @@ const login = async () => {
         throw new Error('Access token not found');
       }
     } else {
-      Swal.fire({
+      await Swal.fire({
         icon: 'error',
         title: '로그인 실패',
         text: '자격 증명을 확인하세요.',
@@ -67,7 +68,7 @@ const login = async () => {
       });
     }
   } catch (error) {
-    Swal.fire({
+    await Swal.fire({
       icon: 'error',
       title: '오류 발생',
       text: '오류가 발생했습니다. 다시 시도하세요.',
@@ -79,16 +80,22 @@ const login = async () => {
 };
 </script>
 
-
 <style scoped>
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* 스크롤을 없애기 위한 스타일 */
+}
 
 .login-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 90vh;
+  height: 100%;
 }
 
 .logo {
@@ -114,7 +121,7 @@ const login = async () => {
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
-  width: 300px; /* 폼의 고정된 너비를 설정 */
+  width: 300px;
 }
 
 .login-form h2 {
