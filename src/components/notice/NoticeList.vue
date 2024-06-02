@@ -67,22 +67,22 @@
     <table class="notice-list">
       <thead>
       <tr>
-        <th v-for="header in headers" :key="header.key || header.label">{{ header.label }}</th>
+        <td>No</td>
+        <td>제목</td>
+        <td>내용</td>
+        <td>등록일</td>
+        <td>관리</td>
       </tr>
       </thead>
       <tbody>
-      <tr v-for="item in paginatedLists" :key="item.noticeCode">
-        <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">
-          <template v-if="header.key">
-              <span v-if="header.key === 'noticeTitle'" @click="showDetailsNoticePopup(item)">
-                {{ item[header.key] }}
-              </span>
-            <span v-else>{{ item[header.key] }}</span>
-          </template>
-          <template v-else>
-            <button class="modify" @click="showEditForm(item)">수정</button>
-            <button class="delete" @click="deleteNotice(item.noticeCode)">삭제</button>
-          </template>
+      <tr v-for="(item, index) in paginatedLists" :key="item.noticeCode">
+        <td>{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
+        <td @click="showDetailsNoticePopup(item)">{{ item.noticeTitle }}</td>
+        <td>{{ item.noticeContent }}</td>
+        <td>{{ item.noticeEnrollDate }}</td>
+        <td>
+          <button class="modify" @click="showEditForm(item)">수정</button>
+          <button class="delete" @click="deleteNotice(item.noticeCode)">삭제</button>
         </td>
       </tr>
       </tbody>
@@ -111,7 +111,7 @@ const store = useStore();
 const accessToken = store.state.accessToken;
 const lists = ref([]);
 const headers = ref([
-  { key: 'noticeCode', label: 'No' },
+  { label: 'No' },
   { key: 'noticeTitle', label: '공지사항 제목' },
   { key: 'noticeContent', label: '공지사항 내용' },
   { key: 'noticeEnrollDate', label: '등록일' },
@@ -310,7 +310,18 @@ onMounted(() => {
   <style scoped>
   .modify,
   .delete {
-    border: 1px !important;
+    color: #ffffff;
+    font-weight: bold;
+    border-radius: 5px;
+    border: 0;
+    width: 50px;
+  }
+
+  .modify {
+    background-color: #999999;
+  }
+  .delete {
+    background-color: #FC6F86;
   }
   .table-td button {
     border: none;
@@ -412,16 +423,26 @@ onMounted(() => {
   border-collapse: collapse;
   }
 
+  .notice-list {
+    width: 1600px;
+  }
+  .notice-list tr td {
+    text-align: center;
+  }
+  .notice-list thead tr td {
+    background-color: #d9d9d9;
+    font-weight: bold;
+  }
+
   .notice-table th,
   .notice-table td {
   padding: 10px;
-  text-align: center;
   font-size: 14px;
   color: #444444;
   }
 
   .notice-table th {
-  background-color: #f2f2f2;
+  background-color: #d9d9d9;
   }
 
   .notice-table td {
@@ -506,19 +527,20 @@ onMounted(() => {
   .btn-saveNotice {
   display: flex;
   position: relative;
-  height: 30px;
-  font-size: 14px;
+    left: 1480px;
+  height: 35px;
+  font-size: 16px;
   font-weight: bold;
-  text-align: center;
   border-radius: 5px;
   border-color: #344DAF;
   background-color: #344DAF;
   color: #ffffff;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   cursor: pointer;
   border: 0;
     margin-bottom: 10px;
+    width: 115px;
   }
 
   .btn-saveNotice:hover {
