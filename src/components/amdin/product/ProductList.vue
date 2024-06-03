@@ -138,7 +138,7 @@
       <span> {{currentPage}} / {{totalPages}} </span>
       <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
     </div>
-    <ProductDetailPopup v-if="editPopup" :currentProductCode="currentProductCode"
+    <ProductUpdatePopup v-if="editPopup" :currentProductCode="currentProductCode"
                                          :currentProductName="currentProductName"
                                          :currentProductCount="currentProductCount"
                                          :currentProductPrice="currentProductPrice"
@@ -160,7 +160,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import ProductPostPopup from "@/components/amdin/product/ProductPostPopup.vue"
-import ProductDetailPopup from "@/components/amdin/product/ProductDetailPopup.vue";
+import ProductUpdatePopup from "@/components/amdin/product/ProductUpdatePopup.vue";
 import ProductDeletePopup from "@/components/amdin/product/ProductDeletePopup.vue";
 import axios from "axios";
 import { useStore } from 'vuex';
