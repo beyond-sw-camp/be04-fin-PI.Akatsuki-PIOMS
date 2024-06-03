@@ -49,7 +49,7 @@ const login = async () => {
         password: password.value,
         accessNumber: accessNumber.value
       }),
-      credentials: 'include' // 쿠키를 포함하기 위해 설정
+      credentials: 'include'
     });
 
     if (response.ok) {
@@ -86,12 +86,19 @@ const login = async () => {
 <style scoped>
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
 
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* 스크롤을 없애기 위한 스타일 */
+}
+
 .login-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 90vh;
+  height: 100%;
 }
 
 .logo {
@@ -117,7 +124,7 @@ const login = async () => {
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
-  width: 300px; /* 폼의 고정된 너비를 설정 */
+  width: 300px;
 }
 
 .login-form h2 {

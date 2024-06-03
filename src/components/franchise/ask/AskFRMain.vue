@@ -113,7 +113,7 @@ const franchiseOwnerId = 1; // 점주 ID를 하드코딩합니다. 실제 구현
 
 const fetchAsks = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/franchise/asklist/${franchiseOwnerId}`, {
+    const response = await fetch(`http://localhost:5000/franchise/ask/list`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
