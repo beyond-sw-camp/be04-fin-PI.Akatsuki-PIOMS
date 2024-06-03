@@ -4,7 +4,7 @@
     <img class="logo" src="@/assets/icon/PIOMS_로고.png" alt="Logo"/>
     <section class="header_info">
       <div class="crown">
-        <img class="crown_icon" src="@/assets/icon/Crown.png" alt="Crown"/>
+        <img class="crown_icon" :src="userRoleIcon" alt="User Role Icon"/>
         <h5><u>{{ username }}</u>님 정보</h5>
       </div>
       <div class="dictionary">
@@ -172,7 +172,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { jwtDecode } from 'jwt-decode';
@@ -239,6 +239,15 @@ onMounted(() => {
       }
     });
   });
+});
+
+const userRoleIcon = computed(() => {
+  if (store.getters.userRole === 'ROLE_ROOT') {
+    return '@/assets/icon/Crown.png';
+  } else if (store.getters.userRole === 'ROLE_ADMIN') {
+    return '@/assets/icon/admin.png';
+  }
+  return '';
 });
 </script>
 
