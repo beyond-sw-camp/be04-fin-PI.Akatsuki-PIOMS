@@ -179,15 +179,15 @@ const headers = ref([
   { key: 'productExposureStatus', label: '상품 노출 상태'},
   { key: 'productColor', label: '색상'},
   { key: 'productSize', label: '사이즈'},
-  { key: 'categoryThirdName', label: '카테고리 코드'},
-  { key: 'categorySecondName', label: '카테고리 코드'},
   { key: 'categoryFirstName', label: '카테고리 코드'},
+  { key: 'categorySecondName', label: '카테고리 코드'},
+  { key: 'categoryThirdName', label: '카테고리 코드'},
 ]);
 
 const filteredLists = ref([]);
 const currentPage = ref(1);
 const itemsPerPage = 15;
-const selectedExposureStatus = ref('');
+const selectedExposureStatus = ref('전체');
 const filterProductName = ref('');
 const filterStatus = ref('');
 const filterColor = ref('');
@@ -199,8 +199,6 @@ const thirdCategories = ref([]);
 const selectedFirstCategory = ref('');
 const selectedSecondCategory = ref('');
 const selectedThirdCategory = ref('');
-
-const showPostPopup = ref(false);
 
 const currentProductCode = ref('');
 const currentProductName = ref('');
@@ -215,6 +213,8 @@ const currentCategorySecondCode = ref('');
 const currentCategoryThirdCode = ref('');
 const currentProductContent = ref('');
 const productImages = ref({});
+
+const showPostPopup = ref(false);
 const editPopup = ref(false);
 const deletePopup = ref(false);
 

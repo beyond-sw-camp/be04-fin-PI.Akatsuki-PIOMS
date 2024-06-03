@@ -2,7 +2,7 @@
   <div>
     <div class="headerTitle">
         <h3 class="product-title"><img src="@/assets/icon/Cloth.png">상품 및 재고 관리 > 재고 관리 > 재고 알림 관리 </h3>
-    <h6 class="product-sub-title">조회할 상품의 조건을 선택 후
+    <h6 class="product-sub-title" style="margin-top: 1%; margin-bottom: 1%">조회할 상품의 조건을 선택 후
       <img src="@/assets/icon/reset.png">초기화 또는 <img src="@/assets/icon/search.png">검색을 눌러주세요.
     </h6>
     </div>
@@ -13,11 +13,12 @@
         <tr>
           <td class="filter-label">상품명</td>
           <td class="filter-input">
-            <input type="text" v-model="filterProductName" class="textInput"/>
+            <input type="text" v-model="filterProductName" class="textInput" placeholder="상품명을 입력하세요."/>
           </td>
           <td class="filter-label">상품상태</td>
           <td class="filter-input">
             <select id="filterStatus" v-model="filterStatus" class="textInput">
+              <option hidden="hidden" value="">전체</option>
               <option value="공급가능">공급가능</option>
               <option value="일시제한">일시제한</option>
               <option value="단종">단종</option>
@@ -29,6 +30,7 @@
           <td class="filter-label">색상</td>
           <td class="filter-input">
             <select id="filterColor" v-model="filterColor" class="textInput">
+              <option hidden="hidden" value="">전체</option>
               <option value="빨간색">빨간색</option>
               <option value="주황색">주황색</option>
               <option value="노란색">노란색</option>
@@ -41,6 +43,7 @@
           <td class="filter-label">사이즈</td>
           <td class="filter-input">
             <select id="filterSize" v-model="filterSize" class="textInput">
+              <option hidden="hidden" value="">전체</option>
               <option value="90">90</option>
               <option value="95">95</option>
               <option value="100">100</option>
@@ -133,7 +136,9 @@ const headers = ref([
   { key: 'productStatus', label: '상품 상태'},
   { key: 'productColor', label: '색상'},
   { key: 'productSize', label: '사이즈'},
-  { key: 'categoryThirdCode', label: '카테고리 코드'},
+  { key: 'categoryFirstName', label: '카테고리 코드'},
+  { key: 'categorySecondName', label: '카테고리 코드'},
+  { key: 'categoryThirdName', label: '카테고리 코드'},
 ]);
 
 const filteredLists = ref([]);
