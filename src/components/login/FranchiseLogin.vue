@@ -23,6 +23,7 @@ import { ref } from 'vue';
 import Swal from 'sweetalert2';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import { jwtDecode } from 'jwt-decode';
 
 const username = ref('');
 const password = ref('');
@@ -32,7 +33,9 @@ const store = useStore();
 
 const login = async () => {
   try {
-    const response = await fetch('http://localhost:5000/franchise/login', {
+    console.log('로그인 시도:', { username: username.value, password: password.value });
+
+    const response = await fetch('http://api.pioms.shop/franchise/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -53,6 +56,17 @@ const login = async () => {
 
       if (accessToken) {
         await store.dispatch('login', { accessToken });
+
+        const decodedToken = jwtDecode(accessToken);
+        const usernameFromToken = decodedToken.username;
+
+        Swal.fire({
+          icon: 'success',
+          title: `${usernameFromToken}님 환영합니다`,
+          showConfirmButton: false,
+          timer: 2000
+        });
+
         await router.push('/franchise/home');
       } else {
         throw new Error('Access token not found');
@@ -87,7 +101,7 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden; /* 스크롤을 없애기 위한 스타일 */
+  overflow: hidden;
 }
 
 .login-container {
@@ -95,7 +109,7 @@ html, body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  height: 90vh;
 }
 
 .logo {
@@ -119,7 +133,7 @@ html, body {
   background: white;
   padding: 40px;
   border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 18px 20px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
   width: 300px;
 }

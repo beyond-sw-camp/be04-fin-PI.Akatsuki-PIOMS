@@ -155,7 +155,6 @@ h2 {
   font-size: 1.5em;
 }
 
-
 .action-button {
   background-color: #007bff;
   color: white;

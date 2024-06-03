@@ -42,6 +42,20 @@ const closeDeleteModal = () => {
 const deleteCategoryFirst = async () => {
 
   try {
+    const categorySecondResponse = await fetch(`http://localhost:5000/admin/category/second/list/detail/categoryfirst/${props.currentFirstCode}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    })
+    const categorySeconds = await categorySecondResponse.json();
+
+    if(categorySeconds.length > 0) {
+      alert("카테고리를 삭제할 수 없습니다. 하위 카테고리가 존재합니다.");
+      return;
+    }
+
     const response = await fetch(`http://localhost:5000/admin/category/first/delete/${props.currentFirstCode}`, {
       method: 'DELETE',
       headers: {

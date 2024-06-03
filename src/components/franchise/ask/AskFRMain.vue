@@ -26,17 +26,24 @@
       </table>
     </div>
 
-    <div class="action-buttons">
-      <button @click="resetFilters" class="reset-btn">
-        <img src="@/assets/icon/reset.png" alt="Reset" />
-      </button>
-      <button @click="applyFilters" class="search-btn">
-        <img src="@/assets/icon/search.png" alt="Search" />
-      </button>
-      <button @click="showCreate" class="create-btn">문의작성</button>
+    <div align="center">
+      <div class="action-buttons">
+        <button @click="resetFilters" class="reset-btn">
+          <img src="@/assets/icon/reset.png" alt="Reset" />
+        </button>
+        <button @click="applyFilters" class="search-btn">
+          <img src="@/assets/icon/search.png" alt="Search" />
+        </button>
+      </div>
+    </div>
+    <div align="center" style="margin-bottom: 70px">
+      <div class="action-buttons">
+        <button @click="showCreate" class="create-btn">문의작성</button>
+      </div>
     </div>
 
     <div class="table-container">
+
       <table class="table">
         <thead>
         <tr class="header1">
@@ -271,11 +278,10 @@ const refreshData = () => {
 }
 
 .action-buttons {
-  display: grid;
-  grid-template-columns: 25% 5% 3% 3% 27% 6%;
-  justify-content: center;
-  margin-top: 10px;
-  margin-bottom: 20px;
+  max-width: 1300px;
+  justify-content: center; /* 가운데 정렬 */
+  //margin-bottom: 20px;
+  align-items: center;
 }
 
 .reset-btn {
@@ -314,9 +320,10 @@ const refreshData = () => {
   cursor: pointer;
   padding: 8px;
   font-size: 14px;
-  position: relative;
-  bottom: 3px;
-  grid-column-start: 6;
+  float: right;
+  //bottom: 3px; /* 원하는 위치로 이동 */
+  //grid-column-start:6 ;
+  height: 60px;
 }
 
 .create-btn:hover {
