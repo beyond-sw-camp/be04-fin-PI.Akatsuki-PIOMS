@@ -1,156 +1,156 @@
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
-    box-sizing: border-box;
-  }
-  
-  .form-wrapper {
-    width: 100%;
-    max-width: 1200px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
-  }
-  
-  .detail-table {
-    width: 100%;
-    border-collapse: collapse;
-    align-content: center;
-    justify-content: center;
-    margin-bottom: 40px;
-  }
-  
-  .detail-table td {
-    border: 1px solid #ddd;
-    padding: 15px;
-    font-size: 16px;
-  }
-  
-  .detail-table .content-td {
-    height: 270px; /* 원하는 높이를 설정합니다 */
-    vertical-align: top;
-  }
-  
-  .label {
-    background-color: #D9D9D9;
-    font-weight: bold;
-    width: 150px;
-  }
-  
-  .answer-section {
-    display: flex;
-    flex-direction: column;
-    padding-top: 10px;
-    background-color: #D9D9D9;
-    font-size: 16px;
-  }
-  
-  textarea {
-    width: 98%;
-    height: 210px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    resize: vertical;
-    font-size: medium;
-  }
-  
-  .action-buttons {
-    width: 100%;
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
-    background-color: white;
-    padding: 5px;
-  }
-  
-  .cancel-btn {
-    background-color: #D9D9D9;
-    color: black;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    padding: 8px 16px;
-    font-size: 14px;
-    font-weight: bold;
-  }
-  
-  .submit-btn {
-    background-color: #FFCD4B;
-    color: black;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    padding: 8px 16px;
-    font-size: 14px;
-    font-weight: bold;
-  }
-  
-  .cancel-btn:hover {
-    background-color: red; /* hover 시 빨간색으로 변경 */
-  }
-  
-  .submit-btn:hover {
-    background-color: limegreen; /* hover 시 녹색으로 변경 */
-  }
-  
-  .popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-  }
-  
-  .popup-content {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #f5f5f5;
-    padding: 20px;
-    border-radius: 30px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    width: 50%;
-    max-width: 2000px;
-    height: 73%;
-    overflow-y: auto;
-    max-height: 90vh;
-  }
-  
-  .popup-content h2 {
-    margin-bottom: 20px;
-  }
-  
-  .popup-content .form-group {
-    margin-bottom: 20px;
-  }
-  
-  .popup-content label {
-    font-weight: bold;
-  }
-  
-  .popup-content input[type="text"],
-  .popup-content textarea {
-    width: 100%;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    resize: none;
-    height: auto;
-  }
-  
-  .popup-content button {
-    padding: 10px 20px;
-    background-color: #9d9d9d;
-    color: black;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+/*.container {*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    padding: 10px;*/
+/*    box-sizing: border-box;*/
+/*  }*/
+/*  */
+/*  .form-wrapper {*/
+/*    width: 100%;*/
+/*    max-width: 1200px;*/
+/*    background-color: #fff;*/
+/*    border-radius: 8px;*/
+/*    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
+/*    box-sizing: border-box;*/
+/*  }*/
+/*  */
+/*  .detail-table {*/
+/*    width: 100%;*/
+/*    border-collapse: collapse;*/
+/*    align-content: center;*/
+/*    justify-content: center;*/
+/*    margin-bottom: 40px;*/
+/*  }*/
+/*  */
+/*  .detail-table td {*/
+/*    border: 1px solid #ddd;*/
+/*    padding: 15px;*/
+/*    font-size: 16px;*/
+/*  }*/
+/*  */
+/*  .detail-table .content-td {*/
+/*    height: 270px; !* 원하는 높이를 설정합니다 *!*/
+/*    vertical-align: top;*/
+/*  }*/
+/*  */
+/*  .label {*/
+/*    background-color: #D9D9D9;*/
+/*    font-weight: bold;*/
+/*    width: 150px;*/
+/*  }*/
+/*  */
+/*  .answer-section {*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    padding-top: 10px;*/
+/*    background-color: #D9D9D9;*/
+/*    font-size: 16px;*/
+/*  }*/
+/*  */
+/*  textarea {*/
+/*    width: 98%;*/
+/*    height: 210px;*/
+/*    padding: 10px;*/
+/*    border: 1px solid #ddd;*/
+/*    border-radius: 4px;*/
+/*    resize: vertical;*/
+/*    font-size: medium;*/
+/*  }*/
+/*  */
+/*  .action-buttons {*/
+/*    width: 100%;*/
+/*    display: flex;*/
+/*    gap: 10px;*/
+/*    justify-content: flex-end;*/
+/*    background-color: white;*/
+/*    padding: 5px;*/
+/*  }*/
+/*  */
+/*  .cancel-btn {*/
+/*    background-color: #D9D9D9;*/
+/*    color: black;*/
+/*    border: none;*/
+/*    border-radius: 4px;*/
+/*    cursor: pointer;*/
+/*    padding: 8px 16px;*/
+/*    font-size: 14px;*/
+/*    font-weight: bold;*/
+/*  }*/
+/*  */
+/*  .submit-btn {*/
+/*    background-color: #FFCD4B;*/
+/*    color: black;*/
+/*    border: none;*/
+/*    border-radius: 4px;*/
+/*    cursor: pointer;*/
+/*    padding: 8px 16px;*/
+/*    font-size: 14px;*/
+/*    font-weight: bold;*/
+/*  }*/
+/*  */
+/*  .cancel-btn:hover {*/
+/*    background-color: red; !* hover 시 빨간색으로 변경 *!*/
+/*  }*/
+/*  */
+/*  .submit-btn:hover {*/
+/*    background-color: limegreen; !* hover 시 녹색으로 변경 *!*/
+/*  }*/
+/*  */
+/*  .popup-overlay {*/
+/*    position: fixed;*/
+/*    top: 0;*/
+/*    left: 0;*/
+/*    width: 100%;*/
+/*    height: 100%;*/
+/*    background-color: rgba(0, 0, 0, 0.5);*/
+/*    z-index: 999;*/
+/*  }*/
+/*  */
+/*  .popup-content {*/
+/*    position: fixed;*/
+/*    top: 50%;*/
+/*    left: 50%;*/
+/*    transform: translate(-50%, -50%);*/
+/*    background-color: #f5f5f5;*/
+/*    padding: 20px;*/
+/*    border-radius: 30px;*/
+/*    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);*/
+/*    width: 50%;*/
+/*    max-width: 2000px;*/
+/*    height: 73%;*/
+/*    overflow-y: auto;*/
+/*    max-height: 90vh;*/
+/*  }*/
+/*  */
+/*  .popup-content h2 {*/
+/*    margin-bottom: 20px;*/
+/*  }*/
+/*  */
+/*  .popup-content .form-group {*/
+/*    margin-bottom: 20px;*/
+/*  }*/
+/*  */
+/*  .popup-content label {*/
+/*    font-weight: bold;*/
+/*  }*/
+/*  */
+/*  .popup-content input[type="text"],*/
+/*  .popup-content textarea {*/
+/*    width: 100%;*/
+/*    padding: 10px;*/
+/*    border-radius: 5px;*/
+/*    border: 1px solid #ccc;*/
+/*    box-sizing: border-box;*/
+/*    resize: none;*/
+/*    height: auto;*/
+/*  }*/
+/*  */
+/*  .popup-content button {*/
+/*    padding: 10px 20px;*/
+/*    background-color: #9d9d9d;*/
+/*    color: black;*/
+/*    border: none;*/
+/*    border-radius: 5px;*/
+/*    cursor: pointer;*/
+/*  }*/

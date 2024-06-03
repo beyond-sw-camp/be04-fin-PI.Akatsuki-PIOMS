@@ -1,8 +1,8 @@
 <template>
-  <div class="popup-overlay" @click.self="closePopup">
+  <div class="popup-overlay" @click.self="showPostPopup">
     <div class="popup-content">
       <div class="popup-header">
-        <button class="close-button" @click="closePopup">×</button>
+        <button class="close-button" @click="showPostPopup">×</button>
         <h4>상품 등록</h4>
       </div>
       <div class="popup-body">
@@ -292,6 +292,9 @@ const saveProduct = async (imageUrl) => {
 const closePopup = () => {
   emit('close');
 };
+const showPostPopup = () => {
+  emit('close');
+}
 onMounted(() => {
   const numberInputs = document.querySelectorAll('input[type="number"]');
   numberInputs.forEach(input => {
