@@ -155,7 +155,7 @@ onMounted(fetchAskData);
 }
 
 .detail-table {
-  width: 100%x;
+  width: 100%;
   border-collapse: collapse;
   align-content: center;
   justify-content: center;
@@ -202,7 +202,7 @@ textarea {
   gap: 10px;
   justify-content: flex-end;
   background-color: white;
-  padding: 5px;
+  //padding: 5px;
 }
 
 .cancel-btn {

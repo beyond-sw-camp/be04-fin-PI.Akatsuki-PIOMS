@@ -45,7 +45,6 @@ const props = defineProps({
 
 const emit = defineEmits(['refreshData']);
 
-const franchiseOwnerCode = 1; // 테스트를 위한 하드코딩된 코드
 const franchiseOwnerData = ref(null);
 const askTitle = ref('');
 const askContent = ref('');

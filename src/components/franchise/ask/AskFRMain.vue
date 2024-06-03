@@ -36,10 +36,6 @@
       <button @click="showCreate" class="create-btn">문의작성</button>
     </div>
 
-<!--    <div class="table-header">-->
-<!--      <button @click="showCreate" class="create-btn">문의작성</button>-->
-<!--    </div>-->
-
     <div class="table-container">
       <table class="table">
         <thead>
@@ -82,9 +78,9 @@
       <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
     </div>
   </div>
-  <Create v-if = "createPopup" @refreshData="refreshData" :closeCreate="closeCreate"/>
-  <Edit v-if = "editPopup" @refreshData="refreshData" :askCode="askCode" :closeEdit="closeEdit"/>
-  <View v-if = "viewPopup" @refreshData="refreshData" :askCode="askCode" :closeView="closeView"/>
+  <Create v-if="createPopup" @refreshData="refreshData" :closeCreate="closeCreate"/>
+  <Edit v-if="editPopup" @refreshData="refreshData" :askCode="askCode" :closeEdit="closeEdit"/>
+  <View v-if="viewPopup" @refreshData="refreshData" :askCode="askCode" :closeView="closeView"/>
 </template>
 
 <script setup>
@@ -92,7 +88,7 @@ import { ref, computed, onMounted } from 'vue';
 import Create from './AskFormCreate.vue';
 import Edit from './AskFormEdit.vue';
 import View from './AskFormView.vue';
-import Breadcrumb from '@/components/amdin/ask/Breadcrumb.vue'; // Breadcrumb 컴포넌트 임포트
+import Breadcrumb from '@/components/amdin/ask/Breadcrumb.vue';
 import { useStore } from 'vuex';
 
 const store = useStore();
@@ -109,7 +105,6 @@ const itemsPerPage = 15;
 const breadcrumbs = [
   { label: '문의사항 조회 및 관리', link: null },
 ];
-const franchiseOwnerId = 1; // 점주 ID를 하드코딩합니다. 실제 구현에서는 로그인 시 세션이나 로컬스토리지에서 가져옵니다.
 
 const fetchAsks = async () => {
   try {
@@ -135,8 +130,8 @@ const fetchAsks = async () => {
 const applyFilters = () => {
   filteredAsks.value = asks.value.filter(ask => {
     const matchesStatus = filterStatus.value === '전체' || ask.askStatus === filterStatus.value;
-    const matchesStartDate = !startDate.value || new Date(ask.askEnrollDate[0], ask.askEnrollDate[1] - 1, ask.askEnrollDate[2]) >= new Date(startDate.value);
-    const matchesEndDate = !endDate.value || new Date(ask.askEnrollDate[0], ask.askEnrollDate[1] - 1, ask.askEnrollDate[2]) <= new Date(endDate.value);
+    const matchesStartDate = !startDate.value || new Date(...ask.askEnrollDate) >= new Date(startDate.value);
+    const matchesEndDate = !endDate.value || new Date(...ask.askEnrollDate) <= new Date(endDate.value);
     return matchesStatus && matchesStartDate && matchesEndDate;
   });
 };
@@ -149,9 +144,9 @@ const resetFilters = () => {
   currentPage.value = 1; // 페이지 리셋
 };
 
-const formatDate = (dateString) => {
-  if (!dateString) return '-';
-  const date = new Date(dateString);
+const formatDate = (dateArray) => {
+  if (!dateArray) return '-';
+  const date = new Date(dateArray[0], dateArray[1] - 1, dateArray[2], dateArray[3], dateArray[4], dateArray[5]);
   if (isNaN(date)) return 'Invalid Date';
   return date.toLocaleString('ko-KR', {
     year: 'numeric',
@@ -163,7 +158,6 @@ const formatDate = (dateString) => {
     hour12: false
   });
 };
-
 
 const paginatedAsks = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
@@ -192,29 +186,32 @@ const createPopup = ref(false);
 const editPopup = ref(false);
 const viewPopup = ref(false);
 
-const showCreate = () =>{
+const showCreate = () => {
   createPopup.value = true;
 }
 
-const showEdit = (askCode2) => {
+const showEdit = (ask) => {
   editPopup.value = !editPopup.value;
-  askCode.value = askCode2;
-}
-const showView = (askCode3) => {
-  viewPopup.value = !viewPopup.value;
-  askCode.value = askCode3;
+  askCode.value = ask.askCode;
 }
 
-const closeCreate = () =>{
+const showView = (ask) => {
+  viewPopup.value = !viewPopup.value;
+  askCode.value = ask.askCode;
+}
+
+const closeCreate = () => {
   createPopup.value = false;
 }
 
-const closeEdit = () =>{
+const closeEdit = () => {
   editPopup.value = !editPopup.value;
 }
-const closeView = () =>{
+
+const closeView = () => {
   viewPopup.value = !viewPopup.value;
 }
+
 onMounted(() => {
   fetchAsks();
 });
@@ -222,7 +219,6 @@ onMounted(() => {
 const refreshData = () => {
   fetchAsks(); // 데이터를 새로고침
 };
-
 </script>
 
 <style scoped>
@@ -277,12 +273,12 @@ const refreshData = () => {
 .action-buttons {
   display: grid;
   grid-template-columns: 25% 5% 3% 3% 27% 6%;
-  justify-content: center; /* 가운데 정렬 */
+  justify-content: center;
   margin-top: 10px;
   margin-bottom: 20px;
 }
 
-.reset-btn{
+.reset-btn {
   background-color: #fff;
   color: black;
   border: none;
@@ -316,12 +312,11 @@ const refreshData = () => {
   border: 1px solid #ddd;
   border-radius: 4px;
   cursor: pointer;
-  padding: 8px 16px;
+  padding: 8px;
   font-size: 14px;
-  //position: relative;
-  bottom: 3px; /* 원하는 위치로 이동 */
-  left: 546px ; /* 원하는 위치로 이동 */
-  grid-column-start:6 ;
+  position: relative;
+  bottom: 3px;
+  grid-column-start: 6;
 }
 
 .create-btn:hover {
@@ -352,7 +347,7 @@ const refreshData = () => {
   text-align: center;
 }
 
-.table th,td {
+.table th, td {
   width: 40px;
 }
 

@@ -26,7 +26,7 @@ import FavoriteList from "@/components/franchise/favorite/FavoriteList.vue";
 import AdminMembers from "@/components/amdin/member/AdminMemberPage.vue";
 import Log from "@/components/log/Log.vue";
 import NoticeList from "@/components/notice/NoticeList.vue";
-// import FranchiseDashBoard from "@/components/franchise/FranchiseDashBoard.vue";
+import FranchiseDashBoard from "@/components/franchise/FranchiseDashBoard.vue";
 import DriverDashBoard from "@/components/driver/DriverDashBoard.vue";
 
 
@@ -177,11 +177,11 @@ const routes = [
         component: DriverDashBoard,
         meta: { requiresAuth: true, role: 'ROLE_DRIVER' }
     },
-    // {
-    //     path: '/franchise/home',
-    //     name: 'FranchiseDashBoard',
-    //     component: FranchiseDashBoard
-    // },
+    {
+        path: '/franchise/home',
+        name: 'FranchiseDashBoard',
+        component: FranchiseDashBoard
+    },
 ];
 
 const router = createRouter({
