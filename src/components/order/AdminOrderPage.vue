@@ -64,6 +64,7 @@
         :detailItem="detailItem"
         :getOrderList="getOrderList"
     />
+    
     <div class="table-container">
     <table class="table">
       <thead >

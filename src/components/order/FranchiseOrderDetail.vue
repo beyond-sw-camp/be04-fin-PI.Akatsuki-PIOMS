@@ -1,7 +1,7 @@
 <template>
   <div class="popup-overlay" >
        <div class="popup-content">
-           <button class="close" @click="showDetailPopup" >돌아가기</button>
+           <button class="cancel-btn" @click="showDetailPopup" >돌아가기</button>
            <br>
           
            <br>
@@ -76,18 +76,18 @@
             </div>
 
             <div class="divvv-title" style="border-top: 2px black solid;">
-                반품상품
+                발주상품
             </div>
 
-            <div style="display: block; font-size: 1.5lh; display:flex; justify-content: center; font-weight: 1000; width:100%" align = "center">
-              <table>
+            <div class="table-container">
+              <table class="table">
                 <thead>
-                  <tr>
+                  <tr class="header1">
                     <th>상품 코드</th><th> 상품명</th> <th>요청 수량</th> <th v-if="item.orderCondition=='검수대기'"> 검수 수량</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr class="table" v-for="(product, rowIndex) in list" :key="rowIndex">
+                  <tr class="allpost" v-for="(product, rowIndex) in list" :key="rowIndex">
                       <td>{{ product.productCode }}</td>
                       <td>{{ product.productName }}</td>
                       <td>{{ product.requestProductCount }}</td>
@@ -97,6 +97,27 @@
               </table>
             </div>
             <br>
+            <div class="divvv-title" style="border-top: 2px black solid;">
+                반품상품
+            </div>
+            <div class="table-container">
+              <table class="table">
+                <thead>
+                  <tr class="header1">
+                    <th v-for="(header, index) in exchangeHeaders" :key="exchangeList">{{ header.label }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="allpost" v-for="(product, rowIndex) in exchangeList" :key="rowIndex">
+                    <td v-for="(header, colIndex) in exchangeHeaders" :key="colIndex">
+                      <div >{{ product[header.key] }}</div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+
              <div class="but-group">
                <input class="but" type="button" value="검수하기" @click="gumsoo" v-if="item.orderCondition == '검수대기'">
              </div>
@@ -105,15 +126,16 @@
                <div class="divvv-title">거절 사유</div>
                <div class="divvv3"> {{item.orderReason}}</div>
              </div>
-             <button class="close" @click="clickUpdate" >
-               수정하기
-             </button>
+             
            </div>
 
           </div>
           발주일자 : {{ item.orderDate }}
            <br>
            주문코드 : {{ item.orderCode }}<br>   
+          <div class="action-buttons">
+            <input class="cancel-btn" type="button" value="수정하기" @click="clickUpdate">
+          </div>
        </div>
 
     <FranchiseOrderUpdatePopup
@@ -217,8 +239,8 @@ const gumsoo = async () => {
 
 
 <style scoped>
+  @import "../../assets/css/popup.css" ;
 
 
-
-  </style>
+</style>
   

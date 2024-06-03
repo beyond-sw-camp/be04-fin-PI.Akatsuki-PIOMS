@@ -1,239 +1,297 @@
 
-/*.radio-group {*/
-/*  !* border: 2px solid #9d9d9d; *!*/
-/*  display: flex;*/
-/*  align-items: center;*/
-/*  gap: 5px;*/
-/*  font-size: 16px;*/
-/*  border-radius: 5px;*/
-/*}*/
+.radio-group {
+  /* border: 2px solid #9d9d9d; */
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 16px;
+  border-radius: 5px;
+}
 
-/*.radio-group .title {*/
-/*  margin-right: 20px;*/
-/*}*/
-/*.radio-group .left {*/
-/*  background-color: #d9d9d9;*/
-/*  padding: 10px ;*/
-/*  width: 100px ;*/
-/*  justify-content: center;*/
-/*}*/
+.radio-group .title {
+  margin-right: 20px;
+}
+.radio-group .left {
+  background-color: #d9d9d9;
+  padding: 10px ;
+  width: 100px ;
+  justify-content: center;
+}
 
-/*.radio-group label {*/
-/*  display: flex;*/
-/*  align-items: center;*/
-/*  gap: 3px;*/
-/*  font-size: 16px;*/
-/*}*/
+.radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 16px;
+}
 
-/*.condition-button {*/
-/*  display: inline-block;*/
-/*  padding: 2px 5px; !* 최소한의 패딩으로 글씨 영역만큼만 색이 적용되도록 합니다 *!*/
-/*  border-radius: 3px;*/
-/*  color: #fff;*/
-/*  font-weight: bold;*/
-/*}*/
+.condition-button {
+  display: inline-block;
+  padding: 2px 5px; /* 최소한의 패딩으로 글씨 영역만큼만 색이 적용되도록 합니다 */
+  border-radius: 3px;
+  color: #fff;
+  font-weight: bold;
+}
 
-/*.condition-button.pending {*/
-/*  background-color: #ffcc00; !* Color for 승인대기 *!*/
-/*}*/
+.condition-button.pending {
+  background-color: #ffcc00; /* Color for 승인대기 */
+}
 
-/*.condition-button.approved {*/
-/*  background-color: #007bff; !* Color for 승인완료 *!*/
-/*}*/
+.condition-button.approved {
+  background-color: #007bff; /* Color for 승인완료 */
+}
 
-/*.condition-button.rejected {*/
-/*  background-color: #ff6285; !* Color for 승인거절 *!*/
-/*}*/
+.condition-button.rejected {
+  background-color: #ff6285; /* Color for 승인거절 */
+}
 
-/*.condition-button.inspection-pending {*/
-/*  background-color: #ffcc00; !* Color for 검수대기 *!*/
-/*}*/
+.condition-button.inspection-pending {
+  background-color: #ffcc00; /* Color for 검수대기 */
+}
 
-/*.condition-button.inspection-completed {*/
-/*  background-color: #45a049; !* Color for 검수완료 *!*/
-/*}*/
+.condition-button.inspection-completed {
+  background-color: #45a049; /* Color for 검수완료 */
+}
 
-/*!* 여기부턴 재현님꺼 *!*/
-/*  .container {*/
-/*    position: relative;*/
-/*    min-height: 100vh; !* Ensure the container takes at least the full height of the viewport *!*/
-/*  }*/
-/*  */
-/*  .filter-section {*/
-/*    display: flex;*/
-/*    justify-content: center;*/
-/*    margin-bottom: 20px;*/
-/*  }*/
-/*  */
-/*  .filter-table {*/
-/*    border-collapse: collapse;*/
-/*    background-color: #f9f9f9;*/
-/*    border: 1px solid #ddd;*/
-/*    border-radius: 5px;*/
-/*    padding: 10px;*/
-/*    width: 1300px;*/
-/*  }*/
-/*  */
-/*  .filter-table td {*/
-/*    padding: 5px 10px;*/
-/*    font-size: 16px;*/
-/*    */
-/*  }*/
-/*  */
-/*  .filter-label {*/
-/*    font-weight: bold;*/
-/*    text-align: center;*/
-/*    width: 100px;*/
-/*    background-color: #D9D9D9;*/
-/*  }*/
-/*  */
-/*  .filter-input {*/
-/*    width: 500px;*/
-/*    text-align: left;*/
-/*    border: 1px solid lightgray;*/
-/*  }*/
-/*  */
-/*  .date-range span {*/
-/*    margin: 0 5px;*/
-/*  }*/
-/*  */
-/*  .action-buttons {*/
-/*    display: flex;*/
-/*    justify-content: center;*/
-/*    margin-top: 10px;*/
-/*    margin-bottom: 20px;*/
-/*  }*/
-/*  */
-/*  .reset-btn, .search-btn {*/
-/*    background-color: #fff;*/
-/*    color: black;*/
-/*    border: none;*/
-/*    border-radius: 4px;*/
-/*    cursor: pointer;*/
-/*    padding: 8px 8px;*/
-/*    font-size: 14px;*/
-/*    margin: 0 5px;*/
-/*  }*/
-/*  */
-/*  .reset-btn:hover, .search-btn:hover {*/
-/*    background-color: #f0f0f0;*/
-/*  }*/
-/*  */
-/*  .table-container {*/
-/*    width: 100%;*/
-/*    margin-bottom: 10px;*/
-/*    display: flex;*/
-/*    justify-content: center;*/
-/*  }*/
-/*  */
-/*  .table {*/
-/*    width: 1300px;*/
-/*    max-width: 1300px;*/
-/*    border-collapse: collapse;*/
-/*    background-color: #fff;*/
-/*    border-radius: 10px;*/
-/*    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
-/*    border-spacing: 0 10px;*/
-/*  }*/
-/*  */
-/*  .table th {*/
-/*    font-weight: bold;*/
-/*    color: #000;*/
-/*    font-size: 16px;*/
-/*    text-align: center;*/
-/*  }*/
-/*  */
-/*  .table th,td {*/
-/*    width: 50px;*/
-/*  }*/
-/*  */
-/*  .table th:nth-child(5), .table td:nth-child(5) {*/
-/*    width: 100px; !* 원하는 너비로 설정 *!*/
-/*  }*/
-/*  .highlighted {*/
-/*    background-color: #9d9d9d;*/
-/*  }*/
-/*  */
-/*  td.boardname {*/
-/*    text-decoration: none;*/
-/*    color: black;*/
-/*    cursor: pointer;*/
-/*    width: 150px;*/
-/*  }*/
-/*  */
-/*  .header1 {*/
-/*    background-color: #D9D9D9;*/
-/*    font-weight: bold;*/
-/*    height: 50px;*/
-/*    font-size: 12px;*/
-/*    text-align: center;*/
-/*  }*/
-/*  */
-/*  .header1 .num {*/
-/*    width: 5%;*/
-/*  }*/
-/*  */
-/*  .allpost {*/
-/*    text-align: center;*/
-/*    padding: 10px 0;*/
-/*  }*/
-/*  */
-/*  .allpost .num {*/
-/*    width: 5%;*/
-/*  }*/
-/*  */
-/*  .allpost td {*/
-/*    border-right: 1px solid #ddd;*/
-/*    font-size: 14px;*/
+/* 여기부턴 재현님꺼 */
+  .container {
+    position: relative;
+    min-height: 100vh; /* Ensure the container takes at least the full height of the viewport */
+  }
 
-/*  }*/
-/*  */
-/*  .editbutton {*/
-/*    background-color: #ffcc00;*/
-/*    border: none;*/
-/*    padding: 5px 10px;*/
-/*    cursor: pointer;*/
-/*    border-radius: 5px;*/
-/*    color: #fff;*/
-/*    font-weight: bold;*/
-/*  }*/
-/*  */
-/*  .editbutton-pending {*/
-/*    background-color: #ff6285;*/
-/*  }*/
-/*  */
-/*  .editbutton:hover {*/
-/*    background-color: #ffbb00;*/
-/*  }*/
-/*  */
-/*  .editbutton-pending:hover {*/
-/*    background-color: #ff6275;*/
-/*  }*/
-/*  */
-/*  .pagination {*/
-/*    display: flex;*/
-/*    justify-content: center;*/
-/*    align-items: center;*/
-/*    margin-top: 10px;*/
-/*  }*/
-/*  */
-/*  .pagination button {*/
-/*    background-color: #fff;*/
-/*    color: black;*/
-/*    border: 1px solid #ddd;*/
-/*    border-radius: 4px;*/
-/*    cursor: pointer;*/
-/*    padding: 8px 16px;*/
-/*    font-size: 14px;*/
-/*    margin: 0 5px;*/
-/*  }*/
-/*  */
-/*  .pagination button:disabled {*/
-/*    cursor: not-allowed;*/
-/*    opacity: 0.5;*/
-/*  }*/
-/*  */
-/*  .pagination span {*/
-/*    margin: 0 10px;*/
-/*    font-weight: bold;*/
-/*  }*/
+  .filter-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .filter-table {
+    border-collapse: collapse;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    width: 1300px;
+  }
+
+  .filter-table td {
+    padding: 5px 10px;
+    font-size: 16px;
+
+  }
+
+  .filter-label {
+    font-weight: bold;
+    text-align: center;
+    width: 100px;
+    background-color: #D9D9D9;
+  }
+
+  .filter-input {
+    width: 500px;
+    text-align: left;
+    border: 1px solid lightgray;
+  }
+
+  .date-range span {
+    margin: 0 5px;
+  }
+
+.action-buttons {
+  display: grid;
+  grid-template-columns: 25% 5% 3% 3% 27% 6%;
+  justify-content: center; /* 가운데 정렬 */
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.reset-btn{
+  background-color: #fff;
+  color: black;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 8px 8px;
+  font-size: 14px;
+  margin: 0 5px;
+  grid-column-start: 3;
+}
+
+.search-btn {
+  background-color: #fff;
+  color: black;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 8px 8px;
+  font-size: 14px;
+  margin: 0 5px;
+  grid-column-start: 4;
+}
+
+.reset-btn:hover, .search-btn:hover {
+  background-color: #f0f0f0;
+}
+.create-btn {
+  background-color: #fff;
+  color: black;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 8px 16px;
+  font-size: 14px;
+//position: relative;
+  bottom: 3px; /* 원하는 위치로 이동 */
+  left: 546px ; /* 원하는 위치로 이동 */
+  grid-column-start:6 ;
+}
+
+.create-btn:hover {
+  background-color: #f0f0f0;
+}
+
+  .table-container {
+    width: 100%;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .table {
+    width: 1300px;
+    max-width: 1300px;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-spacing: 0 10px;
+  }
+
+  .table th {
+    font-weight: bold;
+    color: #000;
+    font-size: 16px;
+    text-align: center;
+  }
+
+  .table th,td {
+    width: 50px;
+  }
+
+  .table th:nth-child(5), .table td:nth-child(5) {
+    width: 100px; /* 원하는 너비로 설정 */
+  }
+  .highlighted {
+    background-color: #9d9d9d;
+  }
+
+  td.boardname {
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+    width: 150px;
+  }
+
+  .header1 {
+    background-color: #D9D9D9;
+    font-weight: bold;
+    height: 50px;
+    font-size: 12px;
+    text-align: center;
+  }
+
+  .header1 .num {
+    width: 5%;
+  }
+
+  .allpost {
+    text-align: center;
+    padding: 10px 0;
+  }
+
+  .allpost .num {
+    width: 5%;
+  }
+
+  .allpost td {
+    border-right: 1px solid #ddd;
+    font-size: 14px;
+
+  }
+
+  .editbutton {
+    background-color: #ffcc00;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    color: #fff;
+    font-weight: bold;
+  }
+
+  .editbutton-pending {
+    background-color: #ff6285;
+  }
+
+  .editbutton:hover {
+    background-color: #ffbb00;
+  }
+
+  .editbutton-pending:hover {
+    background-color: #ff6275;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .pagination button {
+    background-color: #fff;
+    color: black;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 8px 16px;
+    font-size: 14px;
+    margin: 0 5px;
+  }
+
+  .pagination button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .pagination span {
+    margin: 0 10px;
+    font-weight: bold;
+  }
+
+
+  .breadcrumbs {
+    font-size: 16px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: left;
+    font-weight: bold;
+    padding: 10px;
+    width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .breadcrumbs span {
+    margin: 0 5px;
+  }
+
+  .breadcrumbs a {
+    color: #000;
+    text-decoration: none;
+    font-weight: bolder;
+  }
+
+  .breadcrumbs a:hover {
+    text-decoration: underline;
+  }

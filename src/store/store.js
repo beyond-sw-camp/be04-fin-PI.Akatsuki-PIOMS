@@ -1,14 +1,15 @@
 import { createStore } from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
-import { jwtDecode } from "jwt-decode";
-import axiosInstance from '@/axios-instance'; // Axios 인스턴스를 임포트합니다.
-import router from '@/router/router.js'; // 라우터를 임포트합니다.
+import { jwtDecode } from 'jwt-decode';
+import axiosInstance from '@/axios-instance';
+import router from '@/router/router.js';
 
 const store = createStore({
     state: {
         accessToken: localStorage.getItem('accessToken') || '',
         refreshToken: '',
         userRole: '',
+        username: '',
     },
     mutations: {
         setAccessToken(state, token) {
@@ -21,10 +22,14 @@ const store = createStore({
         setUserRole(state, role) {
             state.userRole = role;
         },
+        setUsername(state, username) {
+            state.username = username;
+        },
         clearAuth(state) {
             state.accessToken = '';
             state.refreshToken = '';
             state.userRole = '';
+            state.username = '';
             localStorage.removeItem('accessToken');
         }
     },
@@ -35,7 +40,9 @@ const store = createStore({
 
             const decodedToken = jwtDecode(accessToken);
             const userRole = decodedToken.role;
+            const username = decodedToken.username;
             commit('setUserRole', userRole);
+            commit('setUsername', username);
         },
         async reissueToken({ commit, state }) {
             try {
@@ -54,7 +61,7 @@ const store = createStore({
                 console.error('로그아웃 요청 중 오류 발생:', error);
             } finally {
                 commit('clearAuth');
-                router.push({ name: 'CommonLogin' }); // 로그아웃 후 로그인 선택창으로 이동
+                router.push({ name: 'CommonLogin' });
             }
         },
         initializeAuth({ commit }) {
@@ -64,13 +71,16 @@ const store = createStore({
 
                 const decodedToken = jwtDecode(accessToken);
                 const userRole = decodedToken.role;
+                const username = decodedToken.username;
                 commit('setUserRole', userRole);
+                commit('setUsername', username);
             }
         }
     },
     getters: {
         isAuthenticated: state => !!state.accessToken,
         userRole: state => state.userRole,
+        username: state => state.username,
     },
     plugins: [createPersistedState()],
 });

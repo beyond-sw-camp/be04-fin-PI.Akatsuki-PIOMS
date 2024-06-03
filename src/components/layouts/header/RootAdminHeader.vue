@@ -4,7 +4,7 @@
     <img class="logo" src="@/assets/icon/PIOMS_로고.png" alt="Logo"/>
     <section class="header_info">
       <div class="crown">
-        <img class="crown_icon" src="@/assets/icon/Crown.png" alt="Crown"/>
+        <img class="crown_icon" :src="userRoleIcon" alt="User Role Icon"/>
         <h5><u>{{ username }}</u>님 정보</h5>
       </div>
       <div class="dictionary">
@@ -27,7 +27,11 @@
   <!-- 카테고리 -->
   <nav class="header_rootAdmin">
     <ul class="nav_header">
-      <li><a href="#" class="dashboard" style="display: flex;"><img src="@/assets/icon/dashboard.png"/></a></li>
+      <router-link to="/admin/home" style="align-items: center; display: flex">
+        <a href="#" class="dashboard" >
+          <img src="@/assets/icon/dashboard.png"/>
+        </a>
+      </router-link>
 
       <li>
         <a href="#" class="label">가맹점 및 직원 관리</a>
@@ -60,15 +64,16 @@
             <li>
               <a href="#" class="depth1"><h4 id="depth1_title">상품 관리</h4></a>
               <ul class="submenu_sub">
-                <li><a href="#" class="depth2">상품 전체조회 및 관리</a></li>
+                <li><router-link to="/admin/product/list" class="depth2">상품 전체조회 및 관리</router-link></li>
+<!--                <li><a href="#" class="depth2">상품 전체조회 및 관리</a></li>-->
               </ul>
               <hr class="hr3">
             </li>
             <li>
               <a href="#" class="depth1"><h4 id="depth1_title">상품 카테고리 관리</h4></a>
               <ul class="submenu_sub">
-                <li><a href="#" class="depth2">상품 카테고리 전체조회</a></li>
-                <li><a href="#" class="depth2">상품 카테고리 등록 관리</a></li>
+                <li><router-link to="/admin/category/list" class="depth2">상품 카테고리 전체조회</router-link></li>
+                <li><router-link to="/admin/category/post" class="depth2">상품 카테고리 등록 관리</router-link></li>
               </ul>
             </li>
           </ul>
@@ -89,8 +94,7 @@
             <li>
               <a href="#" class="depth1"><h4 id="depth1_title">발주 관리</h4></a>
               <ul class="submenu_sub">
-                <li><a href="#" class="depth2">발주 목록 조회 및 승인</a></li>
-                <li><a href="#" class="depth2">명세서 조회</a></li>
+                <li><router-link to="/admin/product/list" class="depth2">발주 목록 조회 및 승인</router-link></li>
               </ul>
             </li>
           </ul>
@@ -101,25 +105,20 @@
         <a href="#" class="label">반품 및 교환 관리</a>
         <div class="submenu_box">
           <ul class="submenu">
-            <li>
-              <a href="#" class="depth1"><h4 id="depth1_title">반품 및 교환 상태 관리</h4></a>
-              <ul class="submenu_sub">
-                <li><a href="#" class="depth2">반품 및 교환 상태 처리</a></li>
-              </ul>
-              <hr class="hr3">
-            </li>
+<!--            <li>-->
+<!--              <a href="#" class="depth1"><h4 id="depth1_title">반품 및 교환 상태 관리</h4></a>-->
+<!--              <ul class="submenu_sub">-->
+<!--                <li><a href="#" class="depth2">반품 및 교환 상태 처리</a></li>-->
+<!--              </ul>-->
+<!--              <hr class="hr3">-->
+<!--            </li>-->
             <li>
               <a href="#" class="depth1"><h4 id="depth1_title">반품 관리</h4></a>
               <ul class="submenu_sub">
-                <li><a href="#" class="depth2">반품 상품 조회</a></li>
+                <li><router-link to="/admin/exchange/list" class="depth2">반품 상품 조회</router-link></li>
+<!--                <li><a href="#" class="depth2">반품 상품 조회</a></li>-->
               </ul>
               <hr class="hr3">
-            </li>
-            <li>
-              <a href="#" class="depth1"><h4 id="depth1_title">교환 관리</h4></a>
-              <ul class="submenu_sub">
-                <li><a href="#" class="depth2">교환 상품 조회</a></li>
-              </ul>
             </li>
           </ul>
         </div>
@@ -132,14 +131,15 @@
             <li>
               <a href="#" class="depth1"><h4 id="depth1_title">공지 관리</h4></a>
               <ul class="submenu_sub">
-                <li><a href="#" class="depth2">공지사항 조회 및 관리</a></li>
+                <li><router-link to="/admin/notice/list" class="depth2">공지사항 조회 및 관리</router-link></li>
               </ul>
               <hr class="hr3">
             </li>
             <li>
               <a href="#" class="depth1"><h4 id="depth1_title">문의 관리</h4></a>
               <ul class="submenu_sub">
-                <li><a href="#" class="depth2">문의사항 조회 및 관리</a></li>
+                <li><router-link to="/admin/ask" class="depth2">문의사항 조회 및 관리</router-link></li>
+<!--                <li><a href="#" class="depth2">문의사항 조회 및 관리</a></li>-->
               </ul>
             </li>
           </ul>
@@ -172,7 +172,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { jwtDecode } from 'jwt-decode';
@@ -240,13 +240,22 @@ onMounted(() => {
     });
   });
 });
+
+const userRoleIcon = computed(() => {
+  if (store.getters.userRole === 'ROLE_ROOT') {
+    return '@/assets/icon/Crown.png';
+  } else if (store.getters.userRole === 'ROLE_ADMIN') {
+    return '@/assets/icon/admin.png';
+  }
+  return '';
+});
 </script>
 
 <style scoped>
 header {
   display: flex;
   justify-content: space-between;
-  width: 2100px;
+  width: 100%;
   height: 35px;
 }
 .header_info {
@@ -348,7 +357,7 @@ header {
 
 hr.hr1 {
   padding: 0;
-  width: 2100px;
+  width: 100%;
   border: 0;
   height: 0;
   border-top: 0.5px solid #B9B9B9;
@@ -357,7 +366,7 @@ hr.hr1 {
 
 hr.hr2 {
   padding: 0;
-  width: 2100px;
+  width: 100%;
   height: 0;
   border: 0;
   border-top: 0.5px solid #B9B9B9;
@@ -376,11 +385,11 @@ hr.hr3 {
 .header_rootAdmin {
   display: flex;
   justify-content: center;
-  width: 2100px;
+  width: 100%;
   height: 20px;
   position: relative;
   top: 10px;
-  left: 55px;
+  //left: 55px;
 }
 
 .dashboard {
@@ -422,11 +431,12 @@ hr.hr3 {
   margin: 0;
   padding: 0;
   display: flex; /* 수평으로 맞추기 */
-  justify-content: space-between;
-  width: 2000px;
+  //justify-content: space-between;
+  gap: 100px;
+  //width: 100%;
 }
 
-.nav_header > il {
+.nav_header > li {
   position: relative;
 }
 .label:hover {
@@ -451,7 +461,7 @@ hr.hr3 {
 }
 .dashboard,
 .label {
-  margin-right: 100px;
+  //margin-right: 100px;
 }
 .dashboard {
   width: 20px;
@@ -491,6 +501,7 @@ hr.hr3 {
   margin: 0;
   list-style-type: none;
   flex-direction: column;
+  //background-color: #FF6285;
 }
 .submenu .depth1 li a{
   width: 120px !important;
@@ -513,10 +524,7 @@ hr.hr3 {
   height: 30px;
 }
 
-.submenu_box
-,.submenu_box1
-,.submenu_box2
-,.submenu_box3 {
+.submenu_box {
   display: none;
   position: relative;
   top: 10px;
