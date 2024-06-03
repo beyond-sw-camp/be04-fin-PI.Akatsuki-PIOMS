@@ -9,7 +9,7 @@
       </div>
       <div class="dictionary">
         <img class="dictionary_icon" src="@/assets/icon/Dictionary.png" alt="Dictionary"/>
-        <h5>관리자 메뉴얼</h5>
+        <button @click="pdfDownload">관리자 매뉴얼</button>
       </div>
       <div>
         <button class="cta" @click="logout">
@@ -188,7 +188,12 @@ const fetchUsernameFromToken = () => {
     username.value = decoded.username;
   }
 };
-
+const pdfDownload = () => {
+  const link = document.createElement('a');
+  link.href = 'http://localhost:5000/admin/pdfdownload/admin-pdf'; // PDF 파일 경로를 여기에 입력합니다.
+  link.download = 'AdminManual.pdf'; // 다운로드될 파일 이름을 설정합니다.
+  link.click();
+};
 const logout = async () => {
   try {
     await store.dispatch('logout');

@@ -129,7 +129,7 @@ const getAdminMembers = async () => {
 };
 const downloadExcel = () => {
   axios({
-    url: 'http://localhost:5000/admin/exceldownload/product-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
+    url: 'http://localhost:5000/admin/exceldownload/admin-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${accessToken}`,
@@ -140,7 +140,7 @@ const downloadExcel = () => {
     const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }));
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', 'ProductList.xlsx'); // 원하는 파일 이름 설정
+    link.setAttribute('download', 'adminList.xlsx'); // 원하는 파일 이름 설정
     document.body.appendChild(link);
     link.click();
   }).catch((error) => {
