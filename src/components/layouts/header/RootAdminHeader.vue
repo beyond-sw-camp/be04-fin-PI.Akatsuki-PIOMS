@@ -246,7 +246,7 @@ onMounted(() => {
 header {
   display: flex;
   justify-content: space-between;
-  width: 2100px;
+  width: 100%;
   height: 35px;
 }
 .header_info {
@@ -348,7 +348,7 @@ header {
 
 hr.hr1 {
   padding: 0;
-  width: 2100px;
+  width: 100%;
   border: 0;
   height: 0;
   border-top: 0.5px solid #B9B9B9;
@@ -357,7 +357,7 @@ hr.hr1 {
 
 hr.hr2 {
   padding: 0;
-  width: 2100px;
+  width: 100%;
   height: 0;
   border: 0;
   border-top: 0.5px solid #B9B9B9;
@@ -376,11 +376,11 @@ hr.hr3 {
 .header_rootAdmin {
   display: flex;
   justify-content: center;
-  width: 2100px;
+  width: 100%;
   height: 20px;
   position: relative;
   top: 10px;
-  left: 55px;
+  //left: 55px;
 }
 
 .dashboard {
@@ -422,11 +422,12 @@ hr.hr3 {
   margin: 0;
   padding: 0;
   display: flex; /* 수평으로 맞추기 */
-  justify-content: space-between;
-  width: 2000px;
+  //justify-content: space-between;
+  gap: 100px;
+  //width: 100%;
 }
 
-.nav_header > il {
+.nav_header > li {
   position: relative;
 }
 .label:hover {
@@ -451,7 +452,7 @@ hr.hr3 {
 }
 .dashboard,
 .label {
-  margin-right: 100px;
+  //margin-right: 100px;
 }
 .dashboard {
   width: 20px;
@@ -491,6 +492,7 @@ hr.hr3 {
   margin: 0;
   list-style-type: none;
   flex-direction: column;
+  background-color: #FF6285;
 }
 .submenu .depth1 li a{
   width: 120px !important;
@@ -513,17 +515,14 @@ hr.hr3 {
   height: 30px;
 }
 
-.submenu_box
-,.submenu_box1
-,.submenu_box2
-,.submenu_box3 {
+.submenu_box {
   display: none;
   position: relative;
   top: 10px;
   margin: 0;
   border-radius: 15px;
-  border: 1px solid #B9B9B9;
-  background-color: #fff;
+  //border: 1px solid #B9B9B9;
+  //background-color: #fff;
   width: 220px;
   z-index: 10000;
 }
