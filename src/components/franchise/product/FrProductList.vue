@@ -124,7 +124,7 @@
                         :currentProductColor="currentProductColor"
                         :currentProductSize="currentProductSize"
                         :currentCategoryFirstName="currentCategoryFirstName"
-                        :currentCategorySecondName="currentCategorySeconName"
+                        :currentCategorySecondName="currentCategorySecondName"
                         :currentCategoryThirdName="currentCategoryThirdName"
                         :currentProductContent="currentProductContent"
                         :closeEdit="closePopup"/>
