@@ -2,8 +2,12 @@
   <!-- 공지사항 상세 정보 팝업 -->
   <div class="overlay">
     <div class="notice-form">
-      <h2>공지사항 상세 정보</h2>
-      <button class="close-btn" @click="$emit('close')">X</button>
+
+      <div style="display: flex; justify-content: space-between;">
+        <h2>공지사항 상세 정보</h2>
+        <button class="close-btn" @click="$emit('close')">X</button>
+      </div>
+      
       <table>
         <tr>
           <td class="detailTitle">제목</td>
@@ -71,6 +75,8 @@ const props = defineProps({
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
+  width: 50px;
+  height: 50px;
 }
 
 .back {
