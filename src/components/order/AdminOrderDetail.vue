@@ -1,7 +1,7 @@
 <template>
   <div class="popup-overlay" >
        <div class="popup-content">
-           <button class="close" @click="showDetailPopup" >돌아가기</button>
+           <button class="cancel-btn" @click="showDetailPopup" >돌아가기</button>
            <br>
           
            <br>
@@ -79,15 +79,15 @@
             <div class="divvv-title">
                 발주상품
             </div>
-            <div style="display: block; font-size: 1.5lh; display:flex; justify-content: center; font-weight: 1000; width:100%;" align = "center">
-              <table>
+            <div class="table-container">
+              <table class="table">
                 <thead>
-                  <tr>
+                  <tr class="header1">
                     <th v-for="(header, index) in headers" :key="index">{{ header.label }}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr class="table" v-for="(product, rowIndex) in list" :key="rowIndex">
+                  <tr class="allpost" v-for="(product, rowIndex) in list" :key="rowIndex">
                     <td v-for="(header, colIndex) in headers" :key="colIndex">
                       <div >{{ product[header.key] }}</div>
                     </td>
@@ -99,15 +99,15 @@
             <div class="divvv-title" style="border-top: 2px black solid;">
                 반품상품
             </div>
-            <div style="display: block; font-size: 1.5lh; display:flex; justify-content: center; font-weight: 1000; width:100%" align = "center">
-              <table>
+            <div class="table-container">
+              <table class="table">
                 <thead>
-                  <tr>
-                    <th v-for="(header, index) in exchangeHeaders" :key="index">{{ header.label }}</th>
+                  <tr class="header1">
+                    <th v-for="(header, index) in exchangeHeaders" :key="exchangeList">{{ header.label }}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr class="table" v-for="(product, rowIndex) in exchangeList" :key="rowIndex">
+                  <tr class="allpost" v-for="(product, rowIndex) in exchangeList" :key="rowIndex">
                     <td v-for="(header, colIndex) in exchangeHeaders" :key="colIndex">
                       <div >{{ product[header.key] }}</div>
                     </td>
@@ -120,10 +120,8 @@
             <br>
             <br>
             <br>
-            <div class="but-group">
-              <input class="but" type="button" value="발주승인" @click="accpetOrder">
-              <input class="but" type="button" value="발주반려" @click="clickDeny">
-            </div>
+
+            
 
             <div v-if="isDenied">
               <div class="popup-overlay"  >
@@ -132,15 +130,15 @@
                     <h2>반려사유 </h2>
                     <textarea v-model="reason" cols="30" rows="5"></textarea><br>
 
-                    <div style="display: block; font-size: 1.5lh; display:flex; justify-content: center; font-weight: 1000; width:100%;" align="center">
-                      <table>
+                    <div class="table-container">
+                      <table class="table">
                         <thead >
-                          <tr>
+                          <tr class="header1">
                             <th  v-for="(header, index) in headers" :key="index" >{{ header.label }}</th>
                           </tr>
                         </thead>
                         <tbody >
-                          <tr class="table" v-for="(product, rowIndex) in list" :key="rowIndex">
+                          <tr class="allpost" v-for="(product, rowIndex) in list" :key="rowIndex">
                             <td v-for="(header, colIndex) in headers" :key="colIndex">
                               <div>{{ product[header.key] }}</div>
                             </td>
@@ -149,9 +147,9 @@
                       </table>
                     </div>
                     <div class="but-group">
-                      <button type="button" class="close" @click="clickDeny">취소</button>
+                      <button type="button" class="cancel-btn" @click="clickDeny">취소</button>
                       &nbsp;&nbsp;&nbsp;
-                      <button type="submit" class="close">등록</button>
+                      <button type="submit" class="submit-btn">등록</button>
                     </div>
                   </form> 
                 </div>
@@ -159,6 +157,10 @@
             </div>
             
           </div>
+          <div class="action-buttons" v-if="item.orderCondition == '승인대기'">
+              <input class="cancel-btn" type="button" value="발주승인" @click="accpetOrder">
+              <input class="cancel-btn" type="button" value="발주반려" @click="clickDeny">
+            </div>
           발주일자 : {{ item.orderDate }}
            <br>
            주문코드 : {{ item.orderCode }}<br>   
@@ -173,6 +175,9 @@
 <script setup>
    import { ref } from "vue";
    import axios from 'axios';
+   import { useStore } from 'vuex'; // Vuex store 임포트
+  const store = useStore(); // Vuex store 사용
+
 
    const headers = ref([
     /*{ key: 'requestProductCode', label: '상품 코드' },*/
@@ -189,6 +194,7 @@
    popupVisible: Boolean,
    writeActive: Boolean,
    detailItem: Object,
+   getOrderList: Function,
  });
  const item = props.detailItem;
  const list = props.detailItem.orderProductList;
@@ -197,30 +203,37 @@
  // 추후 개선 예정 
  const adminCode = 2;
  const franchiseCode = 1;
-
- console.log(item);
- console.log(list);
- console.log(exchangeList);
-
-
 const accpetOrder = async () => {
     try {
-      const response = await fetch(`/api/admin/order/${item.orderCode}/accept?adminCode=${adminCode}`, {
+
+      const accessToken = store.state.accessToken;
+        if (!accessToken) {
+          throw new Error('No access token found');
+      }
+      const response = await fetch(`http://localhost:5000/admin/order/${item.orderCode}/accept`, {
         method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include'
       });
       if(response.status ==406){
         alert("이 발주는 이미 처리되어 있습니다.");
         props.showDetailPopup();
+        
         return;
       }
       if (!response.ok) {
-        alert("헉 왜 주문 승인 안되지????????????")
-        throw new Error('네트워크 오류 발생');
+        alert("잘못된 주문")
+        props.showDetailPopup();
       }
+    
       props.showDetailPopup();
-
+      props.getOrderList();
     } catch (error) {
       console.error('오류 발생:', error);
+      props.showDetailPopup();
     }
 };
 
@@ -231,35 +244,49 @@ const clickDeny = () =>{
 }
 
 const denyOrder = async () => {
-  console.log(item.orderCode);
+
     try {
-      const response = await fetch(`/api/admin/order/${item.orderCode}/deny?adminCode=${adminCode}&denyMessage=${reason.value}`, {
+      const accessToken = store.state.accessToken;
+      if (!accessToken) {
+        throw new Error('No access token found');
+      }
+
+      const response = await fetch(`http://localhost:5000/admin/order/${item.orderCode}/deny?denyMessage=${reason.value}`, {
         method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include'
       });
       if(response.status ==406){
         alert("이 발주는 이미 처리되어 있습니다.");
         clickDeny();
         props.showDetailPopup();
-        return;
+        props.getOrderList();
       }
       if (!response.ok) {
         alert("헉 왜 주문 거절 안되지????????????")
+        props.showDetailPopup();
         throw new Error('네트워크 오류 발생');
       }
     } catch (error) {
       alert("헉 왜 주문 거절 안되지????????????");
-      console.error('오류 발생:', error);
+      props.showDetailPopup();
     }
 };
 
 
-
+console.log(props.detailItem);
+console.log(exchangeList);
 </script>
 
 
 <style scoped>
+  @import "../../assets/css/popup.css" ;
+  @import "../../assets/css/order.css" ;
 
 
-
-  </style>
+  
+</style>
   

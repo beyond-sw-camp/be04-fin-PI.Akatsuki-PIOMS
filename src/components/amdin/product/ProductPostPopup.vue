@@ -1,8 +1,8 @@
 <template>
-  <div class="popup-overlay" @click.self="closePopup">
+  <div class="popup-overlay" @click.self="showPostPopup">
     <div class="popup-content">
       <div class="popup-header">
-        <button class="close-button" @click="closePopup">×</button>
+        <button class="close-button" @click="showPostPopup">×</button>
         <h4>상품 등록</h4>
       </div>
       <div class="popup-body">
@@ -37,6 +37,7 @@
                 <td class="insert-label">상품노출상태</td>
                 <td class="insert-input">
                   <select v-model="selectedExposureStatus" class="textInput">
+                    <option value="">전체 노출상태</option>
                     <option value="true">노출</option>
                     <option value="false">미노출</option>
                   </select>
@@ -134,6 +135,7 @@
 import { onMounted, defineEmits, ref } from 'vue';
 import imageSrc from '@/assets/icon/picture.png';
 import { useStore } from 'vuex';
+import ProductList from "@/components/amdin/product/ProductList.vue";
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -144,7 +146,7 @@ const insertProductName = ref('');
 const insertProductCount = ref('');
 const insertProductPrice = ref('');
 const insertStatus = ref('');
-const selectedExposureStatus = ref('true');
+const selectedExposureStatus = ref('');
 const insertColor = ref('');
 const insertSize = ref('');
 const insertContent = ref('');
@@ -290,6 +292,9 @@ const saveProduct = async (imageUrl) => {
 const closePopup = () => {
   emit('close');
 };
+const showPostPopup = () => {
+  emit('close');
+}
 onMounted(() => {
   const numberInputs = document.querySelectorAll('input[type="number"]');
   numberInputs.forEach(input => {
@@ -308,10 +313,59 @@ onMounted(() => {
 
 
 const uploadAndSaveProduct = async () => {
+  if(!insertProductName.value.trim()) {
+    alert('상품명을 입력해주세요.');
+    return;
+  }
+  if(!insertProductCount.value) {
+    alert('상품의 재고량을 입력해주세요.');
+    return;
+  }
+  if(!insertProductPrice.value) {
+    alert('상품 가격을 입력해주세요.');
+    return;
+  }
+  if(!insertStatus.value.trim()) {
+    alert('상품의 상태를 정해주세요.');
+    return;
+  }
+  if(!selectedExposureStatus.value.trim()) {
+    alert('상품의 노출상태를 정해주세요.');
+    return;
+  }
+  if(!insertColor.value.trim()) {
+    alert('상품의 색상을 정해주세요.');
+    return;
+  }
+  if(!insertSize.value.trim()) {
+    alert('상품의 사이즈를 정해주세요.');
+    return;
+  }
+  if(!selectedFirstCategory.value) {
+    alert('대분류 카테고리를 정해주세요.');
+    return;
+  }
+  if(!selectedSecondCategory.value) {
+    alert('중분류 카테고리를 정해주세요.');
+    return;
+  }
+  if(!selectedThirdCategory.value) {
+    alert('소분류 카테고리를 정해주세요.');
+    return;
+  }
+  if(!insertContent.value.trim()) {
+    alert('상품의 상세정보를 입력해주세요.');
+    return;
+  }
   const fileInput = document.querySelector('input[type="file"]');
   const file = fileInput.files[0];
 
   const formData = new FormData();
+
+  if(!file) {
+    alert('상품의 사진을 첨부해주세요.');
+    return;
+  }
 
   // 이미지 파일 추가
   if (file) {
@@ -338,7 +392,6 @@ const uploadAndSaveProduct = async () => {
       body: formData,
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
     });
 
@@ -349,13 +402,12 @@ const uploadAndSaveProduct = async () => {
 
     const data = await response.json();
     console.log('상품이 성공적으로 등록되었습니다:', data);
+    location.reload(ProductList);
     emit('close');
   } catch (error) {
     console.error('오류:', error);
   }
 };
-
-
 </script>
 
 <style scoped>

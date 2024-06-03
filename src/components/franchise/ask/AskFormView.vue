@@ -52,22 +52,24 @@ const props = defineProps({
 });
 
 const fetchAskData = async () => {
-  const askCode = props.askCode.askCode;
-  if (!askCode) {
+  if (!props.askCode) {
     console.error('askCode is not defined');
     return;
   }
+
   try {
-    const response = await fetch(`http://localhost:5000/franchise/ask/${askCode}`, {
+    const response = await fetch(`http://localhost:5000/franchise/ask/${props.askCode}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     });
+
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new Error(`Failed to fetch ask data: ${response.statusText}`);
     }
+
     const data = await response.json();
     askData.value = data;
     answer.value = data.askAnswer || ''; // 이미 작성된 답변을 불러옵니다.
@@ -76,9 +78,9 @@ const fetchAskData = async () => {
   }
 };
 
-const formatDate = (dateString) => {
-  if (!dateString) return '-';
-  const date = new Date(dateString);
+const formatDate = (dateArray) => {
+  if (!dateArray) return '-';
+  const date = new Date(dateArray[0], dateArray[1] - 1, dateArray[2], dateArray[3], dateArray[4], dateArray[5]);
   if (isNaN(date)) return 'Invalid Date';
   return date.toLocaleString('ko-KR', {
     year: 'numeric',

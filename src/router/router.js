@@ -16,15 +16,19 @@ import AskFormEdit from "@/components/franchise/ask/AskFormEdit.vue";
 import ProductList from "@/components/amdin/product/ProductList.vue";
 import FrProductList from "@/components/franchise/product/FrProductList.vue";
 import CategoryList from "@/components/amdin/Category/CategoryList.vue";
-import OrderPage from '@/components/order/orderPage.vue';
-
-import ExchangePage from '@/components/exchange/exchangePage.vue';
+import AdminOrderPage from '@/components/order/AdminOrderPage.vue';
+import FranchiseOrderPage from '@/components/order/FranchiseOrderPage.vue';
+import AdminExchangePage from '@/components/exchange/AdminExchangePage.vue';
+import FranchiseExchangePage from '@/components/exchange/FranchiseExchangePage.vue';
 import PostCategory from "@/components/amdin/Category/PostCategory.vue";
 import FavoriteRegister from "@/components/franchise/favorite/FavoriteRegister.vue";
 import FavoriteList from "@/components/franchise/favorite/FavoriteList.vue";
+import AdminMembers from "@/components/amdin/member/AdminMemberPage.vue";
 import Log from "@/components/log/Log.vue";
+import NoticeList from "@/components/notice/NoticeList.vue";
+import FranchiseDashBoard from "@/components/franchise/FranchiseDashBoard.vue";
 import DriverDashBoard from "@/components/driver/DriverDashBoard.vue";
-import noticeList from "@/components/notice/noticeList.vue";
+
 
 const routes = [
     {
@@ -90,10 +94,16 @@ const routes = [
         meta: { requiresAuth: true, role: 'ROLE_OWNER' }
     },
     {
-        path: '/order/list',
-        name: 'orderList',
-        component: OrderPage,
-        meta: { requiresAuth: true, role: 'ROLE_ADMIN' }
+        path: '/admin/order/list',
+        name: 'AdminOrderList',
+        component: AdminOrderPage,
+        meta: { requiresAuth: true, role: ['ROLE_ADMIN', 'ROLE_ROOT'] }
+    },
+    {
+        path: '/franchise/order/list',
+        name: 'FranchiseOrderList',
+        component: FranchiseOrderPage
+        ,meta: { requiresAuth: true, role: ['ROLE_OWNER', 'ROLE_ROOT'] }
     },
     {
         path: '/admin/product/list',
@@ -105,7 +115,7 @@ const routes = [
         path: '/franchise/product/list',
         name: 'FranchiseProductList',
         component: FrProductList,
-        meta: { requiresAuth: true, role: 'ROLE_OWNER' }
+        meta: { requiresAuth: true, role: 'ROLE_ROOT' }
     },
     {
         path: '/admin/category/list',
@@ -120,15 +130,22 @@ const routes = [
         meta: { requiresAuth: true, role: ['ROLE_ADMIN', 'ROLE_ROOT'] }
     },
     {
-        path: '/exchange/list',
-        name: 'exchangeList',
-        component: ExchangePage,
-        meta: { requiresAuth: true, role: 'ROLE_ADMIN' }
+        path: '/franchise/exchange/list',
+        name: 'FranchiseExchangeList',
+        component: FranchiseExchangePage,
+        meta: { requiresAuth: true, role: ['ROLE_OWNER', 'ROLE_ROOT'] }
+    },
+    {
+        path: '/admin/exchange/list',
+        name: 'AdminExchangeList',
+        component: AdminExchangePage,
+        meta: { requiresAuth: true, role: ['ROLE_ADMIN', 'ROLE_ROOT'] }
     },
     {
         path: '/admin/notice/list',
         name: 'noticeList',
-        component: noticeList
+        component: NoticeList,
+        meta: { requiresAuth: true, role: ['ROLE_ROOT','ROLE_ADMIN'] }
     },
     {
         path: '/franchise/favorite/register',
@@ -143,6 +160,12 @@ const routes = [
         meta: { requiresAuth: true, role: 'ROLE_OWNER' }
     },
     {
+
+        path: '/admin/members',
+        name: 'AdminMemberList',
+        component: AdminMembers
+    },
+    {
         path: '/admin/logs',
         name: 'AdminLogs',
         component: Log,
@@ -151,8 +174,14 @@ const routes = [
     {
         path: '/driver/home',
         name: 'DriverDashboard',
-        component: DriverDashBoard
-    }
+        component: DriverDashBoard,
+        meta: { requiresAuth: true, role: 'ROLE_DRIVER' }
+    },
+    {
+        path: '/franchise/home',
+        name: 'FranchiseDashBoard',
+        component: FranchiseDashBoard
+    },
 ];
 
 const router = createRouter({
@@ -167,12 +196,12 @@ router.beforeEach(async (to, from, next) => {
 
     if (to.matched.some(record => record.meta.requiresAuth)) {
         if (!isAuthenticated) {
-            next({ name: 'AdminLogin' });
+            next({ name: 'CommonLogin' });
         } else {
             const requiredRoles = to.meta.role;
             if (requiredRoles && !requiredRoles.includes(userRole)) {
                 // 사용자가 해당 경로에 접근할 권한이 없는 경우
-                next({ name: 'AdminLogin' });
+                next({ name: 'CommonLogin' });
             } else {
                 next();
             }

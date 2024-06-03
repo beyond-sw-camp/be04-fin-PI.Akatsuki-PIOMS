@@ -2,7 +2,7 @@
   <div>
     <div class="headerTitle">
         <h3 class="product-title"><img src="@/assets/icon/Cloth.png">상품 및 상품 카테고리 관리 > 상품 관리 > 상품 전체 조회 및 관리</h3>
-    <h6 class="product-sub-title">조회할 상품의 조건을 선택 후
+    <h6 class="product-sub-title" style="margin-top: 1%; margin-bottom: 1%">조회할 상품의 조건을 선택 후
       <img src="@/assets/icon/reset.png">초기화 또는 <img src="@/assets/icon/search.png">검색을 눌러주세요.
     </h6>
     </div>
@@ -13,13 +13,14 @@
         <tr>
           <td class="filter-label">상품명</td>
           <td class="filter-input">
-            <input type="text" v-model="filterProductName" class="textInput"/>
+            <input type="text" v-model="filterProductName" @keyup.enter="applyFilters" class="textInput" placeholder="상품명을 입력하세요."/>
           </td>
         </tr>
         <tr>
           <td class="filter-label">상품상태</td>
           <td class="filter-input">
             <select id="filterStatus" v-model="filterStatus" class="textInput">
+              <option hidden="hidden" value="">전체</option>
               <option value="공급가능">공급가능</option>
               <option value="일시제한">일시제한</option>
               <option value="단종">단종</option>
@@ -29,6 +30,7 @@
           <td class="filter-label">상품노출상태</td>
           <td class="filter-input">
             <select id="selectedExposureStatus" v-model="selectedExposureStatus" class="textInput">
+              <option hidden="hidden" value="">전체</option>
               <option value="노출">노출</option>
               <option value="미노출">미노출</option>
             </select>
@@ -38,6 +40,7 @@
           <td class="filter-label">색상</td>
           <td class="filter-input">
             <select id="filterColor" v-model="filterColor" class="textInput">
+              <option hidden="hidden" value="">전체</option>
               <option value="빨간색">빨간색</option>
               <option value="주황색">주황색</option>
               <option value="노란색">노란색</option>
@@ -50,6 +53,7 @@
           <td class="filter-label">사이즈</td>
           <td class="filter-input">
             <select id="filterSize" v-model="filterSize" class="textInput">
+              <option hidden="hidden" value="">전체</option>
               <option value="90">90</option>
               <option value="95">95</option>
               <option value="100">100</option>
@@ -106,12 +110,21 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" 
-            class="allpost"
-            @dblclick="showModifyPopup(item.productCode,item.productName,item.productCount,item.productPrice,item.productStatus,item.productExposureStatus,
-                                        item.productColor,item.productSize,item.categoryFirstCode,item.categorySecondCode,item.categoryThirdCode,item.productContent)">
+        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost">
           <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">
+            <template v-if="header.key === 'productName'">
+              <button class="button-as-text" @click="showModifyPopup(item.productCode,item.productName,item.productCount,item.productPrice,item.productStatus,item.productColor,item.productSize,item.categoryFirstCode,item.categorySecondCode,item.categoryThirdCode,item.productContent)">
+                {{ item[header.key] }}
+              </button>
+            </template>
+            <template v-else-if="header.key === 'productExposureStatus'">
+              <button class="button-as-text" @click="showDeletePopup(item.productCode, item.productName, item.productExposureStatus)">
+                {{ item.productExposureStatus ? '노출' : '미노출' }}
+              </button>
+            </template>
+            <template v-else>
               {{ item[header.key] }}
+            </template>
             <template v-if="header.key === 'imgUrl'">
               <img :src="getProductImageUrl(item.productCode)" class="product-img" />
             </template>
@@ -125,12 +138,11 @@
       <span> {{currentPage}} / {{totalPages}} </span>
       <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
     </div>
-    <ProductDetailPopup v-if="editPopup" :currentProductCode="currentProductCode"
+    <ProductUpdatePopup v-if="editPopup" :currentProductCode="currentProductCode"
                                          :currentProductName="currentProductName"
                                          :currentProductCount="currentProductCount"
                                          :currentProductPrice="currentProductPrice"
                                          :currentProductStatus="currentProductStatus"
-                                         :currentProductExposureStatus="currentProductExposureStatus"
                                          :currentProductColor="currentProductColor"
                                          :currentProductSize="currentProductSize"
                                          :currentCategoryFirstCode="currentCategoryFirstCode"
@@ -138,13 +150,18 @@
                                          :currentCategoryThirdCode="currentCategoryThirdCode"
                                          :currentProductContent="currentProductContent"
                                          :closeEdit="closeEdit"/>
+    <ProductDeletePopup v-if="deletePopup" :currentProductCode="currentProductCode"
+                                           :currentProductName="currentProductName"
+                                           :currentProductExposureStatus="currentProductExposureStatus"
+                                           :closeDeletePopup="closeDeletePopup"/>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
 import ProductPostPopup from "@/components/amdin/product/ProductPostPopup.vue"
-import ProductDetailPopup from "@/components/amdin/product/ProductDetailPopup.vue";
+import ProductUpdatePopup from "@/components/amdin/product/ProductUpdatePopup.vue";
+import ProductDeletePopup from "@/components/amdin/product/ProductDeletePopup.vue";
 import axios from "axios";
 import { useStore } from 'vuex';
 const store = useStore();
@@ -162,7 +179,9 @@ const headers = ref([
   { key: 'productExposureStatus', label: '상품 노출 상태'},
   { key: 'productColor', label: '색상'},
   { key: 'productSize', label: '사이즈'},
-  { key: 'categoryThirdCode', label: '카테고리 코드'},
+  { key: 'categoryFirstName', label: '카테고리 코드'},
+  { key: 'categorySecondName', label: '카테고리 코드'},
+  { key: 'categoryThirdName', label: '카테고리 코드'},
 ]);
 
 const filteredLists = ref([]);
@@ -181,8 +200,6 @@ const selectedFirstCategory = ref('');
 const selectedSecondCategory = ref('');
 const selectedThirdCategory = ref('');
 
-const showPostPopup = ref(false);
-
 const currentProductCode = ref('');
 const currentProductName = ref('');
 const currentProductCount = ref('');
@@ -196,9 +213,12 @@ const currentCategorySecondCode = ref('');
 const currentCategoryThirdCode = ref('');
 const currentProductContent = ref('');
 const productImages = ref({});
-const editPopup = ref(false);
 
-const showModifyPopup = (productCode, productName, productCount, productPrice, productStatus, productExposureStatus, productColor, productSize,
+const showPostPopup = ref(false);
+const editPopup = ref(false);
+const deletePopup = ref(false);
+
+const showModifyPopup = (productCode, productName, productCount, productPrice, productStatus, productColor, productSize,
                           categoryFirstCode, categorySecondCode, categoryThirdCode, productContent) => {
   editPopup.value = !editPopup.value;
   setCurrentProductCode(productCode);
@@ -206,7 +226,6 @@ const showModifyPopup = (productCode, productName, productCount, productPrice, p
   setCurrentProductCount(productCount);
   setCurrentProductPrice(productPrice);
   setCurrentProductStatus(productStatus);
-  setCurrentProductExposureStatus(productExposureStatus);
   setCurrentProductColor(productColor);
   setCurrentProductSize(productSize);
   setCurrentCategoryFirstCode(categoryFirstCode);
@@ -214,8 +233,17 @@ const showModifyPopup = (productCode, productName, productCount, productPrice, p
   setCurrentCategoryThirdCode(categoryThirdCode);
   setCurrentProductContent(productContent);
 }
+const showDeletePopup = (productCode, productName, productExposureStatus) => {
+  deletePopup.value = !deletePopup.value;
+  setCurrentProductCode(productCode);
+  setCurrentProductName(productName);
+  setCurrentProductExposureStatus(productExposureStatus);
+}
 const closeEdit = () => {
   editPopup.value = !editPopup.value;
+}
+const closeDeletePopup = () => {
+  deletePopup.value = !deletePopup.value;
 }
 const getProductImageUrl = (productCode) => {
   return productImages.value[productCode] || 'path/to/default-image.jpg';
@@ -230,7 +258,7 @@ const fetchProductImages = async () => {
       },
     });
     if(!response.ok) {
-      throw new Error('이미지를 불러오지 못했습니다.');
+      throw new Error('Bad request');
     }
     const productImagesData = await response.json();
 
@@ -254,7 +282,7 @@ const fetchFirstCategories = async () => {
       },
     });
     if (!response.ok) {
-      throw new Error('대분류를 불러오는 데 실패했습니다.');
+      throw new Error('Bad request');
     }
     firstCategories.value = await response.json();
   } catch (error) {
@@ -275,7 +303,7 @@ const fetchSecondCategories = async () => {
       },
     });
     if (!response.ok) {
-      throw new Error('중분류를 불러오는 데 실패했습니다.');
+      throw new Error('Bad request');
     }
     secondCategories.value = await response.json();
     thirdCategories.value = [];
@@ -298,7 +326,7 @@ const fetchThirdCategories = async () => {
       },
     });
     if (!response.ok) {
-      throw new Error('소분류를 불러오는 데 실패했습니다.');
+      throw new Error('Bad request');
     }
     thirdCategories.value = await response.json();
   } catch (error) {
@@ -312,7 +340,17 @@ const applyFilters = () => {
     const matchesStatus = !filterStatus.value || list.productStatus === filterStatus.value;
     const matchesColor = !filterColor.value || list.productColor === filterColor.value;
     const matchesSize = !filterSize.value || list.productSize === parseInt(filterSize.value, 10);
-    const matchesCategory = !selectedThirdCategory.value || list.categoryThirdCode === selectedThirdCategory.value;
+
+    let matchesCategory = true;
+    if (selectedFirstCategory.value) {
+      matchesCategory = list.categoryFirstCode === selectedFirstCategory.value;
+      if (matchesCategory && selectedSecondCategory.value) {
+        matchesCategory = list.categorySecondCode === selectedSecondCategory.value;
+        if (matchesCategory && selectedThirdCategory.value) {
+          matchesCategory = list.categoryThirdCode === selectedThirdCategory.value;
+        }
+      }
+    }
 
     return matchesProductName && matchesExposureStatus && matchesStatus && matchesColor && matchesSize && matchesCategory;
   });
@@ -343,14 +381,14 @@ const setCurrentProductPrice = (productPrice) => {
 const setCurrentProductStatus = (productStatus) => {
   currentProductStatus.value = productStatus;
 }
-const setCurrentProductExposureStatus = (productExposureStatus) => {
-  currentProductExposureStatus.value = productExposureStatus;
-}
 const setCurrentProductColor = (productColor) => {
   currentProductColor.value = productColor;
 }
 const setCurrentProductSize = (productSize) => {
   currentProductSize.value = productSize;
+}
+const setCurrentProductExposureStatus = (productExposureStatus) => {
+  currentProductExposureStatus.value = productExposureStatus;
 }
 const setCurrentProductContent = (productContent) => {
   currentProductContent.value = productContent;
@@ -375,7 +413,7 @@ const getMemberId = async () => {
     });
 
     if (!response.ok) {
-      throw new Error('네트워크 오류 발생');
+      throw new Error('Bad request');
     }
 
     const data = await response.json();
@@ -387,7 +425,7 @@ const getMemberId = async () => {
       filteredLists.value = [];
     }
   } catch (error) {
-    console.error('오류 발생:', error);
+    console.error('Bad request:', error);
   }
 };
 const downloadExcel = () => {
@@ -407,7 +445,7 @@ const downloadExcel = () => {
     document.body.appendChild(link);
     link.click();
   }).catch((error) => {
-    console.error('Excel 다운로드 중 오류 발생:', error);
+    console.error('EBad request:', error);
   });
 };
 const paginatedLists = computed(() => {
@@ -466,7 +504,7 @@ fetchThirdCategories();
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 10px;
-  width: 1200px;
+  width: 1250px;
 }
 
 .filter-table td {
@@ -525,8 +563,8 @@ fetchThirdCategories();
   justify-content: space-between; /* 양 끝에 정렬 */
   align-items: center; /* 수직 가운데 정렬 */
   position: absolute; /* 절대 위치 설정 */
-  left: 24.1%; /* 좌측 정렬 */
-  width: 1210px;
+  left: 14%; /* 좌측 정렬 */
+  width: 1270px;
 }
 
 .reset-btn:hover, .search-btn:hover {
@@ -629,6 +667,10 @@ fetchThirdCategories();
 .product-sub-title img {
   width: 20px;
   height: 20px;
+}
+.headerTitle img {
+  width: 30px;
+  height: 30px;
 }
 .headerTitle h6 {
   margin-bottom: 5%;

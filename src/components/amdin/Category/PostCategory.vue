@@ -56,6 +56,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
+import CategoryList from "@/components/amdin/Category/CategoryList.vue";
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -200,7 +201,7 @@ const saveCategorySecond = async () => {
   console.log('savedSecondData: ', savedSecondData);
 
   try {
-    const responseSecond = await fetch(`http://localhost:5000/admin/category/second/create?requesterAdminCode=1`, {
+    const responseSecond = await fetch(`http://localhost:5000/admin/category/second/create`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -247,7 +248,7 @@ const saveCategoryThird = async () => {
   console.log('savedThirdData: ', savedThirdData);
 
   try {
-    const responseThird = await fetch(`http://localhost:5000/admin/category/third/create?requesterAdminCode=1`, {
+    const responseThird = await fetch(`http://localhost:5000/admin/category/third/create`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -266,7 +267,7 @@ const saveCategoryThird = async () => {
     // 데이터를 새로고침하고 화면을 갱신합니다.
     fetchThirdCategories(selectedSecondCategory.value);
     insertCategoryThirdName.value = ''; // 입력 필드 초기화
-
+    location.reload(CategoryList);
   } catch (error) {
     console.error('오류: ', error);
   }

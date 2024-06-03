@@ -32,7 +32,9 @@
           <td>이미지</td>
           <td>{{ product.franchiseWarehouseTotal }}</td>
           <td>{{ product.franchiseWarehouseEnable }}</td>
-          <td>{{ product.product.productStatus }}</td>
+          <td :class="{'status-temporary': product.product.productStatus === '일시제한', 'status-available': product.product.productStatus === '공급가능'}">
+            {{ product.product.productStatus }}
+          </td>
           <td>{{ product.product.productColor }}</td>
           <td>{{ product.product.productSize }}</td>
           <td>{{ product.product.categoryThird.categorySecond.categoryFirst.categoryFirstName }}</td>
@@ -53,16 +55,19 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useStore } from 'vuex';
 
+const store = useStore();
+const accessToken = store.state.accessToken;
 const favoriteProducts = ref([]);
 
 // Fetch favorite products
 const fetchFavorites = async () => {
   try {
-    const response = await fetch('http://api.pioms.shop/warehouse/favorites', {
-
+    const response = await fetch('http://localhost:5000/franchise/warehouse/favorites', {
       method: 'GET',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     });
@@ -79,10 +84,10 @@ const fetchFavorites = async () => {
 
 const removeFavorite = async (productId) => {
   try {
-    const response = await fetch(`http://api.pioms.shop/warehouse/removeFavorite/${productId}`, {
-
+    const response = await fetch(`http://localhost:5000/franchise/warehouse/removeFavorite/${productId}`, {
       method: 'PUT',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     });
@@ -131,6 +136,14 @@ fetchFavorites();
 
 .header1 {
   background-color: #f0f0f0;
+}
+
+.status-temporary {
+  color: red;
+}
+
+.status-available {
+  color: blue;
 }
 
 .button-as-text {

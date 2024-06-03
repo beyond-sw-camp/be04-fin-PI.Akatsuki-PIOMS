@@ -18,6 +18,7 @@
 <script setup>
 import {defineProps, defineEmits, ref} from 'vue';
 import { useStore } from 'vuex';
+import CategoryList from "@/components/amdin/Category/CategoryList.vue";
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -54,7 +55,7 @@ const deleteCategoryThird = async () => {
     }
 
 
-    const response = await fetch(`http://localhost:5000/admin/category/third/delete/${props.currentThirdCode}?requesterAdminCode=1`, {
+    const response = await fetch(`http://localhost:5000/admin/category/third/delete/${props.currentThirdCode}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -62,12 +63,8 @@ const deleteCategoryThird = async () => {
       },
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`카테고리 소분류 수정에 실패했습니다. 상태 코드: ${response.status}, 메시지: ${errorText}`);
-    }
-
     console.log('카테고리 대분류가 성공적으로 수정되었습니다.');
+    location.reload(CategoryList);
     emits('close');
   } catch (error) {
     console.error('오류:', error);

@@ -4,8 +4,7 @@
         
         
         <div class="info">
-        <h2 align="center">발주서 생성</h2>
-        <br /><br /><br />
+          <div class="divvv-title">발주서 생성</div>
 
       <div class="filter-container">
           <div class="radio-group">
@@ -34,13 +33,13 @@
           </div>
       </div>
 
-    <div align="center">
-      <h3>상품 리스트</h3>
-      <div class="table-wrapper" align="center">
-          <table>
+      <div class="divvv-title">상품 리스트</div>
+
+      <div class="table-container">
+        <table class="table">
             <thead>
-              <tr>
-                <th>상품 코드</th><th>상품 이름</th><th>상품 가격</th><th>본사 수량</th><th>상품 상태</th><th>색상</th><th>상품 설명</th><th>상품카테고리</th><th>성별</th>
+              <tr class="header1">
+                <th>상품 코드</th><th>상품 이름</th><th>상품 가격</th><th>본사 수량</th><th>상품 상태</th><th>색상</th><th>상품 설명</th><th>카테고리(대)</th><th>카테고리(중)</th><th>카테고리(소)</th><th>성별</th>
               </tr>
             </thead>
 
@@ -50,7 +49,8 @@
                   @dblclick="addProductToList(product)" 
                   @mouseenter="highlightRow(index)"
                   @mouseleave="resetRowColor(index)"
-                  style="cursor: pointer;">
+                  class="allpost">
+
                 <td>{{ product.productCode }}</td>
                 <td>{{ product.productName }}</td>
                 <td>{{ product.productPrice }}원</td>
@@ -58,7 +58,9 @@
                 <td>{{ product.productStatus }}</td>
                 <td>{{ product.productColor }}</td>
                 <td>{{ product.productContent }}</td>
-                <td>{{ product.categoryThirdCode }}</td>
+                <td>{{ product.categoryFirstName }}</td>
+                <td>{{ product.categorySecondName }}</td>
+                <td>{{ product.categoryThirdName }}</td>
                 <td>{{ product.productGender }}</td>
               </tr>
             </tbody>
@@ -66,12 +68,12 @@
         </div>
       </div>
         <br>
-        <div align="center">
-        <h3>선택된 상품 리스트</h3>
-        <div class="table-wrapper2">
-        <table>
+        <div class="divvv-title" style="height: 30px;">선택된 상품 리스트</div>
+
+        <div class="table-container">
+          <table class="table">
           <thead>
-            <tr>
+            <tr class="header1">
               <th>상품 코드</th>
               <th>상품 이름</th>
               <th>상품 수량</th>
@@ -79,35 +81,44 @@
               <th>선택</th>
             </tr>
           </thead>
-          <tr v-for="(selectedProduct, index) in selectedProducts" :key="index">
+          <tr v-for="(selectedProduct, index) in selectedProducts" :key="index"
+            class="allpost"
+          >
             <td>{{ selectedProduct.productCode }}</td>
             <td>{{ selectedProduct.productName }}</td>
             <td>{{ selectedProduct.productCount }}</td>
             <td><input type="number" v-model="selectedProduct.quantity" min="1" @change="calculateTotalPrice" /></td>
-            <td><button class="button2" @click="removeProductFromList(index)">취소</button></td>
+            <td><button class="cancel-btn" @click="removeProductFromList(index)">취소</button></td>
           </tr>
         </table>
       </div >
-    </div>
-      <div style="display: flex; justify-content: right;">
+    <div class="action-buttons" >
         <p v-if="totalPrice > 0">총 가격: {{ totalPrice }}원</p>
-        <button @click="exportOrder">발주신청하기</button>
-        <button class="close" @click="showPopup" >돌아가기</button>
-      </div>
+        <button class="cancel-btn" @click="exportOrder">발주신청하기</button>
+        <button class="cancel-btn" @click="showPopup" >돌아가기</button>
       </div>
     </div>
   </div>
+
+
 
   </template>
   
 <script setup>
   import { ref } from "vue";
-  
+  import { useStore } from 'vuex'; // Vuex store 임포트
+  const store = useStore(); // Vuex store 사용
+
+
   const props = defineProps({
     showPopup: Function,
     popupVisible: Boolean,
     writeActive: Boolean,
+    franchiseCode:Number,
+    franchiseOwnerCode:Number
   });
+  const franchiseOwnerCode = props.franchiseOwnerCode;
+  const franchiseCode = props.franchiseCode;
   
   const writeActive = ref(true);
   const filter = ref("");
@@ -137,9 +148,16 @@
   
   const getProducts = async () => {
     try {
-
-      const response = await fetch("/api/franchise/product", {
+      const accessToken = store.state.accessToken;
+    if (!accessToken) {
+      throw new Error('No access token found');
+    }
+      const response = await fetch("http://localhost:5000/franchise/product", {
         method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': `Bearer ${accessToken}`,
+        },
       });
       if (!response.ok) {
         throw new Error("네트워크 오류 발생");
@@ -190,18 +208,26 @@
     acc[product.productCode] = product.quantity;
     return acc;
   }, {});
+  
 
   const orderData = {
-    // products: productsData,
-    franchiseCode: 1 // 실제 프랜차이즈 코드를 사용 예정
+    orderTotalPrice: totalPrice.value,
+    products: productsData,
+    franchiseCode: franchiseCode
   };
 
   try {
-    const response = await fetch("/api/franchise/1/order", {
-        method: "POST",
+    const accessToken = store.state.accessToken;
+    if (!accessToken) {
+      throw new Error('No access token found');
+    }
+    const response = await fetch(`http://localhost:5000/franchise/order`, {
+        method: "POST",        
         headers: {
-          "Content-Type": "application/json"
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify(orderData)
       });
     if (response.status == 406) {
@@ -222,11 +248,7 @@
   }
 
 };
-
-
-  </script>
-  
-  <style scoped>
-
+</script>
+<style scoped>
+  @import "../../assets/css/popup.css" ;
 </style>
-  

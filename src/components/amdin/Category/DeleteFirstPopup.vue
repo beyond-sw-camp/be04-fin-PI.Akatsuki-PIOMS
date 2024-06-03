@@ -18,6 +18,7 @@
 <script setup>
 import { defineProps, defineEmits, ref } from 'vue';
 import { useStore } from 'vuex';
+import CategoryList from "@/components/amdin/Category/CategoryList.vue";
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -41,7 +42,21 @@ const closeDeleteModal = () => {
 const deleteCategoryFirst = async () => {
 
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/first/delete/${props.currentFirstCode}?requesterAdminCode=1`, {
+    const categorySecondResponse = await fetch(`http://localhost:5000/admin/category/second/list/detail/categoryfirst/${props.currentFirstCode}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    })
+    const categorySeconds = await categorySecondResponse.json();
+
+    if(categorySeconds.length > 0) {
+      alert("카테고리를 삭제할 수 없습니다. 하위 카테고리가 존재합니다.");
+      return;
+    }
+
+    const response = await fetch(`http://localhost:5000/admin/category/first/delete/${props.currentFirstCode}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -49,12 +64,8 @@ const deleteCategoryFirst = async () => {
       },
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`카테고리 대분류 수정에 실패했습니다. 상태 코드: ${response.status}, 메시지: ${errorText}`);
-    }
-
     console.log('카테고리 대분류를 삭제하였습니다.');
+    location.reload(CategoryList);
     emits('close');
   } catch (error) {
     console.error('오류:', error);

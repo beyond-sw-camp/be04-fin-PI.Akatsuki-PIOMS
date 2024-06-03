@@ -9,106 +9,82 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v2
         with:
           node-version: '20.x'
 
       - name: Install dependencies
         run: npm ci
 
-      - name: List node_modules
-        run: ls -la node_modules
+      - name: Build project
+        run: npm run build
 
-      - name: Print environment variables
-        run: printenv
-
-      - name: Build
+      - name: Install AWS CLI
         run: |
-          echo "Starting build process..."
-          npm run build
-        env:
-          NODE_ENV: production
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install --update
 
-      - name: Prepare deployment package
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Generate deployment package
         run: |
           mkdir -p .ebextensions
-          cat <<EOF > .ebextensions/nginx.config
+          cat <<EOF > .ebextensions/00-makeFiles.config
           files:
-            "/etc/nginx/conf.d/myapp.conf":
-              mode: "000644"
+            "/etc/nginx/conf.d/vueapp.conf":
+              mode: "000755"
               owner: root
               group: root
               content: |
                 server {
-                  listen 80;
-                  server_name localhost;
-
-                  access_log /var/log/nginx/access.log;
-                  error_log /var/log/nginx/error.log;
-
-                  location / {
-                    proxy_pass http://localhost:8080;
-                    proxy_http_version 1.1;
-                    proxy_set_header Upgrade \$http_upgrade;
-                    proxy_set_header Connection 'upgrade';
-                    proxy_set_header Host \$host;
-                    proxy_cache_bypass \$http_upgrade;
-                  }
-
-                  location /static/ {
-                    alias /usr/share/nginx/html/static/;
-                  }
-
-                  error_page 500 502 503 504 /50x.html;
-                  location = /50x.html {
-                    root /usr/share/nginx/html;
-                  }
+                    listen        80;
+                    server_name   _;
+          
+                    location / {
+                        proxy_pass http://127.0.0.1:8080;
+                        proxy_http_version 1.1;
+                        proxy_set_header Upgrade \$http_upgrade;
+                        proxy_set_header Connection 'upgrade';
+                        proxy_set_header Host \$host;
+                        proxy_cache_bypass \$http_upgrade;
+                    }
+          
+                    error_page  500 502 503 504  /50x.html;
+                    location = /50x.html {
+                        root   /usr/share/nginx/html;
+                    }
                 }
-          container_commands:
-            01_reload_nginx:
-              command: "ln -sfn /etc/nginx/conf.d/myapp.conf /etc/nginx/sites-enabled/myapp && nginx -s reload"
           EOF
+          cat <<EOF > Procfile
+          web: node server.js
+          EOF
+          mkdir -p deploy
+          cp -r dist deploy/
+          cp package.json deploy/
+          cp server.js deploy/
+          cp Procfile deploy/
+          cp -r .ebextensions deploy/
+          cd deploy && zip -r deploy.zip .
 
-          zip -r deploy.zip dist server.js package.json Procfile .ebextensions .platform
-
-      - name: Install AWS CLI
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y awscli
-
-      - name: Install Elastic Beanstalk CLI
-        run: |
-          pip install awsebcli
-
-      - name: Configure AWS CLI
-        run: |
-          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws configure set default.region ap-northeast-2
-
-      - name: Deploy to Elastic Beanstalk
-        run: |
-          eb init AkatsukiFE --platform node.js --region ap-northeast-2
-          eb use AkatsukiFE-env
-          eb deploy
-
-      - name: Check Environment Health
-        run: |
-          STATUS=$(aws elasticbeanstalk describe-environments --environment-names AkatsukiFE-env --query 'Environments[0].Health' --output text)
-          if [ "$STATUS" != "Green" ]; then
-            echo "Environment health is not 'Green'. Current status: $STATUS"
-            exit 1
-          fi
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ap-northeast-2
-
-      - name: Get Logs
-        run: |
-          eb logs AkatsukiFE-env
+      - name: Beanstalk Deploy
+        uses: einaregilsson/beanstalk-deploy@v22
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: AkatsukiFE
+          environment_name: AkatsukiFE-env
+          version_label: github-action-${{ github.sha }}
+          region: ap-northeast-2
+          deployment_package: deploy/deploy.zip
