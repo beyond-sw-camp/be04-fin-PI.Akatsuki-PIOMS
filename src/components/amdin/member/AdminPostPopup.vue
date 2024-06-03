@@ -12,26 +12,23 @@
               <tr>
                 <td class="insert-label">관리자명</td>
                 <td class="insert-input">
-                  <input type="text" v-model="insertProductName" class="textInput-name" placeholder="관리자명을 입력하세요."/>
+                  <input type="text" v-model="insertAdminName" class="textInput-name" placeholder="관리자명을 입력하세요."/>
                 </td>
                 <td class="insert-label">이메일</td>
                 <td class="insert-input">
-                  <input type="text" v-model="insertProductCount" class="textInput" placeholder="재고량을 입력하세요.">
+                  <input type="text" v-model="insertAdminEmail" class="textInput" placeholder="재고량을 입력하세요.">
                 </td>
                 <td class="insert-label">휴대 전화</td>
                 <td class="insert-input">
-                  <input type="number" v-model="insertProductPrice" class="textInput" placeholder="상품 가격을 입력하세요.">
+                  <input type="number" v-model="insertAdminPhone" class="textInput" placeholder="상품 가격을 입력하세요.">
                 </td>
               </tr>
               <tr>
                 <td class="insert-label">역할</td>
                 <td class="insert-input">
-                  <select v-model="insertStatus" class="textInput">
+                  <select v-model="insertAdminRole" class="textInput">
                     <option value="">전체 상태</option>
-                    <option value="공급가능">공급가능</option>
-                    <option value="일시제한">일시제한</option>
-                    <option value="단종">단종</option>
-                    <option value="품절">품절</option>
+                    <option value="ROLE_ADMIN">공급가능</option>
                   </select>
                 </td>
               </tr>
@@ -47,20 +44,25 @@
 
 <script setup>
 import { onMounted, defineEmits, ref } from 'vue';
-import imageSrc from '@/assets/icon/picture.png';
 import { useStore } from 'vuex';
-import ProductList from "@/components/amdin/product/ProductList.vue";
 const store = useStore();
 const accessToken = store.state.accessToken;
 
 const emit = defineEmits(['close']);
 
+const insertAdminName = ref('');
+const insertAdminEmail = ref('');
+const insertAdminPhone = ref('');
+const insertAdminRole = ref('');
+
+
+
 const saveAdmin = async () => {
   const requestData = {
-    adminName: insertProductName.value,
-    adminEmail: insertProductCount.value,
-    adminPhone: insertProductPrice.value,
-    adminRole: insertStatus.value,
+    adminName: insertAdminName.value,
+    adminEmail: insertAdminEmail.value,
+    adminPhone: insertAdminPhone.value,
+    adminRole: insertAdminRole.value,
   };
 
   console.log('Request Data:', requestData);
