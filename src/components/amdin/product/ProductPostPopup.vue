@@ -413,32 +413,33 @@ const uploadAndSaveProduct = async () => {
 <style scoped>
 .popup-overlay {
   position: fixed;
-  left: 50%;
-  top: 50%;
-  width: 50%;
-  margin-left: -25%;
-  height: 300px;
-  margin-top: -150px;
-  z-index: 1000;
-  background: white;
-  border: 1px solid #d1d8dd;
-  box-shadow: 0 0 6px 1px rgb(0 0 0 / 30%);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
 }
 
 .popup-content {
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
-  position: relative;
-  width: 1200px;
-  height: 1200px;
-  text-align: center;
-  overflow-y: auto; /* 내용이 많을 경우 스크롤 추가 */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f5f5f5;
+  padding: 40px;
+  border-radius: 30px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  width: 60%;
+  //max-width: 2000px;
+  height: 65%;
+  overflow-y: auto;
+  max-height: 84vh;
 }
 
 .close-button {
   position: absolute;
-  top: 32px;
+  top: 50px;
   right: 80px;
   background: none;
   border: none;
@@ -458,12 +459,13 @@ const uploadAndSaveProduct = async () => {
   background-color: #D9D9D9;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  width: 1063px;
-  margin-left: 3.2%;
+  //width: 1063px;
+  width: 95%;
+  //margin-left: 3.2%;
 }
 
 .popup-body {
-  padding: 10px;
+  //padding: 10px;
   padding-top: unset;
 }
 
@@ -570,6 +572,7 @@ h2 {
 
 .imgForm {
   text-align: center;
+  width: 100%;
 }
 
 .img-close-button {
@@ -634,5 +637,10 @@ h2 {
   border-radius: 5px;
   margin-left: 1%;
 }
+.img{
+  width: 200px;
+  height:200px;
+}
+
 </style>
 

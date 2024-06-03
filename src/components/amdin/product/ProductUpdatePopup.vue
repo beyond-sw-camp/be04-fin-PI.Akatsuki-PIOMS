@@ -8,7 +8,7 @@
       <div class="popup-body">
         <div class="insert-section">
           <div class="table-wrapper">
-            <table class="category-table">
+            <table class="top-table">
               <tr>
                 <td class="second-insert-label">
                   <div class="second-insert-label0">카테고리 구분</div>
@@ -33,9 +33,15 @@
                     </option>
                   </select>
                 </td>
+              </tr>
+              <tr>
                 <td class="insert-label">상품명</td>
                 <td class="insert-input-name">
                   <input type="text" :value="currentProductName" @input="updateName = $event.target.value" class="textInput" />
+                </td>
+                <td class="insert-label">재고량</td>
+                <td class="insert-input">
+                  <input type="number" :value="currentProductCount" @input="updateCount = $event.target.value" class="textInput" />
                 </td>
               </tr>
             </table>
@@ -63,14 +69,12 @@
                     <option value="110">110</option>
                   </select>
                 </td>
+
               </tr>
             </table>
             <table class="insert-table">
               <tr>
-                <td class="insert-label">재고량</td>
-                <td class="insert-input">
-                  <input type="number" :value="currentProductCount" @input="updateCount = $event.target.value" class="textInput" />
-                </td>
+
                 <td class="insert-label">가격</td>
                 <td class="insert-input">
                   <input type="number" :value="currentProductPrice" @input="updatePrice = $event.target.value" class="textInput" />
@@ -282,27 +286,28 @@ watch(updateSecond, async (newVal) => {
 <style scoped>
 .popup-overlay {
   position: fixed;
-  left: 50%;
-  top: 50%;
-  width: 50%;
-  margin-left: -25%;
-  height: 300px;
-  margin-top: -150px;
-  z-index: 1000;
-  background: white;
-  border: 1px solid #d1d8dd;
-  box-shadow: 0 0 6px 1px rgb(0 0 0 / 30%);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
 }
 
 .popup-content {
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
-  position: relative;
-  width: 1200px;
-  height: 1200px;
-  text-align: center;
-  overflow-y: auto; /* 내용이 많을 경우 스크롤 추가 */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 30px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  width: 50%;
+  max-width: 2000px;
+  height: 73%;
+  overflow-y: auto;
+  max-height: 90vh;
 }
 
 .close-button {
@@ -327,12 +332,11 @@ watch(updateSecond, async (newVal) => {
   background-color: #D9D9D9;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  width: 1063px;
-  margin-left: 3.2%;
+  //border-radius: 5px;
+  //margin-bottom: 20px;;
 }
 
 .popup-body {
-  padding: 10px;
   padding-top: unset;
 }
 
@@ -362,14 +366,17 @@ h2 {
 }
 
 .insert-section {
-  display: flex;
   justify-content: center;
+  width: 100%;
 }
 
 .insert-table {
   border-collapse: collapse;
+  background-color: #f9f9f9;
   border: 1px solid #ddd;
+  border-radius: 5px;
   padding: 10px;
+  border-top: none;
 }
 .table-wrapper {
   border-radius: 0 !important;
@@ -386,22 +393,25 @@ h2 {
   font-weight: bold;
   text-align: center;
   font-size: 12px;
-  width: 10%;
+  min-width: 100px;
+  max-width: 100px;
   background-color: #D9D9D9;
   border: 1px solid #ddd;
   height: 50px;
 }
 
 .insert-input {
-  width: 200px;
+  width: 100%;
+  min-width: 200px;
+  max-width: 200px;
   text-align: left;
   border: 1px solid lightgray;
   border-right: none;
   height: 30px;
-
 }
 .insert-input-name {
-  width: 500px;
+  width: 100%;
+  min-width: 200px;
   text-align: left;
   border: 1px solid lightgray;
   border-right: none;
@@ -439,16 +449,19 @@ h2 {
   font-weight: bold;
   text-align: center;
   font-size: 12px;
-  width: 10%;
+  min-width: 100px;
+  max-width: 100px;
   background-color: #D9D9D9;
   border: 1px solid #ddd;
-
+  height: 50px;
 }
 
 .second-insert-input {
-  width: 490px;
+  width: 100%;
   border: 1px solid lightgray;
   border-right: none;
+  text-align: left;
+
 }
 
 .textInput {
@@ -492,6 +505,7 @@ h2 {
 .second-insert-label0 {
   text-align: center;
   font-size: 12px;
+
 }
 .top-table {
   border-collapse: collapse;
