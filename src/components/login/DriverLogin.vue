@@ -19,10 +19,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import {ref} from 'vue';
+import {useRouter} from 'vue-router';
 import Swal from 'sweetalert2';
-import { useStore } from 'vuex';
+import {useStore} from 'vuex';
 
 const username = ref('');
 const password = ref('');
@@ -51,7 +51,7 @@ const login = async () => {
       console.log('추출한 accessToken:', accessToken);
 
       if (accessToken) {
-        await store.dispatch('login', { accessToken });
+        await store.dispatch('login', {accessToken});
         await router.push('/driver/home');
       } else {
         throw new Error('Access token not found');
@@ -79,16 +79,22 @@ const login = async () => {
 };
 </script>
 
-
 <style scoped>
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* 스크롤을 없애기 위한 스타일 */
+}
 
 .login-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 90vh;
+  height: 100%;
 }
 
 .logo {
@@ -114,7 +120,7 @@ const login = async () => {
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
-  width: 300px; /* 폼의 고정된 너비를 설정 */
+  width: 300px;
 }
 
 .login-form h2 {
@@ -153,7 +159,7 @@ const login = async () => {
   color: #fff;
   font-weight: bold;
   font-size: 1em;
-  background: rgb(185,185,185);
+  background: rgb(185, 185, 185);
   transition: all 0.2s;
   border-radius: 3px;
   cursor: pointer;
@@ -162,19 +168,19 @@ const login = async () => {
 .login-button:hover {
   background-image: linear-gradient(
       to right,
-      rgb(252,111,134),
-      rgb(252,111,134) 16.65%,
-      rgb(255,205,75) 16.65%,
-      rgb(255,205,75) 33.3%,
-      rgb(57,76,169) 33.3%,
-      rgb(57,76,169) 49.95%,
-      rgb(252,111,134) 49.95%,
-      rgb(252,111,134) 66.6%,
-      rgb(255,205,75) 66.6%,
-      rgb(255,205,75) 83.25%,
-      rgb(57,76,169) 83.25%,
-      rgb(57,76,169) 100%,
-      rgb(185,185,185) 100%
+      rgb(252, 111, 134),
+      rgb(252, 111, 134) 16.65%,
+      rgb(255, 205, 75) 16.65%,
+      rgb(255, 205, 75) 33.3%,
+      rgb(57, 76, 169) 33.3%,
+      rgb(57, 76, 169) 49.95%,
+      rgb(252, 111, 134) 49.95%,
+      rgb(252, 111, 134) 66.6%,
+      rgb(255, 205, 75) 66.6%,
+      rgb(255, 205, 75) 83.25%,
+      rgb(57, 76, 169) 83.25%,
+      rgb(57, 76, 169) 100%,
+      rgb(185, 185, 185) 100%
   );
   animation: var(--timing) linear dance6123 infinite;
   transform: scale(1.1) translateY(-1px);
