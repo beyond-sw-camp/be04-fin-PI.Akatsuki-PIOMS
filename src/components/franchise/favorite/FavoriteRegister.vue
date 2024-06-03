@@ -121,7 +121,7 @@ const franchiseCode = 1;
 // Fetch products from the server
 const fetchProducts = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/warehouse/list/product/${franchiseCode}`, {
+    const response = await fetch(`http://localhost:5000/warehouse/list/product`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
