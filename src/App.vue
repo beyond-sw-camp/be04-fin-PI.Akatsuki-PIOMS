@@ -20,7 +20,7 @@
 import { computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import Footer from "@/components/layouts/footer/Footer.vue";
-import RootAdminHeader from "@/components/layouts/header/RootAdminHeader.vue";
+import RootAdminHeader from "@/components/layouts/header/AdminHeader.vue";
 import DriverHeader from "@/components/layouts/header/DriverHeader.vue";
 import FranchiseHeader from "@/components/layouts/header/FranchiseHeader.vue";
 
