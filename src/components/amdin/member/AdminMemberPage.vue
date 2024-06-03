@@ -27,6 +27,10 @@
       </button>
     </div>
     <div class="post-btn" id="app">
+      <button @click="showPostPopup = true" class="postBtn">
+        <img src="@/assets/icon/new%20Item.png" alt="postProduct">
+      </button>
+      <AdminPostPopup v-if="showPostPopup" @close="showPostPopup = false"/>
       <button @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
     </div>
     <div class="table-container">
@@ -57,6 +61,7 @@
 import { ref, computed } from 'vue';
 import axios from "axios";
 import { useStore } from 'vuex';
+import AdminPostPopup from "@/components/amdin/member/AdminPostPopup.vue";
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -76,6 +81,8 @@ const headers = ref([
   { key: 'deleteDate', label: '삭제일'},
   { key: 'accessNumber', label: '발급코드'},
 ]);
+
+const showPostPopup = ref(false);
 
 const filteredLists = ref([]);
 const currentPage = ref(1);
@@ -164,15 +171,6 @@ getAdminMembers();
 </script>
 
 <style scoped>
-.product-img {
-  width: 30px;
-  height: 30px;
-  transition: transform 0.5s ease;
-}
-.product-img:hover {
-  transform: scale(3.3);
-}
-
 .pagination {
   margin-top: 10px;
   margin-bottom: 100px;
@@ -294,7 +292,10 @@ getAdminMembers();
   height: 10px;
   table-layout: fixed;
 }
-
+.table-td {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .header1 {
   background-color: #D9D9D9;
   font-weight: bold;
