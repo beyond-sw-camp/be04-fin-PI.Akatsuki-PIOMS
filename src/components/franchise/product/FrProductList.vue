@@ -237,7 +237,6 @@ const setCurrentCategorySecondName = (categorySecondName) => {
 const setCurrentCategoryThirdName = (categoryThirdName) => {
   currentCategoryThirdName.value = categoryThirdName;
 }
-
 const getProductImageUrl = (productCode) => {
   return productImages.value[productCode] || 'path/to/default-image.jpg';
 };
@@ -405,7 +404,6 @@ const getMemberId = async () => {
     console.error('오류 발생:', error);
   }
 };
-
 const downloadExcel = () => {
   axios({
     url: 'http://localhost:5000/franchise/exceldownload/product-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
