@@ -129,7 +129,6 @@ const updateFirst = ref('');
 const updateSecond = ref('');
 const updateThird = ref('');
 const updateContent = ref('');
-
 const props = defineProps({
   currentProductCode: String,
   currentProductName: String,
@@ -144,6 +143,7 @@ const props = defineProps({
   currentProductContent: String,
   closeEdit: Function
 });
+
 const submitProduct = async () => {
   const requestData = {
     productName: updateName.value !== '' ? updateName.value : props.currentProductName,
@@ -237,11 +237,9 @@ const fetchCategories = async (level) => {
 const getCategoryFirstName = (code) => {
   return categoryFirstMap.value[code] || '';
 };
-
 const getCategorySecondName = (code) => {
   return categorySecondMap.value[code] || '';
 };
-
 const getCategoryThirdName = (code) => {
   return categoryThirdMap.value[code] || '';
 };
@@ -269,13 +267,11 @@ onMounted(async () => {
     await fetchCategories('third');
   }
 });
-
 watch(updateFirst, async (newVal) => {
   if (newVal) {
     await fetchCategories('second');
   }
 });
-
 watch(updateSecond, async (newVal) => {
   if (newVal) {
     await fetchCategories('third');
