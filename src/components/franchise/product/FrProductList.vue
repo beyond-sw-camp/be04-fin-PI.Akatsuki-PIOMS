@@ -351,7 +351,8 @@ const resetFilters = () => {
 };
 const getMemberId = async () => {
   try {
-    const response = await fetch('http://localhost:5000/franchise/product', {
+    // Product 데이터 가져오기
+    const productResponse = await fetch('http://localhost:5000/franchise/product', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -359,22 +360,52 @@ const getMemberId = async () => {
       },
     });
 
-    if (!response.ok) {
+    if (!productResponse.ok) {
       throw new Error('네트워크 오류 발생');
     }
 
-    const data = await response.json();
-    if (data.length > 0) {
-      lists.value = data.map(({ product, ...rest }) => rest);
-      filteredLists.value = lists.value;
-    } else {
-      lists.value = [];
-      filteredLists.value = [];
+    const productData = await productResponse.json();
+
+    // FranchiseWarehouse 데이터 가져오기
+    const franchiseWarehouseResponse = await fetch('http://localhost:5000/franchise/warehouse', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!franchiseWarehouseResponse.ok) {
+      throw new Error('프랜차이즈 웨어하우스 정보를 가져오는 중 오류 발생');
     }
+
+    const franchiseWarehouseData = await franchiseWarehouseResponse.json();
+
+    // 각 제품에 대한 FranchiseWarehouse 정보를 추가하여 목록 완성
+    lists.value = productData.map(product => {
+      const correspondingWarehouse = franchiseWarehouseData.find(warehouse => warehouse.product.productCode === product.productCode);
+      return {
+        productCode: product.productCode,
+        productName: product.productName,
+        imgUrl: product.imgUrl, // 예상 코드, 실제 이미지 URL을 가져오는 코드로 변경해야 함
+        franchiseWarehouseCount: correspondingWarehouse ? correspondingWarehouse.franchiseWarehouseCount : 0,
+        franchiseWarehouseEnable: correspondingWarehouse ? correspondingWarehouse.franchiseWarehouseEnable : 0,
+        productNoticeCount: product.productNoticeCount,
+        productStatus: product.productStatus,
+        productColor: product.productColor,
+        productSize: product.productSize,
+        categoryFirstName: product.categoryFirstName,
+        categorySecondName: product.categorySecondName,
+        categoryThirdName: product.categoryThirdName,
+      };
+    });
+
+    filteredLists.value = lists.value;
   } catch (error) {
     console.error('오류 발생:', error);
   }
 };
+
 const downloadExcel = () => {
   axios({
     url: 'http://localhost:5000/franchise/exceldownload/product-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
