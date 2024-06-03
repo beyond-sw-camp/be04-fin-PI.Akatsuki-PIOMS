@@ -2,7 +2,7 @@
   <div>
     <div class="headerTitle">
         <h3 class="product-title"><img src="@/assets/icon/Cloth.png">상품 및 재고 관리 > 재고 관리 > 재고 알림 관리 </h3>
-    <h6 class="product-sub-title">조회할 상품의 조건을 선택 후
+    <h6 class="product-sub-title" style="margin-top: 1%; margin-bottom: 1%">조회할 상품의 조건을 선택 후
       <img src="@/assets/icon/reset.png">초기화 또는 <img src="@/assets/icon/search.png">검색을 눌러주세요.
     </h6>
     </div>
@@ -13,11 +13,12 @@
         <tr>
           <td class="filter-label">상품명</td>
           <td class="filter-input">
-            <input type="text" v-model="filterProductName" class="textInput"/>
+            <input type="text" v-model="filterProductName" class="textInput" placeholder="상품명을 입력하세요."/>
           </td>
           <td class="filter-label">상품상태</td>
           <td class="filter-input">
             <select id="filterStatus" v-model="filterStatus" class="textInput">
+              <option hidden="hidden" value="">전체</option>
               <option value="공급가능">공급가능</option>
               <option value="일시제한">일시제한</option>
               <option value="단종">단종</option>
@@ -29,6 +30,7 @@
           <td class="filter-label">색상</td>
           <td class="filter-input">
             <select id="filterColor" v-model="filterColor" class="textInput">
+              <option hidden="hidden" value="">전체</option>
               <option value="빨간색">빨간색</option>
               <option value="주황색">주황색</option>
               <option value="노란색">노란색</option>
@@ -41,6 +43,7 @@
           <td class="filter-label">사이즈</td>
           <td class="filter-input">
             <select id="filterSize" v-model="filterSize" class="textInput">
+              <option hidden="hidden" value="">전체</option>
               <option value="90">90</option>
               <option value="95">95</option>
               <option value="100">100</option>
@@ -93,7 +96,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost" :id="'row-' + rowIndex">
+        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost" :id="'row-' + rowIndex"
+            @click="showDetailPopup(item.productCode,item.productName,item.productCount,item.productPrice,item.productStatus,item.productColor,item.productSize,item.categoryFirstName,item.categorySecondName,item.categoryThirdName,item.productContent)">
           <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">
               {{ item[header.key] }}
             <template v-if="header.key === 'imgUrl'">
@@ -112,6 +116,18 @@
       <span> {{currentPage}} / {{totalPages}} </span>
       <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
     </div>
+    <ProductDetailPopup v-if="detailPopup" :currentProductCode="currentProductCode"
+                        :currentProductName="currentProductName"
+                        :currentProductCount="currentProductCount"
+                        :currentProductPrice="currentProductPrice"
+                        :currentProductStatus="currentProductStatus"
+                        :currentProductColor="currentProductColor"
+                        :currentProductSize="currentProductSize"
+                        :currentCategoryFirstName="currentCategoryFirstName"
+                        :currentCategorySecondName="currentCategorySeconName"
+                        :currentCategoryThirdName="currentCategoryThirdName"
+                        :currentProductContent="currentProductContent"
+                        :closeEdit="closePopup"/>
   </div>
 </template>
 
@@ -119,6 +135,7 @@
 import { ref, computed } from 'vue';
 import axios from "axios";
 import { useStore } from 'vuex';
+import ProductDetailPopup from "@/components/franchise/product/ProductDetailPopup.vue";
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -133,7 +150,9 @@ const headers = ref([
   { key: 'productStatus', label: '상품 상태'},
   { key: 'productColor', label: '색상'},
   { key: 'productSize', label: '사이즈'},
-  { key: 'categoryThirdCode', label: '카테고리 코드'},
+  { key: 'categoryFirstName', label: '카테고리 코드'},
+  { key: 'categorySecondName', label: '카테고리 코드'},
+  { key: 'categoryThirdName', label: '카테고리 코드'},
 ]);
 
 const filteredLists = ref([]);
@@ -152,6 +171,72 @@ const selectedFirstCategory = ref('');
 const selectedSecondCategory = ref('');
 const selectedThirdCategory = ref('');
 const productImages = ref({});
+
+const currentProductCode = ref('');
+const currentProductName = ref('');
+const currentProductCount = ref('');
+const currentProductPrice = ref('');
+const currentProductStatus = ref('');
+const currentProductColor = ref('');
+const currentProductSize = ref('');
+const currentCategoryFirstName = ref('');
+const currentCategorySecondName = ref('');
+const currentCategoryThirdName = ref('');
+const currentProductContent = ref('');
+
+const detailPopup = ref(false);
+
+const showDetailPopup = (productCode, productName, productCount, productPrice, productStatus, productColor, productSize,
+                         categoryFirstName, categorySecondName, categoryThirdName, productContent) => {
+  detailPopup.value = !detailPopup.value;
+  setCurrentProductCode(productCode);
+  setCurrentProductName(productName);
+  setCurrentProductCount(productCount);
+  setCurrentProductPrice(productPrice);
+  setCurrentProductStatus(productStatus);
+  setCurrentProductColor(productColor);
+  setCurrentProductSize(productSize);
+  setCurrentCategoryFirstName(categoryFirstName);
+  setCurrentCategorySecondName(categorySecondName);
+  setCurrentCategoryThirdName(categoryThirdName);
+  setCurrentProductContent(productContent);
+}
+const closePopup = () => {
+  detailPopup.value = !detailPopup.value;
+}
+const setCurrentProductCode = (productCode) => {
+  currentProductCode.value = productCode;
+};
+const setCurrentProductName = (productName) => {
+  currentProductName.value = productName;
+}
+const setCurrentProductCount = (productCount) => {
+  currentProductCount.value = productCount;
+}
+const setCurrentProductPrice = (productPrice) => {
+  currentProductPrice.value = productPrice;
+}
+const setCurrentProductStatus = (productStatus) => {
+  currentProductStatus.value = productStatus;
+}
+const setCurrentProductColor = (productColor) => {
+  currentProductColor.value = productColor;
+}
+const setCurrentProductSize = (productSize) => {
+  currentProductSize.value = productSize;
+}
+const setCurrentProductContent = (productContent) => {
+  currentProductContent.value = productContent;
+}
+const setCurrentCategoryFirstName = (categoryFirstName) => {
+  currentCategoryFirstName.value = categoryFirstName;
+}
+const setCurrentCategorySecondName = (categorySecondName) => {
+  currentCategorySecondName.value = categorySecondName;
+}
+const setCurrentCategoryThirdName = (categoryThirdName) => {
+  currentCategoryThirdName.value = categoryThirdName;
+}
 
 const getProductImageUrl = (productCode) => {
   return productImages.value[productCode] || 'path/to/default-image.jpg';
