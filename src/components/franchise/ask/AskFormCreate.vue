@@ -79,25 +79,28 @@ const submitAsk = async () => {
   }
 
   try {
-    const response = await fetch(`http://localhost:5000/franchise/ask/create`, {
+    const response = await fetch(`http://localhost:5000/franchise/create`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${accessToken}`,
+        'Authorization': `Bearer ${accessToken}`, // 인증 헤더 설정
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        title: askTitle.value,
-        content: askContent.value,
+        title: askTitle.value, // 수정된 필드명 사용
+        content: askContent.value, // 수정된 필드명 사용
       }),
     });
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
+
     await Swal.fire({
       icon: 'success',
       title: '등록 성공',
       text: '등록이 완료되었습니다.',
     });
+
     emit('refreshData');
     props.closeCreate();
     window.location.reload(); // 페이지 새로고침
@@ -110,6 +113,10 @@ const submitAsk = async () => {
     });
   }
 };
+
+
+
+
 
 onMounted(fetchFranchiseOwnerData);
 </script>

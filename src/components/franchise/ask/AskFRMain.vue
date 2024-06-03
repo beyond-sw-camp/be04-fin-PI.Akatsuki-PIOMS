@@ -108,7 +108,7 @@ const breadcrumbs = [
 
 const fetchAsks = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/franchise/ask/list`, {
+    const response = await fetch(`http://localhost:5000/franchise/asklist`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
