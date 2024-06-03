@@ -3,7 +3,7 @@
     <img src="../../assets/icon/List.png" alt="List Icon" class="breadcrumb-icon" />
     <span>주문 조회 및 관리</span>
   </div>
-  <div class="container" >
+
     <div class="filter-section">
       <table class="filter-table">
         <tr>
@@ -54,9 +54,9 @@
       <button @click="applyFilter" class="search-btn">
         <img src="@/assets/icon/search.png" alt="Search" />
       </button>
+      <button class="create-btn"  @click="showPopup" >발주하기</button>
     </div>
 
-    <input class="create-button" type="button" value="발주하기" @click="showPopup" style="  cursor : pointer; border:0; ">
 
     <popup 
         v-if="createPopup"    
@@ -72,12 +72,10 @@
         :franchiseCode="franchiseCode"
         :franchiseOwnerCode="franchiseOwnerCode"
         />
-  <div style="justify-content: center;
-  display: flex;
-  align-items: center;">
-    <table style=" margin-top: 5%;">
+  <div class="table-container">
+    <table class="table">
       <thead >
-        <tr>
+        <tr class="header1">
           <th>발주번호</th><th>발주일</th><th>송장번호</th><th>배송예정일</th><th>발주상태</th>
         </tr>
       </thead>
@@ -89,25 +87,29 @@
             @mouseenter="highlightRow(rowIndex)"
             @mouseleave="resetRowColor(rowIndex)"
             align="center"
+            class="allpost"
         >
-          <td>{{ item.orderCode }}</td>
-          <td>{{ item.orderDate }}</td>
-          <td>{{ item.invoiceCode }}</td>
-          <td>{{ item.invoiceDate }}</td>
+          <td >{{ item.orderCode }}</td>
+          <td >{{ item.orderDate }}</td>
+          <td v-if="item.invoiceCode!=0" class="num" style="width:5%">{{ item.invoiceCode }}</td>
+          <td v-else class="num" style="width:5%">-</td>
+          <td v-if="item.invoiceDate!=null">{{ item.invoiceDate }}</td>
+          <td v-else>-</td>
+          
 
-          <td v-if="item.orderCondition=='승인대기'">
+          <td v-if="item.orderCondition=='승인대기'" >
             <div class="condition-button pending">승인대기</div>
           </td>
-          <td v-else-if="item.orderCondition=='승인완료'">
-            <div class="condition-button approved">승인완료</div>
+          <td v-else-if="item.orderCondition=='승인완료'" class="num">
+            <div class="condition-button approved" >승인완료</div>
           </td>
-          <td v-else-if="item.orderCondition=='승인거부'">
+          <td v-else-if="item.orderCondition=='승인거부'" class="num">
             <div class="condition-button rejected">승인거부</div>
           </td>
-          <td v-else-if="item.orderCondition=='검수대기'">
+          <td v-else-if="item.orderCondition=='검수대기'" class="num">
             <div class="condition-button inspection-pending">검수대기</div>
           </td>
-          <td v-else-if="item.orderCondition=='검수완료'">
+          <td v-else-if="item.orderCondition=='검수완료'" class="num">
             <div class="condition-button inspection-completed">검수완료</div>
           </td>
 
@@ -120,7 +122,7 @@
       <span>페이지 {{ currentPage }} / {{ totalPages }}</span>
       <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
     </div>
-  </div>
+
 </template>
 
 

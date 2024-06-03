@@ -155,7 +155,7 @@ onMounted(fetchAskData);
 }
 
 .detail-table {
-  width: 100%x;
+  width: 100%;
   border-collapse: collapse;
   align-content: center;
   justify-content: center;
