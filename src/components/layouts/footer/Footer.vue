@@ -21,7 +21,7 @@ html, body, #app {
   background-color: #ffffff;
   padding-top: 15px;
   z-index: 10000;
-  position: fixed;
+  //position: fixed;
   bottom: 20px;
 }
 

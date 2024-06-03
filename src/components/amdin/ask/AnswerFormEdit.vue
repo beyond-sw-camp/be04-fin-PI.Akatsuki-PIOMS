@@ -202,7 +202,7 @@ textarea {
   gap: 10px;
   justify-content: flex-end;
   background-color: white;
-  padding: 5px;
+  //padding: 5px;
 }
 
 .cancel-btn {
