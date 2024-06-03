@@ -125,7 +125,7 @@ const itemsPerPage = 15;
 
 const getNotice = async () => {
   try {
-    const response = await fetch('http://localhost:5000/admin/notice/list', {
+    const response = await fetch('http://api.pioms.shop/admin/notice/list', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -245,8 +245,8 @@ const submitNotice = async (notice) => {
   try {
     const method = isEditFormVisible.value ? 'PUT' : 'POST';
     const url = isEditFormVisible.value
-        ? `http://localhost:5000/admin/notice/list/update/${notice.noticeCode}?requesterAdminCode=1`
-        : 'http://localhost:5000/admin/notice/list/register?requesterAdminCode=1';
+        ? `http://api.pioms.shop/admin/notice/list/update/${notice.noticeCode}?requesterAdminCode=1`
+        : 'http://api.pioms.shop/admin/notice/list/register?requesterAdminCode=1';
 
     const response = await fetch(url, {
       method: method,
@@ -274,7 +274,7 @@ const submitNotice = async (notice) => {
 const deleteNotice = async (noticeCode) => {
   try {
     if (confirm('해당 공지사항을 삭제하시겠습니까?')) {
-      const response = await fetch(`http://localhost:5000/admin/notice/list/delete/${noticeCode}?requesterAdminCode=1`, {
+      const response = await fetch(`http://api.pioms.shop/admin/notice/list/delete/${noticeCode}?requesterAdminCode=1`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -311,28 +311,28 @@ onMounted(() => {
 });
 </script>
 
-  <style scoped>
-  .modify,
-  .delete {
-    color: #ffffff;
-    font-weight: bold;
-    border-radius: 5px;
-    border: 0;
-    width: 50px;
-  }
+<style scoped>
+.modify,
+.delete {
+  color: #ffffff;
+  font-weight: bold;
+  border-radius: 5px;
+  border: 0;
+  width: 50px;
+}
 
-  .modify {
-    background-color: #999999;
-  }
-  .delete {
-    background-color: #FC6F86;
-  }
-  .table-td button {
-    border: none;
-    background-color: #ffffff;
-  }
-  /* 공통 스타일 */
-  .container {
+.modify {
+  background-color: #999999;
+}
+.delete {
+  background-color: #FC6F86;
+}
+.table-td button {
+  border: none;
+  background-color: #ffffff;
+}
+/* 공통 스타일 */
+.container {
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -341,40 +341,40 @@ onMounted(() => {
   padding: 20px;
   position: relative;
   top: 10px;
-  }
+}
 
-  .F-title {
+.F-title {
   margin-right: 10px;
   font-weight: bold;
   font-size: 20px;
   position: relative;
   top: 2px;
-  }
+}
 
-  .notice {
+.notice {
   margin-right: 10px;
-  }
+}
 
-  .read-filter {
+.read-filter {
   margin-bottom: 20px;
   background-color: #ffffff;
   border: 1px solid #D9D9D9;
   border-radius: 5px;
   padding: 10px;
   width: 1600px;
-  }
+}
 
-  .read-filter td {
+.read-filter td {
   border: none;
-  }
+}
 
-  .filter-label,
-  .filter1,
-  .filter-date {
+.filter-label,
+.filter1,
+.filter-date {
   cursor: default;
-  }
+}
 
-  .filter-label {
+.filter-label {
   font-size: 16px;
   text-align: center;
   width: 120px;
@@ -382,9 +382,9 @@ onMounted(() => {
   font-weight: bold;
   background-color: #D9D9D9;
   color: #444444;
-  }
+}
 
-  .filter-section {
+.filter-section {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -393,69 +393,69 @@ onMounted(() => {
   font-size: 14px;
   margin-bottom: 0;
   border-color: #d9d9d9;
-  }
+}
 
-  .filter-input {
+.filter-input {
   width: 400px;
   height: 30px;
   padding: 10px;
   margin-left: 20px;
   border-right: 1px solid #d9d9d9;
-  }
+}
 
-  .filter1 {
+.filter1 {
   font-size: 14px;
   display: flex;
   justify-content: flex-start;
   margin-left: 10px;
   position: relative;
   top: 4px
-  }
+}
 
-  .filter-input,
-  .filter-section {
+.filter-input,
+.filter-section {
   font-size: 16px;
-  }
+}
 
-  .filter-date {
+.filter-date {
   border-top: 1px solid #D9D9D9 !important;
   border-color: #d9d9d9;
-  }
+}
 
-  notice-table {
+notice-table {
   width: 1600px;
   border-collapse: collapse;
-  }
+}
 
-  .notice-list {
-    width: 1600px;
-  }
-  .notice-list tr td {
-    text-align: center;
-  }
-  .notice-list thead tr td {
-    background-color: #d9d9d9;
-    font-weight: bold;
-  }
+.notice-list {
+  width: 1600px;
+}
+.notice-list tr td {
+  text-align: center;
+}
+.notice-list thead tr td {
+  background-color: #d9d9d9;
+  font-weight: bold;
+}
 
-  .notice-table th,
-  .notice-table td {
+.notice-table th,
+.notice-table td {
   padding: 10px;
   font-size: 14px;
   color: #444444;
-  }
+}
 
-  .notice-table th {
+.notice-table th {
   background-color: #d9d9d9;
-  }
+}
 
-  .notice-table td {
+.notice-table td {
   position: relative;
   top:5px;
-  }
+}
 
-  /* 팝업 */
-  .overlay {
+/* 팝업 */
+.overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -465,33 +465,33 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  }
+}
 
-  notice-form {
+notice-form {
   background: white;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   max-width: 500px; /* 팝업의 최대 너비 */
-  }
+}
 
-  .notice-form h2 {
+.notice-form h2 {
   margin-bottom: 16px;
-  }
+}
 
-  .notice-form form div {
+.notice-form form div {
   margin-bottom: 12px;
-  }
+}
 
-  .notice-form input,
-  .notice-form textarea {
+.notice-form input,
+.notice-form textarea {
   width: calc(100% - 20px); /* 팝업의 패딩 값 제외한 너비 */
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  }
+}
 
-  .notice-form button {
+.notice-form button {
   padding: 8px 12px;
   margin-right: 8px;
   border: none;
@@ -499,19 +499,19 @@ onMounted(() => {
   color: white;
   cursor: pointer;
   border-radius: 4px;
-  }
+}
 
-  .notice-form button[type="button"] {
+.notice-form button[type="button"] {
   background: #6c757d;
-  }
+}
 
-  .notice-form button:disabled {
+.notice-form button:disabled {
   background: #ccc;
   cursor: not-allowed;
-  }
+}
 
-  #startDate,
-  #endDate {
+#startDate,
+#endDate {
   width: 170px;
   height: 30px;
   font-size: 16px;
@@ -519,19 +519,19 @@ onMounted(() => {
   margin-left: 10px;
   border: 1px solid #d9d9d9;
   color: #444444;
-  }
+}
 
-  .button-container {
+.button-container {
   display: flex;
   justify-content: center; /* 버튼을 왼쪽에 정렬 */
   align-items: center; /* 버튼을 수직 가운데에 정렬 */
   gap: 10px; /* 버튼 사이의 간격을 설정 */
-  }
+}
 
-  .btn-saveNotice {
+.btn-saveNotice {
   display: flex;
   position: relative;
-    left: 1480px;
+  left: 1480px;
   height: 35px;
   font-size: 16px;
   font-weight: bold;
@@ -543,28 +543,28 @@ onMounted(() => {
   align-items: center;
   cursor: pointer;
   border: 0;
-    margin-bottom: 10px;
-    width: 115px;
-  }
+  margin-bottom: 10px;
+  width: 115px;
+}
 
-  .btn-saveNotice:hover {
+.btn-saveNotice:hover {
   background-color: #9a9a9a;
   color: #ffffff;
-  }
+}
 
-  .btn-reset,
-  .btn-search {
-    border: none;
-    background-color: #ffffff;
-  }
+.btn-reset,
+.btn-search {
+  border: none;
+  background-color: #ffffff;
+}
 
-  .reset,
-  .search {
+.reset,
+.search {
   width: 40px;
   height: 40px;
   justify-content: center;
   border: none;
-    background-color: #ffffff;
-  }
+  background-color: #ffffff;
+}
 
-  </style>
+</style>
