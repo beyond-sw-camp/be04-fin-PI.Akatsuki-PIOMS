@@ -278,7 +278,7 @@ const resetRowColor = (index) => {
 
 
 
-<style>
+<style scoped>
   @import "../../assets/css/order.css" ;
   
 </style>

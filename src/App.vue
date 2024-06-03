@@ -1,4 +1,5 @@
 <template>
+
   <div id="app">
     <header>
       <RootAdminHeader v-if="userRole === 'ROLE_ROOT'" />
@@ -10,10 +11,6 @@
     <main class="main">
       <router-view />
     </main>
-
-    <aside>
-      <!-- <Sidebar /> -->
-    </aside>
 
     <footer>
       <Footer />
@@ -45,6 +42,7 @@ onMounted(async () => {
   }
 });
 </script>
+
 
 <style scoped>
 .main {

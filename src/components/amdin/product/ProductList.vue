@@ -2,7 +2,7 @@
   <div>
     <div class="headerTitle">
         <h3 class="product-title"><img src="@/assets/icon/Cloth.png">상품 및 상품 카테고리 관리 > 상품 관리 > 상품 전체 조회 및 관리</h3>
-    <h6 class="product-sub-title">조회할 상품의 조건을 선택 후
+    <h6 class="product-sub-title" style="margin-top: 1%; margin-bottom: 1%">조회할 상품의 조건을 선택 후
       <img src="@/assets/icon/reset.png">초기화 또는 <img src="@/assets/icon/search.png">검색을 눌러주세요.
     </h6>
     </div>
@@ -13,13 +13,14 @@
         <tr>
           <td class="filter-label">상품명</td>
           <td class="filter-input">
-            <input type="text" v-model="filterProductName" class="textInput"/>
+            <input type="text" v-model="filterProductName" class="textInput" placeholder="상품명을 입력하세요."/>
           </td>
         </tr>
         <tr>
           <td class="filter-label">상품상태</td>
           <td class="filter-input">
             <select id="filterStatus" v-model="filterStatus" class="textInput">
+              <option hidden="hidden" value="">전체</option>
               <option value="공급가능">공급가능</option>
               <option value="일시제한">일시제한</option>
               <option value="단종">단종</option>
@@ -29,6 +30,7 @@
           <td class="filter-label">상품노출상태</td>
           <td class="filter-input">
             <select id="selectedExposureStatus" v-model="selectedExposureStatus" class="textInput">
+              <option hidden="hidden" value="">전체</option>
               <option value="노출">노출</option>
               <option value="미노출">미노출</option>
             </select>
@@ -38,6 +40,7 @@
           <td class="filter-label">색상</td>
           <td class="filter-input">
             <select id="filterColor" v-model="filterColor" class="textInput">
+              <option hidden="hidden" value="">전체</option>
               <option value="빨간색">빨간색</option>
               <option value="주황색">주황색</option>
               <option value="노란색">노란색</option>
@@ -50,6 +53,7 @@
           <td class="filter-label">사이즈</td>
           <td class="filter-input">
             <select id="filterSize" v-model="filterSize" class="textInput">
+              <option hidden="hidden" value="">전체</option>
               <option value="90">90</option>
               <option value="95">95</option>
               <option value="100">100</option>
@@ -109,7 +113,7 @@
         <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost">
           <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">
             <template v-if="header.key === 'productName'">
-              <button class="button-as-text" @click="showModifyPopup(item.productCode,item.productName,item.productCount,item.productPrice,item.productStatus,item.productColor,item.productSize,item.categoryFirstName,item.categorySecondName,item.categoryThirdName,item.productContent)">
+              <button class="button-as-text" @click="showModifyPopup(item.productCode,item.productName,item.productCount,item.productPrice,item.productStatus,item.productColor,item.productSize,item.categoryFirstCode,item.categorySecondCode,item.categoryThirdCode,item.productContent)">
                 {{ item[header.key] }}
               </button>
             </template>
@@ -141,9 +145,9 @@
                                          :currentProductStatus="currentProductStatus"
                                          :currentProductColor="currentProductColor"
                                          :currentProductSize="currentProductSize"
-                                         :currentCategoryFirstName="currentCategoryFirstName"
-                                         :currentCategorySecondName="currentCategorySecondName"
-                                         :currentCategoryThirdName="currentCategoryThirdName"
+                                         :currentCategoryFirstCode="currentCategoryFirstCode"
+                                         :currentCategorySecondCode="currentCategorySecondCode"
+                                         :currentCategoryThirdCode="currentCategoryThirdCode"
                                          :currentProductContent="currentProductContent"
                                          :closeEdit="closeEdit"/>
     <ProductDeletePopup v-if="deletePopup" :currentProductCode="currentProductCode"
@@ -183,7 +187,7 @@ const headers = ref([
 const filteredLists = ref([]);
 const currentPage = ref(1);
 const itemsPerPage = 15;
-const selectedExposureStatus = ref('전체');
+const selectedExposureStatus = ref('');
 const filterProductName = ref('');
 const filterStatus = ref('');
 const filterColor = ref('');
@@ -206,16 +210,16 @@ const currentProductStatus = ref('');
 const currentProductExposureStatus = ref('');
 const currentProductColor = ref('');
 const currentProductSize = ref('');
-const currentCategoryFirstName = ref('');
-const currentCategorySecondName = ref('');
-const currentCategoryThirdName = ref('');
+const currentCategoryFirstCode = ref('');
+const currentCategorySecondCode = ref('');
+const currentCategoryThirdCode = ref('');
 const currentProductContent = ref('');
 const productImages = ref({});
 const editPopup = ref(false);
 const deletePopup = ref(false);
 
 const showModifyPopup = (productCode, productName, productCount, productPrice, productStatus, productColor, productSize,
-                          categoryFirstName, categorySecondName, categoryThirdName, productContent) => {
+                          categoryFirstCode, categorySecondCode, categoryThirdCode, productContent) => {
   editPopup.value = !editPopup.value;
   setCurrentProductCode(productCode);
   setCurrentProductName(productName);
@@ -224,9 +228,9 @@ const showModifyPopup = (productCode, productName, productCount, productPrice, p
   setCurrentProductStatus(productStatus);
   setCurrentProductColor(productColor);
   setCurrentProductSize(productSize);
-  setCurrentCategoryFirstName(categoryFirstName);
-  setCurrentCategorySecondName(categorySecondName);
-  setCurrentCategoryThirdName(categoryThirdName);
+  setCurrentCategoryFirstCode(categoryFirstCode);
+  setCurrentCategorySecondCode(categorySecondCode);
+  setCurrentCategoryThirdCode(categoryThirdCode);
   setCurrentProductContent(productContent);
 }
 const showDeletePopup = (productCode, productName, productExposureStatus) => {
@@ -389,14 +393,14 @@ const setCurrentProductExposureStatus = (productExposureStatus) => {
 const setCurrentProductContent = (productContent) => {
   currentProductContent.value = productContent;
 }
-const setCurrentCategoryFirstName = (categoryFirstName) => {
-  currentCategoryFirstName.value = categoryFirstName;
+const setCurrentCategoryFirstCode = (categoryFirstCode) => {
+  currentCategoryFirstCode.value = categoryFirstCode;
 }
-const setCurrentCategorySecondName = (categorySecondName) => {
-  currentCategorySecondName.value = categorySecondName;
+const setCurrentCategorySecondCode = (categorySecondCode) => {
+  currentCategorySecondCode.value = categorySecondCode;
 }
-const setCurrentCategoryThirdName = (categoryThirdName) => {
-  currentCategoryThirdName.value = categoryThirdName;
+const setCurrentCategoryThirdCode = (categoryThirdCode) => {
+  currentCategoryThirdCode.value = categoryThirdCode;
 }
 const getMemberId = async () => {
   try {
@@ -500,7 +504,7 @@ fetchThirdCategories();
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 10px;
-  width: 1200px;
+  width: 1250px;
 }
 
 .filter-table td {
@@ -559,8 +563,8 @@ fetchThirdCategories();
   justify-content: space-between; /* 양 끝에 정렬 */
   align-items: center; /* 수직 가운데 정렬 */
   position: absolute; /* 절대 위치 설정 */
-  left: 24.1%; /* 좌측 정렬 */
-  width: 1210px;
+  left: 14%; /* 좌측 정렬 */
+  width: 1270px;
 }
 
 .reset-btn:hover, .search-btn:hover {
@@ -663,6 +667,10 @@ fetchThirdCategories();
 .product-sub-title img {
   width: 20px;
   height: 20px;
+}
+.headerTitle img {
+  width: 30px;
+  height: 30px;
 }
 .headerTitle h6 {
   margin-bottom: 5%;
