@@ -53,7 +53,7 @@ const errorMessage = ref('');
 
 const fetchFranchiseOwnerData = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/franchise/owner/${franchiseOwnerCode}`, {
+    const response = await fetch(`http://localhost:5000/franchise/owner`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -80,7 +80,7 @@ const submitAsk = async () => {
   }
 
   try {
-    const response = await fetch(`http://localhost:5000/franchise/ask/create/${franchiseOwnerCode}`, {
+    const response = await fetch(`http://localhost:5000/franchise/ask/create`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -89,7 +89,6 @@ const submitAsk = async () => {
       body: JSON.stringify({
         title: askTitle.value,
         content: askContent.value,
-        franchiseOwnerCode: franchiseOwnerData.value.franchiseOwnerCode,
       }),
     });
     if (!response.ok) {
@@ -105,6 +104,11 @@ const submitAsk = async () => {
     window.location.reload(); // 페이지 새로고침
   } catch (error) {
     console.error('Failed to submit ask:', error);
+    await Swal.fire({
+      icon: 'error',
+      title: '등록 실패',
+      text: '문의 등록 중 오류가 발생했습니다.',
+    });
   }
 };
 
