@@ -1,9 +1,10 @@
-name: Deploy to AWS Elastic Beanstalk
+name: AkatsukiFE
 
 on:
   push:
     branches:
       - main
+      - develop
 
 jobs:
   deploy:
