@@ -1,5 +1,5 @@
 <template>
-  <div class="breadcrumbs">
+  <div class="breadcrumbs" style="margin-top: 50px;">
     <img src="../../assets/icon/List.png" alt="List Icon" class="breadcrumb-icon" />
     <span>교환 조회 및 관리</span>
   </div>
@@ -76,19 +76,19 @@
           <td v-for="(header, colIndex) in headers" :key="colIndex" align="center">
             {{ item[header.key] }}
           </td>
-          <td v-if="item.exchangeStatus=='반송신청'" >
+          <td v-if="item.exchangeStatus=='반송신청'" style="width: 10%">
             <div class="condition-button pending">반송신청</div>
           </td>
-          <td v-else-if="item.exchangeStatus=='반송중'" >
+          <td v-else-if="item.exchangeStatus=='반송중'" style="width: 10%">
             <div class="condition-button approved">반송중</div>
           </td>
-          <td v-else-if="item.exchangeStatus=='처리대기'" >
+          <td v-else-if="item.exchangeStatus=='처리대기'" style="width: 10%">
             <div class="condition-button rejected">처리대기</div>
           </td>
-          <td v-else-if="item.exchangeStatus=='처리완료'" >
+          <td v-else-if="item.exchangeStatus=='처리완료'" style="width: 10%">
             <div class="condition-button inspection-pending">처리완료</div>
           </td>
-          <td v-else-if="item.exchangeStatus=='반환대기'" >
+          <td v-else-if="item.exchangeStatus=='반환대기'" style="width: 10%">
             <div class="condition-button inspection-completed">반환대기</div>
           </td>
           <td v-else-if="item.exchangeStatus=='반환중'" >

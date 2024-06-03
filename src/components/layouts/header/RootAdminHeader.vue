@@ -94,7 +94,7 @@
             <li>
               <a href="#" class="depth1"><h4 id="depth1_title">발주 관리</h4></a>
               <ul class="submenu_sub">
-                <li><router-link to="/admin/product/list" class="depth2">발주 목록 조회 및 승인</router-link></li>
+                <li><router-link to="/admin/order/list" class="depth2">발주 목록 조회 및 승인</router-link></li>
               </ul>
             </li>
           </ul>

@@ -157,4 +157,5 @@ const checkExchange = async () => {
 
 <style scoped>
   @import "../../assets/css/popup.css" ;
+  @import "../../assets/css/order.css" ;
 </style>

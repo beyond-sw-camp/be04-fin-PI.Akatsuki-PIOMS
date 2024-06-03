@@ -166,7 +166,7 @@ const getOrderList = async () => {
     if (!accessToken) {
       throw new Error('No access token found');
     }
-    const response = await fetch(`http://localhost:5000/admin/orders`, {
+    const response = await fetch(`http://localhost:5000/admin/order/orders`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

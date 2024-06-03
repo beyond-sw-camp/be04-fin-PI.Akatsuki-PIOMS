@@ -1,11 +1,11 @@
 <template>
   <div class = "main">
-    <div class="container">
-      <img class="notice" src="@/assets/icon/List.png" />
-      <span class="F-title">공지 및 문의 관리&nbsp;&nbsp;></span>
-      <span class="F-title">공지사항 관리&nbsp;&nbsp;></span>
-      <span class="F-title">공지사항 조회 관리</span>
-    </div>
+<!--    <div class="container">-->
+<!--      <img class="notice" src="@/assets/icon/List.png" />-->
+<!--      <span class="F-title">공지 및 문의 관리&nbsp;&nbsp;></span>-->
+<!--      <span class="F-title">공지사항 관리&nbsp;&nbsp;></span>-->
+<!--      <span class="F-title">공지사항 조회 관리</span>-->
+<!--    </div>-->
 
     <br/>
     <table class="read-filter">
