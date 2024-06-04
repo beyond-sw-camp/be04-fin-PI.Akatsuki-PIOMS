@@ -1,8 +1,8 @@
 <template>
-  <div class="breadcrumbs" style="margin-top: 50px;">
-    <img src="../../assets/icon/List.png" alt="List Icon" class="breadcrumb-icon" />
-    <span>교환 조회 및 관리</span>
-  </div>
+<!--  <div class="breadcrumbs" style="margin-top: 50px;">-->
+<!--    <img src="../../assets/icon/List.png" alt="List Icon" class="breadcrumb-icon" />-->
+<!--    <span>교환 조회 및 관리</span>-->
+<!--  </div>-->
   <div>
     <div class="filter-section">
       <table class="filter-table">

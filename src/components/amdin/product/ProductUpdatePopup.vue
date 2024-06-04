@@ -102,8 +102,10 @@
             </table>
           </div>
         </div>
-        <button class="action-button" @click="closeEdit">취소</button>
-        <button class="post-button" @click="submitProduct">수정</button>
+        <div style="display: flex; gap: 10px; float: right; padding-top: 2%">
+          <button class="action-button" @click="closeEdit">취소</button>
+          <button class="post-button" @click="submitProduct">수정</button>
+        </div>
       </div>
     </div>
   </div>
@@ -284,6 +286,8 @@ watch(updateSecond, async (newVal) => {
 </script>
 
 <style scoped>
+
+
 .popup-overlay {
   position: fixed;
   top: 0;
@@ -494,9 +498,8 @@ h2 {
   border-radius: 5px;
   cursor: pointer;
   font-size: 1em;
-  margin-left: 80%;
-  margin-top: 2%;
-
+  //margin-left: 80%;
+  //margin-top: 2%;
 }
 
 .action-button:hover {

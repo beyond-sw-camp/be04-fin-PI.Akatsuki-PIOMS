@@ -624,7 +624,6 @@ fetchThirdCategories();
 .allpost {
   text-align: center;
   padding: 10px 0;
-  width: 5%;
 }
 
 .allpost:hover {

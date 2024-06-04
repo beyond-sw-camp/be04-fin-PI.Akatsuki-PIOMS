@@ -1,10 +1,11 @@
 <template>
-  <div class="category-top">
-    <img src="@/assets/icon/Cloth.png" alt="" style="width: 40px; height: 40px">
-    <span>
-    상품 및 상품 카테고리 관리 > 상품 카테고리 관리 > 상품 카테고리 전체 조회
-    </span>
-  </div>
+<!--  <div class="category-top">-->
+<!--    <img src="@/assets/icon/Cloth.png" alt="" style="width: 40px; height: 40px">-->
+<!--    <span>-->
+<!--    상품 및 상품 카테고리 관리 > 상품 카테고리 관리 > 상품 카테고리 전체 조회-->
+<!--    </span>-->
+<!--  </div>-->
+  <div align="center">
   <div class="category-select">
     <div class="categoryFirst-select">
       <div class="select-title"><p>1차 카테고리(대분류)</p></div>
@@ -66,6 +67,7 @@
     <DeleteFirstPopup v-if="deleteCategoryFirstVisible" :currentFirstCode="currentFirstCode" :currentFirstName="currentFirstName" @close="deleteCategoryFirstVisible = false"/>
     <DeleteSecondPopup v-if="deleteCategorySecondVisible" :currentSecondCode="currentSecondCode" :currentSecondName="currentSecondName" @close="deleteCategorySecondVisible = false"/>
     <DeleteThirdPopup v-if="deleteCategoryThirdVisible" :currentThirdCode="currentThirdCode" :currentThirdName="currentThirdName" @close="deleteCategoryThirdVisible = false"/>
+  </div>
   </div>
 </template>
 
@@ -302,6 +304,7 @@ fetchThirdCategories();
   height: 50px;
 }
 .category-select {
+  margin-top: 3%;
   width: 1450px;
   display: flex;
   justify-content: center;

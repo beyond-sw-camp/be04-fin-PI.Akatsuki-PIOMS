@@ -124,8 +124,10 @@
             </table>
           </div>
         </div>
-        <button class="action-button" @click="closePopup">취소</button>
-        <button class="post-button" @click="uploadAndSaveProduct">등록</button>
+        <div style="display: flex; gap: 10px; float: right; padding-top: 2%">
+          <button class="action-button" @click="closePopup">취소</button>
+          <button class="post-button" @click="uploadAndSaveProduct">등록</button>
+        </div>
       </div>
     </div>
   </div>
@@ -608,8 +610,6 @@ h2 {
   border-radius: 5px;
   cursor: pointer;
   font-size: 1em;
-  margin-left: 80%;
-  margin-top: 2%;
 }
 
 .action-button:hover {
