@@ -99,6 +99,21 @@
                   <textarea :value="currentProductContent" @input="updateContent = $event.target.value" class="textInput" style="width: 99%; height: 150px"></textarea>
                 </td>
               </tr>
+              <tr>
+                <td class="second-insert-input1">
+                  <div class="imgForm">
+                    <form>
+                      <input id="imgUpload" type="file" @change="previewImage" hidden />
+                      <button v-if="imagePreview !== imageSrc && imgOn" @click="resetImage" class="img-close-button">X</button>
+                      <label for="imgUpload">
+                        <img class="img" v-if="!imgOn" :src="imageSrc" />
+                        <img class="img" v-if="imgOn" :src="imagePreview" />
+                      </label>
+                      <br />
+                    </form>
+                  </div>
+                </td>
+              </tr>
             </table>
           </div>
         </div>
@@ -115,8 +130,12 @@
 import {onMounted, ref, defineProps, watch} from 'vue';
 import { useStore } from 'vuex';
 import ProductList from "@/components/amdin/product/ProductList.vue";
+import imageSrc from "@/assets/icon/picture.png";
 const store = useStore();
 const accessToken = store.state.accessToken;
+
+const imagePreview = ref(imageSrc);
+const imgOn = ref(false);
 
 const firstCategories = ref([]);
 const secondCategories = ref([]);
@@ -149,6 +168,22 @@ const props = defineProps({
   currentProductContent: String,
   closeEdit: Function
 });
+
+const resetImage = () => {
+  imagePreview.value = imageSrc;
+  imgOn.value = false;
+};
+const previewImage = (event) => {
+  const file = event.target.files[0];
+  if(file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      imagePreview.value = reader.result;
+      imgOn.value = true;
+    };
+    reader.readAsDataURL(file);
+  }
+};
 
 const submitProduct = async () => {
   const requestData = {
