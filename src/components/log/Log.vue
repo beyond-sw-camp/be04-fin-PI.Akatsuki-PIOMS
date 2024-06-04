@@ -50,8 +50,10 @@
       <button @click="applyFilters" class="search-btn">
         <img src="@/assets/icon/search.png" alt="Search" />
       </button>
+      <button @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
     </div>
-
+    <div class="post-btn">
+    </div>
     <!-- 이력 조회 결과 -->
     <div class="table-container">
       <table class="table">
@@ -100,6 +102,7 @@
 import { ref, computed, onMounted } from 'vue';
 import Breadcrumb from '@/components/amdin/ask/Breadcrumb.vue'; // Breadcrumb 컴포넌트 임포트
 import { useStore } from 'vuex';
+import axios from "axios";
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -117,7 +120,26 @@ const breadcrumbs = [
   {label: '통계 및 이력 관리', link: null},
   {label: '이력 관리', link: null},
 ];
-
+const downloadExcel = () => {
+  axios({
+    url: 'http://api.pioms.shop/admin/exceldownload/log-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    responseType: 'blob', // 서버에서 반환되는 데이터의 형식을 명시
+  }).then((response) => {
+    const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'LogList.xlsx'); // 원하는 파일 이름 설정
+    document.body.appendChild(link);
+    link.click();
+  }).catch((error) => {
+    console.error('EBad request:', error);
+  });
+};
 const fetchHistories = async () => {
   try {
     const response = await fetch('http://api.pioms.shop/admin/log', {
@@ -218,6 +240,13 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.excelBtn {
+  width: 100px;
+  height: 26px;
+  border: none;
+  background-color: white;
+  cursor: pointer;
+}
 .container {
   padding: 20px;
 }
