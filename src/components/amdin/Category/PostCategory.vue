@@ -1,10 +1,11 @@
 <template>
-  <div class="category-top">
-    <img src="@/assets/icon/Cloth.png" alt="" style="width: 40px; height: 40px">
-    <span>
-    상품 및 상품 카테고리 관리 > 상품 카테고리 관리 > 상품 카테고리 조회 및 등록
-    </span>
-  </div>
+<!--  <div class="category-top">-->
+<!--    <img src="@/assets/icon/Cloth.png" alt="" style="width: 40px; height: 40px">-->
+<!--    <span>-->
+<!--    상품 및 상품 카테고리 관리 > 상품 카테고리 관리 > 상품 카테고리 조회 및 등록-->
+<!--    </span>-->
+<!--  </div>-->
+  <div align="center">
   <div class="category-select">
     <div class="category-column">
       <div class="post-category">카테고리(대분류)</div>
@@ -50,6 +51,7 @@
         </ul>
       </div>
     </div>
+  </div>
   </div>
 </template>
 

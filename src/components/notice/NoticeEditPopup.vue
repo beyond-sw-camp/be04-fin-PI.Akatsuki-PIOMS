@@ -1,18 +1,27 @@
 <template>
-  <div class="edit-form" v-if="notice">
-    <h2>공지사항 수정</h2>
-    <form @submit.prevent="submitForm">
-      <div class="form-group">
-        <label for="noticeTitle">제목</label>
-        <input type="text" id="noticeTitle" v-model="notice.noticeTitle" required>
-      </div>
-      <div class="form-group">
-        <label for="noticeContent">내용</label>
-        <textarea id="noticeContent" v-model="notice.noticeContent" required></textarea>
-      </div>
-      <button type="submit">저장</button>
-      <button type="submit" @click="closeForm" class="close-btn">취소</button>
-    </form>
+  <div class="notice-form" v-if="notice">
+
+    <div class="title">
+      공지사항 수정
+    </div>
+    <div style="padding: 20px">
+      <form @submit.prevent="submitForm">
+        <div class="form-group">
+          <label for="noticeTitle">제목</label><br><br>
+          <input class="input-title" type="text" id="noticeTitle" v-model="notice.noticeTitle" required>
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="noticeContent">내용</label><br><br>
+          <textarea class="text-area" id="noticeContent" v-model="notice.noticeContent" required></textarea>
+        </div>
+        <div style="  float: right;" >
+          <button class="regist-btn" type="submit">저장</button>
+          <button type="submit" @click="closeForm" class="close-btn">취소</button>
+        </div>
+      </form>
+      <br> <br>
+    </div>
   </div>
 </template>
 
@@ -69,6 +78,63 @@ const closeForm = () => {
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.input-title{
+  width: 100%;
+  border: 2px solid black;
+}
+
+.title {
+  background-color: #d9d9d9;
+  font-size: 20px;
+  font-weight: 500;
+  padding: 10px;
+  padding-left: 20px;
+  border-radius: 10px;
+}
+.register {
+  margin: 0;
+  margin-bottom: 10px;
+  font-size: 20px;
+
+}
+.notice-form {
+  background: #ffffff;
+  //padding: 0px 10px 10px 10px;
+  border-radius: 10px;
+  border-color: #d9d9d9;
+  border: 5px;
+  max-width: 500px;
+  width: 100%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1001; /* 팝업 창이 가장 위에 오도록 z-index 조정 */
+}
+
+.close-btn {
+  background: #9a9a9a;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.regist-btn {
+  background: #9a9a9a;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.text-area{
+  width: 100%;
+  height: 200px;
+  border: 2px solid black;
+
 }
 
 </style>
