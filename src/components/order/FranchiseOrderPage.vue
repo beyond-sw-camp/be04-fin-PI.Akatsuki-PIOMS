@@ -168,7 +168,7 @@ const getOrderList = async () => {
     if (!accessToken) {
       throw new Error('No access token found');
     }
-    const response = await fetch(`http://localhost:5000/franchise/order/list`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/order/list`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
