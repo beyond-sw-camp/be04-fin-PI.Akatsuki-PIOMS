@@ -10,7 +10,7 @@
           <div class="table-wrapper">
             <table class="insert-table">
               <tr>
-                <td class="insert-label">관리자명</td>
+                <td class="insert-label">이름</td>
                 <td class="insert-input">
                   <input type="text" v-model="insertAdminName" class="textInput-name" placeholder="관리자명을 입력하세요."/>
                 </td>
@@ -21,15 +21,6 @@
                 <td class="insert-label">휴대 전화</td>
                 <td class="insert-input">
                   <input type="number" v-model="insertAdminPhone" class="textInput" placeholder="상품 가격을 입력하세요.">
-                </td>
-              </tr>
-              <tr>
-                <td class="insert-label">역할</td>
-                <td class="insert-input">
-                  <select v-model="insertAdminRole" class="textInput">
-                    <option value="">전체 상태</option>
-                    <option value="ROLE_ADMIN">공급가능</option>
-                  </select>
                 </td>
               </tr>
             </table>
@@ -43,10 +34,7 @@
 </template>
 
 <script setup>
-import { onMounted, defineEmits, ref } from 'vue';
-import { useStore } from 'vuex';
-const store = useStore();
-const accessToken = store.state.accessToken;
+import { defineEmits, ref } from 'vue';
 
 const emit = defineEmits(['close']);
 
@@ -55,59 +43,12 @@ const insertAdminEmail = ref('');
 const insertAdminPhone = ref('');
 const insertAdminRole = ref('');
 
-
-
-const saveAdmin = async () => {
-  const requestData = {
-    adminName: insertAdminName.value,
-    adminEmail: insertAdminEmail.value,
-    adminPhone: insertAdminPhone.value,
-    adminRole: insertAdminRole.value,
-  };
-
-  console.log('Request Data:', requestData);
-
-  try {
-    const response = await fetch('http://api.pioms.shop/admin/register', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(requestData)
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`관리자 등록에 실패했습니다. 상태 코드: ${response.status}, 메시지: ${errorText}`);
-    }
-
-    console.log('성공적으로 등록되었습니다.');
-    emit('close');
-  } catch (error) {
-    console.error('오류:', error);
-  }
-};
 const closePopup = () => {
   emit('close');
 };
 const showPostPopup = () => {
   emit('close');
 }
-onMounted(() => {
-  const numberInputs = document.querySelectorAll('input[type="number"]');
-  numberInputs.forEach(input => {
-    input.addEventListener('keypress', (event) => {
-      if (event.key.length === 1 && !/\d/.test(event.key)) {
-        event.preventDefault();
-      }
-    });
-
-    input.addEventListener('input', (event) => {
-      input.value = input.value.replace(/[^0-9]/g, '');
-    });
-  });
-});
 </script>
 
 <style scoped>
