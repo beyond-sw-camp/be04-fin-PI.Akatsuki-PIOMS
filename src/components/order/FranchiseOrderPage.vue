@@ -1,8 +1,8 @@
 <template>
-  <div class="breadcrumbs">
-    <img src="../../assets/icon/List.png" alt="List Icon" class="breadcrumb-icon" />
-    <span>주문 조회 및 관리</span>
-  </div>
+<!--  <div class="breadcrumbs">-->
+<!--    <img src="../../assets/icon/List.png" alt="List Icon" class="breadcrumb-icon" />-->
+<!--    <span>주문 조회 및 관리</span>-->
+<!--  </div>-->
 
     <div class="filter-section">
       <table class="filter-table">
@@ -168,7 +168,7 @@ const getOrderList = async () => {
     if (!accessToken) {
       throw new Error('No access token found');
     }
-    const response = await fetch(`http://localhost:5000/franchise/orders`, {
+    const response = await fetch(`http://localhost:5000/franchise/order/list`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

@@ -29,6 +29,7 @@ import NoticeList from "@/components/notice/NoticeList.vue";
 import FranchiseDashBoard from "@/components/franchise/FranchiseDashBoard.vue";
 import DriverDashBoard from "@/components/driver/DriverDashBoard.vue";
 
+import FrWarehousePage from "@/components/franchise/warehouse/FrWarehousePage.vue";
 
 const routes = [
     {
@@ -182,6 +183,12 @@ const routes = [
         name: 'FranchiseDashBoard',
         component: FranchiseDashBoard
     },
+    {
+        path: '/franchise/warehouse',
+        name: 'FranchiseWarehouse',
+        component: FrWarehousePage
+    },
+
 ];
 
 const router = createRouter({

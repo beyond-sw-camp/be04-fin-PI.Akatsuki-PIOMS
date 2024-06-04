@@ -93,7 +93,7 @@
       </div >
     <div class="action-buttons" >
         <p v-if="totalPrice > 0">총 가격: {{ totalPrice }}원</p>
-        <button class="cancel-btn" @click="exportOrder">발주신청하기</button>
+        <button class="cancel-btn" @click="exportOrder">수정하기</button>
         <button class="cancel-btn" @click="props.clickUpdate" >돌아가기</button>
       </div>
     </div>
@@ -166,7 +166,8 @@
       for (let i = 0; i < props.item.orderProductList.length; i++) {
         const obj = props.item.orderProductList[i];
         console.log(obj);
-        selectedProducts.value.push(products.value.find(element => element.productCode == obj.productCode));
+        if(products.value.find(element => element.productCode == obj.productCode) !=null)
+          selectedProducts.value.push(products.value.find(element => element.productCode == obj.productCode));
         console.log(selectedProducts.value);
       }
       console.log(products);
