@@ -164,6 +164,8 @@ import ProductUpdatePopup from "@/components/amdin/product/ProductUpdatePopup.vu
 import ProductDeletePopup from "@/components/amdin/product/ProductDeletePopup.vue";
 import axios from "axios";
 import { useStore } from 'vuex';
+import Swal from "sweetalert2";
+
 const store = useStore();
 const accessToken = store.state.accessToken;
 

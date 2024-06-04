@@ -59,6 +59,8 @@
 import { onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
 import CategoryList from "@/components/amdin/Category/CategoryList.vue";
+import Swal from "sweetalert2";
+
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -140,12 +142,20 @@ const fetchThirdCategories = async (categorySecondCode) => {
 
 const saveCategoryFirst = async () => {
   if (!insertCategoryFirstName.value.trim()) {
-    alert('대분류 카테고리명을 입력해주세요.');
+    await Swal.fire({
+      icon: 'success',
+      title: '카테고리명 누락',
+      text: '대분류 카테고리명을 입력해주세요.',
+    });
     return;
   }
   const existingFirstNames = firstCategories.value.map(category => category.categoryFirstName);
   if (existingFirstNames.includes(insertCategoryFirstName.value.trim())) {
-    alert('이미 존재하는 대분류 카테고리명입니다.');
+    await Swal.fire({
+      icon: 'success',
+      title: '카테고리 중복',
+      text: '이미 존재하는 대분류 카테고리명입니다.',
+    });
     return;
   }
   const savedFirstData = {
@@ -182,17 +192,29 @@ const saveCategoryFirst = async () => {
 
 const saveCategorySecond = async () => {
   if (!selectedFirstCategory.value) {
-    alert('대분류 카테고리를 선택해주세요.');
+    await Swal.fire({
+      icon: 'success',
+      title: '상위 카테고리 누락',
+      text: '대분류 카테고리를 선택해주세요.',
+    });
     return;
   }
 
   if (!insertCategorySecondName.value.trim()) {
-    alert('중분류 카테고리명을 입력해주세요.');
+    await Swal.fire({
+      icon: 'success',
+      title: '카테고리명 누락',
+      text: '중분류 카테고리명을 입력해주세요.',
+    });
     return;
   }
   const existingSecondNames = secondCategories.value.map(category => category.categorySecondName);
   if (existingSecondNames.includes(insertCategorySecondName.value.trim())) {
-    alert('이미 존재하는 중분류 카테고리명입니다.');
+    await Swal.fire({
+      icon: 'success',
+      title: '카테고리 중복',
+      text: '이미 존재하는 중분류 카테고리명입니다.',
+    });
     return;
   }
   const savedSecondData = {
@@ -230,16 +252,28 @@ const saveCategorySecond = async () => {
 
 const saveCategoryThird = async () => {
   if (!selectedSecondCategory.value) {
-    alert('중분류 카테고리를 선택해주세요.');
+    await Swal.fire({
+      icon: 'success',
+      title: '상위 카테고리 누락',
+      text: '중분류 카테고리를 선택해주세요.',
+    });
     return;
   }
   if (!insertCategoryThirdName.value.trim()) {
-    alert('소분류 카테고리명을 입력해주세요.');
+    await Swal.fire({
+      icon: 'success',
+      title: '카테고리명 누락',
+      text: '소분류 카테고리명을 입력해주세요.',
+    });
     return;
   }
   const existingThirdNames = thirdCategories.value.map(category => category.categoryThirdName);
   if (existingThirdNames.includes(insertCategoryThirdName.value.trim())) {
-    alert('이미 존재하는 중분류 카테고리명입니다.');
+    await Swal.fire({
+      icon: 'success',
+      title: '카테고리 중복',
+      text: '이미 존재하는 소분류 카테고리명입니다.',
+    });
     return;
   }
   const savedThirdData = {
