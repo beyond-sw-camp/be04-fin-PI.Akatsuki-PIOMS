@@ -1,8 +1,5 @@
 <template>
-  <div class="breadcrumbs">
-    <img src="../../assets/icon/List.png" alt="List Icon" class="breadcrumb-icon" />
-    <span>교환 조회 및 관리</span>
-  </div>
+
   <div>
     <div class="filter-section">
       <table class="filter-table">
@@ -35,15 +32,19 @@
         </tr>
       </table>
     </div>
-    <div class="action-buttons">
-      <button @click="resetFilters" class="reset-btn">
-        <img src="@/assets/icon/reset.png" alt="Reset" />
-      </button>
-      <button @click="applyFilter" class="search-btn">
-        <img src="@/assets/icon/search.png" alt="Search" />
-      </button>
+    <div align="center" >
+      <div class="action-buttons" >
+        <button @click="resetFilters" class="reset-btn">
+          <img src="@/assets/icon/reset.png" alt="Reset" />
+        </button>
+        <button @click="applyFilter" class="search-btn">
+          <img src="@/assets/icon/search.png" alt="Search" />
+        </button>
+        <br>
+        <input class="create-btn"  type="button" value="발주하기" @click="showPopup" style="cursor: pointer; float: right">
+        <br><br><br>
+      </div>
     </div>
-    <input class="create-button" type="button" value="발주하기" @click="showPopup" style="cursor: pointer; border:0;">
     <exchangePopup
       v-if="createPopup"
       :showPopup="showPopup"
@@ -59,26 +60,50 @@
       :franchiseCode="franchiseCode"
       :franchiseOwnerCode="franchiseOwnerCode"
     />
-    <table style="margin-top: 5%;">
+    <div class="table-container">
+      <table class="table">
       <thead>
-        <tr>
-          <th v-for="(header, index) in headers" :key="index">
-            <div align="center">{{ header.label }}</div>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex"
-            :id="'row-' + rowIndex"
-            @dblclick="showDetailPopup(item)"
-            @mouseenter="highlightRow(rowIndex)"
-            @mouseleave="resetRowColor(rowIndex)">
-          <td v-for="(header, colIndex) in headers" :key="colIndex" align="center">
-            {{ item[header.key] }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          <tr class="header1">
+            <th>반품코드</th>
+            <th>반품신청일</th>
+            <th>반품상태</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex"
+              :id="'row-' + rowIndex"
+              @dblclick="showDetailPopup(item)"
+              @mouseenter="highlightRow(rowIndex)"
+              @mouseleave="resetRowColor(rowIndex)"
+              class="allpost"
+          >
+            <td>{{ item.exchangeCode }}</td>
+            <td>{{ item.exchangeDate }}</td>
+            <td v-if="item.exchangeStatus=='반송신청'" style="width: 10%">
+              <div class="condition-button pending">반송신청</div>
+            </td>
+            <td v-else-if="item.exchangeStatus=='반송중'" style="width: 10%">
+              <div class="condition-button approved">반송중</div>
+            </td>
+            <td v-else-if="item.exchangeStatus=='처리대기'" style="width: 10%">
+              <div class="condition-button rejected">처리대기</div>
+            </td>
+            <td v-else-if="item.exchangeStatus=='처리완료'" style="width: 10%">
+              <div class="condition-button inspection-pending">처리완료</div>
+            </td>
+            <td v-else-if="item.exchangeStatus=='반환대기'" style="width: 10%">
+              <div class="condition-button inspection-completed">반환대기</div>
+            </td>
+            <td v-else-if="item.exchangeStatus=='반환중'" >
+              <div class="condition-button inspection-completed">반환중</div>
+            </td>
+            <td v-else-if="item.exchangeStatus=='반환완료'" >
+              <div class="condition-button inspection-completed">반환완료</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage === 1">이전</button>
       <span>페이지 {{ currentPage }} / {{ totalPages }}</span>
@@ -101,13 +126,6 @@ const endDate = ref('');
 const franchiseCode = 3;
 const franchiseOwnerCode = 3;
 
-const headers = ref([
-  { key: 'exchangeCode', label: '주문 코드' },
-  { key: 'exchangeStatus', label: '주문 상태' },
-  { key: 'exchangeDate', label: '주문날짜' },
-
-]);
-
 const filterExchangeCode = ref('');
 const filterFranchiseName = ref('');
 const filterFranchiseOwnerName = ref('');
@@ -125,7 +143,8 @@ const getExchangeList = async () => {
     if (!accessToken) {
       throw new Error('No access token found');
     }
-    const response = await fetch(`http://api.pioms.shop/franchise/exchanges`, {
+    // const response = await fetch(`http://api.pioms.shop/franchise/exchange/list`, {
+    const response = await fetch(`http://localhost:5000/franchise/exchange/list`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -212,8 +231,8 @@ const resetRowColor = (index) => document.querySelector(`#row-${index}`).classLi
 </script>
 
 <style scoped>
-@import "../../assets/css/order.css";
-@import "../../assets/css/Breadcrumb.css";
+  @import "../../assets/css/order.css";
+
 
 </style>
 

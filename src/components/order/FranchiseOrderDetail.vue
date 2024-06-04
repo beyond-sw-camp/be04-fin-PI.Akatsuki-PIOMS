@@ -1,9 +1,7 @@
 <template>
   <div class="popup-overlay" >
        <div class="popup-content">
-           <button class="cancel-btn" @click="showDetailPopup" >돌아가기</button>
            <br>
-
            <br>
                 <h1 align="center">발주서</h1>
 
@@ -138,6 +136,7 @@
           <div class="action-buttons" v-if="item.orderCondition=='승인대기' || item.orderCondition=='승인거부'">
             <input class="cancel-btn" type="button" value="수정하기" @click="clickUpdate">
           </div>
+         <button style="float: right" class="cancel-btn" @click="showDetailPopup" >돌아가기</button>
        </div>
 
     <FranchiseOrderUpdatePopup

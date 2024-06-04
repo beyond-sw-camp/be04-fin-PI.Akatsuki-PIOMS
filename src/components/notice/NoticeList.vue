@@ -216,6 +216,8 @@ const resetFilters = () => {
 
 const isRegisterFormVisible = ref(false);
 const isEditFormVisible = ref(false);
+const isDetailFormVisible = ref(false);
+
 const newNotice = ref({ noticeTitle: '', noticeContent: '' });
 const selectedNotice = ref(null);
 
@@ -243,6 +245,7 @@ const toggleEditForm = () => {
 const closeOverlay = () => {
   isRegisterFormVisible.value = false;
   isEditFormVisible.value = false;
+
 };
 
 const submitNotice = async (notice) => {
