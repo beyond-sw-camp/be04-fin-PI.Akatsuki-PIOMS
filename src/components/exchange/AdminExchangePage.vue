@@ -35,14 +35,14 @@
             <input type="text" v-model="filterFranchiseOwnerName" />
           </td>
         </tr>
-        
+
         <tr>
           <td class="filter-label">반품/교환 신청일</td>
           <td class="filter-input">
             <input type="date" v-model="filterExchangeDate" />
           </td>
         </tr>
-        
+
       </table>
     </div>
     <div class="action-buttons">
@@ -63,7 +63,7 @@
           <th v-for="(header, index) in headers" :key="index" > <div align="center">{{ header.label }}</div></th>
           <th>반품상태</th>
         </tr>
-        
+
       </thead>
       <tbody>
         <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex"
@@ -152,7 +152,7 @@ const getExchangeList = async () => {
       throw new Error('No access token found');
     }
     // const response = await fetch(`/api/admin/exchanges`, {
-    const response = await fetch(`http://localhost:5000/admin/exchanges`, {
+    const response = await fetch(`http://api.pioms.shop/admin/exchanges`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

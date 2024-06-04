@@ -134,7 +134,7 @@ const fetchAsks = async () => {
       throw new Error('No access token found');
     }
 
-    const response = await fetch('http://localhost:5000/admin/ask/list', {
+    const response = await fetch('http://api.pioms.shop/admin/ask/list', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -175,9 +175,9 @@ const resetFilters = () => {
   currentPage.value = 1; // 페이지 리셋
 };
 
-const formatDate = (dateArray) => {
-  if (!dateArray) return '-';
-  const date = new Date(dateArray[0], dateArray[1] - 1, dateArray[2], dateArray[3], dateArray[4], dateArray[5]);
+const formatDate = (dateString) => {
+  if (!dateString) return '-';
+  const date = new Date(dateString);
   if (isNaN(date)) return 'Invalid Date';
   return date.toLocaleString('ko-KR', {
     year: 'numeric',

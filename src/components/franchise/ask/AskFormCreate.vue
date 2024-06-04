@@ -52,7 +52,7 @@ const errorMessage = ref('');
 
 const fetchFranchiseOwnerData = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/franchise/owner`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/owner`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -62,7 +62,9 @@ const fetchFranchiseOwnerData = async () => {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    franchiseOwnerData.value = await response.json();
+    const data = await response.json();
+    console.log('Fetched Franchise Owner Data:', data);
+    franchiseOwnerData.value = data;
   } catch (error) {
     console.error('Failed to fetch franchise owner data:', error);
   }
@@ -79,7 +81,7 @@ const submitAsk = async () => {
   }
 
   try {
-    const response = await fetch(`http://localhost:5000/franchise/create`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/create`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`, // 인증 헤더 설정
@@ -114,13 +116,8 @@ const submitAsk = async () => {
   }
 };
 
-
-
-
-
 onMounted(fetchFranchiseOwnerData);
 </script>
-
 
 <style scoped>
 .container {

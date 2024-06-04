@@ -17,6 +17,11 @@
          배송완료
        </div>
     </div>
+      <div class="delivery-status-box">
+        <div class="before-div">{{ beforeDiv }}</div>
+        <div class="ing-div">{{ ingDiv }}</div>
+        <div class="after-div">{{afterDiv}}</div>
+      </div>
  </div>
 
 
@@ -44,108 +49,268 @@
     </div>
   </div>
 
-  <!-- 배송기사 배송 조회 -->
   <div class="my-delivery-list">
     <div>
-      <img class = "delivery" src="@/assets/icon/Delivery.png"/>
+      <img class="delivery" src="@/assets/icon/Delivery.png"/>
       내 배송 조회
-      <hr class ="hr2"/>
-
-  <table class="read-filter">
-    <tr class="paTable">
-      <td class="filter-label">배송상태</td>
-      <td class="filter1">
-        <div class="radio-group">
-          <div class="title">
-          <label id="delivery-status"><input type="radio" value="" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter" checked> 전체 </label>
-          <label id="delivery-status"><input type="radio" value="배송전" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"> 배송전 </label>
-          <label id="delivery-status"><input type="radio" value="배송중" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"> 배송중 </label>
-          <label id="delivery-status"><input type="radio" value="배송완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"> 배송완료 </label>
-          </div>
-        </div>
-      </td>
-      <td class="filter-label1">주문(발주)번호</td>
-      <td class="filter1">
-        <input type="text" class="filter-input" placeholder="주문(발주)번호를 입력해주세요." v-model="filterText" />
-      </td>
-    </tr>
-    <tr class="paTable">
-      <td class="filter-label">배송지</td>
-      <td>
-        <input type="text" class="filter-input" placeholder="배송지를 입력해주세요." v-model="filterText" />
-      </td>
-      <td class="filter-label1">배송(송장)번호</td>
-      <td>
-        <input type="text" class="filter-input" placeholder="배송지를 입력해주세요." v-model="filterText" />
-      </td>
-    </tr>
+      <hr class="hr2"/>
+      <table class="delivery-list">
+        <tr class="paTable">
+          <td class="filter-label">배송상태</td>
+          <td class="filter1">
+            <div class="radio-group">
+              <div class="delivery-status-title">
+                <label id="delivery-status"><input type="radio" value="전체" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"> 전체 </label>
+                <label id="delivery-status"><input type="radio" value="배송전" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"> 배송전 </label>
+                <label id="delivery-status"><input type="radio" value="배송중" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"> 배송중 </label>
+                <label id="delivery-status"><input type="radio" value="배송완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"> 배송완료 </label>
+              </div>
+            </div>
+          </td>
+        </tr>
       </table>
-
       <!-- 리셋, 검색 버튼 -->
       <div class="button-container">
-        <button type="button" class="btn-reset" @click="resetFilters">
+        <button class="btn-reset" @click="resetFilter">
           <img class="reset-icon" src="@/assets/icon/reset.png" />
         </button>
-        <button type="button" class="btn-search" @click="applyFilters">
+        <button class="btn-search" @click="applyFilter">
           <img class="search-icon" src="@/assets/icon/search.png" />
         </button>
       </div>
-
+      <br/>
+      <div v-if="filteredOrders.length">
+        <table class="delivery-table">
+          <thead>
+          <tr>
+            <th class="no">No</th>
+            <th class="order">주문 번호</th>
+            <th class="invoice">송장 번호</th>
+            <th class="address">배송지</th>
+            <th class="status">배송 상태</th>
+            <th class="owner">점주명</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="(order, index) in filteredOrders" :key="index">
+            <td>{{ index + 1 }}</td>
+            <td>{{ order.orderCode }}</td>
+            <td>{{ order.invoiceCode }}</td>
+            <td>{{ order.franchiseAddress }}</td>
+            <td>{{ order.deliveryStatus }}</td>
+            <td>{{ order.franchiseOwnerName }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
+
 </template>
 
 <script setup>
-import {computed, onMounted, ref} from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useStore } from 'vuex';
 
 const store = useStore();
 const accessToken = store.state.accessToken;
 
-  const headers = ref([
-    { key: 'noticeTitle', label: '공지사항 제목'},
-    { key: 'noticeEnrollDate', label: '등록일'},
-  ]);
+const lists = ref([]);
+const deliveryList = ref([
+  { label: 'No'},
+  { key: 'requestCode', label: '주문(발주)번호' },
+  { key: 'invoiceCode', label: '배송(송장)번호'},
+  { key: 'franchiseAddress', label: '배송지'},
+  { key: 'deliveryStatus', label: '배송상태'},
+  { key: 'franchiseOwnerName', label: '점주명'},
+]);
 
-  const notices = ref([]);
-  const showPopup = ref(false);
-  const selectedNotice = ref({});
+const beforeDiv = ref();
+const driverCode = 8;
 
-  const getNotice = async () => {
-    try {
-      const response = await fetch('http://localhost:5000/admin/notice/list', {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      const data = await response.json();
-      notices.value = data;
-    } catch (error) {
-      console.error('공지사항 목록을 가져오는 중 에러가 발생했습니다:', error);
-    }
-  };
-
-  const openPopup = (notice) => {
-    selectedNotice.value = notice;
-    showPopup.value = true;
-  };
-
-  const closePopup = () => {
-    showPopup.value = false;
-  };
-
-  const sortedNotices = computed(() => {
-    return notices.value.slice().sort((a, b) => {
-      return new Date(b.noticeEnrollDate) - new Date(a.noticeEnrollDate);
+const getCountBeforeDelivery = async () => {
+  try {
+    const response = await fetch(`http://api.pioms.shop/driver/${driverCode}/before-delivery/count`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
     });
-  });
 
-  onMounted(() => {
-    getNotice();
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const responseText = await response.text();
+    console.log('응답 텍스트:', responseText);
+
+    if (!responseText) {
+      throw new Error('응답이 비어 있습니다.');
+    }
+
+    beforeDiv.value = responseText;
+
+  } catch (error) {
+    console.error('배송전 송장 수를 가져오는 중 에러가 발생했습니다:', error);
+  }
+};
+const ingDiv = ref();
+const getCountIngDelivery = async () => {
+  try {
+    const response = await fetch(`http://localhost:5000/driver/${driverCode}/ing-delivery/count`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const responseText = await response.text();
+    console.log('응답 텍스트:', responseText);
+
+    if (!responseText) {
+      throw new Error('응답이 비어 있습니다.');
+    }
+
+    ingDiv.value = responseText;
+
+  } catch (error) {
+    console.error('배송완료 송장 수를 가져오는 중 에러가 발생했습니다:', error);
+  }
+};
+const afterDiv = ref();
+const getCountAfterDelivery = async () => {
+  try {
+    const response = await fetch(`http://api.pioms.shop/driver/${driverCode}/complete-delivery/count`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const responseText = await response.text();
+    console.log('응답 텍스트:', responseText);
+
+    if (!responseText) {
+      throw new Error('응답이 비어 있습니다.');
+    }
+
+    afterDiv.value = responseText;
+
+  } catch (error) {
+    console.error('배송완료 송장 수를 가져오는 중 에러가 발생했습니다:', error);
+  }
+};
+
+const list = ref([]);
+const headers = ref([
+  { key: 'noticeTitle', label: '공지사항 제목' },
+  { key: 'noticeEnrollDate', label: '등록일' },
+]);
+const notices = ref([]);
+const showPopup = ref(false);
+const selectedNotice = ref({});
+const getNotice = async () => {
+  try {
+    const response = await fetch('http://api.pioms.shop/driver/notice/list', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const responseText = await response.text();
+    console.log('응답 텍스트:', responseText);
+
+    if (!responseText) {
+      throw new Error('응답이 비어 있습니다.');
+    }
+
+    const data = JSON.parse(responseText);
+    notices.value = data;
+
+  } catch (error) {
+    console.error('공지사항 목록을 가져오는 중 에러가 발생했습니다:', error);
+  }
+};
+const openPopup = (notice) => {
+  selectedNotice.value = notice;
+  showPopup.value = true;
+};
+
+const closePopup = () => {
+  showPopup.value = false;
+};
+
+const sortedNotices = computed(() => {
+  return notices.value.slice().sort((a, b) => {
+    return new Date(b.noticeEnrollDate) - new Date(a.noticeEnrollDate);
   });
+});
+
+// 검색필터
+const conditionFilter = ref('');
+const filteredOrders = ref([]);
+const driverDashBoard = ref([]);
+const applyFilter = () => {
+  filteredOrders.value = driverDashBoard.value.filter(order =>
+      conditionFilter.value === '전체' || conditionFilter.value === ''
+          ? true
+          : order.deliveryStatus === conditionFilter.value
+  );
+};
+const resetFilter = () => {
+  conditionFilter.value = '';
+  applyFilter();
+};
+// 대쉬보드
+const getDriverDashBoard = async () => {
+  try {
+    const response = await fetch('http://localhost:5000/driver/dashboard', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    if (!response.ok) {
+      throw new Error('네트워크 오류 발생');
+    }
+    const data = await response.json();
+    driverDashBoard.value = data.order || [];
+    applyFilter();
+  } catch (error) {
+    console.error('오류 발생:', error);
+  }
+};
+
+const currentPage = ref(1);
+const totalPages = ref(1);
+
+onMounted(() => {
+  getNotice();
+  getDriverDashBoard();
+  getCountBeforeDelivery();
+  getCountIngDelivery();
+  getCountAfterDelivery();
+});
+
+
 </script>
 
 <style scoped>
@@ -167,12 +332,13 @@ const accessToken = store.state.accessToken;
 .my-delivery-list {
   border: 1px solid #d9d9d9;
   margin-top: 0 !important;
-  width: 1000px;
+  width: 750px;
   height: 870px;
   display: flex;
   position: absolute;
-  top: 1px;
-  right: 25px;
+  top: 100px;
+  right: 80px;
+  overflow-y: auto;
 }
 
 .delivery-list-box,
@@ -196,12 +362,23 @@ const accessToken = store.state.accessToken;
 /* 그 홈 박스에 각각 들어가는 요소들 */
 .delivery-status {
   display: flex;
-  padding: 20px;
+  justify-content: space-between;
   position: relative;
-  top: 10px;
-  margin-left: 50px;
+  top: 50px;
+  margin-left:  35px;
+  margin-right: 35px;
   color: #444444;
 }
+ .delivery-status-box {
+   display: flex;
+   position: relative;
+   align-items: center;
+   justify-content: space-between;
+   margin-left: 15px;
+   margin-right: 15px;
+   top: 30px;
+   font-size: 30px;
+ }
 .week {
   display: flex;
   justify-content: flex-end;
@@ -223,8 +400,52 @@ const accessToken = store.state.accessToken;
 .before,
 .ing,
 .after {
-  margin-right: 70px;
+  position: relative;
+  top: -45px;
   color: #444444;
+}
+.before-div,
+.ing-div,
+.after-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  border: 2px solid #d9d9d9;
+  padding: 20px;
+  width: 60px;
+  height: 60px;
+}
+
+.before {
+  border-radius: 8px;
+  background-color: #FFCD4B;
+  color: #ffffff;
+  width: 70px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ing {
+  border-radius: 8px;
+  background-color: #344DAF;
+  color: #ffffff;
+  width: 70px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.after {
+  border-radius: 8px;
+  background-color: #B9B9B9;
+  color: #ffffff;
+  width: 80px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 hr.hr1 {
@@ -241,7 +462,7 @@ hr.hr1-1 {
 }
 
 hr.hr2 {
-  width: 1000px;
+  width: 750px;
   top: 8px;
   position: relative;
 }
@@ -291,6 +512,7 @@ hr.hr2 {
    background: rgba(0, 0, 0, 0.5);
    z-index: 9999;
  }
+
  .popup-content {
    background: #fff;
    padding: 20px;
@@ -299,9 +521,9 @@ hr.hr2 {
    text-align: center;
  }
  .close-btn {
-   position: absolute;
-   top: 10px;
-   right: 10px;
+   position: relative;
+   top: -10px;
+   right: -200px;
    cursor: pointer;
  }
  .data-table {
@@ -315,17 +537,12 @@ hr.hr2 {
    border-color: #e4e4e4 !important;
    margin-bottom: 30px;
  }
+
  h2 {
    margin-top: 0;
  }
 
  /* 배송기사 배송조회 CSS */
- .read-filter {
-   position: relative;
-   top: 15px;
-   left: 10px;
-   display: inline;
- }
  .paTable {
    font-weight: bold;
    text-align: center;
@@ -334,43 +551,22 @@ hr.hr2 {
    border: 1px solid #ddd;
  }
  .filter1 {
-   width: 360px;
+   width: 660px;
    padding: 8px;
+   border: 1px solid #d9d9d9;
  }
- .title {
+
+ .delivery-status-title {
    display: flex;
-   justify-content: center;
+   justify-content: flex-start;
    font-size: 16px;
    position: relative;
-   top: 5px;
+   top: 2px;
  }
  .filter-label {
    font-size: 16px;
    width: 80px;
- }
- .filter-label1 {
-   font-size: 16px;
-   width: 110px;
    background-color: #d9d9d9;
-   font-weight: bold;
- }
- .filter-input {
-   font-size: 16px;
-   width: 250px;
-   display: flex;
-   justify-content: flex-start;
-   border-right: 1px solid #d9d9d9;
- }
- #delivery-status {
-   display: flex;
-   justify-content: flex-start;
-   align-items: center;
-   position: relative;
-   right: 10px;
- }
- .filter-input {
-   padding: 10px;
-   height: 30px;
  }
 
  /* 리셋, 검색 버튼 */
@@ -378,7 +574,7 @@ hr.hr2 {
  .btn-search {
    border: none;
    background-color: #ffffff;
-
+   cursor: pointer;
  }
  .button-container {
    display: flex;
@@ -391,4 +587,43 @@ hr.hr2 {
    height: 30px !important;
  }
 
+ /* 조회 표 */
+.delivery-list {
+  position: relative;
+  top: 15px;
+
+}
+
+ .delivery-table {
+  height: 50px;
+ }
+
+ .delivery-table th {
+   width: 1000px;
+   height: 40px;
+   background-color: #d9d9d9;
+ }
+ .delivery-table td {
+   text-align: center;
+   height: 40px;
+ }
+
+ .no {
+   width: 100px !important;
+ }
+ .order {
+   width: 500px !important;
+ }
+ .invoice {
+   width: 500px !important;
+ }
+.address {
+  width: 2500px !important;
+}
+.status{
+  width: 500px !important;
+}
+.owner {
+  width: 500px !important;
+}
 </style>
