@@ -3,9 +3,7 @@
     <div class="main-content">
       <div class="top-row">
         <div class="section order-status">
-          <h2>
-            내 발주 현황
-          </h2>
+          <router-link to="/franchise/notice/list" class="orderStatus-link">내 발주 현황</router-link>
           <hr class="section-divider" />
           <div class="status-boxes">
             <div class="status-box">
@@ -23,16 +21,26 @@
           </div>
         </div>
         <div class="section inventory-alert">
+          <div>
           <h2>재고 알림</h2>
           <hr class="section-divider" />
-          <div class="inventory-info" v-if="lowStockItems.length">
-            <div v-for="item in lowStockItems" :key="item.franchiseWarehouseCode">
-              <div>상품명: {{ item.product.productName }}</div>
-              <div>재고: {{ item.franchiseWarehouseEnable }}</div>
-            </div>
-          </div>
-          <div v-else>
+          <ul class="list">
+            <li v-for="item in paginatedLowStockItems" :key="item.franchiseWarehouseCode" class="list-item">
+              <div>
+                상품명: {{ item.product.productName }}
+              </div>
+              <div>
+                재고: {{ item.franchiseWarehouseEnable }}
+              </div>
+            </li>
+          </ul>
+          <div v-if="!lowStockItems.length">
             <div>재고가 부족한 상품이 없습니다.</div>
+          </div>
+            </div>
+          <div class="pagination">
+            <button @click="prevLowStockPage" :disabled="lowStockCurrentPage === 1">이전</button>
+            <button @click="nextLowStockPage" :disabled="lowStockCurrentPage === lowStockTotalPages">다음</button>
           </div>
         </div>
       </div>
@@ -43,7 +51,7 @@
           </router-link>
           <ul class="list">
             <li v-for="item in paginatedNotices" :key="item.noticeCode" class="list-item">
-              <div class="notice-title">{{ item.noticeTitle }}</div>
+              <div class="notice-title">{{ truncateTitle(item.noticeTitle) }}</div>
               <div>{{ formatNoticeDate(item.noticeEnrollDate) }}</div>
             </li>
           </ul>
@@ -56,7 +64,7 @@
           <router-link to="/franchise/ask" class="inquiry-link">문의사항 리스트</router-link>
           <ul class="list">
             <li v-for="item in paginatedAsks" :key="item.askCode" class="list-item">
-              <div class="title">{{ item.askTitle }}</div>
+              <div class="title">{{ truncateTitle(item.askTitle) }}</div>
               <div class="status-container">
                 <div class="status"
                      :class="{ 'status-pending': item.askStatus === '답변대기', 'status-complete': item.askStatus === '답변완료' }">
@@ -78,8 +86,6 @@
               <div>
                 {{ item.product.productName }}
                 <span class="category">
-<!--                  {{ item.product.categoryThird.categorySecond.categorySecondName }} >-->
-<!--                  {{ item.product.categoryThird.categoryThirdName }}-->
                 </span>
               </div>
               <div>{{ item.product.productStatus }}</div>
@@ -94,6 +100,7 @@
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
@@ -111,7 +118,9 @@ const orderStat = ref({});
 const currentPage = ref(1);
 const noticeCurrentPage = ref(1);
 const favoritesCurrentPage = ref(1);
+const lowStockCurrentPage = ref(1);
 const itemsPerPage = 6;
+const lowStockItemsPerPage = 3;
 
 const fetchDashboardData = async () => {
   try {
@@ -130,9 +139,28 @@ const fetchDashboardData = async () => {
     asks.value = data.askList.asks;
     favorites.value = data.favoriteList;
     orderStat.value = data.orderStat;
-    lowStockItems.value = data.favoriteList.filter(item => item.franchiseWarehouseEnable < 10);
+    lowStockItems.value = data.filter(item => item.franchiseWarehouseEnable < 10);
   } catch (error) {
     console.error('Failed to fetch dashboard data:', error);
+  }
+};
+
+const fetchProducts = async () => {
+  try {
+    const response = await fetch(`http://api.pioms.shop/franchise/warehouse/list/product`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    lowStockItems.value = data.filter(item => item.franchiseWarehouseEnable <= 5);
+  } catch (error) {
+    console.error('Failed to fetch products:', error);
   }
 };
 
@@ -154,6 +182,12 @@ const paginatedFavorites = computed(() => {
   return favorites.value.slice(start, end);
 });
 
+const paginatedLowStockItems = computed(() => {
+  const start = (lowStockCurrentPage.value - 1) * lowStockItemsPerPage;
+  const end = start + lowStockItemsPerPage;
+  return lowStockItems.value.slice(start, end);
+});
+
 const totalPages = computed(() => {
   return Math.ceil(asks.value.length / itemsPerPage);
 });
@@ -164,6 +198,10 @@ const noticeTotalPages = computed(() => {
 
 const favoritesTotalPages = computed(() => {
   return Math.ceil(favorites.value.length / itemsPerPage);
+});
+
+const lowStockTotalPages = computed(() => {
+  return Math.ceil(lowStockItems.value.length / lowStockItemsPerPage);
 });
 
 const prevPage = () => {
@@ -202,6 +240,22 @@ const nextFavoritesPage = () => {
   }
 };
 
+const prevLowStockPage = () => {
+  if (lowStockCurrentPage.value > 1) {
+    lowStockCurrentPage.value--;
+  }
+};
+
+const nextLowStockPage = () => {
+  if (lowStockCurrentPage.value < lowStockTotalPages.value) {
+    lowStockCurrentPage.value++;
+  }
+};
+
+const truncateTitle = (title, maxLength = 20) => {
+  return title.length > maxLength ? `${title.slice(0, maxLength)}...` : title;
+};
+
 const formatAskDate = (dateString) => {
   if (!dateString) return '-';
   const date = new Date(dateString);
@@ -226,7 +280,11 @@ const formatNoticeDate = (dateString) => {
   });
 };
 
-onMounted(fetchDashboardData);
+onMounted(() => {
+  fetchProducts();
+  fetchDashboardData();
+});
+
 </script>
 
 <style scoped>
@@ -269,6 +327,8 @@ body{
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border: 1px solid #ddd;
   flex: 1;
+  //height: 350px; /* 높이 고정 */
+  overflow: hidden; /* 내용이 넘칠 경우 숨기기 */
 }
 
 .notice-list,
@@ -317,30 +377,35 @@ body{
 }
 
 .notice-title {
-  font-size: 16px;
+  flex: 1;
+  font-size: 15px;
   color: #333;
   font-weight: bold;
+  white-space: nowrap; /* 텍스트 줄 바꿈 금지 */
+  overflow: hidden; /* 넘치는 텍스트 숨기기 */
+  text-overflow: ellipsis; /* 넘치는 텍스트 생략표(...) 추가 */
 }
 
 .notice-link,
 .inquiry-link,
-.favorite-link {
+.favorite-link,
+.orderStatus-link{
   display: block;
   font-size: 18px;
   font-weight: bold;
   color: #333;
   text-decoration: none;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .order-status {
   flex: 1;
-  height: 80%;
+  height: 230px;
 }
 
 .inventory-alert {
   flex: 1;
-  height: 80%;
+  height: 230px;
 }
 
 .favorite-products {
@@ -356,6 +421,9 @@ body{
 .title {
   flex: 1;
   margin-right: 10px;
+  white-space: nowrap; /* 텍스트 줄 바꿈 금지 */
+  overflow: hidden; /* 넘치는 텍스트 숨기기 */
+  text-overflow: ellipsis; /* 넘치는 텍스트 생략표(...) 추가 */
 }
 
 .status-container {
@@ -425,5 +493,4 @@ body{
   border: none;
   border-top: 1px solid #ddd;
 }
-
 </style>
