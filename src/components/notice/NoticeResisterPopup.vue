@@ -1,20 +1,28 @@
 <template>
   <div class="notice-form">
-    <div class="title">
-      <h2 class="register">공지사항 등록</h2>
+
+      <div class="title">
+        공지사항 등록
+      </div>
+    <div style="padding: 20px">
+      <form @submit.prevent="submitForm">
+        <div >
+          <label class="noticeTitle" for="noticeTitle">제목</label><br><br>
+          <input class="input-title" type="text"  placeholder="공지사항 제목을 입력해주세요." v-model="noticeTitle" required/>
+        </div>
+        <br>
+        <div>
+          <label for="noticeContent">내용</label><br><br>
+          <textarea class="text-area" v-model="noticeContent" placeholder="공지사항 내용을 입력해주세요." required></textarea>
+        </div>
+        <br>
+        <div style="  float: right;" >
+          <button class="regist-btn" type="submit">등록</button>
+          <button class="close-btn" @click="closeForm">취소</button>
+        </div>
+      </form>
+      <br><br>
     </div>
-    <form @submit.prevent="submitForm">
-      <div>
-        <label class="noticeTitle" for="noticeTitle">제목</label>
-        <input type="text"  placeholder="공지사항 제목을 입력해주세요." v-model="noticeTitle" required/>
-      </div>
-      <div>
-        <label for="noticeContent">내용</label>
-        <textarea v-model="noticeContent" placeholder="공지사항 내용을 입력해주세요." required></textarea>
-      </div>
-      <button type="submit">등록</button>
-      <button class="close-btn" @click="closeForm">취소</button>
-    </form>
   </div>
 </template>
 
@@ -40,8 +48,18 @@ import { ref, defineEmits } from 'vue';
 </script>
 
 <style scoped>
+.input-title{
+  width: 100%;
+  border: 2px solid black;
+}
+
 .title {
-  background-color: #9a9a9a;
+  background-color: #d9d9d9;
+  font-size: 20px;
+  font-weight: 500;
+  padding: 10px;
+  padding-left: 20px;
+  border-radius: 10px;
 }
 .register {
   margin: 0;
@@ -51,7 +69,7 @@ import { ref, defineEmits } from 'vue';
 }
 .notice-form {
   background: #ffffff;
-  padding: 0px 10px 10px 10px;
+  //padding: 0px 10px 10px 10px;
   border-radius: 10px;
   border-color: #d9d9d9;
   border: 5px;
@@ -65,12 +83,25 @@ import { ref, defineEmits } from 'vue';
 }
 
 .close-btn {
-  background: #d9d9d9;
+  background: #9a9a9a;
   color: white;
   border: none;
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
 }
+.regist-btn {
+  background: #9a9a9a;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.text-area{
+  width: 100%;
+  height: 200px;
+  border: 2px solid black;
 
+}
 </style>
