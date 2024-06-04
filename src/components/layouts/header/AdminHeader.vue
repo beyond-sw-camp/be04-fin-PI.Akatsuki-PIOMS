@@ -10,7 +10,7 @@
       </div>
       <div class="dictionary">
         <img class="dictionary_icon" src="@/assets/icon/Dictionary.png" alt="Dictionary"/>
-        <h5>관리자 메뉴얼</h5>
+        <button @click="pdfDownload">관리자 매뉴얼</button>
       </div>
       <div>
         <button class="cta" @click="logout">
@@ -172,6 +172,7 @@ import { jwtDecode } from 'jwt-decode';
 
 const router = useRouter();
 const store = useStore();
+const accessToken = store.state.accessToken;
 const username = ref('');
 
 const fetchUsernameFromToken = () => {
@@ -181,7 +182,33 @@ const fetchUsernameFromToken = () => {
     username.value = decoded.username;
   }
 };
+const pdfDownload = async () => {
+  try {
+    const response = await fetch('http://api.pioms.shop/admin/pdfdownload/admin-pdf', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
 
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'AdminManual.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('There has been a problem with your fetch operation:', error);
+  }
+};
 const logout = async () => {
   try {
     await store.dispatch('logout');
