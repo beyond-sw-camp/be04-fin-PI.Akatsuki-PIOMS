@@ -5,9 +5,9 @@
     <section class="header_info">
       <div class="Delivery">
         <img class="Delivery_icon" src="@/assets/icon/Delivery.png" alt="Delivery"/>
-        <h5><u>{{username}}</u>님 정보</h5>
+        <h5><u>{{ username }}</u>님 정보</h5>
       </div>
-      <div class="dictionary">
+      <div class="dictionary" @click="pdfDownload" style="cursor: pointer;">
         <img class="dictionary_icon" src="@/assets/icon/Dictionary.png" alt="Dictionary"/>
         <button @click="pdfDownload">배송기사 매뉴얼</button>
       </div>
@@ -43,6 +43,8 @@ const fetchUsernameFromToken = () => {
     username.value = decoded.username;
   }
 };
+
+
 const pdfDownload = async () => {
   try {
     const response = await fetch('http://localhost:5000/driver/pdfdownload/driver-pdf', {
@@ -70,6 +72,7 @@ const pdfDownload = async () => {
     console.error('There has been a problem with your fetch operation:', error);
   }
 };
+
 const logout = async () => {
   try {
     await store.dispatch('logout');
@@ -119,7 +122,7 @@ onMounted(() => {
 header {
   display: flex;
   justify-content: space-between;
-  width: 2100px;
+  width: 100%;
   height: 35px;
 }
 .header_info {
@@ -212,7 +215,7 @@ header {
   background: #FFCD4B;
 }
 
-.cta:hover svg {
+ctca:hover svg {
   transform: translateX(0);
 }
 
@@ -248,7 +251,7 @@ hr.hr3 {
 .header_rootAdmin {
   display: flex;
   justify-content: center;
-  width: 2100px;
+  width: 100%;
   height: 20px;
   position: relative;
   top: 10px;
@@ -321,4 +324,5 @@ hr.hr3 {
 .label {
   margin-right: 100px;
 }
+
 </style>
