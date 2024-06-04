@@ -33,7 +33,7 @@
             <input type="text" v-model="filterInvoiceCode" />
           </td>
         </tr>
-        
+
         <tr>
           <td class="filter-label">점주명</td>
           <td class="filter-input">
@@ -44,7 +44,7 @@
             <input type="date" v-model="filterOrderDate" />
           </td>
         </tr>
-        
+
       </table>
     </div>
     <div class="action-buttons">
@@ -58,16 +58,16 @@
     </div>
 
 
-    <popup 
-        v-if="createPopup"    
-        :showPopup="showPopup" 
+    <popup
+        v-if="createPopup"
+        :showPopup="showPopup"
         :popupVisible="createPopup"
         :franchiseCode="franchiseCode"
         :franchiseOwnerCode="franchiseOwnerCode"/>
-    <OrderDetail 
-        v-if="createDetailPopup" 
-        :showDetailPopup="showDetailPopup" 
-        :popupVisible="createDetailPopup" 
+    <OrderDetail
+        v-if="createDetailPopup"
+        :showDetailPopup="showDetailPopup"
+        :popupVisible="createDetailPopup"
         :detailItem="detailItem"
         :franchiseCode="franchiseCode"
         :franchiseOwnerCode="franchiseOwnerCode"
@@ -95,7 +95,7 @@
           <td v-else class="num" style="width:5%">-</td>
           <td v-if="item.invoiceDate!=null">{{ item.invoiceDate }}</td>
           <td v-else>-</td>
-          
+
 
           <td v-if="item.orderCondition=='승인대기'" >
             <div class="condition-button pending">승인대기</div>
@@ -168,7 +168,7 @@ const getOrderList = async () => {
     if (!accessToken) {
       throw new Error('No access token found');
     }
-    const response = await fetch(`http://localhost:5000/franchise/orders`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/orders`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -183,7 +183,7 @@ const getOrderList = async () => {
 
     if (!response.ok) {
       throw new Error('네트워크 오류 발생');
-      
+
     }
 
     const data = await response.json();

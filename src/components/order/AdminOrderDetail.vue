@@ -6,21 +6,21 @@
            <button class="cancel-btn" @click="showDetailPopup" >x</button>
          </div>
            <br>
-          
+
            <br>
                 <h1 align="center">발주서</h1>
 
            <div class="info">
                 <div style="display:flex;" align="center">
                   <div class="divvv-title">
-                    수신처      
+                    수신처
                   </div>
                   <div class="divvv-title">
-                    발신처      
+                    발신처
                   </div>
                 </div>
                 <div style="display:flex;" align="center">
-                
+
                     <div class="divvv">
                         <div class="divvv2" >
                           <div class="divvv3-title">
@@ -32,7 +32,7 @@
                         </div>
                         <div class="divvv2">
                           <div class="divvv3-title">
-                              관리자명 
+                              관리자명
                           </div>
                           <div class="divvv3">
                              {{ item.adminName }}
@@ -59,7 +59,7 @@
                         </div>
                         <div class="divvv2">
                           <div class="divvv3-title">
-                              점주명 
+                              점주명
                           </div>
                           <div class="divvv3">
                              {{ item.franchiseOwnerName }}
@@ -73,9 +73,9 @@
                              {{item.franchiseOwnerPhone}}
                           </div>
                         </div>
-                </div>  
+                </div>
             </div>
-            
+
 
             <div class="divvv-title">
                 발주상품
@@ -116,13 +116,13 @@
                 </tbody>
               </table>
             </div>
-            
+
             <br>
             <br>
             <br>
             <br>
 
-            
+
 
             <div v-if="isDenied">
               <div class="popup-overlay"  >
@@ -152,11 +152,11 @@
                       &nbsp;&nbsp;&nbsp;
                       <button type="submit" class="submit-btn">등록</button>
                     </div>
-                  </form> 
+                  </form>
                 </div>
               </div>
             </div>
-            
+
           </div>
           <div class="action-buttons" v-if="item.orderCondition == '승인대기'">
               <input class="cancel-btn" type="button" value="발주승인" @click="accpetOrder">
@@ -172,9 +172,9 @@
        </div>
    </div>
 
-   
 
-       
+
+
 </template>
 
 <script setup>
@@ -205,7 +205,7 @@
  const list = props.detailItem.orderProductList;
  const exchangeList = props.detailItem.exchangeProductList;
 
- // 추후 개선 예정 
+ // 추후 개선 예정
  const adminCode = 2;
  const franchiseCode = 1;
 const accpetOrder = async () => {
@@ -215,7 +215,7 @@ const accpetOrder = async () => {
         if (!accessToken) {
           throw new Error('No access token found');
       }
-      const response = await fetch(`http://localhost:5000/admin/order/${item.orderCode}/accept`, {
+      const response = await fetch(`http://api.pioms.shop/admin/order/${item.orderCode}/accept`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -226,14 +226,14 @@ const accpetOrder = async () => {
       if(response.status ==406){
         alert("이 발주는 이미 처리되어 있습니다.");
         props.showDetailPopup();
-        
+
         return;
       }
       if (!response.ok) {
         alert("잘못된 주문")
         props.showDetailPopup();
       }
-    
+
       props.showDetailPopup();
       props.getOrderList();
     } catch (error) {
@@ -256,7 +256,7 @@ const denyOrder = async () => {
         throw new Error('No access token found');
       }
 
-      const response = await fetch(`http://localhost:5000/admin/order/${item.orderCode}/deny?denyMessage=${reason.value}`, {
+      const response = await fetch(`http://api.pioms.shop/admin/order/${item.orderCode}/deny?denyMessage=${reason.value}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -292,6 +292,5 @@ console.log(exchangeList);
   @import "../../assets/css/order.css" ;
 
 
-  
+
 </style>
-  
