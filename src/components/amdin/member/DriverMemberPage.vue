@@ -30,7 +30,7 @@
       <button @click="showPostPopup = true" class="postBtn">
         <img src="@/assets/icon/new%20Item.png" alt="postProduct">
       </button>
-      <AdminPostPopup v-if="showPostPopup" @close="showPostPopup = false"/>
+      <DriverPostPopup v-if="showPostPopup" @close="showPostPopup = false"/>
       <button @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
     </div>
     <div class="table-container">
@@ -61,8 +61,9 @@
 import { ref, computed } from 'vue';
 import axios from "axios";
 import { useStore } from 'vuex';
+import DriverPostPopup from "@/components/amdin/member/DriverPostPopup.vue";
+
 const store = useStore();
-import AdminPostPopup from "@/components/amdin/member/AdminPostPopup.vue";
 const accessToken = store.state.accessToken;
 
 const lists = ref([]);
@@ -92,7 +93,8 @@ const resetFilters = () => {
 };
 const getDriverMembers = async () => {
   try {
-    const driverResponse = await fetch('http://api.pioms.shop/admin/driver/list', {
+    // Fetch delivery drivers
+    const driverResponse = await fetch('http://localhost:5000/admin/driver/list', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -101,12 +103,13 @@ const getDriverMembers = async () => {
     });
 
     if (!driverResponse.ok) {
-      throw new Error('Bad request');
+      throw new Error('Failed to fetch delivery drivers');
     }
 
     const driverData = await driverResponse.json();
 
-    const franchiseResponse = await fetch('http://api.pioms.shop/admin/franchise/list', {
+    // Fetch franchises
+    const franchiseResponse = await fetch('http://localhost:5000/admin/franchise/list', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -115,28 +118,31 @@ const getDriverMembers = async () => {
     });
 
     if (!franchiseResponse.ok) {
-      throw new Error('가맹점 정보를 가져오는 중 오류 발생');
+      throw new Error('Failed to fetch franchises');
     }
 
     const franchiseData = await franchiseResponse.json();
 
+    // Map delivery drivers to franchises
     lists.value = driverData.map(deliveryMan => {
       const correspondingFranchise = franchiseData.find(franchise =>
-          franchise.deliveryDriver && franchise.deliveryDriver.driverCode === deliveryMan.driverCode);
+          franchise.deliveryDriver && franchise.deliveryDriver.driverCode === deliveryMan.driverCode
+      );
       return {
         driverCode: deliveryMan.driverCode,
         driverName: deliveryMan.driverName,
         driverPhone: deliveryMan.driverPhone,
-        franchiseAddress: correspondingFranchise ? correspondingFranchise.franchiseAddress : 0,
+        franchiseAddress: correspondingFranchise ? correspondingFranchise.franchiseAddress : 'N/A',
         driverStatus: deliveryMan.driverStatus,
       };
     });
 
     filteredLists.value = lists.value;
   } catch (error) {
-    console.error('Bad request:', error);
+    console.error('Error fetching data:', error);
   }
 };
+
 
 const downloadExcel = () => {
   axios({
