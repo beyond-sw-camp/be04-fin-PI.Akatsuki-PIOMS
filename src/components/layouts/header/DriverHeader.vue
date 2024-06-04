@@ -5,14 +5,14 @@
     <section class="header_info">
       <div class="Delivery">
         <img class="Delivery_icon" src="@/assets/icon/Delivery.png" alt="Delivery"/>
-        <h5><u>신타치</u>님 정보</h5>
+        <h5><u>{{ username }}</u>님 정보</h5>
       </div>
-      <div class="dictionary">
+      <div class="dictionary" @click="pdfDownload" style="cursor: pointer;">
         <img class="dictionary_icon" src="@/assets/icon/Dictionary.png" alt="Dictionary"/>
-        <h5>배송기사 메뉴얼</h5>
+        <button @click="pdfDownload">배송기사 매뉴얼</button>
       </div>
       <div>
-        <button class="cta">
+        <button class="cta" @click="logout">
           <span>Logout</span>
           <svg width="15px" height="10px" viewBox="0 0 13 10">
             <path d="M1,5 L11,5"></path>
@@ -25,11 +25,104 @@
   <hr class="hr1"/>
 </template>
 
+<script setup>
+import { onMounted, ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+import { jwtDecode } from 'jwt-decode';
+
+const store = useStore();
+const accessToken = store.state.accessToken;
+const router = useRouter();
+const username = ref('');
+
+const fetchUsernameFromToken = () => {
+  const token = store.state.accessToken;
+  if (token) {
+    const decoded = jwtDecode(token);
+    username.value = decoded.username;
+  }
+};
+
+
+const pdfDownload = async () => {
+  try {
+    const response = await fetch('http://api.pioms.shop/driver/pdfdownload/driver-pdf', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'DriverManual.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('There has been a problem with your fetch operation:', error);
+  }
+};
+
+const logout = async () => {
+  try {
+    await store.dispatch('logout');
+    await router.push('/');
+  } catch (error) {
+    console.error('로그아웃 오류:', error);
+  }
+};
+
+onMounted(() => {
+  store.dispatch('initializeAuth');
+  fetchUsernameFromToken();
+
+  const labels = document.querySelectorAll('.label');
+  let hideTimeout;
+
+  labels.forEach(label => {
+    const submenu = label.nextElementSibling;
+
+    label.addEventListener('mouseenter', () => {
+      clearTimeout(hideTimeout);
+      if (submenu) submenu.style.display = 'block';
+    });
+
+    label.addEventListener('mouseleave', () => {
+      hideTimeout = setTimeout(() => {
+        if (!submenu.matches(':hover')) submenu.style.display = 'none';
+      }, 300);
+    });
+
+    if (submenu) {
+      submenu.addEventListener('mouseenter', () => {
+        clearTimeout(hideTimeout);
+      });
+
+      submenu.addEventListener('mouseleave', () => {
+        hideTimeout = setTimeout(() => {
+          submenu.style.display = 'none';
+        }, 300);
+      });
+    }
+  });
+});
+</script>
+
 <style scoped>
 header {
   display: flex;
   justify-content: space-between;
-  width: 2100px;
+  width: 100%;
   height: 35px;
 }
 .header_info {
@@ -122,7 +215,7 @@ header {
   background: #FFCD4B;
 }
 
-.cta:hover svg {
+ctca:hover svg {
   transform: translateX(0);
 }
 
@@ -158,7 +251,7 @@ hr.hr3 {
 .header_rootAdmin {
   display: flex;
   justify-content: center;
-  width: 2100px;
+  width: 100%;
   height: 20px;
   position: relative;
   top: 10px;
@@ -231,4 +324,5 @@ hr.hr3 {
 .label {
   margin-right: 100px;
 }
+
 </style>

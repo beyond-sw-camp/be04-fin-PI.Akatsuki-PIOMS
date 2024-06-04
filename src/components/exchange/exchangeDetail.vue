@@ -2,7 +2,7 @@
   <div class="popup-overlay">
     <div class="popup-content">
       <br>
-      <div class="info">
+      <div class="info" style="min-height: 700px;">
         <h1 align="center">반품 및 교환 주문서</h1>
 
         <div style="display:flex;" align="center">
@@ -48,7 +48,7 @@
               </tr>
             </thead>
             <!-- 처리 대기중인 교환인 경우 -->
-            <tr class="allpost"v-for="(product, index) in list" :key="index" align="center" v-if="item.exchangeStatus=='처리대기' ">
+            <tr class="allpost"  v-for="(product, index) in list" :key="index" align="center" v-if="item.exchangeStatus=='처리대기' ">
               <td>{{ product.productCode }}</td>
               <td>{{ product.productName }}</td>
               <td>{{ product.exchangeProductCount }}</td>
@@ -68,16 +68,17 @@
           </table>
         </div>
         <br><br><br><br>
-        
+
       </div>
       신청일자 : {{ item.exchangeDate }}
         <div class="action-buttons" v-if="item.exchangeStatus=='처리대기' ">
           <input class="but" type="button" value="저장하기" @click="checkExchange">
           <input class="but" type="button" value="돌아가기" @click="showDetailPopup">
         </div>
-        <div class="action-buttons" v-else>
-          <input class="cancel-btn" type="button" value="돌아가기" @click="showDetailPopup">
-        </div>
+      <div style="float: right">
+        <br>
+        <input class="cancel-btn" type="button" value="돌아가기" @click="showDetailPopup">
+      </div>
       <br>
     </div>
   </div>
@@ -128,7 +129,7 @@ const checkExchange = async () => {
     if (!accessToken) {
       throw new Error('No access token found');
     }
-    const response = await fetch(`http://localhost:5000/admin/exchange/${item.exchangeCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/exchange/${item.exchangeCode}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -157,4 +158,5 @@ const checkExchange = async () => {
 
 <style scoped>
   @import "../../assets/css/popup.css" ;
+  @import "../../assets/css/order.css" ;
 </style>

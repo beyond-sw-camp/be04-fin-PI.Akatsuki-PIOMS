@@ -1,11 +1,11 @@
 <template>
-  <div>
-    <div class="headerTitle">
-        <h3 class="product-title"><img src="@/assets/icon/Cloth.png">상품 및 상품 카테고리 관리 > 상품 관리 > 상품 전체 조회 및 관리</h3>
-    <h6 class="product-sub-title" style="margin-top: 1%; margin-bottom: 1%">조회할 상품의 조건을 선택 후
-      <img src="@/assets/icon/reset.png">초기화 또는 <img src="@/assets/icon/search.png">검색을 눌러주세요.
-    </h6>
-    </div>
+  <div style="margin-top: 50px;">
+<!--    <div class="headerTitle" align="center">-->
+<!--        <h3 class="product-title"><img src="@/assets/icon/Cloth.png">상품 및 상품 카테고리 관리 > 상품 관리 > 상품 전체 조회 및 관리</h3>-->
+<!--    <h6 class="product-sub-title" style="margin-top: 1%; margin-bottom: 1%">조회할 상품의 조건을 선택 후-->
+<!--      <img src="@/assets/icon/reset.png">초기화 또는 <img src="@/assets/icon/search.png">검색을 눌러주세요.-->
+<!--    </h6>-->
+<!--    </div>-->
     <div class="filter-section">
       <div>
       </div>
@@ -250,7 +250,7 @@ const getProductImageUrl = (productCode) => {
 };
 const fetchProductImages = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/admin/product/productImage`, {
+    const response = await fetch(`http://api.pioms.shop/admin/product/productImage`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -274,7 +274,7 @@ const fetchProductImages = async () => {
 };
 const fetchFirstCategories = async () => {
   try {
-    const response = await fetch('http://localhost:5000/admin/category/first', {
+    const response = await fetch('http://api.pioms.shop/admin/category/first', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -295,7 +295,7 @@ const fetchSecondCategories = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -318,7 +318,7 @@ const fetchThirdCategories = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -404,7 +404,7 @@ const setCurrentCategoryThirdCode = (categoryThirdCode) => {
 }
 const getMemberId = async () => {
   try {
-    const response = await fetch('http://localhost:5000/admin/product', {
+    const response = await fetch('http://api.pioms.shop/admin/product', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -430,7 +430,7 @@ const getMemberId = async () => {
 };
 const downloadExcel = () => {
   axios({
-    url: 'http://localhost:5000/admin/exceldownload/product-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
+    url: 'http://api.pioms.shop/admin/exceldownload/product-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${accessToken}`,
@@ -563,8 +563,8 @@ fetchThirdCategories();
   justify-content: space-between; /* 양 끝에 정렬 */
   align-items: center; /* 수직 가운데 정렬 */
   position: absolute; /* 절대 위치 설정 */
-  left: 14%; /* 좌측 정렬 */
-  width: 1270px;
+  left: 19%; /* 좌측 정렬 */
+  width: 1265px;
 }
 
 .reset-btn:hover, .search-btn:hover {
@@ -624,7 +624,6 @@ fetchThirdCategories();
 .allpost {
   text-align: center;
   padding: 10px 0;
-  width: 5%;
 }
 
 .allpost:hover {
@@ -658,7 +657,9 @@ fetchThirdCategories();
 }
 .headerTitle {
   text-align: left;
-  margin-left: 16.2%;
+  margin-left: 19.5%;
+  //min-width: 1200px;
+  //max-width: 1200px;
 }
 
 .product-sub-title {

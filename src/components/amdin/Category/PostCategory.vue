@@ -1,10 +1,11 @@
 <template>
-  <div class="category-top">
-    <img src="@/assets/icon/Cloth.png" alt="" style="width: 40px; height: 40px">
-    <span>
-    상품 및 상품 카테고리 관리 > 상품 카테고리 관리 > 상품 카테고리 조회 및 등록
-    </span>
-  </div>
+<!--  <div class="category-top">-->
+<!--    <img src="@/assets/icon/Cloth.png" alt="" style="width: 40px; height: 40px">-->
+<!--    <span>-->
+<!--    상품 및 상품 카테고리 관리 > 상품 카테고리 관리 > 상품 카테고리 조회 및 등록-->
+<!--    </span>-->
+<!--  </div>-->
+  <div align="center">
   <div class="category-select">
     <div class="category-column">
       <div class="post-category">카테고리(대분류)</div>
@@ -51,6 +52,7 @@
       </div>
     </div>
   </div>
+  </div>
 </template>
 
 <script setup>
@@ -72,7 +74,7 @@ const selectedSecondCategory = ref('');
 
 const fetchFirstCategories = async () => {
   try {
-    const response = await fetch('http://localhost:5000/admin/category/first', {
+    const response = await fetch('http://api.pioms.shop/admin/category/first', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -95,7 +97,7 @@ const fetchSecondCategories = async (categoryFirstCode) => {
   }
   selectedFirstCategory.value = categoryFirstCode;
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/second/list/detail/categoryfirst/${categoryFirstCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/category/second/list/detail/categoryfirst/${categoryFirstCode}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -120,7 +122,7 @@ const fetchThirdCategories = async (categorySecondCode) => {
   }
   selectedSecondCategory.value = categorySecondCode;
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/third/list/detail/categorysecond/${categorySecondCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/category/third/list/detail/categorysecond/${categorySecondCode}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -153,7 +155,7 @@ const saveCategoryFirst = async () => {
   console.log('savedFirstData: ', savedFirstData);
 
   try {
-    const responseFirst = await fetch(`http://localhost:5000/admin/category/first/post?requesterAdminCode=1`, {
+    const responseFirst = await fetch(`http://api.pioms.shop/admin/category/first/post?requesterAdminCode=1`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -201,7 +203,7 @@ const saveCategorySecond = async () => {
   console.log('savedSecondData: ', savedSecondData);
 
   try {
-    const responseSecond = await fetch(`http://localhost:5000/admin/category/second/create`, {
+    const responseSecond = await fetch(`http://api.pioms.shop/admin/category/second/create`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -248,7 +250,7 @@ const saveCategoryThird = async () => {
   console.log('savedThirdData: ', savedThirdData);
 
   try {
-    const responseThird = await fetch(`http://localhost:5000/admin/category/third/create`, {
+    const responseThird = await fetch(`http://api.pioms.shop/admin/category/third/create`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

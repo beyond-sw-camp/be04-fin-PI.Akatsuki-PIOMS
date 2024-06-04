@@ -113,6 +113,7 @@ const noticeCurrentPage = ref(1);
 const favoritesCurrentPage = ref(1);
 const itemsPerPage = 6;
 
+
 const fetchDashboardData = async () => {
   try {
     const response = await fetch(`http://localhost:5000/franchise/franchiseDashboard`, {
@@ -133,6 +134,7 @@ const fetchDashboardData = async () => {
     lowStockItems.value = data.favoriteList.filter(item => item.franchiseWarehouseEnable < 10);
   } catch (error) {
     console.error('Failed to fetch dashboard data:', error);
+
   }
 };
 

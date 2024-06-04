@@ -62,7 +62,7 @@ const fetchAskData = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://localhost:5000/admin/ask/${askCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/ask/${askCode}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -104,7 +104,7 @@ const submitAnswer = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://localhost:5000/admin/ask/answer/${askCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/ask/answer/${askCode}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -149,8 +149,8 @@ onMounted(fetchAskData);
   width: 100%;
   max-width: 1200px;
   background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  //border-radius: 8px;
+  //box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
 }
 

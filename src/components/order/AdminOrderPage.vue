@@ -1,10 +1,8 @@
 <template>
-    <div class="breadcrumbs">
-    <img src="../../assets/icon/List.png" alt="List Icon" class="breadcrumb-icon" />
-    <span>발주 조회 및 관리</span>
-  </div>
-
-
+<!--    <div class="breadcrumbs">-->
+<!--    <img src="../../assets/icon/List.png" alt="List Icon" class="breadcrumb-icon" />-->
+<!--    <span>발주 조회 및 관리</span>-->
+<!--  </div>-->
     <div class="filter-section">
       <table class="filter-table">
         <tr>
@@ -34,7 +32,7 @@
             <input type="text" v-model="filterInvoiceCode" />
           </td>
         </tr>
-        
+
         <tr>
           <td class="filter-label">점주명</td>
           <td class="filter-input">
@@ -45,7 +43,7 @@
             <input type="date" v-model="filterOrderDate" />
           </td>
         </tr>
-        
+
       </table>
     </div>
     <div class="action-buttons">
@@ -57,19 +55,19 @@
       </button>
     </div>
 
-    <OrderDetail 
-        v-if="createDetailPopup" 
-        :showDetailPopup="showDetailPopup" 
-        :popupVisible="createDetailPopup" 
+    <OrderDetail
+        v-if="createDetailPopup"
+        :showDetailPopup="showDetailPopup"
+        :popupVisible="createDetailPopup"
         :detailItem="detailItem"
         :getOrderList="getOrderList"
     />
-    
+
     <div class="table-container">
     <table class="table">
       <thead >
         <tr class="header1">
-          <th v-for="(header, index) in headers" :key="index" > 
+          <th v-for="(header, index) in headers" :key="index" >
             {{ header.label }}
           </th>
           <th>발주상태</th>
@@ -86,7 +84,7 @@
           <td class="num">{{ item.orderCode }}</td>
           <td>{{ item.franchiseName }}</td>
           <td>{{ item.franchiseOwnerName }}</td>
-          
+
           <td >{{ item.orderDate }}</td>
 
           <td v-if="item.invoiceCode!=0" class="num" style="width:5%">{{ item.invoiceCode }}</td>
@@ -166,7 +164,7 @@ const getOrderList = async () => {
     if (!accessToken) {
       throw new Error('No access token found');
     }
-    const response = await fetch(`http://localhost:5000/admin/orders`, {
+    const response = await fetch(`http://api.pioms.shop/admin/order/orders`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -281,5 +279,5 @@ const resetRowColor = (index) => {
 
 <style scoped>
   @import "../../assets/css/order.css" ;
-  
+
 </style>

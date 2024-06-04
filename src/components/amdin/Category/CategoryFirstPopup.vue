@@ -33,7 +33,7 @@ const saveCategoryFirst = async () => {
   console.log('Request Data:', requestData);
 
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/first/update/${props.currentFirstCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/category/first/update/${props.currentFirstCode}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

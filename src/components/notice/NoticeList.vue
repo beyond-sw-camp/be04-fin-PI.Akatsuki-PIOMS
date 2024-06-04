@@ -1,13 +1,8 @@
 <template>
   <div class = "main">
-    <div class="container">
-      <img class="notice" src="@/assets/icon/List.png" />
-      <span class="F-title">공지 및 문의 관리&nbsp;&nbsp;></span>
-      <span class="F-title">공지사항 관리&nbsp;&nbsp;></span>
-      <span class="F-title">공지사항 조회 관리</span>
-    </div>
 
     <br/>
+  <div align="center">
     <table class="read-filter">
       <tr>
         <td class="filter-label">공지 조회 조건</td>
@@ -30,6 +25,7 @@
         </td>
       </tr>
     </table>
+  </div>
 
     <!-- 리셋, 검색 버튼 -->
     <div class="button-container">
@@ -42,8 +38,11 @@
     </div>
 
     <!-- 공지사항 등록 버튼 -->
-    <button class="btn-saveNotice" @click="showRegisterForm">공지사항 등록</button>
-
+    <div class="notice-btn-container " align="center">
+      <div align="center" style="width: 1300px">
+        <button style="float: right" class="btn-saveNotice"  @click="showRegisterForm">공지사항 등록</button>
+      </div>
+    </div>
     <!-- 공지사항 등록 팝업 -->
     <NoticeResisterPopup
         v-if="isRegisterFormVisible"
@@ -61,32 +60,39 @@
     />
 
     <!-- 오버레이 -->
-    <div v-if="isRegisterFormVisible || isEditFormVisible" class="overlay" @click="closeOverlay"></div>
+    <div v-if="isRegisterFormVisible || isEditFormVisible" class="overlay" @click="closeOverlay">
+
+    </div>
 
     <!-- 공지사항 목록 -->
-    <table class="notice-list">
-      <thead>
-      <tr>
-        <td>No</td>
-        <td>제목</td>
-        <td>내용</td>
-        <td>등록일</td>
-        <td>관리</td>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="(item, index) in paginatedLists" :key="item.noticeCode">
-        <td>{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
-        <td @click="showDetailsNoticePopup(item)">{{ item.noticeTitle }}</td>
-        <td>{{ item.noticeContent }}</td>
-        <td>{{ item.noticeEnrollDate }}</td>
-        <td>
-          <button class="modify" @click="showEditForm(item)">수정</button>
-          <button class="delete" @click="deleteNotice(item.noticeCode)">삭제</button>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+    <div class="table-container">
+      <table class="table">
+        <thead>
+        <tr class="header1">
+          <td>No</td>
+          <td>제목</td>
+          <td>내용</td>
+          <td>등록일</td>
+          <td>관리</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="(item, index) in paginatedLists" :key="item.noticeCode"
+            :id="'row-' + rowIndex"
+            class="allpost"
+        >
+          <td class="num">{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
+          <td style="width: 20%" @click="showDetailsNoticePopup(item)">{{ item.noticeTitle }}</td>
+          <td style="width: 50%">{{ item.noticeContent }}</td>
+          <td>{{ item.noticeEnrollDate }}</td>
+          <td style="">
+            <button class="modify" @click="showEditForm(item)">수정</button>
+            <button class="delete" @click="deleteNotice(item.noticeCode)">삭제</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
 
     <!-- 공지사항 상세 정보 팝업 -->
     <NoticeDetailsPopup v-if="viewPopup && selectedNotice" :notice="selectedNotice" @close="closeDetailsPopup" />
@@ -107,6 +113,13 @@ import NoticeDetailsPopup from '@/components/notice/NoticeDetailsPopup.vue';
 import NoticeEditPopup from '@/components/notice/NoticeEditPopup.vue';
 import { useStore } from 'vuex';
 
+const highlightRow = (index) => {
+  document.querySelector(`#row-${index}`).classList.add('highlighted');
+};
+const resetRowColor = (index) => {
+  document.querySelector(`#row-${index}`).classList.remove('highlighted');
+};
+
 const store = useStore();
 const accessToken = store.state.accessToken;
 const lists = ref([]);
@@ -124,7 +137,7 @@ const itemsPerPage = 15;
 
 const getNotice = async () => {
   try {
-    const response = await fetch('http://localhost:5000/admin/notice/list', {
+    const response = await fetch('http://api.pioms.shop/admin/notice/list', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -171,10 +184,19 @@ const applyFilters = () => {
   currentPage.value = 1; // 필터 적용 후 페이지를 첫 페이지로 설정
 };
 
+
+const sortedNotices = computed(() => {
+  return lists.value.slice().sort((a, b) => {
+    return new Date(b.noticeEnrollDate) - new Date(a.noticeEnrollDate);
+  });
+});
+
 const paginatedLists = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-  return filteredLists.value.slice(start, end);
+  // 현재 페이지와 페이지당 항목 수
+  const startIndex = (currentPage.value - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  // 현재 페이지에 해당하는 공지사항 리스트 추출
+  return sortedNotices.value.slice(startIndex, endIndex);
 });
 
 const totalPages = computed(() => {
@@ -236,8 +258,8 @@ const submitNotice = async (notice) => {
   try {
     const method = isEditFormVisible.value ? 'PUT' : 'POST';
     const url = isEditFormVisible.value
-        ? `http://localhost:5000/admin/notice/list/update/${notice.noticeCode}?requesterAdminCode=1`
-        : 'http://localhost:5000/admin/notice/list/register?requesterAdminCode=1';
+        ? `http://api.pioms.shop/admin/notice/list/update/${notice.noticeCode}?requesterAdminCode=1`
+        : 'http://api.pioms.shop/admin/notice/list/register?requesterAdminCode=1';
 
     const response = await fetch(url, {
       method: method,
@@ -265,7 +287,7 @@ const submitNotice = async (notice) => {
 const deleteNotice = async (noticeCode) => {
   try {
     if (confirm('해당 공지사항을 삭제하시겠습니까?')) {
-      const response = await fetch(`http://localhost:5000/admin/notice/list/delete/${noticeCode}?requesterAdminCode=1`, {
+      const response = await fetch(`http://api.pioms.shop/admin/notice/list/delete/${noticeCode}?requesterAdminCode=1`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -296,11 +318,6 @@ const closeDetailsPopup = () => {
 
 const viewPopup = ref(false);
 
-const sortedNotices = computed(() => {
-  return notices.value.slice().sort((a, b) => {
-    return new Date(b.noticeEnrollDate) - new Date(a.noticeEnrollDate);
-  });
-});
 
 onMounted(() => {
   getNotice();
@@ -308,6 +325,8 @@ onMounted(() => {
 </script>
 
   <style scoped>
+  @import "../../assets/css/order.css" ;
+
   .modify,
   .delete {
     color: #ffffff;
@@ -357,20 +376,20 @@ onMounted(() => {
   border: 1px solid #D9D9D9;
   border-radius: 5px;
   padding: 10px;
-  width: 1600px;
+  width: 1300px;
   }
 
-  .read-filter td {
+.read-filter td {
   border: none;
-  }
+}
 
-  .filter-label,
-  .filter1,
-  .filter-date {
+.filter-label,
+.filter1,
+.filter-date {
   cursor: default;
-  }
+}
 
-  .filter-label {
+.filter-label {
   font-size: 16px;
   text-align: center;
   width: 120px;
@@ -378,9 +397,9 @@ onMounted(() => {
   font-weight: bold;
   background-color: #D9D9D9;
   color: #444444;
-  }
+}
 
-  .filter-section {
+.filter-section {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -389,105 +408,110 @@ onMounted(() => {
   font-size: 14px;
   margin-bottom: 0;
   border-color: #d9d9d9;
-  }
+}
 
-  .filter-input {
+.filter-input {
   width: 400px;
   height: 30px;
   padding: 10px;
   margin-left: 20px;
   border-right: 1px solid #d9d9d9;
-  }
+}
 
-  .filter1 {
+.filter1 {
   font-size: 14px;
   display: flex;
   justify-content: flex-start;
   margin-left: 10px;
   position: relative;
   top: 4px
-  }
+}
 
-  .filter-input,
-  .filter-section {
+.filter-input,
+.filter-section {
   font-size: 16px;
-  }
+}
 
-  .filter-date {
+.filter-date {
   border-top: 1px solid #D9D9D9 !important;
   border-color: #d9d9d9;
+}
+
+  .table-container {
+    width: 100%;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
   }
 
-  notice-table {
+
+
+
+.notice-list {
   width: 1600px;
-  border-collapse: collapse;
-  }
+}
+.notice-list tr td {
+  text-align: center;
+}
+.notice-list thead tr td {
+  background-color: #d9d9d9;
+  font-weight: bold;
+}
 
-  .notice-list {
-    width: 1600px;
-  }
-  .notice-list tr td {
-    text-align: center;
-  }
-  .notice-list thead tr td {
-    background-color: #d9d9d9;
-    font-weight: bold;
-  }
-
-  .notice-table th,
-  .notice-table td {
+.notice-table th,
+.notice-table td {
   padding: 10px;
   font-size: 14px;
   color: #444444;
-  }
+}
 
-  .notice-table th {
+.notice-table th {
   background-color: #d9d9d9;
-  }
+}
 
-  .notice-table td {
+.notice-table td {
   position: relative;
   top:5px;
-  }
+}
 
   /* 팝업 */
   .overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   notice-form {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  max-width: 500px; /* 팝업의 최대 너비 */
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 700px; /* 팝업의 최대 너비 */
   }
 
-  .notice-form h2 {
+.notice-form h2 {
   margin-bottom: 16px;
-  }
+}
 
-  .notice-form form div {
+.notice-form form div {
   margin-bottom: 12px;
-  }
+}
 
-  .notice-form input,
-  .notice-form textarea {
+.notice-form input,
+.notice-form textarea {
   width: calc(100% - 20px); /* 팝업의 패딩 값 제외한 너비 */
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  }
+}
 
-  .notice-form button {
+.notice-form button {
   padding: 8px 12px;
   margin-right: 8px;
   border: none;
@@ -495,19 +519,19 @@ onMounted(() => {
   color: white;
   cursor: pointer;
   border-radius: 4px;
-  }
+}
 
-  .notice-form button[type="button"] {
+.notice-form button[type="button"] {
   background: #6c757d;
-  }
+}
 
-  .notice-form button:disabled {
+.notice-form button:disabled {
   background: #ccc;
   cursor: not-allowed;
-  }
+}
 
-  #startDate,
-  #endDate {
+#startDate,
+#endDate {
   width: 170px;
   height: 30px;
   font-size: 16px;
@@ -515,19 +539,25 @@ onMounted(() => {
   margin-left: 10px;
   border: 1px solid #d9d9d9;
   color: #444444;
-  }
+}
 
   .button-container {
-  display: flex;
-  justify-content: center; /* 버튼을 왼쪽에 정렬 */
-  align-items: center; /* 버튼을 수직 가운데에 정렬 */
-  gap: 10px; /* 버튼 사이의 간격을 설정 */
+    display: flex;
+    justify-content: center; /* 버튼을 왼쪽에 정렬 */
+    align-items: center; /* 버튼을 수직 가운데에 정렬 */
+    gap: 10px; /* 버튼 사이의 간격을 설정 */
+  }
+  .notice-btn-container{
+    display: flex;
+    justify-content: center; /* 버튼을 왼쪽에 정렬 */
+    align-items: center; /* 버튼을 수직 가운데에 정렬 */
   }
 
   .btn-saveNotice {
+
   display: flex;
   position: relative;
-    left: 1480px;
+  //left: 10px;
   height: 35px;
   font-size: 16px;
   font-weight: bold;
@@ -541,26 +571,27 @@ onMounted(() => {
   border: 0;
     margin-bottom: 10px;
     width: 115px;
+
   }
 
-  .btn-saveNotice:hover {
+.btn-saveNotice:hover {
   background-color: #9a9a9a;
   color: #ffffff;
-  }
+}
 
-  .btn-reset,
-  .btn-search {
-    border: none;
-    background-color: #ffffff;
-  }
+.btn-reset,
+.btn-search {
+  border: none;
+  background-color: #ffffff;
+}
 
-  .reset,
-  .search {
+.reset,
+.search {
   width: 40px;
   height: 40px;
   justify-content: center;
   border: none;
-    background-color: #ffffff;
-  }
+  background-color: #ffffff;
+}
 
-  </style>
+</style>

@@ -1,10 +1,11 @@
 <template>
-  <div class="category-top">
-    <img src="@/assets/icon/Cloth.png" alt="" style="width: 40px; height: 40px">
-    <span>
-    상품 및 상품 카테고리 관리 > 상품 카테고리 관리 > 상품 카테고리 전체 조회
-    </span>
-  </div>
+<!--  <div class="category-top">-->
+<!--    <img src="@/assets/icon/Cloth.png" alt="" style="width: 40px; height: 40px">-->
+<!--    <span>-->
+<!--    상품 및 상품 카테고리 관리 > 상품 카테고리 관리 > 상품 카테고리 전체 조회-->
+<!--    </span>-->
+<!--  </div>-->
+  <div align="center">
   <div class="category-select">
     <div class="categoryFirst-select">
       <div class="select-title"><p>1차 카테고리(대분류)</p></div>
@@ -67,6 +68,7 @@
     <DeleteSecondPopup v-if="deleteCategorySecondVisible" :currentSecondCode="currentSecondCode" :currentSecondName="currentSecondName" @close="deleteCategorySecondVisible = false"/>
     <DeleteThirdPopup v-if="deleteCategoryThirdVisible" :currentThirdCode="currentThirdCode" :currentThirdName="currentThirdName" @close="deleteCategoryThirdVisible = false"/>
   </div>
+  </div>
 </template>
 
 <script setup>
@@ -103,7 +105,7 @@ const currentThirdName = ref('');
 
 const getCategoryFirstId = async () => {
   try {
-    const response = await fetch('http://localhost:5000/admin/category/first', {
+    const response = await fetch('http://api.pioms.shop/admin/category/first', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -128,7 +130,7 @@ const getCategoryFirstId = async () => {
 };
 const fetchFirstCategories = async () => {
   try {
-    const response = await fetch('http://localhost:5000/admin/category/first', {
+    const response = await fetch('http://api.pioms.shop/admin/category/first', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -150,7 +152,7 @@ const fetchSecondCategories = async (categoryFirstCode) => {
   }
   selectedFirstCategory.value = categoryFirstCode;
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/second/list/detail/categoryfirst/${categoryFirstCode}`,{
+    const response = await fetch(`http://api.pioms.shop/admin/category/second/list/detail/categoryfirst/${categoryFirstCode}`,{
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -174,7 +176,7 @@ const fetchThirdCategories = async (categorySecondCode) => {
   }
   selectedSecondCategory.value = categorySecondCode;
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/third/list/detail/categorysecond/${categorySecondCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/category/third/list/detail/categorysecond/${categorySecondCode}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -302,6 +304,7 @@ fetchThirdCategories();
   height: 50px;
 }
 .category-select {
+  margin-top: 3%;
   width: 1450px;
   display: flex;
   justify-content: center;
