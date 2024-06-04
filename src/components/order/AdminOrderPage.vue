@@ -46,6 +46,7 @@
 
       </table>
     </div>
+  <div align="center">
     <div class="action-buttons">
       <button @click="resetFilters" class="reset-btn">
         <img src="@/assets/icon/reset.png" alt="Reset" />
@@ -53,8 +54,9 @@
       <button @click="applyFilter" class="search-btn">
         <img src="@/assets/icon/search.png" alt="Search" />
       </button>
+      <br><br><br>
     </div>
-
+  </div>
     <OrderDetail
         v-if="createDetailPopup"
         :showDetailPopup="showDetailPopup"
@@ -164,7 +166,7 @@ const getOrderList = async () => {
     if (!accessToken) {
       throw new Error('No access token found');
     }
-    const response = await fetch(`http://api.pioms.shop/admin/order/orders`, {
+    const response = await fetch(`http://localhost:5000/admin/order/list`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

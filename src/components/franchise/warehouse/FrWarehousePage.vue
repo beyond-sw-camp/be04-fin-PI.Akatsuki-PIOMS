@@ -1,11 +1,6 @@
 <template>
   <div>
-    <div class="headerTitle">
-        <h3 class="product-title"><img src="@/assets/icon/Cloth.png">상품 및 재고 관리 > 재고 관리 > 재고 알림 관리 </h3>
-    <h6 class="product-sub-title" style="margin-top: 1%; margin-bottom: 1%">조회할 상품의 조건을 선택 후
-      <img src="@/assets/icon/reset.png">초기화 또는 <img src="@/assets/icon/search.png">검색을 눌러주세요.
-    </h6>
-    </div>
+
     <div class="filter-section">
       <div>
       </div>
@@ -52,29 +47,7 @@
             </select>
           </td>
         </tr>
-        <tr>
-          <td class="filter-label">카테고리 구분</td>
-          <td class="filter-input">
-            <select id="firstCategory" v-model="selectedFirstCategory" @change="fetchSecondCategories" class="categories">
-              <option value="">대분류</option>
-              <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">
-                {{ category.categoryFirstName }}
-              </option>
-            </select>
-            <select class="categories" id="secondCategory" v-model="selectedSecondCategory" @change="fetchThirdCategories">
-              <option value="">중분류</option>
-              <option v-for="category in secondCategories" :key="category.categorySecondCode" :value="category.categorySecondCode">
-                {{ category.categorySecondName }}
-              </option>
-            </select>
-            <select class="categories" id="thirdCategory" v-model="selectedThirdCategory">
-              <option value="">소분류</option>
-              <option v-for="category in thirdCategories" :key="category.categoryThirdCode" :value="category.categoryThirdCode">
-                {{ category.categoryThirdName }}
-              </option>
-            </select>
-          </td>
-        </tr>
+
       </table>
     </div>
     <div class="action-buttons">
@@ -92,22 +65,36 @@
       <table class="table">
         <thead>
         <tr class="header1">
-          <th v-for="(header, index) in headers" :key="index">{{header.label}}</th>
+          <th style="width: 5%"> 상품 코드</th>
+          <th> 상품 이름</th>
+          <th> 색상</th>
+          <th> 사이즈</th>
+          <th> 상품상태</th>
+          <th> 상품 누적량</th>
+          <th> 상품 보유량</th>
+          <th> 상품 판매가능량</th>
+          <th style="width: 25%">카테고리</th>
+          <th style="width: 5%"> 즐겨찾기</th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost" :id="'row-' + rowIndex"
+        <tr v-for="(item, rowIndex) in filteredLists" :key="rowIndex" class="allpost" :id="'row-' + rowIndex"
             @click="showDetailPopup(item.productCode,item.productName,item.productCount,item.productPrice,item.productStatus,item.productColor,item.productSize,item.categoryFirstName,item.categorySecondName,item.categoryThirdName,item.productContent)">
-          <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">
-              {{ item[header.key] }}
-            <template v-if="header.key === 'imgUrl'">
-              <img :src="getProductImageUrl(item.productCode)" class="product-img"/>
-            </template>
-          </td>
+          <td>{{ item.product.productCode }}</td>
+          <td>{{ item.product.productName }}</td>
+          <td>{{ item.product.productColor }}</td>
+          <td>{{ item.product.productSize }}</td>
+          <td>{{ item.product.productStatus }}</td>
+          <td>{{ item.franchiseWarehouseTotal }}</td>
+          <td>{{ item.franchiseWarehouseCount }}</td>
+          <td>{{ item.franchiseWarehouseEnable }}</td>
+          <td>{{ item.product.categoryFirstName }} > {{ item.product.categoryFirstName }} > {{ item.product.categoryFirstName }}</td>
+
+          <td v-if="item.franchiseWarehouseFavorite==true">O</td>
+          <td v-else>X</td>
+
         </tr>
-        <tr v-for="row in emptyRows" :key="'empty-' + row">
-          <td v-for="header in headers" :key="header.key"></td>
-        </tr>
+
         </tbody>
       </table>
     </div>
@@ -116,18 +103,6 @@
       <span> {{currentPage}} / {{totalPages}} </span>
       <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
     </div>
-    <ProductDetailPopup v-if="detailPopup" :currentProductCode="currentProductCode"
-                        :currentProductName="currentProductName"
-                        :currentProductCount="currentProductCount"
-                        :currentProductPrice="currentProductPrice"
-                        :currentProductStatus="currentProductStatus"
-                        :currentProductColor="currentProductColor"
-                        :currentProductSize="currentProductSize"
-                        :currentCategoryFirstName="currentCategoryFirstName"
-                        :currentCategorySecondName="currentCategorySecondName"
-                        :currentCategoryThirdName="currentCategoryThirdName"
-                        :currentProductContent="currentProductContent"
-                        :closeEdit="closePopup"/>
   </div>
 </template>
 
@@ -135,25 +110,11 @@
 import {ref, computed, onMounted, watchEffect} from 'vue';
 import axios from "axios";
 import { useStore } from 'vuex';
-import ProductDetailPopup from "@/components/franchise/product/ProductDetailPopup.vue";
 const store = useStore();
 const accessToken = store.state.accessToken;
 
 const lists = ref([]);
-const headers = ref([
-  { key: 'productCode', label: '상품 코드'},
-  { key: 'productName', label: '상품명'},
-  { key: 'imgUrl', label: '상품 이미지'},
-  { key: 'franchiseWarehouseCount', label: '보유량'},
-  { key: 'franchiseWarehouseEnable', label: '판매가능 재고량'},
-  { key: 'productNoticeCount', label: '알림 기준 수량'},
-  { key: 'productStatus', label: '상품 상태'},
-  { key: 'productColor', label: '색상'},
-  { key: 'productSize', label: '사이즈'},
-  { key: 'categoryFirstName', label: '카테고리 코드'},
-  { key: 'categorySecondName', label: '카테고리 코드'},
-  { key: 'categoryThirdName', label: '카테고리 코드'},
-]);
+
 
 const filteredLists = ref([]);
 const currentPage = ref(1);
@@ -240,102 +201,16 @@ const setCurrentCategoryThirdName = (categoryThirdName) => {
 const getProductImageUrl = (productCode) => {
   return productImages.value[productCode] || 'path/to/default-image.jpg';
 };
-const fetchProductImages = async () => {
-  try {
 
-    const response = await fetch(`http://api.pioms.shop/admin/product/productImage`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-    });
-    if(!response.ok) {
-      throw new Error('이미지를 불러오지 못했습니다.');
-    }
-    const productImagesData = await response.json();
 
-    productImages.value = productImagesData.reduce((map, item) => {
-      map[item.productCode] = item.imgUrl;
-      return map;
-    }, {});
-
-    console.log(productImages);
-  } catch (error) {
-    console.error('Error:', error);
-  }
-};
-const fetchFirstCategories = async () => {
-  try {
-    const response = await fetch('http://api.pioms.shop/admin/category/first', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-    });
-    if (!response.ok) {
-      throw new Error('대분류를 불러오는 데 실패했습니다.');
-    }
-    firstCategories.value = await response.json();
-  } catch (error) {
-    console.error('Error:', error);
-  }
-};
-const fetchSecondCategories = async () => {
-  if (selectedFirstCategory.value === '') {
-    secondCategories.value = [];
-    return;
-  }
-  try {
-    const response = await fetch(`http://api.pioms.shop/admin/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-    });
-    if (!response.ok) {
-      throw new Error('중분류를 불러오는 데 실패했습니다.');
-    }
-    secondCategories.value = await response.json();
-    thirdCategories.value = [];
-    selectedSecondCategory.value = '';
-  } catch (error) {
-    console.error('Error:', error);
-  }
-};
-const fetchThirdCategories = async () => {
-  if (selectedSecondCategory.value === '') {
-    thirdCategories.value = [];
-    return;
-  }
-  try {
-    const response = await fetch(`http://api.pioms.shop/admin/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-    });
-    if (!response.ok) {
-      throw new Error('소분류를 불러오는 데 실패했습니다.');
-    }
-    thirdCategories.value = await response.json();
-  } catch (error) {
-    console.error('Error:', error);
-  }
-};
 const applyFilters = () => {
   filteredLists.value = lists.value.filter(list => {
-    const matchesExposureStatus = selectedExposureStatus.value === '전체' || list.productExposureStatus === (selectedExposureStatus.value === '노출');
-    const matchesProductName = !filterProductName.value || list.productName.includes(filterProductName.value);
-    const matchesStatus = !filterStatus.value || list.productStatus === filterStatus.value;
-    const matchesColor = !filterColor.value || list.productColor === filterColor.value;
-    const matchesSize = !filterSize.value || list.productSize === parseInt(filterSize.value, 10);
-    const matchesCategory = !selectedThirdCategory.value || list.categoryThirdCode === selectedThirdCategory.value;
-
-    return matchesExposureStatus && matchesProductName && matchesStatus && matchesColor && matchesSize && matchesCategory;
+    const matchesExposureStatus = selectedExposureStatus.value === '전체' || list.product.productExposureStatus === (selectedExposureStatus.value === '노출');
+    const matchesProductName = !filterProductName.value || list.product.productName.includes(filterProductName.value);
+    const matchesStatus = !filterStatus.value || list.product.productStatus === filterStatus.value;
+    const matchesColor = !filterColor.value || list.product.productColor === filterColor.value;
+    const matchesSize = !filterSize.value || list.product.productSize === parseInt(filterSize.value, 10);
+    return matchesExposureStatus && matchesProductName && matchesStatus && matchesColor && matchesSize ;
   });
 };
 const resetFilters = () => {
@@ -349,65 +224,30 @@ const resetFilters = () => {
   selectedThirdCategory.value = '';
   filteredLists.value = lists.value;
 };
+
 const getMemberId = async () => {
-  try {
-    // Product 데이터 가져오기
-    const productResponse = await fetch('http://api.pioms.shop/franchise/product', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!productResponse.ok) {
-      throw new Error('네트워크 오류 발생');
-    }
-
-    const productData = await productResponse.json();
 
     // FranchiseWarehouse 데이터 가져오기
-    const franchiseWarehouseResponse = await fetch('http://api.pioms.shop/franchise/warehouse', {
+    const franchiseWarehouseResponse = await fetch('http://localhost:5000/franchise/warehouse/list', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     });
-
     if (!franchiseWarehouseResponse.ok) {
       throw new Error('프랜차이즈 웨어하우스 정보를 가져오는 중 오류 발생');
     }
-
     const franchiseWarehouseData = await franchiseWarehouseResponse.json();
-
     // 각 제품에 대한 FranchiseWarehouse 정보를 추가하여 목록 완성
-    lists.value = productData.map(product => {
-      const correspondingWarehouse = franchiseWarehouseData.find(warehouse => warehouse.product.productCode === product.productCode);
-      return {
-        productCode: product.productCode,
-        productName: product.productName,
-        imgUrl: product.imgUrl, // 예상 코드, 실제 이미지 URL을 가져오는 코드로 변경해야 함
-        franchiseWarehouseCount: correspondingWarehouse ? correspondingWarehouse.franchiseWarehouseCount : 0,
-        franchiseWarehouseEnable: correspondingWarehouse ? correspondingWarehouse.franchiseWarehouseEnable : 0,
-        productNoticeCount: product.productNoticeCount,
-        productStatus: product.productStatus,
-        productColor: product.productColor,
-        productSize: product.productSize,
-        categoryFirstName: product.categoryFirstName,
-        categorySecondName: product.categorySecondName,
-        categoryThirdName: product.categoryThirdName,
-      };
-    });
-
+    lists.value = franchiseWarehouseData;
     filteredLists.value = lists.value;
-  } catch (error) {
-    console.error('오류 발생:', error);
-  }
+    console.log(lists.value);
 };
+
 const downloadExcel = () => {
   axios({
-    url: 'http://api.pioms.shop/franchise/exceldownload/product-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
+    url: 'http://localhost:5000/franchise/exceldownload/product-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${accessToken}`,
@@ -446,10 +286,6 @@ const prevPage = () => {
 };
 
 getMemberId();
-fetchProductImages();
-fetchFirstCategories();
-fetchSecondCategories();
-fetchThirdCategories();
 </script>
 
 <style scoped>

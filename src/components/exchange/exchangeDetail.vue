@@ -2,7 +2,7 @@
   <div class="popup-overlay">
     <div class="popup-content">
       <br>
-      <div class="info" style="min-height: 700px;">
+      <div class="info">
         <h1 align="center">반품 및 교환 주문서</h1>
 
         <div style="display:flex;" align="center">
@@ -71,14 +71,14 @@
 
       </div>
       신청일자 : {{ item.exchangeDate }}
-        <div class="action-buttons" v-if="item.exchangeStatus=='처리대기' ">
-          <input class="but" type="button" value="저장하기" @click="checkExchange">
-          <input class="but" type="button" value="돌아가기" @click="showDetailPopup">
+      <div class="action-buttons" >
+          <input v-if="item.exchangeStatus=='처리대기' " class="cancel-btn" type="button" value="저장하기" @click="checkExchange">
+          <input class="cancel-btn" type="button" value="돌아가기" @click="showDetailPopup">
         </div>
-      <div style="float: right">
-        <br>
-        <input class="cancel-btn" type="button" value="돌아가기" @click="showDetailPopup">
-      </div>
+<!--      <div style="float: right">-->
+<!--        <br>-->
+<!--        <input class="cancel-btn" type="button" value="돌아가기" @click="showDetailPopup">-->
+<!--      </div>-->
       <br>
     </div>
   </div>
@@ -87,7 +87,8 @@
 <script setup>
 import { ref } from "vue";
 import axios from 'axios';
-import { useStore } from 'vuex'; // Vuex store 임포트
+import { useStore } from 'vuex';
+import FranchiseExchangePage from "@/components/exchange/FranchiseExchangePage.vue"; // Vuex store 임포트
 const store = useStore(); // Vuex store 사용
 
 const headers = ref([
@@ -146,7 +147,9 @@ const checkExchange = async () => {
       alert("서버 에러 발생 ");
       throw new Error('네트워크 오류 발생');
     }
+
     props.showDetailPopup();
+    location.reload(AdminExchangePage);
   } catch (error) {
     console.error('오류 발생:', error);
   }
@@ -157,6 +160,6 @@ const checkExchange = async () => {
 
 
 <style scoped>
-  @import "../../assets/css/popup.css" ;
   @import "../../assets/css/order.css" ;
+  @import "../../assets/css/popup.css" ;
 </style>
