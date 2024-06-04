@@ -1,7 +1,10 @@
 <template>
   <div class="popup-overlay" >
+
        <div class="popup-content">
-           <button class="cancel-btn" @click="showDetailPopup" >돌아가기</button>
+         <div style="float: right">
+           <button class="cancel-btn" @click="showDetailPopup" >x</button>
+         </div>
            <br>
           
            <br>
@@ -16,8 +19,6 @@
                     발신처      
                   </div>
                 </div>
-
-
                 <div style="display:flex;" align="center">
                 
                     <div class="divvv">
@@ -42,7 +43,7 @@
                             점주전화번호
                           </div>
                           <div class="divvv3">
-                             {{item.franchiseOwnerPhone}}
+                             {{item.adminPhone}}
                           </div>
                         </div>
                     </div>
@@ -161,9 +162,13 @@
               <input class="cancel-btn" type="button" value="발주승인" @click="accpetOrder">
               <input class="cancel-btn" type="button" value="발주반려" @click="clickDeny">
             </div>
-          발주일자 : {{ item.orderDate }}
-           <br>
-           주문코드 : {{ item.orderCode }}<br>   
+         <div>
+          발주일 : {{ item.orderDate }} &nbsp;&nbsp;&nbsp;&nbsp;
+           주문코드 : {{ item.orderCode }}<br>
+           <div style="float: right">
+             <button class="cancel-btn" @click="showDetailPopup" >돌아가기</button>
+           </div>
+         </div>
        </div>
    </div>
 
