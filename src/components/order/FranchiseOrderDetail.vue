@@ -3,23 +3,23 @@
        <div class="popup-content">
            <button class="cancel-btn" @click="showDetailPopup" >돌아가기</button>
            <br>
-          
+
            <br>
                 <h1 align="center">발주서</h1>
 
            <div class="info">
                 <div style="display:flex;" align="center">
                   <div class="divvv-title">
-                    수신처      
+                    수신처
                   </div>
                   <div class="divvv-title">
-                    발신처      
+                    발신처
                   </div>
                 </div>
 
 
                 <div style="display:flex;" align="center">
-                
+
                     <div class="divvv">
                         <div class="divvv2" >
                           <div class="divvv3-title">
@@ -31,7 +31,7 @@
                         </div>
                         <div class="divvv2">
                           <div class="divvv3-title">
-                              관리자명 
+                              관리자명
                           </div>
                           <div class="divvv3">
                              {{ item.adminName }}
@@ -58,7 +58,7 @@
                         </div>
                         <div class="divvv2">
                           <div class="divvv3-title">
-                              점주명 
+                              점주명
                           </div>
                           <div class="divvv3">
                              {{ item.franchiseOwnerName }}
@@ -72,7 +72,7 @@
                              {{item.franchiseOwnerPhone}}
                           </div>
                         </div>
-                </div>  
+                </div>
             </div>
 
             <div class="divvv-title" style="border-top: 2px black solid;">
@@ -126,13 +126,13 @@
                <div class="divvv-title">거절 사유</div>
                <div class="divvv3"> {{item.orderReason}}</div>
              </div>
-             
+
            </div>
 
           </div>
           발주일자 : {{ item.orderDate }}
            <br>
-           주문코드 : {{ item.orderCode }}<br>   
+           주문코드 : {{ item.orderCode }}<br>
           <div class="action-buttons">
             <input class="cancel-btn" type="button" value="수정하기" @click="clickUpdate">
           </div>
@@ -146,9 +146,9 @@
     />
    </div>
 
-   
 
-       
+
+
 </template>
 
 <script setup>
@@ -180,7 +180,7 @@
  const list = props.detailItem.orderProductList;
  const exchangeList = props.detailItem.exchangeProductList;
 
- // 추후 개선 예정 
+ // 추후 개선 예정
  const franchiseOwnerCode = props.franchiseOwnerCode;
  console.log(item);
  console.log(list);
@@ -194,7 +194,7 @@ const clickGumsoo = () =>{
 
 const gumsoo = async () => {
   console.log(item.orderCode);
-  
+
   const requestData = {
     orderCode: item.orderCode,
     requestProduct: Object.fromEntries(list.map(product => [
@@ -209,7 +209,7 @@ const gumsoo = async () => {
     if (!accessToken) {
       throw new Error('No access token found');
     }
-    const response = await fetch(`http://localhost:5000/franchise/order/check?franchiseOwnerCode=${franchiseOwnerCode}`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/order/check?franchiseOwnerCode=${franchiseOwnerCode}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -243,4 +243,3 @@ const gumsoo = async () => {
 
 
 </style>
-  

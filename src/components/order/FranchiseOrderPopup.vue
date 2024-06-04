@@ -1,8 +1,8 @@
 <template>
     <div class="popup-overlay" v-if="writeActive">
       <div class="popup-content">
-        
-        
+
+
         <div class="info">
           <div class="divvv-title">발주서 생성</div>
 
@@ -44,9 +44,9 @@
             </thead>
 
             <tbody>
-              <tr v-for="(product, index) in filteredLists" :key="index" 
+              <tr v-for="(product, index) in filteredLists" :key="index"
                   :id="'row-' + index"
-                  @dblclick="addProductToList(product)" 
+                  @dblclick="addProductToList(product)"
                   @mouseenter="highlightRow(index)"
                   @mouseleave="resetRowColor(index)"
                   class="allpost">
@@ -103,7 +103,7 @@
 
 
   </template>
-  
+
 <script setup>
   import { ref } from "vue";
   import { useStore } from 'vuex'; // Vuex store 임포트
@@ -119,12 +119,12 @@
   });
   const franchiseOwnerCode = props.franchiseOwnerCode;
   const franchiseCode = props.franchiseCode;
-  
+
   const writeActive = ref(true);
   const filter = ref("");
   const conditionFilter = ref("");
   const filteredLists = ref([]);
-  
+
   const applyFilter = () => {
     if(conditionFilter.value == ""){
       filteredLists.value = products.value;
@@ -143,16 +143,16 @@
     });
     console.log("Filtered Lists:", filteredLists.value);
   };
-  
+
   const products = ref([]);
-  
+
   const getProducts = async () => {
     try {
       const accessToken = store.state.accessToken;
     if (!accessToken) {
       throw new Error('No access token found');
     }
-      const response = await fetch("http://localhost:5000/franchise/product", {
+      const response = await fetch("http://api.pioms.shop/franchise/product", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -166,36 +166,36 @@
       products.value = data.map(({ orderProductList, ...rest }) => ({ ...rest, quantity: 1 }));
       filteredLists.value = products.value;
       console.log(products);
-      
+
     } catch (error) {
       console.error("오류 발생:", error);
     }
   };
   getProducts();
-  
+
   const selectedProducts = ref([]);
   const totalPrice = ref(0);
-  
+
   const addProductToList = (product) => {
     if (!selectedProducts.value.some((p) => p.productCode === product.productCode)) {
       selectedProducts.value.push(product);
       calculateTotalPrice();
     }
   };
-  
+
   const removeProductFromList = (index) => {
     selectedProducts.value.splice(index, 1);
     calculateTotalPrice();
   };
-  
+
   const calculateTotalPrice = () => {
     totalPrice.value = selectedProducts.value.reduce((acc, curr) => acc + (curr.productPrice * curr.quantity), 0);
   };
-  
+
   const highlightRow = (index) => {
     document.querySelector(`#row-${index}`).classList.add('highlighted');
   };
-  
+
   const resetRowColor = (index) => {
     document.querySelector(`#row-${index}`).classList.remove('highlighted');
   };
@@ -208,7 +208,7 @@
     acc[product.productCode] = product.quantity;
     return acc;
   }, {});
-  
+
 
   const orderData = {
     orderTotalPrice: totalPrice.value,
@@ -221,8 +221,8 @@
     if (!accessToken) {
       throw new Error('No access token found');
     }
-    const response = await fetch(`http://localhost:5000/franchise/order`, {
-        method: "POST",        
+    const response = await fetch(`http://api.pioms.shop/franchise/order`, {
+        method: "POST",
         headers: {
           'Authorization': `Bearer ${accessToken}`,
           'Content-Type': 'application/json',

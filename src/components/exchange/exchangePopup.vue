@@ -23,9 +23,9 @@
             </thead>
 
             <tbody>
-              <tr v-for="(product, index) in filteredLists" :key="index" 
+              <tr v-for="(product, index) in filteredLists" :key="index"
                   :id="'row-' + index"
-                  @dblclick="addProductToList(product)" 
+                  @dblclick="addProductToList(product)"
                   @mouseenter="highlightRow(index)"
                   @mouseleave="resetRowColor(index)"
                   style="cursor: pointer;"
@@ -80,12 +80,12 @@
   </div>
 
   </template>
-  
+
 <script setup>
   import { ref } from "vue";
   import { useStore } from 'vuex'; // Vuex store 임포트
   const store = useStore(); // Vuex store 사용e
-  
+
   const props = defineProps({
     showPopup: Function,
     popupVisible: Boolean,
@@ -96,7 +96,7 @@
   const filter = ref("");
   const conditionFilter = ref("");
   const filteredLists = ref([]);
-  
+
   const applyFilter = () => {
     if(conditionFilter.value == ""){
       filteredLists.value = products.value;
@@ -110,7 +110,7 @@
     });
     console.log("Filtered Lists:", filteredLists.value);
   };
-  
+
   const products = ref([]);
 
 
@@ -120,7 +120,7 @@
       if (!accessToken) {
         throw new Error('No access token found');
       }
-      const response = await fetch(`http://localhost:5000/warehouse/list`, {
+      const response = await fetch(`http://api.pioms.shop/warehouse/list`, {
         method: "GET",
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -136,36 +136,36 @@
       filteredLists.value = products.value;
       console.log(products.value);
       console.log(filteredLists.value);
-      
+
     } catch (error) {
       console.error("오류 발생:", error);
     }
   };
   getProducts();
-  
+
   const selectedProducts = ref([]);
   const totalPrice = ref(0);
-  
+
   const addProductToList = (product) => {
     if (!selectedProducts.value.some((p) => p.franchiseWarehouseCode === product.franchiseWarehouseCode)) {
       selectedProducts.value.push(product);
       calculateTotalPrice();
     }
   };
-  
+
   const removeProductFromList = (index) => {
     selectedProducts.value.splice(index, 1);
     calculateTotalPrice();
   };
-  
+
   const calculateTotalPrice = () => {
     totalPrice.value = selectedProducts.value.reduce((acc, curr) => acc + (curr.productPrice * curr.quantity), 0);
   };
-  
+
   const highlightRow = (index) => {
     document.querySelector(`#row-${index}`).classList.add('highlighted');
   };
-  
+
   const resetRowColor = (index) => {
     document.querySelector(`#row-${index}`).classList.remove('highlighted');
   };
@@ -192,7 +192,7 @@
       if (!accessToken) {
         throw new Error('No access token found');
       }
-    const response = await fetch(`http://localhost:5000/franchise/exchange`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/exchange`, {
       method: "POST",
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -222,7 +222,7 @@
 
 
   </script>
-  
+
 
 <style scoped>
   @import "../../assets/css/order.css" ;

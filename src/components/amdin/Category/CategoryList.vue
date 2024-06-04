@@ -105,7 +105,7 @@ const currentThirdName = ref('');
 
 const getCategoryFirstId = async () => {
   try {
-    const response = await fetch('http://localhost:5000/admin/category/first', {
+    const response = await fetch('http://api.pioms.shop/admin/category/first', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -130,7 +130,7 @@ const getCategoryFirstId = async () => {
 };
 const fetchFirstCategories = async () => {
   try {
-    const response = await fetch('http://localhost:5000/admin/category/first', {
+    const response = await fetch('http://api.pioms.shop/admin/category/first', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -152,7 +152,7 @@ const fetchSecondCategories = async (categoryFirstCode) => {
   }
   selectedFirstCategory.value = categoryFirstCode;
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/second/list/detail/categoryfirst/${categoryFirstCode}`,{
+    const response = await fetch(`http://api.pioms.shop/admin/category/second/list/detail/categoryfirst/${categoryFirstCode}`,{
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -176,7 +176,7 @@ const fetchThirdCategories = async (categorySecondCode) => {
   }
   selectedSecondCategory.value = categorySecondCode;
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/third/list/detail/categorysecond/${categorySecondCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/category/third/list/detail/categorysecond/${categorySecondCode}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
