@@ -120,7 +120,7 @@ const breadcrumbs = [
 
 const fetchHistories = async () => {
   try {
-    const response = await fetch('http://localhost:5000/admin/log', {
+    const response = await fetch('http://api.pioms.shop/admin/log', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

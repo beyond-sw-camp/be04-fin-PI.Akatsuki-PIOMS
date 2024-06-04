@@ -112,7 +112,7 @@ const itemsPerPage = 6;
 
 const fetchAsks = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/franchise/ask/list`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/ask/list`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -132,7 +132,7 @@ const fetchAsks = async () => {
 
 const fetchNotices = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/franchise/notice/list`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/notice/list`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -151,7 +151,7 @@ const fetchNotices = async () => {
 
 const fetchProducts = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/franchise/warehouse/list/product`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/warehouse/list/product`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -171,7 +171,7 @@ const fetchProducts = async () => {
 
 const fetchFavorites = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/franchise/warehouse/favorites`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/warehouse/favorites`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

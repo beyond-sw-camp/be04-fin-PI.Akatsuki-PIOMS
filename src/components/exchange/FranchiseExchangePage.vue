@@ -44,17 +44,17 @@
       </button>
     </div>
     <input class="create-button" type="button" value="발주하기" @click="showPopup" style="cursor: pointer; border:0;">
-    <exchangePopup 
+    <exchangePopup
       v-if="createPopup"
-      :showPopup="showPopup" 
+      :showPopup="showPopup"
       :popupVisible="createPopup"
       :franchiseCode="franchiseCode"
       :franchiseOwnerCode="franchiseOwnerCode"
     />
-    <ExchangeDetail 
-      v-if="createDetailPopup" 
-      :showDetailPopup="showDetailPopup" 
-      :popupVisible="createDetailPopup" 
+    <ExchangeDetail
+      v-if="createDetailPopup"
+      :showDetailPopup="showDetailPopup"
+      :popupVisible="createDetailPopup"
       :detailItem="detailItem"
       :franchiseCode="franchiseCode"
       :franchiseOwnerCode="franchiseOwnerCode"
@@ -125,7 +125,7 @@ const getExchangeList = async () => {
     if (!accessToken) {
       throw new Error('No access token found');
     }
-    const response = await fetch(`http://localhost:5000/franchise/exchanges`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/exchanges`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

@@ -202,7 +202,7 @@ const submitProduct = async () => {
   console.log('Request Data : ', requestData);
 
   try {
-    const response = await fetch(`http://localhost:5000/admin/product/update/${props.currentProductCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/product/update/${props.currentProductCode}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -227,13 +227,13 @@ const fetchCategories = async (level) => {
   let url = '';
   switch (level) {
     case 'first':
-      url = 'http://localhost:5000/admin/category/first';
+      url = 'http://api.pioms.shop/admin/category/first';
       break;
     case 'second':
-      url = `http://localhost:5000/admin/category/second/list/detail/categoryfirst/${updateFirst.value}`;
+      url = `http://api.pioms.shop/admin/category/second/list/detail/categoryfirst/${updateFirst.value}`;
       break;
     case 'third':
-      url = `http://localhost:5000/admin/category/third/list/detail/categorysecond/${updateSecond.value}`;
+      url = `http://api.pioms.shop/admin/category/third/list/detail/categorysecond/${updateSecond.value}`;
       break;
   }
 
