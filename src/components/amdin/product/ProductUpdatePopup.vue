@@ -217,7 +217,7 @@ const submitProduct = async () => {
   formData.append('productContent', updateContent.value !== '' ? updateContent.value : props.currentProductContent);
   console.log(formData.values());
   try {
-    const response = await fetch(`http://localhost:5000/admin/product/update/image/${props.currentProductCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/product/update/image/${props.currentProductCode}`, {
       method: 'PUT',
       credentials: 'include',
       body: formData,
