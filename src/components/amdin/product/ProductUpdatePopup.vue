@@ -106,8 +106,10 @@
                       <input id="imgUpload" type="file" @change="previewImage" hidden />
                       <button v-if="imagePreview !== imageSrc && imgOn" @click="resetImage" class="img-close-button">X</button>
                       <label for="imgUpload">
-                        <img class="img" v-if="!imgOn" :src="imageSrc" />
-                        <img class="img" v-if="imgOn" :src="imagePreview" />
+                        <!-- Display current product image if available -->
+                        <img class="img" v-if="props.currentProductImgUrl" :src="props.currentProductImgUrl" />
+                        <!-- Display default image if current product image is not available -->
+                        <img class="img" v-else :src="imageSrc" />
                       </label>
                       <br />
                     </form>
@@ -131,6 +133,7 @@ import {onMounted, ref, defineProps, watch} from 'vue';
 import { useStore } from 'vuex';
 import ProductList from "@/components/amdin/product/ProductList.vue";
 import imageSrc from "@/assets/icon/picture.png";
+
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -166,6 +169,7 @@ const props = defineProps({
   currentCategorySecondCode: String,
   currentCategoryThirdCode: String,
   currentProductContent: String,
+  currentProductImgUrl: String,
   closeEdit: Function
 });
 
@@ -184,38 +188,47 @@ const previewImage = (event) => {
     reader.readAsDataURL(file);
   }
 };
-
 const submitProduct = async () => {
-  const requestData = {
-    productName: updateName.value !== '' ? updateName.value : props.currentProductName,
-    productCount: updateCount.value !== '' ? updateCount.value : props.currentProductCount,
-    productPrice: updatePrice.value !== '' ? updatePrice.value : props.currentProductPrice,
-    productStatus: updateStatus.value !== '' ? updateStatus.value : props.currentProductStatus,
-    productColor: updateColor.value !== '' ? updateColor.value : props.currentProductColor,
-    productSize: updateSize.value !== '' ? updateSize.value : props.currentProductSize,
-    categoryFirstCode: updateFirst.value !== '' ? updateFirst.value : props.currentCategoryFirstCode,
-    categorySecondCode: updateSecond.value !== '' ? updateSecond.value : props.currentCategorySecondCode,
-    categoryThirdCode: updateThird.value !== '' ? updateThird.value : props.currentCategoryThirdCode,
-    productContent: updateContent.value !== '' ? updateContent.value : props.currentProductContent
-  };
+  const fileInput = document.querySelector('input[type="file"]');
+  const file = fileInput.files[0];
 
-  console.log('Request Data : ', requestData);
+  const formData = new FormData();
 
+  if(!file) {
+    alert('상품의 사진을 첨부해주세요.');
+    return;
+  }
+
+  // 이미지 파일 추가
+  if (file) {
+    formData.append('file', file);
+  }
+
+  // 상품 정보 추가
+  formData.append('productName', updateName.value !== '' ? updateName.value : props.currentProductName);
+  formData.append('productCount', updateCount.value !== '' ? updateCount.value : props.currentProductCount);
+  formData.append('productPrice', updatePrice.value !== '' ? updatePrice.value : props.currentProductPrice);
+  formData.append('productStatus', updateStatus.value !== '' ? updateStatus.value : props.currentProductStatus);
+  formData.append('productColor', updateColor.value !== '' ? updateColor.value : props.currentProductColor);
+  formData.append('productSize', updateSize.value !== '' ? updateSize.value : props.currentProductSize);
+  formData.append('categoryFirstCode', updateFirst.value !== '' ? updateFirst.value : props.currentCategoryFirstCode);
+  formData.append('categorySecondCode', updateSecond.value !== '' ? updateSecond.value : props.currentCategorySecondCode);
+  formData.append('categoryThirdCode', updateThird.value !== '' ? updateThird.value : props.currentCategoryThirdCode);
+  formData.append('productContent', updateContent.value !== '' ? updateContent.value : props.currentProductContent);
+  console.log(formData.values());
   try {
-    const response = await fetch(`http://api.pioms.shop/admin/product/update/${props.currentProductCode}`, {
+    const response = await fetch(`http://localhost:5000/admin/product/update/image/${props.currentProductCode}`, {
       method: 'PUT',
+      credentials: 'include',
+      body: formData,
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(requestData)
     });
 
     if (!response.ok) {
-      const errorMessage = await response.text();
-      throw new Error(`수정 실패: ${errorMessage}`);
+      throw new Error('이미지 업로드에 실패했습니다.');
     }
-
     console.log('드디어 수정 성공!');
     location.reload(ProductList);
     props.closeEdit();
@@ -223,6 +236,7 @@ const submitProduct = async () => {
     console.error('수정 실패:', error);
   }
 };
+
 const fetchCategories = async (level) => {
   let url = '';
   switch (level) {
@@ -284,6 +298,7 @@ const getCategorySecondName = (code) => {
 const getCategoryThirdName = (code) => {
   return categoryThirdMap.value[code] || '';
 };
+
 onMounted(async () => {
   const numberInputs = document.querySelectorAll('input[type="number"]');
   numberInputs.forEach(input => {
@@ -308,6 +323,7 @@ onMounted(async () => {
     await fetchCategories('third');
   }
 });
+
 watch(updateFirst, async (newVal) => {
   if (newVal) {
     await fetchCategories('second');
