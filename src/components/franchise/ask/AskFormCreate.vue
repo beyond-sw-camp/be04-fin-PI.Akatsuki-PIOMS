@@ -62,7 +62,9 @@ const fetchFranchiseOwnerData = async () => {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    franchiseOwnerData.value = await response.json();
+    const data = await response.json();
+    console.log('Fetched Franchise Owner Data:', data);
+    franchiseOwnerData.value = data;
   } catch (error) {
     console.error('Failed to fetch franchise owner data:', error);
   }
@@ -114,13 +116,8 @@ const submitAsk = async () => {
   }
 };
 
-
-
-
-
 onMounted(fetchFranchiseOwnerData);
 </script>
-
 
 <style scoped>
 .container {

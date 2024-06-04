@@ -1,29 +1,30 @@
 <template>
   <div class="dashboard-container">
-    <div class="sidebar">
-      <div class="sidebar-content">Dash board</div>
-    </div>
     <div class="main-content">
       <div class="top-row">
         <div class="section order-status">
-          <h2>내 발주 현황</h2>
+          <h2>
+            내 발주 현황
+          </h2>
+          <hr class="section-divider" />
           <div class="status-boxes">
             <div class="status-box">
-              <div class="status-count">2</div>
-              <div class="status-label">승인 대기</div>
-            </div>
-            <div class="status-box">
-              <div class="status-count">1</div>
+              <div class="status-count">{{ orderStat.acceptCnt }}</div>
               <div class="status-label">승인 완료</div>
             </div>
             <div class="status-box">
-              <div class="status-count">-</div>
-              <div class="status-label">승인 반려</div>
+              <div class="status-count">{{ orderStat.inspectionWaitCnt }}</div>
+              <div class="status-label">검수 대기</div>
+            </div>
+            <div class="status-box">
+              <div class="status-count">{{ orderStat.inspectionFinishCnt }}</div>
+              <div class="status-label">검수 완료</div>
             </div>
           </div>
         </div>
         <div class="section inventory-alert">
           <h2>재고 알림</h2>
+          <hr class="section-divider" />
           <div class="inventory-info" v-if="lowStockItems.length">
             <div v-for="item in lowStockItems" :key="item.franchiseWarehouseCode">
               <div>상품명: {{ item.product.productName }}</div>
@@ -37,7 +38,9 @@
       </div>
       <div class="bottom-row">
         <div class="section notice-list">
-          <router-link to="/admin/notice/list" class="notice-link">공지사항 리스트</router-link>
+          <router-link to="/admin/notice/list" class="notice-link">
+            공지사항 리스트
+          </router-link>
           <ul class="list">
             <li v-for="item in paginatedNotices" :key="item.noticeCode" class="list-item">
               <div class="notice-title">{{ item.noticeTitle }}</div>
@@ -75,8 +78,8 @@
               <div>
                 {{ item.product.productName }}
                 <span class="category">
-                  {{ item.product.categoryThird.categorySecond.categorySecondName }} >
-                  {{ item.product.categoryThird.categoryThirdName }}
+<!--                  {{ item.product.categoryThird.categorySecond.categorySecondName }} >-->
+<!--                  {{ item.product.categoryThird.categoryThirdName }}-->
                 </span>
               </div>
               <div>{{ item.product.productStatus }}</div>
@@ -101,18 +104,18 @@ const accessToken = store.state.accessToken;
 
 const notices = ref([]);
 const asks = ref([]);
-const filteredAsks = ref([]);
 const favorites = ref([]);
 const lowStockItems = ref([]);
+const orderStat = ref({});
 
 const currentPage = ref(1);
 const noticeCurrentPage = ref(1);
 const favoritesCurrentPage = ref(1);
 const itemsPerPage = 6;
 
-const fetchAsks = async () => {
+const fetchDashboardData = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/franchise/ask/list`, {
+    const response = await fetch(`http://localhost:5000/franchise/franchiseDashboard`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -123,75 +126,20 @@ const fetchAsks = async () => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    asks.value = data.asks || data.askDTOs || [];
-    filteredAsks.value = asks.value;
+    notices.value = data.noticeList;
+    asks.value = data.askList.asks;
+    favorites.value = data.favoriteList;
+    orderStat.value = data.orderStat;
+    lowStockItems.value = data.favoriteList.filter(item => item.franchiseWarehouseEnable < 10);
   } catch (error) {
-    console.error('Failed to fetch asks:', error);
-  }
-};
-
-const fetchNotices = async () => {
-  try {
-    const response = await fetch(`http://localhost:5000/franchise/notice/list`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-    });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    notices.value = data;
-  } catch (error) {
-    console.error('Failed to fetch notices:', error);
-  }
-};
-
-const fetchProducts = async () => {
-  try {
-    const response = await fetch(`http://localhost:5000/franchise/warehouse/list/product`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-    });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    lowStockItems.value = data.filter(item => item.franchiseWarehouseEnable < 10 && item.franchiseCode === 3);
-  } catch (error) {
-    console.error('Failed to fetch products:', error);
-  }
-};
-
-
-const fetchFavorites = async () => {
-  try {
-    const response = await fetch(`http://localhost:5000/franchise/warehouse/favorites`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-    });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    favorites.value = data;
-  } catch (error) {
-    console.error('Failed to fetch favorites:', error);
+    console.error('Failed to fetch dashboard data:', error);
   }
 };
 
 const paginatedAsks = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
   const end = start + itemsPerPage;
-  return filteredAsks.value.slice(start, end);
+  return asks.value.slice(start, end);
 });
 
 const paginatedNotices = computed(() => {
@@ -207,7 +155,7 @@ const paginatedFavorites = computed(() => {
 });
 
 const totalPages = computed(() => {
-  return Math.ceil(filteredAsks.value.length / itemsPerPage);
+  return Math.ceil(asks.value.length / itemsPerPage);
 });
 
 const noticeTotalPages = computed(() => {
@@ -254,10 +202,9 @@ const nextFavoritesPage = () => {
   }
 };
 
-const formatAskDate = (dateArray) => {
-  if (!dateArray) return '-';
-  const [year, month, day, hour, minute, second] = dateArray;
-  const date = new Date(year, month - 1, day, hour, minute, second);
+const formatAskDate = (dateString) => {
+  if (!dateString) return '-';
+  const date = new Date(dateString);
   return date.toLocaleString('ko-KR', {
     year: 'numeric',
     month: '2-digit',
@@ -279,33 +226,28 @@ const formatNoticeDate = (dateString) => {
   });
 };
 
-onMounted(() => {
-  fetchAsks();
-  fetchNotices();
-  fetchFavorites();
-  fetchProducts(); // Fetch products for inventory alert
-});
+onMounted(fetchDashboardData);
 </script>
 
 <style scoped>
-.dashboard-container {
-  display: flex;
+body{
+  overflow-x:hidden;
 }
 
-.sidebar {
-  width: 200px;
-  background-color: #f4f4f4;
-  border-right: 1px solid #ddd;
+.dashboard-container {
   display: flex;
-  align-items: center;
   justify-content: center;
+  width: 100%;
+  padding:20px;
+  box-sizing: border-box;
 }
 
 .main-content {
+  width: 100%;
+  max-width: 1200px;
+  margin:0 auto;
   display: flex;
-  flex: 1;
   flex-direction: column;
-  padding: 20px;
 }
 
 .top-row {
@@ -332,7 +274,7 @@ onMounted(() => {
 .notice-list,
 .inquiry-list {
   flex: 1;
-  max-width: 20%; /* 가로 길이 조정 */
+  max-width: 20%;
 }
 
 .status-boxes {
@@ -363,19 +305,19 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px; /* 간격 추가 */
-  border-bottom: 1px solid #ddd; /* 하단 선 추가 */
-  padding-bottom: 10px; /* 간격 추가 */
-  overflow: hidden; /* 텍스트 오버플로우 숨기기 */
-  text-overflow: ellipsis; /* 텍스트가 길 경우 생략 표시 */
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .notice-list .list-item {
-  margin-bottom: 30px; /* 공지사항의 타이틀 간 간격 조정 */
+  margin-bottom: 30px;
 }
 
 .notice-title {
-  font-size: 16px; /* 공지사항 제목 폰트 크기 */
+  font-size: 16px;
   color: #333;
   font-weight: bold;
 }
@@ -384,8 +326,8 @@ onMounted(() => {
 .inquiry-link,
 .favorite-link {
   display: block;
-  font-size: 18px; /* 폰트 크기 키우기 */
-  font-weight: bold; /* 폰트 굵게 */
+  font-size: 18px;
+  font-weight: bold;
   color: #333;
   text-decoration: none;
   margin-bottom: 10px;
@@ -413,7 +355,7 @@ onMounted(() => {
 
 .title {
   flex: 1;
-  margin-right: 10px; /* 상태와의 간격 추가 */
+  margin-right: 10px;
 }
 
 .status-container {
@@ -427,7 +369,7 @@ onMounted(() => {
   color: #721c24;
   padding: 3px 10px;
   border-radius: 5px;
-  font-size: 12px; /* 폰트 크기 줄이기 */
+  font-size: 12px;
   margin-bottom: 5px;
 }
 
@@ -440,7 +382,7 @@ onMounted(() => {
 }
 
 .date {
-  font-size: 12px; /* 날짜 폰트 크기 줄이기 */
+  font-size: 12px;
   color: #666;
 }
 
@@ -467,8 +409,21 @@ onMounted(() => {
 }
 
 .category {
-  font-size: 12px; /* 카테고리 폰트 크기 */
-  color: #666; /* 카테고리 색상 */
+  font-size: 12px;
+  color: #666;
   margin-left: 5px;
 }
+
+.section h2 {
+  font-size: 18px; /* 폰트 크기 키우기 */
+  font-weight: bold; /* 폰트 굵게 */
+  color: #333;
+}
+
+.section-divider {
+  margin: 10px 0;
+  border: none;
+  border-top: 1px solid #ddd;
+}
+
 </style>
