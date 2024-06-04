@@ -109,6 +109,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useStore } from 'vuex';
+import Swal from "sweetalert2";
 
 const store = useStore();
 const accessToken = store.state.accessToken;
@@ -201,12 +202,19 @@ const saveFavorites = async () => {
 
   let message = '';
   if (successfullyAddedProducts.length > 0) {
-    message += '저장이 완료되었습니다: ' + successfullyAddedProducts.join(', ') + '\n';
+    await Swal.fire({
+      icon: 'success',
+      title: '저장 성공',
+      text: successfullyAddedProducts.join(', ') + ' 이(가) 저장되었습니다.',
+    });
   }
   if (alreadyFavoriteProducts.length > 0) {
-    message += '이미 즐겨찾기에 추가된 상품입니다: ' + alreadyFavoriteProducts.join(', ');
+    await Swal.fire({
+      icon: 'warning',
+      title: '저장 실패',
+      text:  alreadyFavoriteProducts.join(', ') + ' 은(는) 이미 즐겨찾기에 추가된 상품입니다.',
+    });
   }
-  alert(message);
 };
 
 onMounted(() => {

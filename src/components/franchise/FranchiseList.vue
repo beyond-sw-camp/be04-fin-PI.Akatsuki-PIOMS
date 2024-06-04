@@ -48,6 +48,7 @@
 <script setup>
 import { ref } from 'vue';
 
+
 const franchises = ref([]);
 const keyword = ref('branchName');
 const searchText = ref('');
