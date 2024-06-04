@@ -61,8 +61,8 @@
 import { ref, computed } from 'vue';
 import axios from "axios";
 import { useStore } from 'vuex';
-import AdminPostPopup from "@/components/amdin/member/AdminPostPopup.vue";
 const store = useStore();
+import AdminPostPopup from "@/components/amdin/member/AdminPostPopup.vue";
 const accessToken = store.state.accessToken;
 
 const lists = ref([]);

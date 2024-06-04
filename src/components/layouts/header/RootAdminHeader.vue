@@ -177,8 +177,9 @@ import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { jwtDecode } from 'jwt-decode';
 
-const router = useRouter();
 const store = useStore();
+const accessToken = store.state.accessToken;
+const router = useRouter();
 const username = ref('');
 
 const fetchUsernameFromToken = () => {
@@ -188,12 +189,34 @@ const fetchUsernameFromToken = () => {
     username.value = decoded.username;
   }
 };
-const pdfDownload = () => {
-  const link = document.createElement('a');
-  link.href = 'http://localhost:5000/admin/pdfdownload/admin-pdf'; // PDF 파일 경로를 여기에 입력합니다.
-  link.download = 'AdminManual.pdf'; // 다운로드될 파일 이름을 설정합니다.
-  link.click();
+const pdfDownload = async () => {
+  try {
+    const response = await fetch('http://localhost:5000/admin/pdfdownload/admin-pdf', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'AdminManual.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('There has been a problem with your fetch operation:', error);
+  }
 };
+
 const logout = async () => {
   try {
     await store.dispatch('logout');
