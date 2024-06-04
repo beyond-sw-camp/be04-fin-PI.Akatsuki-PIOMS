@@ -9,7 +9,7 @@
       </div>
       <div class="dictionary" @click="pdfDownload" style="cursor: pointer;">
         <img class="dictionary_icon" src="@/assets/icon/Dictionary.png" alt="Dictionary"/>
-        <h5>배송기사 메뉴얼</h5>
+        <button @click="pdfDownload">배송기사 매뉴얼</button>
       </div>
       <div>
         <button class="cta" @click="logout">
@@ -31,8 +31,9 @@ import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { jwtDecode } from 'jwt-decode';
 
-const router = useRouter();
 const store = useStore();
+const accessToken = store.state.accessToken;
+const router = useRouter();
 const username = ref('');
 
 const fetchUsernameFromToken = () => {
@@ -43,12 +44,13 @@ const fetchUsernameFromToken = () => {
   }
 };
 
+
 const pdfDownload = async () => {
   try {
     const response = await fetch('http://localhost:5000/driver/pdfdownload/driver-pdf', {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${store.state.accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     });

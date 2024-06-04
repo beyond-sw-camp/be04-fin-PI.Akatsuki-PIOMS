@@ -1,15 +1,15 @@
 <template>
-  <!-- 점주 header -->
+  <!-- root 관리자 header -->
   <header class="header">
     <img class="logo" src="@/assets/icon/PIOMS_로고.png" alt="Logo"/>
     <section class="header_info">
-      <div class="smile">
-        <img class="smile_icon" src="@/assets/icon/smile.png" alt="smile"/>
+      <div class="crown">
+        <img class="crown_icon" :src="userRoleIcon" alt="User Role Icon"/>
         <h5><u>{{ username }}</u>님 정보</h5>
       </div>
       <div class="dictionary">
         <img class="dictionary_icon" src="@/assets/icon/Dictionary.png" alt="Dictionary"/>
-        <button @click="pdfDownload">점주 매뉴얼</button>
+        <button @click="pdfDownload">관리자 매뉴얼</button>
       </div>
       <div>
         <button class="cta" @click="logout">
@@ -27,20 +27,30 @@
   <!-- 카테고리 -->
   <nav class="header_rootAdmin">
     <ul class="nav_header">
-      <router-link to="/franchise/home" style="align-items: center; display: flex">
+      <router-link to="/admin/home" style="align-items: center; display: flex">
         <a href="#" class="dashboard" >
           <img src="@/assets/icon/dashboard.png"/>
         </a>
       </router-link>
 
       <li>
-        <a href="#" class="label">가맹점 관리</a>
+        <a href="#" class="label">가맹점 및 직원 관리</a>
         <div class="submenu_box">
           <ul class="submenu">
             <li>
-              <a href="#" class="depth1"><h4 id="depth1_title">가맹점 관리</h4></a>
+              <a href="#" class="depth1"><h4 id="depth1_title">가맹점 및 점주 관리</h4></a>
               <ul class="submenu_sub">
-                <li><router-link to="/franchise/store/list" class="depth2">가맹점 정보 관리</router-link></li>
+                <li><a href="#" class="depth2">가맹점 및 점주 전체조회</a></li>
+                <li><a href="#" class="depth2">가맹점 관리</a></li>
+                <li><a href="#" class="depth2">점주 관리</a></li>
+              </ul>
+              <hr class="hr3">
+            </li>
+            <li>
+              <a href="#" class="depth1"><h4 id="depth1_title">배송기사 관리</h4></a>
+              <ul class="submenu_sub">
+                <li><a href="#" class="depth2">배송기사 전체조회</a></li>
+                <li><a href="#" class="depth2">배송기사 관리</a></li>
               </ul>
             </li>
           </ul>
@@ -48,21 +58,22 @@
       </li>
 
       <li>
-        <a href="#" class="label">상품 및 재고 관리</a>
-        <div class="submenu_box1">
+        <a href="#" class="label">상품 및 상품 카테고리 관리</a>
+        <div class="submenu_box">
           <ul class="submenu">
             <li>
               <a href="#" class="depth1"><h4 id="depth1_title">상품 관리</h4></a>
               <ul class="submenu_sub">
-                <li><router-link to="/franchise/product/list" class="depth2">상품 등록 및 관리</router-link></li>
-                <li><router-link to="/franchise/product/favorites" class="depth2">즐겨찾기 상품 관리</router-link></li>
+                <li><router-link to="/admin/product/list" class="depth2">상품 전체조회 및 관리</router-link></li>
+<!--                <li><a href="#" class="depth2">상품 전체조회 및 관리</a></li>-->
               </ul>
               <hr class="hr3">
             </li>
             <li>
-              <a href="#" class="depth1"><h4 id="depth1_title">재고 관리</h4></a>
+              <a href="#" class="depth1"><h4 id="depth1_title">상품 카테고리 관리</h4></a>
               <ul class="submenu_sub">
-                <li><router-link to="/franchise/stock/alerts" class="depth2">재고 알림 관리</router-link></li>
+                <li><router-link to="/admin/category/list" class="depth2">상품 카테고리 전체조회</router-link></li>
+                <li><router-link to="/admin/category/post" class="depth2">상품 카테고리 등록 관리</router-link></li>
               </ul>
             </li>
           </ul>
@@ -70,24 +81,44 @@
       </li>
 
       <li>
-        <a href="#" class="label">발주 및 배송 관리</a>
-        <div class="submenu_box2">
+        <a href="#" class="label">배송 및 발주 관리</a>
+        <div class="submenu_box">
           <ul class="submenu">
             <li>
-              <a href="#" class="depth1"><h4 id="depth1_title">발주 관리</h4></a>
+              <a href="#" class="depth1"><h4 id="depth1_title">배송 관리</h4></a>
               <ul class="submenu_sub">
-                <li><router-link to="/franchise/order/list" class="depth2">발주내역 조회 및 관리</router-link></li>
-                <li><router-link to="/franchise/invoice/list" class="depth2">명세서 조회</router-link></li>
+                <li><a href="#" class="depth2">배송상태 조회 및 관리</a></li>
               </ul>
               <hr class="hr3">
             </li>
             <li>
-              <a href="#" class="depth1"><h4 id="depth1_title">배송 관리</h4></a>
+              <a href="#" class="depth1"><h4 id="depth1_title">발주 관리</h4></a>
               <ul class="submenu_sub">
-                <li><router-link to="/franchise/delivery/status" class="depth2">배송상태 조회 및 관리</router-link></li>
-                <li><router-link to="/franchise/return/list" class="depth2">반품 상품 조회</router-link></li>
-                <li><router-link to="/franchise/exchange/list" class="depth2">교환 상품 조회</router-link></li>
+                <li><router-link to="/admin/product/list" class="depth2">발주 목록 조회 및 승인</router-link></li>
               </ul>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <li>
+        <a href="#" class="label">반품 및 교환 관리</a>
+        <div class="submenu_box">
+          <ul class="submenu">
+<!--            <li>-->
+<!--              <a href="#" class="depth1"><h4 id="depth1_title">반품 및 교환 상태 관리</h4></a>-->
+<!--              <ul class="submenu_sub">-->
+<!--                <li><a href="#" class="depth2">반품 및 교환 상태 처리</a></li>-->
+<!--              </ul>-->
+<!--              <hr class="hr3">-->
+<!--            </li>-->
+            <li>
+              <a href="#" class="depth1"><h4 id="depth1_title">반품 관리</h4></a>
+              <ul class="submenu_sub">
+                <li><router-link to="/admin/exchange/list" class="depth2">반품 상품 조회</router-link></li>
+<!--                <li><a href="#" class="depth2">반품 상품 조회</a></li>-->
+              </ul>
+              <hr class="hr3">
             </li>
           </ul>
         </div>
@@ -95,19 +126,20 @@
 
       <li>
         <a href="#" class="label">공지 및 문의 관리</a>
-        <div class="submenu_box3">
+        <div class="submenu_box">
           <ul class="submenu">
             <li>
-              <a href="#" class="depth1"><h4 id="depth1_title">공지사항 관리</h4></a>
+              <a href="#" class="depth1"><h4 id="depth1_title">공지 관리</h4></a>
               <ul class="submenu_sub">
-                <li><router-link to="/franchise/notice/list" class="depth2">공지사항 처리</router-link></li>
+                <li><router-link to="/admin/notice/list" class="depth2">공지사항 조회 및 관리</router-link></li>
               </ul>
               <hr class="hr3">
             </li>
             <li>
-              <a href="#" class="depth1"><h4 id="depth1_title">문의사항 관리</h4></a>
+              <a href="#" class="depth1"><h4 id="depth1_title">문의 관리</h4></a>
               <ul class="submenu_sub">
-                <li><router-link to="/franchise/ask" class="depth2">문의사항 관리 및 조회</router-link></li>
+                <li><router-link to="/admin/ask" class="depth2">문의사항 조회 및 관리</router-link></li>
+<!--                <li><a href="#" class="depth2">문의사항 조회 및 관리</a></li>-->
               </ul>
             </li>
           </ul>
@@ -115,13 +147,20 @@
       </li>
 
       <li>
-        <a href="#" class="label">통계 관리</a>
+        <a href="#" class="label">통계 및 이력 관리</a>
         <div class="submenu_box">
           <ul class="submenu">
             <li>
               <a href="#" class="depth1"><h4 id="depth1_title">통계 관리</h4></a>
               <ul class="submenu_sub">
-                <li><router-link to="/franchise/statistics" class="depth2">통계(미정) 관리</router-link></li>
+                <li><a href="#" class="depth2">전체 통계 관리</a></li>
+              </ul>
+              <hr class="hr3">
+            </li>
+            <li>
+              <a href="#" class="depth1"><h4 id="depth1_title">이력 관리</h4></a>
+              <ul class="submenu_sub">
+                <li><a href="#" class="depth2">전체 이력 관리</a></li>
               </ul>
             </li>
           </ul>
@@ -152,7 +191,7 @@ const fetchUsernameFromToken = () => {
 };
 const pdfDownload = async () => {
   try {
-    const response = await fetch('http://localhost:5000/franchise/pdfdownload/fraowner-pdf', {
+    const response = await fetch('http://localhost:5000/admin/pdfdownload/admin-pdf', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -168,7 +207,7 @@ const pdfDownload = async () => {
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'FrOwnerManual.pdf';
+    link.download = 'AdminManual.pdf';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -191,35 +230,52 @@ onMounted(() => {
   store.dispatch('initializeAuth');
   fetchUsernameFromToken();
 
-  const labels = document.querySelectorAll('.label');
-  let hideTimeout;
+  document.addEventListener('DOMContentLoaded', function() {
+    var labels = document.querySelectorAll('.label');
+    var hideTimeout;
 
-  labels.forEach(label => {
-    const submenu = label.nextElementSibling;
+    labels.forEach(function(label) {
+      var submenu = label.nextElementSibling;
 
-    label.addEventListener('mouseenter', () => {
-      clearTimeout(hideTimeout);
-      if (submenu) submenu.style.display = 'block';
-    });
-
-    label.addEventListener('mouseleave', () => {
-      hideTimeout = setTimeout(() => {
-        if (!submenu.matches(':hover')) submenu.style.display = 'none';
-      }, 300);
-    });
-
-    if (submenu) {
-      submenu.addEventListener('mouseenter', () => {
+      label.addEventListener('mouseenter', function() {
         clearTimeout(hideTimeout);
+        if (submenu) {
+          submenu.style.display = 'block';
+        }
       });
 
-      submenu.addEventListener('mouseleave', () => {
-        hideTimeout = setTimeout(() => {
-          submenu.style.display = 'none';
+      label.addEventListener('mouseleave', function() {
+        hideTimeout = setTimeout(function() {
+          if (!submenu.matches(':hover')) {
+            submenu.style.display = 'none';
+          }
         }, 300);
       });
-    }
+
+      if (submenu) {
+        submenu.addEventListener('mouseenter', function() {
+          clearTimeout(hideTimeout);
+        });
+
+        submenu.addEventListener('mouseleave', function() {
+          hideTimeout = setTimeout(function() {
+            if (!submenu.matches(':hover') && !label.matches(':hover')) {
+              submenu.style.display = 'none';
+            }
+          }, 300);
+        });
+      }
+    });
   });
+});
+
+const userRoleIcon = computed(() => {
+  if (store.getters.userRole === 'ROLE_ROOT') {
+    return '@/assets/icon/Crown.png';
+  } else if (store.getters.userRole === 'ROLE_ADMIN') {
+    return '@/assets/icon/admin.png';
+  }
+  return '';
 });
 </script>
 
@@ -227,7 +283,7 @@ onMounted(() => {
 header {
   display: flex;
   justify-content: space-between;
-  width: 2100px;
+  width: 100%;
   height: 35px;
 }
 .header_info {
@@ -245,17 +301,17 @@ header {
   bottom: 9px;
   left: 7px;
 }
-.smile {
+.crown {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 150px;
   height: 50px;
 }
-.smile_icon {
+.crown_icon {
   width: 18px;
-  height: 18px;
-  margin-right: 4px;
+  height: 15px;
+  margin-right: 2px;
 }
 .dictionary {
   display: flex;
@@ -329,7 +385,7 @@ header {
 
 hr.hr1 {
   padding: 0;
-  width: 2100px;
+  width: 100%;
   border: 0;
   height: 0;
   border-top: 0.5px solid #B9B9B9;
@@ -338,7 +394,7 @@ hr.hr1 {
 
 hr.hr2 {
   padding: 0;
-  width: 2100px;
+  width: 100%;
   height: 0;
   border: 0;
   border-top: 0.5px solid #B9B9B9;
@@ -357,10 +413,11 @@ hr.hr3 {
 .header_rootAdmin {
   display: flex;
   justify-content: center;
-  width: 2100px;
+  width: 100%;
   height: 20px;
   position: relative;
   top: 10px;
+  //left: 55px;
 }
 
 .dashboard {
@@ -381,7 +438,8 @@ hr.hr3 {
   line-height: 10px;
   display: inline; /* 리스트 아이템을 인라인으로 표시 */
   position: relative;
-  top: -1px;
+  top: -4px;
+  cursor: pointer;
 }
 
 .label_box.show {
@@ -401,9 +459,12 @@ hr.hr3 {
   margin: 0;
   padding: 0;
   display: flex; /* 수평으로 맞추기 */
-  justify-content: space-between;
+  //justify-content: space-between;
+  gap: 100px;
+  //width: 100%;
 }
-.nav_header > il {
+
+.nav_header > li {
   position: relative;
 }
 .label:hover {
@@ -428,7 +489,7 @@ hr.hr3 {
 }
 .dashboard,
 .label {
-  margin-right: 150px;
+  //margin-right: 100px;
 }
 .dashboard {
   width: 20px;
@@ -468,6 +529,7 @@ hr.hr3 {
   margin: 0;
   list-style-type: none;
   flex-direction: column;
+  //background-color: #FF6285;
 }
 .submenu .depth1 li a{
   width: 120px !important;
@@ -489,10 +551,8 @@ hr.hr3 {
   width: 150px;
   height: 30px;
 }
-.submenu_box
-,.submenu_box1
-,.submenu_box2
-,.submenu_box3 {
+
+.submenu_box {
   display: none;
   position: relative;
   top: 10px;
@@ -503,17 +563,18 @@ hr.hr3 {
   width: 220px;
   z-index: 10000;
 }
-.submenu_box {
-  height: 100px;
+
+.submenu_box{
+  height: 320px;
 }
 .submenu_box1 {
   height: 250px;
 }
 .submenu_box2 {
-  height: 330px;
+  height: 300px;
 }
 .submenu_box3 {
-  height: 210px;
+  height: 200px;
 }
 .depth2 {
   display: flex;
@@ -527,9 +588,15 @@ hr.hr3 {
   border-radius: 12px;
   height: 12px;
 }
+
+/* :hover 상태를 이용해 서브메뉴 박스 표시 */
+.label:hover + .submenu_box,
+.submenu_box:hover,
+.label:hover + .submenu .submenu_box:hover {
+  display: block;
+}
 /* .show 클래스가 추가되면 하위 메뉴 표시 */
 .show {
   display: block;
 }
-
 </style>
