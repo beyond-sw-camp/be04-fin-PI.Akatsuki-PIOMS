@@ -133,6 +133,7 @@ import {onMounted, ref, defineProps, watch} from 'vue';
 import { useStore } from 'vuex';
 import ProductList from "@/components/amdin/product/ProductList.vue";
 import imageSrc from "@/assets/icon/picture.png";
+import Swal from "sweetalert2";
 
 const store = useStore();
 const accessToken = store.state.accessToken;
@@ -195,7 +196,11 @@ const submitProduct = async () => {
   const formData = new FormData();
 
   if(!file) {
-    alert('상품의 사진을 첨부해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '이미지 누락',
+      text: '이미지를 첨부해주세요.',
+    });
     return;
   }
 

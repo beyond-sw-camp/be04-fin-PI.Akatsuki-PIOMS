@@ -138,6 +138,8 @@ import { onMounted, defineEmits, ref } from 'vue';
 import imageSrc from '@/assets/icon/picture.png';
 import { useStore } from 'vuex';
 import ProductList from "@/components/amdin/product/ProductList.vue";
+import Swal from "sweetalert2";
+
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -316,47 +318,91 @@ onMounted(() => {
 
 const uploadAndSaveProduct = async () => {
   if(!insertProductName.value.trim()) {
-    alert('상품명을 입력해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '상품명 항목 누락',
+      text: '상품명을 입력해주세요.',
+    });
     return;
   }
   if(!insertProductCount.value) {
-    alert('상품의 재고량을 입력해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '재고량 항목 누락',
+      text: '재고량을 입력해주세요.',
+    });
     return;
   }
   if(!insertProductPrice.value) {
-    alert('상품 가격을 입력해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '가격 항목 누락',
+      text: '가격을 입력해주세요.',
+    });
     return;
   }
   if(!insertStatus.value.trim()) {
-    alert('상품의 상태를 정해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '상품상태 항목 누락',
+      text: '상품 상태를 정해주세요.',
+    });
     return;
   }
   if(!selectedExposureStatus.value.trim()) {
-    alert('상품의 노출상태를 정해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '상품 노출 상태 항목 누락',
+      text: '상품 노출 상태를 정해주세요.',
+    });
     return;
   }
   if(!insertColor.value.trim()) {
-    alert('상품의 색상을 정해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '색상 항목 누락',
+      text: '색상을 정해주세요.',
+    });
     return;
   }
   if(!insertSize.value.trim()) {
-    alert('상품의 사이즈를 정해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '사이즈 항목 누락',
+      text: '사이즈를 정해주세요.',
+    });
     return;
   }
   if(!selectedFirstCategory.value) {
-    alert('대분류 카테고리를 정해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '대분류 카테고리 항목 누락',
+      text: '대분류 카테고리를 정해주세요.',
+    });
     return;
   }
   if(!selectedSecondCategory.value) {
-    alert('중분류 카테고리를 정해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '중분류 카테고리 항목 누락',
+      text: '중분류 카테고리를 정해주세요.',
+    });
     return;
   }
   if(!selectedThirdCategory.value) {
-    alert('소분류 카테고리를 정해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '소분류 카테고리 항목 누락',
+      text: '소분류 카테고리를 정해주세요.',
+    });
     return;
   }
   if(!insertContent.value.trim()) {
-    alert('상품의 상세정보를 입력해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '상세정보 항목 누락',
+      text: '상품 상세정보를 입력해주세요.',
+    });
     return;
   }
   const fileInput = document.querySelector('input[type="file"]');
@@ -365,7 +411,11 @@ const uploadAndSaveProduct = async () => {
   const formData = new FormData();
 
   if(!file) {
-    alert('상품의 사진을 첨부해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '상품 이미지 누락',
+      text: '이미지를 첨부해주세요.',
+    });
     return;
   }
 

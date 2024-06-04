@@ -383,7 +383,8 @@ const getMemberId = async () => {
 
     // 각 제품에 대한 FranchiseWarehouse 정보를 추가하여 목록 완성
     lists.value = productData.map(product => {
-      const correspondingWarehouse = franchiseWarehouseData.find(warehouse => warehouse.product.productCode === product.productCode);
+      const correspondingWarehouse = franchiseWarehouseData.find(warehouse =>
+          warehouse.product.productCode === product.productCode);
       return {
         productCode: product.productCode,
         productName: product.productName,
