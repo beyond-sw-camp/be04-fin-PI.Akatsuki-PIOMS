@@ -1,53 +1,3 @@
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  // 모든 .label 요소를 선택합니다.
-  var labels = document.querySelectorAll('.label');
-
-  // 타이머를 위한 변수
-  var hideTimeout;
-
-  // 각 .label 요소에 이벤트 리스너를 추가합니다.
-  labels.forEach(function(label) {
-    var submenu = label.nextElementSibling;
-    label.addEventListener('mouseenter', function() {
-      clearTimeout(hideTimeout);
-      // 하위 메뉴를 표시합니다.
-      if (submenu) {
-        submenu.style.display = 'block';
-      }
-    });
-
-    label.addEventListener('mouseleave', function() {
-      // 마우스가 .submenu_box 안으로 이동할 때 타이머를 해제합니다.
-      submenu.addEventListener('mouseenter', function() {
-        clearTimeout(hideTimeout);
-      });
-
-      // 일정 시간이 지난 후 하위 메뉴를 숨깁니다.
-      hideTimeout = setTimeout(function() {
-        if (submenu) {
-          submenu.style.display = 'none';
-        }
-      }, 100);
-    });
-
-    submenu.addEventListener('mouseleave', function() {
-      // 마우스가 .label 안으로 이동할 때 타이머를 해제합니다.
-      label.addEventListener('mouseenter', function() {
-        clearTimeout(hideTimeout);
-      });
-
-      // 일정 시간이 지난 후 하위 메뉴를 숨깁니다.
-      hideTimeout = setTimeout(function() {
-        if (submenu) {
-          submenu.style.display = 'none';
-        }
-      }, 100);
-    });
-  });
-});
-</script>
-
 <template>
   <!-- 점주 header -->
   <header class="header">
@@ -55,14 +5,14 @@ document.addEventListener('DOMContentLoaded', function() {
     <section class="header_info">
       <div class="smile">
         <img class="smile_icon" src="@/assets/icon/smile.png" alt="smile"/>
-        <h5><u>Konan</u>님 정보</h5>
+        <h5><u>{{ username }}</u>님 정보</h5>
       </div>
       <div class="dictionary">
         <img class="dictionary_icon" src="@/assets/icon/Dictionary.png" alt="Dictionary"/>
         <h5>점주 메뉴얼</h5>
       </div>
       <div>
-        <button class="cta">
+        <button class="cta" @click="logout">
           <span>Logout</span>
           <svg width="15px" height="10px" viewBox="0 0 13 10">
             <path d="M1,5 L11,5"></path>
@@ -77,98 +27,105 @@ document.addEventListener('DOMContentLoaded', function() {
   <!-- 카테고리 -->
   <nav class="header_rootAdmin">
     <ul class="nav_header">
-      <li><a href="#" class="dashboard" style= "display: flex;"><img src="@/assets/icon/dashboard.png"></a></li>
+      <router-link to="/franchise/home" style="align-items: center; display: flex">
+        <a href="#" class="dashboard" >
+          <img src="@/assets/icon/dashboard.png"/>
+        </a>
+      </router-link>
 
-      <li><a href="#" class="label">가맹점 관리</a>
-        <container class="submenu_box">
+      <li>
+        <a href="#" class="label">가맹점 관리</a>
+        <div class="submenu_box">
           <ul class="submenu">
             <li>
               <a href="#" class="depth1"><h4 id="depth1_title">가맹점 관리</h4></a>
               <ul class="submenu_sub">
-
-                <li><a href="#" class="depth2">가맹점 정보 관리</a></li>
+                <li><router-link to="/franchise/store/list" class="depth2">가맹점 정보 관리</router-link></li>
               </ul>
             </li>
           </ul>
-        </container>
+        </div>
       </li>
 
-      <li><a href="#" class="label">상품 및 재고 관리</a>
-        <container class="submenu_box1">
+      <li>
+        <a href="#" class="label">상품 및 재고 관리</a>
+        <div class="submenu_box1">
           <ul class="submenu">
             <li>
               <a href="#" class="depth1"><h4 id="depth1_title">상품 관리</h4></a>
               <ul class="submenu_sub">
-                <li><a href="#" class="depth2">상품 등록 및 관리</a></li>
-                <li><a href="#" class="depth2">즐겨찾기 상품 관리</a></li>
+                <li><router-link to="/franchise/product/list" class="depth2">상품 등록 및 관리</router-link></li>
+                <li><router-link to="/franchise/product/favorites" class="depth2">즐겨찾기 상품 관리</router-link></li>
               </ul>
               <hr class="hr3">
             </li>
             <li>
               <a href="#" class="depth1"><h4 id="depth1_title">재고 관리</h4></a>
               <ul class="submenu_sub">
-                <li><a href="#" class="depth2">재고 알림 관리</a></li>
+                <li><router-link to="/franchise/stock/alerts" class="depth2">재고 알림 관리</router-link></li>
               </ul>
             </li>
           </ul>
-        </container>
+        </div>
       </li>
 
-      <li><a href="#" class="label">발주 및 배송 관리</a>
-        <container class="submenu_box2">
+      <li>
+        <a href="#" class="label">발주 및 배송 관리</a>
+        <div class="submenu_box2">
           <ul class="submenu">
             <li>
               <a href="#" class="depth1"><h4 id="depth1_title">발주 관리</h4></a>
               <ul class="submenu_sub">
-
-                <li><a href="#" class="depth2">발주내역 조회 및 관리</a></li>
-                <li><a href="#" class="depth2">명세서 조회</a></li>
+                <li><router-link to="/franchise/order/list" class="depth2">발주내역 조회 및 관리</router-link></li>
+                <li><router-link to="/franchise/invoice/list" class="depth2">명세서 조회</router-link></li>
               </ul>
               <hr class="hr3">
             </li>
             <li>
               <a href="#" class="depth1"><h4 id="depth1_title">배송 관리</h4></a>
               <ul class="submenu_sub">
-                <li><a href="#" class="depth2">배송상태 조회 및 관리</a></li>
-                <li><a href="#" class="depth2">반품 상품 조회</a></li>
-                <li><a href="#" class="depth2">교환 상품 조회</a></li>
+                <li><router-link to="/franchise/delivery/status" class="depth2">배송상태 조회 및 관리</router-link></li>
+                <li><router-link to="/franchise/return/list" class="depth2">반품 상품 조회</router-link></li>
+                <li><router-link to="/franchise/exchange/list" class="depth2">교환 상품 조회</router-link></li>
               </ul>
             </li>
           </ul>
-        </container>
+        </div>
       </li>
 
-      <li><a href="#" class="label">공지 및 문의 관리</a>
-        <container class="submenu_box3">
+      <li>
+        <a href="#" class="label">공지 및 문의 관리</a>
+        <div class="submenu_box3">
           <ul class="submenu">
             <li>
               <a href="#" class="depth1"><h4 id="depth1_title">공지사항 관리</h4></a>
               <ul class="submenu_sub">
-                <li><a href="#" class="depth2">공지사항 처리</a></li>
+                <li><router-link to="/franchise/notice/list" class="depth2">공지사항 처리</router-link></li>
               </ul>
               <hr class="hr3">
             </li>
             <li>
               <a href="#" class="depth1"><h4 id="depth1_title">문의사항 관리</h4></a>
               <ul class="submenu_sub">
-                <li><a href="#" class="depth2">문의사항 관리 및 조회</a></li>
+                <li><router-link to="/franchise/ask" class="depth2">문의사항 관리 및 조회</router-link></li>
               </ul>
             </li>
           </ul>
-        </container>
+        </div>
       </li>
 
-      <li><a href="#" class="label">통계 관리</a>
-        <container class="submenu_box">
+      <li>
+        <a href="#" class="label">통계 관리</a>
+        <div class="submenu_box">
           <ul class="submenu">
             <li>
               <a href="#" class="depth1"><h4 id="depth1_title">통계 관리</h4></a>
               <ul class="submenu_sub">
-                <li><a href="#" class="depth2">통계(미정) 관리</a></li>
+                <li><router-link to="/franchise/statistics" class="depth2">통계(미정) 관리</router-link></li>
               </ul>
             </li>
           </ul>
-        </container>
+        </div>
       </li>
     </ul>
   </nav>
@@ -485,3 +442,67 @@ hr.hr3 {
 }
 
 </style>
+
+
+<script setup>
+import { onMounted, ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+import { jwtDecode } from 'jwt-decode';
+
+const router = useRouter();
+const store = useStore();
+const username = ref('');
+
+const fetchUsernameFromToken = () => {
+  const token = store.state.accessToken;
+  if (token) {
+    const decoded = jwtDecode(token);
+    username.value = decoded.username;
+  }
+};
+
+const logout = async () => {
+  try {
+    await store.dispatch('logout');
+    await router.push('/');
+  } catch (error) {
+    console.error('로그아웃 오류:', error);
+  }
+};
+
+onMounted(() => {
+  store.dispatch('initializeAuth');
+  fetchUsernameFromToken();
+
+  const labels = document.querySelectorAll('.label');
+  let hideTimeout;
+
+  labels.forEach(label => {
+    const submenu = label.nextElementSibling;
+
+    label.addEventListener('mouseenter', () => {
+      clearTimeout(hideTimeout);
+      if (submenu) submenu.style.display = 'block';
+    });
+
+    label.addEventListener('mouseleave', () => {
+      hideTimeout = setTimeout(() => {
+        if (!submenu.matches(':hover')) submenu.style.display = 'none';
+      }, 300);
+    });
+
+    if (submenu) {
+      submenu.addEventListener('mouseenter', () => {
+        clearTimeout(hideTimeout);
+      });
+
+      submenu.addEventListener('mouseleave', () => {
+        hideTimeout = setTimeout(() => {
+          submenu.style.display = 'none';
+        }, 300);
+      });
+    }
+  });
+});
+</script>
