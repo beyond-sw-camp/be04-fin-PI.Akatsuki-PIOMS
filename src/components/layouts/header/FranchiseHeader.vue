@@ -9,7 +9,7 @@
       </div>
       <div class="dictionary">
         <img class="dictionary_icon" src="@/assets/icon/Dictionary.png" alt="Dictionary"/>
-        <h5>점주 메뉴얼</h5>
+        <button @click="pdfDownload">점주 매뉴얼</button>
       </div>
       <div>
         <button class="cta" @click="logout">
@@ -131,6 +131,97 @@
   </nav>
   <hr class="hr2"/>
 </template>
+
+<script setup>
+import { onMounted, ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+import { jwtDecode } from 'jwt-decode';
+
+const store = useStore();
+const accessToken = store.state.accessToken;
+const router = useRouter();
+const username = ref('');
+
+const fetchUsernameFromToken = () => {
+  const token = store.state.accessToken;
+  if (token) {
+    const decoded = jwtDecode(token);
+    username.value = decoded.username;
+  }
+};
+const pdfDownload = async () => {
+  try {
+    const response = await fetch('http://localhost:5000/franchise/pdfdownload/fraowner-pdf', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'FrOwnerManual.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('There has been a problem with your fetch operation:', error);
+  }
+};
+
+const logout = async () => {
+  try {
+    await store.dispatch('logout');
+    await router.push('/');
+  } catch (error) {
+    console.error('로그아웃 오류:', error);
+  }
+};
+
+onMounted(() => {
+  store.dispatch('initializeAuth');
+  fetchUsernameFromToken();
+
+  const labels = document.querySelectorAll('.label');
+  let hideTimeout;
+
+  labels.forEach(label => {
+    const submenu = label.nextElementSibling;
+
+    label.addEventListener('mouseenter', () => {
+      clearTimeout(hideTimeout);
+      if (submenu) submenu.style.display = 'block';
+    });
+
+    label.addEventListener('mouseleave', () => {
+      hideTimeout = setTimeout(() => {
+        if (!submenu.matches(':hover')) submenu.style.display = 'none';
+      }, 300);
+    });
+
+    if (submenu) {
+      submenu.addEventListener('mouseenter', () => {
+        clearTimeout(hideTimeout);
+      });
+
+      submenu.addEventListener('mouseleave', () => {
+        hideTimeout = setTimeout(() => {
+          submenu.style.display = 'none';
+        }, 300);
+      });
+    }
+  });
+});
+</script>
 
 <style scoped>
 header {
@@ -442,67 +533,3 @@ hr.hr3 {
 }
 
 </style>
-
-
-<script setup>
-import { onMounted, ref, computed } from 'vue';
-import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
-import { jwtDecode } from 'jwt-decode';
-
-const router = useRouter();
-const store = useStore();
-const username = ref('');
-
-const fetchUsernameFromToken = () => {
-  const token = store.state.accessToken;
-  if (token) {
-    const decoded = jwtDecode(token);
-    username.value = decoded.username;
-  }
-};
-
-const logout = async () => {
-  try {
-    await store.dispatch('logout');
-    await router.push('/');
-  } catch (error) {
-    console.error('로그아웃 오류:', error);
-  }
-};
-
-onMounted(() => {
-  store.dispatch('initializeAuth');
-  fetchUsernameFromToken();
-
-  const labels = document.querySelectorAll('.label');
-  let hideTimeout;
-
-  labels.forEach(label => {
-    const submenu = label.nextElementSibling;
-
-    label.addEventListener('mouseenter', () => {
-      clearTimeout(hideTimeout);
-      if (submenu) submenu.style.display = 'block';
-    });
-
-    label.addEventListener('mouseleave', () => {
-      hideTimeout = setTimeout(() => {
-        if (!submenu.matches(':hover')) submenu.style.display = 'none';
-      }, 300);
-    });
-
-    if (submenu) {
-      submenu.addEventListener('mouseenter', () => {
-        clearTimeout(hideTimeout);
-      });
-
-      submenu.addEventListener('mouseleave', () => {
-        hideTimeout = setTimeout(() => {
-          submenu.style.display = 'none';
-        }, 300);
-      });
-    }
-  });
-});
-</script>
