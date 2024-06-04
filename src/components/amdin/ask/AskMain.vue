@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <!-- Breadcrumb 컴포넌트 추가 -->
-    <Breadcrumb :crumbs="breadcrumbs" />
+<!--    <Breadcrumb :crumbs="breadcrumbs" />-->
 
     <div class="filter-section">
       <table class="filter-table">
@@ -263,6 +263,7 @@ const closeEdit = () =>{
 .filter-table td {
   padding: 5px 10px;
   font-size: 16px;
+  height: 30px;
 }
 
 .filter-label {

@@ -1,13 +1,8 @@
 <template>
   <div class = "main">
-    <div class="container">
-      <img class="notice" src="@/assets/icon/List.png" />
-      <span class="F-title">공지 및 문의 관리&nbsp;&nbsp;></span>
-      <span class="F-title">공지사항 관리&nbsp;&nbsp;></span>
-      <span class="F-title">공지사항 조회 관리</span>
-    </div>
 
     <br/>
+  <div align="center">
     <table class="read-filter">
       <tr>
         <td class="filter-label">공지 조회 조건</td>
@@ -30,6 +25,7 @@
         </td>
       </tr>
     </table>
+  </div>
 
     <!-- 리셋, 검색 버튼 -->
     <div class="button-container">
@@ -42,8 +38,11 @@
     </div>
 
     <!-- 공지사항 등록 버튼 -->
-    <button class="btn-saveNotice" @click="showRegisterForm">공지사항 등록</button>
-
+    <div class="notice-btn-container " align="center">
+      <div align="center" style="width: 1300px">
+        <button style="float: right" class="btn-saveNotice"  @click="showRegisterForm">공지사항 등록</button>
+      </div>
+    </div>
     <!-- 공지사항 등록 팝업 -->
     <NoticeResisterPopup
         v-if="isRegisterFormVisible"
@@ -61,32 +60,39 @@
     />
 
     <!-- 오버레이 -->
-    <div v-if="isRegisterFormVisible || isEditFormVisible" class="overlay" @click="closeOverlay"></div>
+    <div v-if="isRegisterFormVisible || isEditFormVisible" class="overlay" @click="closeOverlay">
+
+    </div>
 
     <!-- 공지사항 목록 -->
-    <table class="notice-list">
-      <thead>
-      <tr>
-        <td>No</td>
-        <td>제목</td>
-        <td>내용</td>
-        <td>등록일</td>
-        <td>관리</td>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="(item, index) in paginatedLists" :key="item.noticeCode">
-        <td>{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
-        <td @click="showDetailsNoticePopup(item)">{{ item.noticeTitle }}</td>
-        <td>{{ item.noticeContent }}</td>
-        <td>{{ item.noticeEnrollDate }}</td>
-        <td>
-          <button class="modify" @click="showEditForm(item)">수정</button>
-          <button class="delete" @click="deleteNotice(item.noticeCode)">삭제</button>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+    <div class="table-container">
+      <table class="table">
+        <thead>
+        <tr class="header1">
+          <td>No</td>
+          <td>제목</td>
+          <td>내용</td>
+          <td>등록일</td>
+          <td>관리</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="(item, index) in paginatedLists" :key="item.noticeCode"
+            :id="'row-' + rowIndex"
+            class="allpost"
+        >
+          <td class="num">{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
+          <td style="width: 20%" @click="showDetailsNoticePopup(item)">{{ item.noticeTitle }}</td>
+          <td style="width: 50%">{{ item.noticeContent }}</td>
+          <td>{{ item.noticeEnrollDate }}</td>
+          <td style="">
+            <button class="modify" @click="showEditForm(item)">수정</button>
+            <button class="delete" @click="deleteNotice(item.noticeCode)">삭제</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
 
     <!-- 공지사항 상세 정보 팝업 -->
     <NoticeDetailsPopup v-if="viewPopup && selectedNotice" :notice="selectedNotice" @close="closeDetailsPopup" />
@@ -106,6 +112,13 @@ import NoticeResisterPopup from '@/components/notice/NoticeResisterPopup.vue';
 import NoticeDetailsPopup from '@/components/notice/NoticeDetailsPopup.vue';
 import NoticeEditPopup from '@/components/notice/NoticeEditPopup.vue';
 import { useStore } from 'vuex';
+
+const highlightRow = (index) => {
+  document.querySelector(`#row-${index}`).classList.add('highlighted');
+};
+const resetRowColor = (index) => {
+  document.querySelector(`#row-${index}`).classList.remove('highlighted');
+};
 
 const store = useStore();
 const accessToken = store.state.accessToken;
@@ -308,6 +321,8 @@ onMounted(() => {
 </script>
 
   <style scoped>
+  @import "../../assets/css/order.css" ;
+
   .modify,
   .delete {
     color: #ffffff;
@@ -357,7 +372,7 @@ onMounted(() => {
   border: 1px solid #D9D9D9;
   border-radius: 5px;
   padding: 10px;
-  width: 1600px;
+  width: 1300px;
   }
 
   .read-filter td {
@@ -418,10 +433,15 @@ onMounted(() => {
   border-color: #d9d9d9;
   }
 
-  notice-table {
-  width: 1600px;
-  border-collapse: collapse;
+  .table-container {
+    width: 100%;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
   }
+
+
+
 
   .notice-list {
     width: 1600px;
@@ -452,23 +472,23 @@ onMounted(() => {
 
   /* 팝업 */
   .overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   notice-form {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  max-width: 500px; /* 팝업의 최대 너비 */
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 700px; /* 팝업의 최대 너비 */
   }
 
   .notice-form h2 {
@@ -518,16 +538,22 @@ onMounted(() => {
   }
 
   .button-container {
-  display: flex;
-  justify-content: center; /* 버튼을 왼쪽에 정렬 */
-  align-items: center; /* 버튼을 수직 가운데에 정렬 */
-  gap: 10px; /* 버튼 사이의 간격을 설정 */
+    display: flex;
+    justify-content: center; /* 버튼을 왼쪽에 정렬 */
+    align-items: center; /* 버튼을 수직 가운데에 정렬 */
+    gap: 10px; /* 버튼 사이의 간격을 설정 */
+  }
+  .notice-btn-container{
+    display: flex;
+    justify-content: center; /* 버튼을 왼쪽에 정렬 */
+    align-items: center; /* 버튼을 수직 가운데에 정렬 */
   }
 
   .btn-saveNotice {
+
   display: flex;
   position: relative;
-    left: 1480px;
+  //left: 10px;
   height: 35px;
   font-size: 16px;
   font-weight: bold;
@@ -541,6 +567,7 @@ onMounted(() => {
   border: 0;
     margin-bottom: 10px;
     width: 115px;
+
   }
 
   .btn-saveNotice:hover {
