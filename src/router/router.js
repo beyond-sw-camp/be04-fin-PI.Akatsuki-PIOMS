@@ -28,6 +28,7 @@ import Log from "@/components/log/Log.vue";
 import NoticeList from "@/components/notice/NoticeList.vue";
 import FranchiseDashBoard from "@/components/franchise/FranchiseDashBoard.vue";
 import DriverDashBoard from "@/components/driver/DriverDashBoard.vue";
+import NoticeListFrOwner from "@/components/notice/NoticeListFrOwner.vue";
 
 
 const routes = [
@@ -143,9 +144,15 @@ const routes = [
     },
     {
         path: '/admin/notice/list',
-        name: 'noticeList',
+        name: 'NoticeList',
         component: NoticeList,
-        meta: { requiresAuth: true, role: ['ROLE_ROOT','ROLE_ADMIN'] }
+        meta: { requiresAuth: true, role: ['ROLE_ROOT'] }
+    },
+    {
+        path: '/franchise/notice/list',
+        name: 'FranchiseNoticeList',
+        component: NoticeListFrOwner,
+        meta: { requiresAuth: true, role: ['ROLE_ADMIN', 'ROLE_OWNER'] }
     },
     {
         path: '/franchise/favorite/register',

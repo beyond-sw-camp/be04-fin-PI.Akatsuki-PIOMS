@@ -1,116 +1,83 @@
 <template>
-<div class = "main">
+  <div class = "main">
 
-<br/>
-<div align="center">
-  <table class="read-filter">
-    <tr>
-      <td class="filter-label">공지 조회 조건</td>
-      <td class="filter1">
-        <select class="filter-section" v-model="filterType">
-          <option value="all">전체</option>
-          <option value="content">내용</option>
-          <option value="title">제목</option>
-        </select>
+    <br/>
+    <div align="center">
+      <table class="read-filter">
+        <tr>
+          <td class="filter-label">공지 조회 조건</td>
+          <td class="filter1">
+            <select class="filter-section" v-model="filterType">
+              <option value="all">전체</option>
+              <option value="content">내용</option>
+              <option value="title">제목</option>
+            </select>
 
-        <input type="text" class="filter-input" placeholder="검색어를 입력해주세요." v-model="filterText" />
-      </td>
-    </tr>
-    <tr>
-      <td class="filter-label">등록일</td>
-      <td colspan="3" class="filter-date">
-        <input type="date" id="startDate" v-model="startDate" placeholder="시작 날짜 선택" title="시작 날짜 선택" />
-        &nbsp;&nbsp;<span>~</span>&nbsp;
-        <input type="date" id="endDate" v-model="endDate" placeholder="종료 날짜 선택" title="종료 날짜 선택" />
-      </td>
-    </tr>
-  </table>
-</div>
+            <input type="text" class="filter-input" placeholder="검색어를 입력해주세요." v-model="filterText" />
+          </td>
+        </tr>
+        <tr>
+          <td class="filter-label">등록일</td>
+          <td colspan="3" class="filter-date">
+            <input type="date" id="startDate" v-model="startDate" placeholder="시작 날짜 선택" title="시작 날짜 선택" />
+            &nbsp;&nbsp;<span>~</span>&nbsp;
+            <input type="date" id="endDate" v-model="endDate" placeholder="종료 날짜 선택" title="종료 날짜 선택" />
+          </td>
+        </tr>
+      </table>
+    </div>
 
-<!-- 리셋, 검색 버튼 -->
-<div class="button-container">
-  <button type="button" class="btn-reset" @click="resetFilters">
-    <img class="reset" src="@/assets/icon/reset.png" />
-  </button>
-  <button type="button" class="btn-search" @click="applyFilters">
-    <img class="search" src="@/assets/icon/search.png" />
-  </button>
-</div>
-
-<!-- 공지사항 등록 버튼 -->
-<div class="notice-btn-container " align="center">
-  <div align="center" style="width: 1300px">
-    <button style="float: right" class="btn-saveNotice"  @click="showRegisterForm">공지사항 등록</button>
+    <!-- 리셋, 검색 버튼 -->
+    <div class="button-container">
+      <button type="button" class="btn-reset" @click="resetFilters">
+        <img class="reset" src="@/assets/icon/reset.png" />
+      </button>
+      <button type="button" class="btn-search" @click="applyFilters">
+        <img class="search" src="@/assets/icon/search.png" />
+      </button>
+    </div>
   </div>
-</div>
-<!-- 공지사항 등록 팝업 -->
-<NoticeResisterPopup
-    v-if="isRegisterFormVisible"
-    :notice="newNotice"
-    @close="toggleRegisterForm"
-    @submit="submitNotice"
-/>
 
-<!-- 공지사항 수정 팝업 -->
-<NoticeEditPopup
-    v-if="isEditFormVisible"
-    :notice="selectedNotice"
-    @close="toggleEditForm"
-    @submit="submitNotice"
-/>
+    <!-- 공지사항 목록 -->
+    <div class="table-container">
+      <table class="table">
+        <thead>
+        <tr class="header1">
+          <td>No</td>
+          <td>제목</td>
+          <td>내용</td>
+          <td>등록일</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="(item, index) in paginatedLists" :key="item.noticeCode"
+            :id="'row-' + rowIndex"
+            class="allpost"
+        >
+          <td class="num">{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
+          <td style="width: 20%" @click="showDetailsNoticePopup(item)">{{ item.noticeTitle }}</td>
+          <td style="width: 50%">{{ item.noticeContent }}</td>
+          <td>{{ item.noticeEnrollDate }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
 
-<!-- 오버레이 -->
-<div v-if="isRegisterFormVisible || isEditFormVisible" class="overlay" @click="closeOverlay">
+    <!-- 공지사항 상세 정보 팝업 -->
+    <NoticeDetailsPopup v-if="viewPopup && selectedNotice" :notice="selectedNotice" @close="closeDetailsPopup" />
 
-</div>
+    <!-- 페이지네이션 -->
+    <div class="pagination">
+      <button @click="prevPage" :disabled="currentPage === 1">이전</button>
+      <span>{{ currentPage }} / {{ totalPages }}</span>
+      <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
+    </div>
 
-<!-- 공지사항 목록 -->
-<div class="table-container">
-  <table class="table">
-    <thead>
-    <tr class="header1">
-      <td>No</td>
-      <td>제목</td>
-      <td>내용</td>
-      <td>등록일</td>
-      <td>관리</td>
-    </tr>
-    </thead>
-    <tbody>
-    <tr v-for="(item, index) in paginatedLists" :key="item.noticeCode"
-        :id="'row-' + rowIndex"
-        class="allpost"
-    >
-      <td class="num">{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
-      <td style="width: 20%" @click="showDetailsNoticePopup(item)">{{ item.noticeTitle }}</td>
-      <td style="width: 50%">{{ item.noticeContent }}</td>
-      <td>{{ item.noticeEnrollDate }}</td>
-      <td style="">
-        <button class="modify" @click="showEditForm(item)">수정</button>
-        <button class="delete" @click="deleteNotice(item.noticeCode)">삭제</button>
-      </td>
-    </tr>
-    </tbody>
-  </table>
-</div>
-
-<!-- 공지사항 상세 정보 팝업 -->
-<NoticeDetailsPopup v-if="viewPopup && selectedNotice" :notice="selectedNotice" @close="closeDetailsPopup" />
-
-<!-- 페이지네이션 -->
-<div class="pagination">
-  <button @click="prevPage" :disabled="currentPage === 1">이전</button>
-  <span>{{ currentPage }} / {{ totalPages }}</span>
-  <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
-</div>
-</div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import NoticeResisterPopup from '@/components/notice/NoticeResisterPopup.vue';
 import NoticeDetailsPopup from '@/components/notice/NoticeDetailsPopup.vue';
-import NoticeEditPopup from '@/components/notice/NoticeEditPopup.vue';
 import { useStore } from 'vuex';
 
 const highlightRow = (index) => {
@@ -127,8 +94,7 @@ const headers = ref([
   { label: 'No' },
   { key: 'noticeTitle', label: '공지사항 제목' },
   { key: 'noticeContent', label: '공지사항 내용' },
-  { key: 'noticeEnrollDate', label: '등록일' },
-  { label: '관리' } // 관리 열 추가
+  { key: 'noticeEnrollDate', label: '등록일' }
 ]);
 
 const filteredLists = ref([]);
@@ -137,7 +103,7 @@ const itemsPerPage = 15;
 
 const getNotice = async () => {
   try {
-    const response = await fetch('http://localhost:5000/admin/notice/list', {
+    const response = await fetch('http://api.pioms.shop/franchise/notice/list', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -212,90 +178,6 @@ const resetFilters = () => {
   startDate.value = '';
   endDate.value = '';
   applyFilters(); // 필터 초기화 후 다시 필터 적용
-};
-
-const isRegisterFormVisible = ref(false);
-const isEditFormVisible = ref(false);
-const newNotice = ref({ noticeTitle: '', noticeContent: '' });
-const selectedNotice = ref(null);
-
-const showRegisterForm = () => {
-  isRegisterFormVisible.value = true;
-  isEditFormVisible.value = false;
-  newNotice.value = { noticeTitle: '', noticeContent: '' };
-};
-
-const showEditForm = (notice) => {
-  isEditFormVisible.value = true;
-  isRegisterFormVisible.value = false;
-  selectedNotice.value = { ...notice };
-};
-
-const toggleRegisterForm = () => {
-  isRegisterFormVisible.value = !isRegisterFormVisible.value;
-};
-
-const toggleEditForm = () => {
-  isEditFormVisible.value = !isEditFormVisible.value;
-};
-
-
-const closeOverlay = () => {
-  isRegisterFormVisible.value = false;
-  isEditFormVisible.value = false;
-};
-
-const submitNotice = async (notice) => {
-  try {
-    const method = isEditFormVisible.value ? 'PUT' : 'POST';
-    const url = isEditFormVisible.value
-        ? `http://localhost:5000/admin/notice/list/update/${notice.noticeCode}?requesterAdminCode=1`
-        : 'http://localhost:5000/admin/notice/list/register?requesterAdminCode=1';
-
-    const response = await fetch(url, {
-      method: method,
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(notice),
-    });
-
-    if (!response.ok) {
-      throw new Error(isEditFormVisible.value ? '공지사항 수정 실패' : '공지사항 등록 실패');
-    }
-
-    alert(isEditFormVisible.value ? '공지사항이 수정되었습니다.' : '공지사항이 등록되었습니다.');
-    location.reload();
-    toggleRegisterForm();
-    toggleEditForm();
-    getNotice();
-  } catch (error) {
-    console.error('공지사항 처리 오류:', error);
-  }
-};
-
-const deleteNotice = async (noticeCode) => {
-  try {
-    if (confirm('해당 공지사항을 삭제하시겠습니까?')) {
-      const response = await fetch(`http://localhost:5000/admin/notice/list/delete/${noticeCode}?requesterAdminCode=1`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-
-      if (!response.ok) {
-        throw new Error('공지사항 삭제 실패');
-      }
-
-      getNotice();
-    }
-  } catch (error) {
-    console.error('공지사항 삭제 오류:', error);
-  }
 };
 
 const showDetailsNoticePopup = (item) => {
