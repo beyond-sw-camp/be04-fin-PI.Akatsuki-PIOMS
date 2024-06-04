@@ -109,6 +109,7 @@
             <th>점주명</th>
           </tr>
           </thead>
+
           <tbody>
           <tr v-for="(order, index) in driverDashBoard" :key="index">
             <td>{{ index + 1 }}</td>
@@ -241,7 +242,6 @@ const headers = ref([
   { key: 'noticeTitle', label: '공지사항 제목' },
   { key: 'noticeEnrollDate', label: '등록일' },
 ]);
-
 const notices = ref([]);
 const showPopup = ref(false);
 const selectedNotice = ref({});
@@ -287,7 +287,6 @@ const sortedNotices = computed(() => {
     return new Date(b.noticeEnrollDate) - new Date(a.noticeEnrollDate);
   });
 });
-
 const conditionFilter = ref('');
 const filterText1 = ref('');
 const filterText2 = ref('');
