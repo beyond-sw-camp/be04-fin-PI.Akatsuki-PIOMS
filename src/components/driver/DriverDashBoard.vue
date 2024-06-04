@@ -49,69 +49,50 @@
     </div>
   </div>
 
-  <!-- 배송기사 배송 조회 -->
   <div class="my-delivery-list">
     <div>
-      <img class = "delivery" src="@/assets/icon/Delivery.png"/>
+      <img class="delivery" src="@/assets/icon/Delivery.png"/>
       내 배송 조회
-      <hr class ="hr2"/>
-
-  <table class="read-filter">
-    <tr class="paTable">
-      <td class="filter-label">배송상태</td>
-      <td class="filter1">
-        <div class="radio-group">
-          <div class="delivery-status-title">
-          <label id="delivery-status"><input type="radio" value="" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter" checked> 전체 </label>
-          <label id="delivery-status"><input type="radio" value="배송전" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"> 배송전 </label>
-          <label id="delivery-status"><input type="radio" value="배송중" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"> 배송중 </label>
-          <label id="delivery-status"><input type="radio" value="배송완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"> 배송완료 </label>
-          </div>
-        </div>
-      </td>
-      <td class="filter-label1">주문(발주)번호</td>
-      <td class="filter1">
-        <input type="text" class="filter-input" placeholder="주문(발주)번호를 입력해주세요." v-model="filterText1" />
-      </td>
-    </tr>
-    <tr class="paTable">
-      <td class="filter-label">배송지</td>
-      <td>
-        <input type="text" class="filter-input" placeholder="배송지를 입력해주세요." v-model="filterText2" />
-      </td>
-      <td class="filter-label1">배송(송장)번호</td>
-      <td>
-        <input type="text" class="filter-input" placeholder="배송(송장)번호를 입력해주세요." v-model="filterText3" />
-      </td>
-    </tr>
+      <hr class="hr2"/>
+      <table class="delivery-list">
+        <tr class="paTable">
+          <td class="filter-label">배송상태</td>
+          <td class="filter1">
+            <div class="radio-group">
+              <div class="delivery-status-title">
+                <label id="delivery-status"><input type="radio" value="전체" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"> 전체 </label>
+                <label id="delivery-status"><input type="radio" value="배송전" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"> 배송전 </label>
+                <label id="delivery-status"><input type="radio" value="배송중" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"> 배송중 </label>
+                <label id="delivery-status"><input type="radio" value="배송완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"> 배송완료 </label>
+              </div>
+            </div>
+          </td>
+        </tr>
       </table>
-
       <!-- 리셋, 검색 버튼 -->
       <div class="button-container">
-        <button type="button" class="btn-reset" @click="resetFilters">
+        <button class="btn-reset" @click="resetFilter">
           <img class="reset-icon" src="@/assets/icon/reset.png" />
         </button>
-        <button type="button" class="btn-search" @click="applyFilters">
+        <button class="btn-search" @click="applyFilter">
           <img class="search-icon" src="@/assets/icon/search.png" />
         </button>
       </div>
-
       <br/>
-      <div v-if="driverDashBoard.length">
+      <div v-if="filteredOrders.length">
         <table class="delivery-table">
           <thead>
           <tr>
-            <th>No</th>
-            <th>주문 번호</th>
-            <th>송장 번호</th>
-            <th>배송지</th>
-            <th>배송 상태</th>
-            <th>점주명</th>
+            <th class="no">No</th>
+            <th class="order">주문 번호</th>
+            <th class="invoice">송장 번호</th>
+            <th class="address">배송지</th>
+            <th class="status">배송 상태</th>
+            <th class="owner">점주명</th>
           </tr>
           </thead>
-
           <tbody>
-          <tr v-for="(order, index) in driverDashBoard" :key="index">
+          <tr v-for="(order, index) in filteredOrders" :key="index">
             <td>{{ index + 1 }}</td>
             <td>{{ order.orderCode }}</td>
             <td>{{ order.invoiceCode }}</td>
@@ -122,13 +103,6 @@
           </tbody>
         </table>
       </div>
-
-<!--      &lt;!&ndash; 페이지네이션 (옵션) &ndash;&gt;-->
-<!--      <div class="pagination">-->
-<!--        <button @click="prevPage" :disabled="currentPage === 1">이전</button>-->
-<!--        <span>{{ currentPage }} / {{ totalPages }}</span>-->
-<!--        <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>-->
-<!--      </div>-->
     </div>
   </div>
 
@@ -141,6 +115,7 @@ import { useStore } from 'vuex';
 const store = useStore();
 const accessToken = store.state.accessToken;
 
+const lists = ref([]);
 const deliveryList = ref([
   { label: 'No'},
   { key: 'requestCode', label: '주문(발주)번호' },
@@ -287,42 +262,23 @@ const sortedNotices = computed(() => {
     return new Date(b.noticeEnrollDate) - new Date(a.noticeEnrollDate);
   });
 });
+
+// 검색필터
 const conditionFilter = ref('');
-const filterText1 = ref('');
-const filterText2 = ref('');
-const filterText3 = ref('');
-
-const applyFilters = () => {
-  deliveryList.value = list.value.filter(order => {
-    const matchesConditionFilter =
-        conditionFilter.value === '' ||
-        conditionFilter.value === '전체' ||
-        (conditionFilter.value === '배송전' && order.deliveryStatus === '배송전') ||
-        (conditionFilter.value === '배송중' && order.deliveryStatus === '배송중') ||
-        (conditionFilter.value === '배송완료' && order.deliveryStatus === '배송완료');
-    const matchesOrderCode = !filterText1.value || order.orderCode.includes(filterText1.value);
-    const matchesFranchiseAddress = !filterText2.value || order.franchiseAddress.includes(filterText2.value);
-    const matchesInvoiceCode = !filterText3.value || order.invoiceCode.includes(filterText3.value);
-
-    return matchesConditionFilter && matchesOrderCode && matchesFranchiseAddress && matchesInvoiceCode;
-  });
-  currentPage.value = 1; // 필터 적용 후 페이지를 첫 페이지로 설정
-};
-
-const resetFilters = () => {
-  conditionFilter.value = '';
-  filterText1.value = '';
-  filterText2.value = '';
-  filterText3.value = '';
-  applyFilters(); // 필터 초기화 후 다시 필터 적용
-};
-
-const currentPage = ref(1);
-const totalPages = ref(1);
-
-
+const filteredOrders = ref([]);
 const driverDashBoard = ref([]);
-
+const applyFilter = () => {
+  filteredOrders.value = driverDashBoard.value.filter(order =>
+      conditionFilter.value === '전체' || conditionFilter.value === ''
+          ? true
+          : order.deliveryStatus === conditionFilter.value
+  );
+};
+const resetFilter = () => {
+  conditionFilter.value = '';
+  applyFilter();
+};
+// 대쉬보드
 const getDriverDashBoard = async () => {
   try {
     const response = await fetch('http://localhost:5000/driver/dashboard', {
@@ -335,36 +291,16 @@ const getDriverDashBoard = async () => {
     if (!response.ok) {
       throw new Error('네트워크 오류 발생');
     }
-
     const data = await response.json();
-    console.log('Fetched data:', data);  // 응답 데이터 확인
     driverDashBoard.value = data.order || [];
-
-    console.log(driverDashBoard.invoice);
+    applyFilter();
   } catch (error) {
     console.error('오류 발생:', error);
   }
-    return {
-      deliveryList,
-      driverDashBoard
-    };
 };
 
-// const filteredOrders = computed(() => {
-//   if (!driverDashBoard.value) return [];
-// });
-
-// const prevPage = () => {
-//   if (currentPage.value > 1) {
-//     currentPage.value--;
-//   }
-// };
-//
-// const nextPage = () => {
-//   if (currentPage.value < totalPages.value) {
-//     currentPage.value++;
-//   }
-// };
+const currentPage = ref(1);
+const totalPages = ref(1);
 
 onMounted(() => {
   getNotice();
@@ -400,8 +336,8 @@ onMounted(() => {
   height: 870px;
   display: flex;
   position: absolute;
-  top: 95px;
-  right: 10px;
+  top: 100px;
+  right: 80px;
   overflow-y: auto;
 }
 
@@ -576,6 +512,7 @@ hr.hr2 {
    background: rgba(0, 0, 0, 0.5);
    z-index: 9999;
  }
+
  .popup-content {
    background: #fff;
    padding: 20px;
@@ -600,17 +537,12 @@ hr.hr2 {
    border-color: #e4e4e4 !important;
    margin-bottom: 30px;
  }
+
  h2 {
    margin-top: 0;
  }
 
  /* 배송기사 배송조회 CSS */
- .read-filter {
-   position: relative;
-   top: 15px;
-   left: 10px;
-   display: inline;
- }
  .paTable {
    font-weight: bold;
    text-align: center;
@@ -619,42 +551,22 @@ hr.hr2 {
    border: 1px solid #ddd;
  }
  .filter1 {
-   width: 360px;
+   width: 660px;
    padding: 8px;
+   border: 1px solid #d9d9d9;
  }
 
  .delivery-status-title {
    display: flex;
-   justify-content: center;
+   justify-content: flex-start;
    font-size: 16px;
    position: relative;
-   top: 5px;
+   top: 2px;
  }
  .filter-label {
    font-size: 16px;
    width: 80px;
- }
- .filter-label1 {
-   font-size: 16px;
-   width: 110px;
    background-color: #d9d9d9;
-   font-weight: bold;
- }
- .filter-input {
-   font-size: 16px;
-   width: 290px;
-   display: flex;
-   justify-content: flex-start;
-   border-right: 1px solid #d9d9d9;
-   padding: 10px;
-   height: 20px;
- }
- #delivery-status {
-   display: flex;
-   justify-content: flex-start;
-   align-items: center;
-   position: relative;
-   right: 5px;
  }
 
  /* 리셋, 검색 버튼 */
@@ -662,7 +574,7 @@ hr.hr2 {
  .btn-search {
    border: none;
    background-color: #ffffff;
-
+   cursor: pointer;
  }
  .button-container {
    display: flex;
@@ -676,6 +588,11 @@ hr.hr2 {
  }
 
  /* 조회 표 */
+.delivery-list {
+  position: relative;
+  top: 15px;
+
+}
 
  .delivery-table {
   height: 50px;
@@ -683,8 +600,30 @@ hr.hr2 {
 
  .delivery-table th {
    width: 1000px;
-   height: 50px;
+   height: 40px;
    background-color: #d9d9d9;
  }
+ .delivery-table td {
+   text-align: center;
+   height: 40px;
+ }
 
+ .no {
+   width: 100px !important;
+ }
+ .order {
+   width: 500px !important;
+ }
+ .invoice {
+   width: 500px !important;
+ }
+.address {
+  width: 2500px !important;
+}
+.status{
+  width: 500px !important;
+}
+.owner {
+  width: 500px !important;
+}
 </style>
