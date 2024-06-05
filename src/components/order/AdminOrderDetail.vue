@@ -1,10 +1,7 @@
 <template>
   <div class="popup-overlay" >
-
        <div class="popup-content">
-           <br>
-
-           <br>
+           <br>          <br>
                 <h1 align="center">발주서</h1>
 
            <div class="info">
@@ -179,7 +176,11 @@
    import { ref } from "vue";
    import axios from 'axios';
    import { useStore } from 'vuex'; // Vuex store 임포트
-  const store = useStore(); // Vuex store 사용
+   import Swal from "sweetalert2";
+   import AdminExchangePage from "@/components/exchange/AdminExchangePage.vue";
+   import FranchiseOrderPage from "@/components/order/FranchiseOrderPage.vue"; // Vuex store 임포트
+
+   const store = useStore(); // Vuex store 사용
 
 
    const headers = ref([
@@ -221,22 +222,30 @@ const accpetOrder = async () => {
         },
         credentials: 'include'
       });
-      if(response.status ==406){
-        alert("이 발주는 이미 처리되어 있습니다.");
-        props.showDetailPopup();
 
-        return;
-      }
       if (!response.ok) {
-        alert("잘못된 주문")
-        props.showDetailPopup();
+        throw new Error("error")
       }
-
+      await Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "발주 등록 완료되었습니다.",
+        showConfirmButton: false,
+        timer: 1500
+      });
       props.showDetailPopup();
-      props.getOrderList();
+      location.reload(FranchiseOrderPage);
     } catch (error) {
+      await Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "잘못된 요청입니다.",
+        showConfirmButton: false,
+        timer: 1500
+      });
+      location.reload(FranchiseOrderPage);
+
       console.error('오류 발생:', error);
-      props.showDetailPopup();
     }
 };
 
@@ -262,19 +271,28 @@ const denyOrder = async () => {
         },
         credentials: 'include'
       });
-      if(response.status ==406){
-        alert("이 발주는 이미 처리되어 있습니다.");
-        clickDeny();
-        props.showDetailPopup();
-        props.getOrderList();
-      }
       if (!response.ok) {
-        alert("헉 왜 주문 거절 안되지????????????")
         props.showDetailPopup();
         throw new Error('네트워크 오류 발생');
       }
+      await Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "발주 거절 처리 완료되었습니다.",
+        showConfirmButton: false,
+        timer: 1500
+      });
+      location.reload(AdminOrderPage);
     } catch (error) {
-      alert("헉 왜 주문 거절 안되지????????????");
+      await Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "잘못된 요청입니다.",
+        showConfirmButton: false,
+        timer: 1500
+      });
+      location.reload(FranchiseOrderPage);
+
       props.showDetailPopup();
     }
 };

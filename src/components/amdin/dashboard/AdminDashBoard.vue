@@ -289,9 +289,21 @@ const askList = ref([]);
 const products = ref([]);
 const isLoading = ref(false);
 
+const userRole = computed(() => store.getters.userRole);
+console.log(userRole);
 
 const getDash = async () => {
   let timerInterval;
+  let url;
+
+  console.log(userRole);
+
+  if(userRole === 'ROLE_ROOT') {
+    url= 'http://localhost:5000/admin/rootDashboard'
+  }else{
+    url= 'http://localhost:5000/admin/adminDashboard'
+  }
+
   Swal.fire({
     title: "대시보드를 불러오는 중입니다...",
     timer: 1000,
@@ -316,7 +328,7 @@ const getDash = async () => {
     if (!accessToken) {
       throw new Error('No access token found');
     }
-    const response = await fetch(`http://localhost:5000/admin/rootDashboard`, {
+    const response = await fetch(url, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

@@ -1,4 +1,5 @@
 <template>
+
   <div class="popup-overlay" >
        <div class="popup-content">
            <br>
@@ -96,7 +97,7 @@
               </table>
             </div>
             <br>
-             <div v-if="exchangeList!=[]">
+             <div v-if="exchangeList!==[]">
               <div class="divvv-title" style="border-top: 2px black solid;">
                   반품상품
               </div>
@@ -117,10 +118,6 @@
                 </table>
               </div>
              </div>
-
-             <div class="but-group">
-               <input class="but" type="button" value="검수하기" @click="gumsoo" v-if="item.orderCondition == '검수대기'">
-             </div>
            <div v-if="item.orderCondition == '승인거부' || item.orderCondition=='승인대기'">
              <div v-if="item.orderCondition == '승인거부'" >
                <div class="divvv-title">거절 사유</div>
@@ -132,11 +129,10 @@
           </div>
           발주일자 : {{ item.orderDate }}
            <br>
-           주문코드 : {{ item.orderCode }}<br>   
-          <div class="action-buttons" v-if="item.orderCondition=='승인대기' || item.orderCondition=='승인거부'">
-            <input class="cancel-btn" type="button" value="수정하기" @click="clickUpdate">
-          </div>
-         <button style="float: right" class="cancel-btn" @click="showDetailPopup" >돌아가기</button>
+           주문코드 : {{ item.orderCode }}<br>
+          <button style="float: right" class="cancel-btn" @click="showDetailPopup" >돌아가기</button>
+          <button style="float: right" class="cancel-btn" @click="clickUpdate" v-if="item.orderCondition=='승인대기' || item.orderCondition=='승인거부'">수정하기</button>
+          <button style="float: right" class="cancel-btn" @click="gumsoo" v-if="item.orderCondition == '검수대기'">검수하기</button>
        </div>
 
     <FranchiseOrderUpdatePopup
@@ -158,6 +154,8 @@
   import { useStore } from 'vuex'; // Vuex store 임포트
   const store = useStore(); // Vuex store 사용
   import FranchiseOrderUpdatePopup from "@/components/order/FranchiseOrderUpdatePopup.vue";
+  import Swal from "sweetalert2";
+  import FranchiseOrderPage from "@/components/order/FranchiseOrderPage.vue";
 
   const updateStatus = ref(false);
   const clickUpdate = () =>{
@@ -210,7 +208,8 @@ const gumsoo = async () => {
     if (!accessToken) {
       throw new Error('No access token found');
     }
-    const response = await fetch(`http://api.pioms.shop/franchise/order/check?franchiseOwnerCode=${franchiseOwnerCode}`, {
+    // const response = await fetch(`http://api.pioms.shop/franchise/order/check?franchiseOwnerCode=${franchiseOwnerCode}`, {
+    const response = await fetch(`http://localhost:5000/franchise/order/check?franchiseOwnerCode=${franchiseOwnerCode}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -218,18 +217,26 @@ const gumsoo = async () => {
       },
         body: JSON.stringify(requestData)
     });
-    if(response.status ==406){
-      alert("이 발주는 이미 처리되어 있습니다.");
-      clickGumsoo();
-      props.showDetailPopup();
-      return;
-    }
     if (!response.ok) {
-      alert("헉 왜 주문 거절 안되지????????????")
       throw new Error('네트워크 오류 발생');
     }
+    await Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "발주 검수 완료.",
+      showConfirmButton: false,
+      timer: 1500
+    });
+    location.reload(FranchiseOrderPage);
   } catch (error) {
-    alert("헉 왜 주문 거절 안되지????????????");
+    await Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "발주 검수 실패.",
+      showConfirmButton: false,
+      timer: 1500
+    });
+    location.reload(FranchiseOrderPage);
     console.error('오류 발생:', error);
   }
 };

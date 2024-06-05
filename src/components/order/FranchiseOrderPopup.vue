@@ -106,7 +106,9 @@
 
 <script setup>
   import { ref } from "vue";
-  import { useStore } from 'vuex'; // Vuex store 임포트
+  import { useStore } from 'vuex';
+  import Swal from "sweetalert2";
+  import FranchiseOrderPage from "@/components/order/FranchiseOrderPage.vue"; // Vuex store 임포트
   const store = useStore(); // Vuex store 사용
 
 
@@ -152,6 +154,7 @@
     if (!accessToken) {
       throw new Error('No access token found');
     }
+      // const response = await fetch("http://api.pioms.shop/franchise/product", {
       const response = await fetch("http://api.pioms.shop/franchise/product", {
         method: "GET",
         headers: {
@@ -221,7 +224,8 @@
     if (!accessToken) {
       throw new Error('No access token found');
     }
-    const response = await fetch(`http://api.pioms.shop/franchise/order`, {
+    // const response = await fetch(`http://api.pioms.shop/franchise/order`, {
+    const response = await fetch(`http://localhost:5000/franchise/order`, {
         method: "POST",
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -230,20 +234,31 @@
         credentials: 'include',
         body: JSON.stringify(orderData)
       });
-    if (response.status == 406) {
-      alert("생각은 하셨나요? 신청 재고량 너무 많거나, 이미 승인 대기중인 발주가 존재합니다.");
-      props.showPopup();
-      throw new Error("");
-    }
+
     if (!response.ok) {
-      alert("불가불가불가사리");
-      props.showPopup();
       throw new Error("네트워크 오류 발생");
     }
     const result = await response.json();
-    console.log("주문 성공:", result);
+    await Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "발주 요청 완료",
+      showConfirmButton: false,
+      timer: 1500
+    });
+    props.showDetailPopup();
+    location.reload(FranchiseOrderPage);
     props.showPopup();
   } catch (error) {
+    await Swal.fire({
+      position: "center",
+      icon: "error",
+      title: "발주 요청 실패",
+      showConfirmButton: false,
+      timer: 1500
+    });
+    props.showDetailPopup();
+    location.reload(FranchiseOrderPage);
     console.error("주문 오류 발생:", error);
   }
 
