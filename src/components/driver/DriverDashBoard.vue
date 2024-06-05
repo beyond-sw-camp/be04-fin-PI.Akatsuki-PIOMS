@@ -675,10 +675,10 @@ hr.hr2 {
 }
 
  .invoice-close-btn {
-   position: absolute !important;
-   top: 130px !important;
-   right: 430px !important;
-   cursor: pointer;
+   position: fixed !important;
+   top: 100px !important;
+   right: 450px !important;
+   cursor: pointer !important;
    font-size: 20px;
    color: #444444;
    z-index: 9999;
