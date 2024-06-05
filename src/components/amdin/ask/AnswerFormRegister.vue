@@ -100,6 +100,15 @@ const formatDate = (dateString) => {
 };
 
 const submitAnswer = async () => {
+  if (!answer.value.trim()) {
+    await Swal.fire({
+      icon: 'warning',
+      title: '경고',
+      text: '답변을 입력해주세요.',
+    });
+    return;
+  }
+
   const askCode = props.askCode.askCode;
   if (!askCode) {
     console.error('askCode is not defined');

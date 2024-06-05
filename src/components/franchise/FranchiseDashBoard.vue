@@ -356,7 +356,7 @@ body {
   display: flex;
   font-size: 24px;
   font-weight: bold;
-  background-color: #d9d9d9;
+  background-color: #F3F3F3;
   height: 70px;
   justify-content: center;
   align-items: center;

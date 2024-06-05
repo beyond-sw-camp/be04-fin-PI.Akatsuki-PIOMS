@@ -1,18 +1,16 @@
 <template>
   <div class="container">
     <!-- Breadcrumb 컴포넌트 추가 -->
-<!--    <Breadcrumb :crumbs="breadcrumbs" />-->
+    <!--    <Breadcrumb :crumbs="breadcrumbs" />-->
 
     <div class="filter-section">
       <table class="filter-table">
         <tr>
           <td class="filter-label">답변여부</td>
           <td class="filter-input">
-            <select id="filterStatus" v-model="filterStatus" title="문의 상태 선택">
-              <option value="전체">전체</option>
-              <option value="답변대기">답변대기</option>
-              <option value="답변완료">답변완료</option>
-            </select>
+            <label><input type="radio" v-model="filterStatus" value="전체" /> 전체</label>
+            <label><input type="radio" v-model="filterStatus" value="답변대기" /> 답변대기</label>
+            <label><input type="radio" v-model="filterStatus" value="답변완료" /> 답변완료</label>
           </td>
           <td class="filter-label">가맹점명</td>
           <td class="filter-input">
@@ -220,7 +218,7 @@ const registPopup = ref(false);
 const askCode = ref(null);
 const editPopup = ref(false);
 
-const showRegist = (askCode1) =>{
+const showRegist = (askCode1) => {
   registPopup.value = !registPopup.value;
   askCode.value = askCode1;
 }
@@ -229,15 +227,16 @@ const showEdit = (askCode2) => {
   editPopup.value = !editPopup.value;
   askCode.value = askCode2;
 }
-const closeRegist = () =>{
+const closeRegist = () => {
   registPopup.value = !registPopup.value;
 }
 
-const closeEdit = () =>{
+const closeEdit = () => {
   editPopup.value = !editPopup.value;
 }
 
 </script>
+
 
 <style scoped>
 .container {
@@ -329,7 +328,7 @@ const closeEdit = () =>{
   text-align: center;
 }
 
-.table th,td {
+.table th, td {
   width: 50px;
 }
 
