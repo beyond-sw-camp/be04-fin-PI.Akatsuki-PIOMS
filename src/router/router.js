@@ -189,13 +189,13 @@ const routes = [
         path: '/driver/home',
         name: 'DriverDashboard',
         component: DriverDashBoard,
-        meta: { requiresAuth: true, preventBack: true, role: 'ROLE_DRIVER' } // preventBack 추가
+        meta: { requiresAuth: true, preventBack: true, role: 'ROLE_DRIVER' }
     },
     {
         path: '/franchise/home',
         name: 'FranchiseDashBoard',
         component: FranchiseDashBoard,
-        meta: { requiresAuth: true, preventBack: true, role: 'ROLE_OWNER' } // preventBack 추가
+        meta: { requiresAuth: true, preventBack: true, role: 'ROLE_OWNER' }
     },
     {
         path: '/franchise/warehouse',
@@ -220,9 +220,25 @@ const router = createRouter({
     routes
 });
 
+// 네비게이션 가드 설정
 router.beforeEach(async (to, from, next) => {
     const isAuthenticated = store.getters.isAuthenticated;
     const userRole = store.getters.userRole;
+
+    // 나쁜사람들이 하는 행위 -> 접근 시 토큰이 있는 경우 리다이렉션 처리
+    if (['/', '/admin/login', '/franchise/login', '/driver/login'].includes(to.path)) {
+        if (isAuthenticated) {
+            switch (userRole) {
+                case 'ROLE_ROOT':
+                case 'ROLE_ADMIN':
+                    return next({ name: 'AdminDashBoard' });
+                case 'ROLE_OWNER':
+                    return next({ name: 'FranchiseDashBoard' });
+                case 'ROLE_DRIVER':
+                    return next({ name: 'DriverDashboard' });
+            }
+        }
+    }
 
     if (to.matched.some(record => record.meta.requiresAuth)) {
         if (!isAuthenticated) {
@@ -255,7 +271,6 @@ router.beforeEach(async (to, from, next) => {
     }
 });
 
-// 페이지 벗어나기 안됨
 window.addEventListener('popstate', (event) => {
     const currentRoute = router.currentRoute.value;
     if (currentRoute.meta.preventBack) {
