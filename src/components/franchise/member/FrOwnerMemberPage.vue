@@ -16,10 +16,13 @@
           <td class="filter-label">상태</td>
           <td colspan="3" class="filter-input">
             <label>
-              <input type="radio" v-model="filterStatus" value= 1 /> 활성화
+              <input type="radio" v-model="filterStatus" value="1" /> 활성화
             </label>
             <label>
-              <input type="radio" v-model="filterStatus" value= 0 /> 비활성화
+              <input type="radio" v-model="filterStatus" value="0" /> 비활성화
+            </label>
+            <label>
+              <input type="radio" v-model="filterStatus" value="" /> 전체
             </label>
           </td>
         </tr>
@@ -41,7 +44,6 @@
           <th>점주명</th>
           <th>가맹점명</th>
           <th>아이디</th>
-          <th>비밀번호</th>
           <th>이메일</th>
           <th>전화번호</th>
           <th>등록일</th>
@@ -53,22 +55,20 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(franchise, index) in paginatedFranchises" :key="franchise.franchiseCode" class="allpost">
+        <tr v-for="(franchiseOwner, index) in paginatedFranchises" :key="franchiseOwner.franchiseOwnerCode" class="allpost">
           <td class="num">{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
-          <td>{{ franchise.franchiseOwner.ownerName }}</td>
-          <td>{{ franchise.franchiseName }}</td>
-          <td>{{ franchise.franchiseBusinessNum }}</td>
-          <td>{{ franchise.franchiseAddress }}</td>
-          <td>{{ franchise.franchiseCall }}</td>
-          <td>{{ franchise.deliveryDriver.driverName }}</td>
-          <td>{{ formatDate(franchise.franchiseEnrollDate) }}</td>
-          <td>{{ formatDate(franchise.franchiseUpdateDate) }}</td>
-          <td>{{ formatDate(franchise.franchiseDeleteDate) }}</td>
-          <td>{{ franchise.loginFailCount }}</td>
-          <td>{{ franchise.status }}</td>
+          <td>{{ franchiseOwner.franchiseOwnerName }}</td>
+          <td>{{ franchiseOwner.franchiseName }}</td>
+          <td>{{ franchiseOwner.franchiseOwnerId }}</td>
+          <td>{{ franchiseOwner.franchiseOwnerEmail }}</td>
+          <td>{{ franchiseOwner.franchiseOwnerPhone }}</td>
+          <td>{{ formatDate(franchiseOwner.franchiseOwnerEnrollDate) }}</td>
+          <td>{{ formatDate(franchiseOwner.franchiseOwnerUpdateDate) }}</td>
+          <td>{{ formatDate(franchiseOwner.franchiseOwnerDeleteDate) }}</td>
+          <td>{{ franchiseOwner.ownerPwdCheckCount }}</td>
+          <td>{{ franchiseOwner.ownerStatus }}</td>
           <td>
-            <button @click="showRegist(franchise)" class="editbutton">등록</button>
-            <button @click="showEdit(franchise)" class="editbutton">수정</button>
+            <button @click="showEdit(franchiseOwner)" class="editbutton">조회</button>
           </td>
         </tr>
         </tbody>
@@ -79,34 +79,24 @@
       <span>{{ currentPage }} / {{ totalPages }}</span>
       <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
     </div>
+    <Edit v-if="editPopup" :franchiseOwnerCode="franchiseOwnerCode" :closeEdit="closeEdit" @refreshData="fetchFranchises"/>
   </div>
-  <Register v-if="registPopup" :askCode="askCode" :closeRegist="closeRegist"/>
-  <Edit v-if="editPopup" :askCode="askCode" :closeEdit="closeEdit"/>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import Breadcrumb from '@/components/amdin/ask/Breadcrumb.vue'; // Breadcrumb 컴포넌트 임포트
-import { useStore } from 'vuex'; // Vuex store 임포트
+import { useStore } from 'vuex';
+import Edit from '@/components/franchise/member/FormEdit.vue';
 
-const store = useStore(); // Vuex store 사용
-
-const franchises = ref([]);
+const store = useStore();
+const franchiseOwners = ref([]);
 const filteredFranchises = ref([]);
-const filterStatus = ref('전체');
+const filterStatus = ref('');
 const filterOwnerName = ref('');
 const filterFranchiseName = ref('');
 
 const currentPage = ref(1);
 const itemsPerPage = 15;
-
-const breadcrumbs = [
-  { label: '문의사항 조회 및 관리', link: null },
-];
-
-const refreshData = () => {
-  fetchFranchises(); // 데이터를 새로고침
-};
 
 const fetchFranchises = async () => {
   try {
@@ -115,7 +105,7 @@ const fetchFranchises = async () => {
       throw new Error('No access token found');
     }
 
-    const response = await fetch('http://api.pioms.shop/admin/franchise/list', {
+    const response = await fetch('http://api.pioms.shop/admin/franchise/owner/list', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -127,8 +117,8 @@ const fetchFranchises = async () => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    franchises.value = data || [];
-    filteredFranchises.value = franchises.value;
+    franchiseOwners.value = data || [];
+    filteredFranchises.value = franchiseOwners.value;
     applyFilters();
   } catch (error) {
     console.error('Failed to fetch franchises:', error);
@@ -136,20 +126,21 @@ const fetchFranchises = async () => {
 };
 
 const applyFilters = () => {
-  filteredFranchises.value = franchises.value.filter(franchise => {
-    const matchesOwnerName = !filterOwnerName.value || franchise.franchiseOwner.ownerName.includes(filterOwnerName.value);
+  filteredFranchises.value = franchiseOwners.value.filter(franchise => {
+    const matchesOwnerName = !filterOwnerName.value || franchise.franchiseOwnerName.includes(filterOwnerName.value);
     const matchesFranchiseName = !filterFranchiseName.value || franchise.franchiseName.includes(filterFranchiseName.value);
+    const matchesStatus = filterStatus.value === '' || franchise.ownerStatus === Number(filterStatus.value);
 
-    return matchesOwnerName && matchesFranchiseName;
+    return matchesOwnerName && matchesFranchiseName && matchesStatus;
   });
 };
 
 const resetFilters = () => {
-  filterStatus.value = '전체';
+  filterStatus.value = '';
   filterOwnerName.value = '';
   filterFranchiseName.value = '';
-  filteredFranchises.value = franchises.value;
-  currentPage.value = 1; // 페이지 리셋
+  filteredFranchises.value = franchiseOwners.value;
+  currentPage.value = 1;
 };
 
 const formatDate = (dateString) => {
@@ -193,22 +184,12 @@ onMounted(() => {
   fetchFranchises();
 });
 
-const registPopup = ref(false);
-const askCode = ref(null);
 const editPopup = ref(false);
-
-const showRegist = (franchise) => {
-  registPopup.value = !registPopup.value;
-  askCode.value = franchise.franchiseCode;
-};
+const franchiseOwnerCode = ref(null);
 
 const showEdit = (franchise) => {
   editPopup.value = !editPopup.value;
-  askCode.value = franchise.franchiseCode;
-};
-
-const closeRegist = () => {
-  registPopup.value = !registPopup.value;
+  franchiseOwnerCode.value = franchise.franchiseOwnerCode;
 };
 
 const closeEdit = () => {
@@ -217,9 +198,10 @@ const closeEdit = () => {
 </script>
 
 <style scoped>
+/* (기존 스타일을 유지하되 필요한 경우 추가 및 수정) */
 .container {
   position: relative;
-  min-height: 100vh; /* Ensure the container takes at least the full height of the viewport */
+  min-height: 100vh;
 }
 
 .filter-section {
@@ -254,10 +236,6 @@ const closeEdit = () => {
   width: 500px;
   text-align: left;
   border: 1px solid lightgray;
-}
-
-.date-range span {
-  margin: 0 5px;
 }
 
 .action-buttons {
@@ -311,7 +289,7 @@ const closeEdit = () => {
 }
 
 .table th:nth-child(5), .table td:nth-child(5) {
-  width: 100px; /* 원하는 너비로 설정 */
+  width: 100px;
 }
 
 td.boardname {
@@ -348,7 +326,7 @@ td.boardname {
 }
 
 .allpost td:nth-child(11) {
-  width: 150px; /* 로그인 실패 횟수 칸 넓히기 */
+  width: 150px;
 }
 
 .editbutton {
