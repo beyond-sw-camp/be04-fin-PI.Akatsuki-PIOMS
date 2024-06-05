@@ -3,11 +3,7 @@
     <div class="main-content">
       <div class="top-row">
         <div class="section order-status">
-          <div class="orderStatus-header">
-            <img src="@/assets/icon/List.png" class="icon" />
-            <span>발주 현황</span>
-            <span class="unit">(단위: 주)</span>
-          </div>
+            <router-link to="/franchise/order/list" class="order-link">내 발주 현황</router-link>
           <hr class="section-divider" />
           <div class="status-boxes">
             <div class="status-box">
@@ -37,7 +33,7 @@
           </div>
         </div>
         <div class="section inventory-alert">
-          <h2>재고 알림</h2>
+          <router-link to="/franchise/warehouse" class="warehouse-link">재고 알림</router-link>
           <hr class="section-divider" />
           <ul class="list">
             <li v-for="item in paginatedLowStockItems" :key="item.franchiseWarehouseCode" class="list-item">
@@ -346,21 +342,21 @@ body {
 .status-box {
   text-align: center;
   flex: 1;
-  border: 13px solid white;
+  border: 11px solid white;
   border-radius: 10px;
 }
 
 .status-count-box {
   text-align: center;
   flex: 1;
-  border: 13px solid white;
+  border: 11px solid white;
 }
 
 .status-count {
   display: flex;
   font-size: 24px;
   font-weight: bold;
-  background-color: #8B8B8B;
+  background-color: #d9d9d9;
   height: 70px;
   justify-content: center;
   align-items: center;
@@ -378,23 +374,34 @@ body {
 }
 
 .labelbox{
-  border: 13px solid white;
+  display: flex;
+  border: 11px solid white;
+  align-items: baseline;
+  justify-content: center;
 }
 
 .status-label1{
-  height: 30px;
+  height: 32px;
+  width: 100px;
   background-color: #394CA9;
+  align-content: center;
   align-items: center;
 }
 
 .status-label2{
-  height: 30px;
+  height: 32px;
+  width: 100px;
   background-color: #FC6F86;
+  align-content: center;
+  align-items: center;
 }
 
 .status-label3{
-  height: 30px;
+  height: 32px;
+  width: 100px;
   background-color: #FFCD4B;
+  align-content: center;
+  align-items: center;
 }
 
 .list {
@@ -431,7 +438,8 @@ body {
 .notice-link,
 .inquiry-link,
 .favorite-link,
-.orderStatus-link {
+.order-link,
+.warehouse-link{
   display: block;
   font-size: 18px;
   font-weight: bold;
@@ -442,7 +450,9 @@ body {
 
 .notice-link:hover,
 .inquiry-link:hover,
-.favorite-link:hover {
+.favorite-link:hover,
+.order-link:hover,
+warehouse-link:hover{
   color: #000;
 }
 
@@ -508,12 +518,6 @@ body {
   font-size: 12px;
   color: #666;
   margin-left: 5px;
-}
-
-.section h2 {
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
 }
 
 .section-divider {

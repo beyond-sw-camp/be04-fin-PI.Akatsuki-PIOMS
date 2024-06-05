@@ -131,6 +131,7 @@ import axios from "axios";
 
 const store = useStore(); // Vuex store 사용
 const accessToken = store.state.accessToken;
+const lists = ref([]);
 
 // 추후 토큰으로 받을 예정
 const franchiseCode = 3;
