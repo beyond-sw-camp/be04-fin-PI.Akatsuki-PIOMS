@@ -276,7 +276,6 @@
 
 <script setup>
 import {computed, ref} from "vue";
-import axios from 'axios';
 import { useStore } from 'vuex';
 import Swal from "sweetalert2"; // Vuex store 임포트
 const store = useStore(); // Vuex store 사용
@@ -335,17 +334,9 @@ const getDash = async () => {
     orderStat.value = data.orderStat;
     products.value = data.products;
 
-    console.log(askList.asks)
-    console.log(company.value)
-    console.log(exchanges.value)
-    console.log(franchises.value)
-    console.log(notices.value)
-    console.log(orderStat.value)
-    console.log(asks.value)
-    console.log(products.value)
     isLoading.value=true;
     await Swal.fire({
-      position: "top-end",
+      position: "center",
       icon: "success",
       title: "루트 관리자 대시보드 작성되었습니다.",
       showConfirmButton: false,
