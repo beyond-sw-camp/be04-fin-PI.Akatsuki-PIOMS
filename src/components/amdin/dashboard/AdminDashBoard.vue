@@ -299,9 +299,9 @@ const getDash = async () => {
   console.log(userRole);
 
   if(userRole === 'ROLE_ROOT') {
-    url= 'http://localhost:5000/admin/rootDashboard'
+    url= 'http://api.pioms.shop/admin/rootDashboard'
   }else{
-    url= 'http://localhost:5000/admin/adminDashboard'
+    url= 'http://api.pioms.shop/admin/adminDashboard'
   }
 
   Swal.fire({

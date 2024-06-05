@@ -228,7 +228,7 @@ const resetFilters = () => {
 const getMemberId = async () => {
 
     // FranchiseWarehouse 데이터 가져오기
-    const franchiseWarehouseResponse = await fetch('http://localhost:5000/franchise/warehouse/list', {
+    const franchiseWarehouseResponse = await fetch('http://api.pioms.shop/franchise/warehouse/list', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -247,7 +247,7 @@ const getMemberId = async () => {
 
 const downloadExcel = () => {
   axios({
-    url: 'http://localhost:5000/franchise/exceldownload/product-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
+    url: 'http://api.pioms.shop/franchise/exceldownload/product-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${accessToken}`,
