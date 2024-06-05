@@ -138,6 +138,8 @@ import { onMounted, defineEmits, ref } from 'vue';
 import imageSrc from '@/assets/icon/picture.png';
 import { useStore } from 'vuex';
 import ProductList from "@/components/amdin/product/ProductList.vue";
+import Swal from "sweetalert2";
+
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -222,7 +224,7 @@ const uploadImage = async () => {
   const fileInput = document.querySelector('input[type="file"]');
   const file = fileInput.files[0];
   if (!file) {
-    await saveProduct(''); // 이미지가 없는 경우 saveProduct 호출
+    await saveProduct('');
     return;
   }
 
@@ -246,8 +248,8 @@ const uploadImage = async () => {
 
     const data = await response.json();
     console.log('이미지 URL:', data);
-    imageUrl = data.imgUrl; // 이미지 URL 저장
-    await saveProduct(imageUrl); // saveProduct 호출 시 이미지 URL 전달
+    imageUrl = data.imgUrl;
+    await saveProduct(imageUrl);
   } catch (error) {
     console.error('오류:', error);
   }
@@ -313,50 +315,93 @@ onMounted(() => {
   fetchCategories('first');
 });
 
-
 const uploadAndSaveProduct = async () => {
   if(!insertProductName.value.trim()) {
-    alert('상품명을 입력해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '상품명 항목 누락',
+      text: '상품명을 입력해주세요.',
+    });
     return;
   }
   if(!insertProductCount.value) {
-    alert('상품의 재고량을 입력해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '재고량 항목 누락',
+      text: '재고량을 입력해주세요.',
+    });
     return;
   }
   if(!insertProductPrice.value) {
-    alert('상품 가격을 입력해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '가격 항목 누락',
+      text: '가격을 입력해주세요.',
+    });
     return;
   }
   if(!insertStatus.value.trim()) {
-    alert('상품의 상태를 정해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '상품상태 항목 누락',
+      text: '상품 상태를 정해주세요.',
+    });
     return;
   }
   if(!selectedExposureStatus.value.trim()) {
-    alert('상품의 노출상태를 정해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '상품 노출 상태 항목 누락',
+      text: '상품 노출 상태를 정해주세요.',
+    });
     return;
   }
   if(!insertColor.value.trim()) {
-    alert('상품의 색상을 정해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '색상 항목 누락',
+      text: '색상을 정해주세요.',
+    });
     return;
   }
   if(!insertSize.value.trim()) {
-    alert('상품의 사이즈를 정해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '사이즈 항목 누락',
+      text: '사이즈를 정해주세요.',
+    });
     return;
   }
   if(!selectedFirstCategory.value) {
-    alert('대분류 카테고리를 정해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '대분류 카테고리 항목 누락',
+      text: '대분류 카테고리를 정해주세요.',
+    });
     return;
   }
   if(!selectedSecondCategory.value) {
-    alert('중분류 카테고리를 정해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '중분류 카테고리 항목 누락',
+      text: '중분류 카테고리를 정해주세요.',
+    });
     return;
   }
   if(!selectedThirdCategory.value) {
-    alert('소분류 카테고리를 정해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '소분류 카테고리 항목 누락',
+      text: '소분류 카테고리를 정해주세요.',
+    });
     return;
   }
   if(!insertContent.value.trim()) {
-    alert('상품의 상세정보를 입력해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '상세정보 항목 누락',
+      text: '상품 상세정보를 입력해주세요.',
+    });
     return;
   }
   const fileInput = document.querySelector('input[type="file"]');
@@ -365,16 +410,18 @@ const uploadAndSaveProduct = async () => {
   const formData = new FormData();
 
   if(!file) {
-    alert('상품의 사진을 첨부해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '상품 이미지 누락',
+      text: '이미지를 첨부해주세요.',
+    });
     return;
   }
 
-  // 이미지 파일 추가
   if (file) {
     formData.append('file', file);
   }
 
-  // 상품 정보 추가
   formData.append('productName', insertProductName.value);
   formData.append('productCount', insertProductCount.value);
   formData.append('productPrice', insertProductPrice.value);
@@ -433,7 +480,6 @@ const uploadAndSaveProduct = async () => {
   border-radius: 30px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   width: 60%;
-  //max-width: 2000px;
   height: 65%;
   overflow-y: auto;
   max-height: 84vh;
@@ -448,8 +494,8 @@ const uploadAndSaveProduct = async () => {
   font-size: 2em;
   cursor: pointer;
   color: #333;
-  padding: 0; /* 추가 */
-  margin: 0; /* 추가 */
+  padding: 0;
+  margin: 0;
 }
 
 .popup-header {
@@ -461,13 +507,10 @@ const uploadAndSaveProduct = async () => {
   background-color: #D9D9D9;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  //width: 1063px;
   width: 95%;
-  //margin-left: 3.2%;
 }
 
 .popup-body {
-  //padding: 10px;
   padding-top: unset;
 }
 
@@ -517,8 +560,6 @@ h2 {
   border-right: none;
   height: 30px;
 }
-
-.insert-input input {}
 
 .second-insert-table {
   border-collapse: collapse;

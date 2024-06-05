@@ -14,8 +14,9 @@
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue';
+import { defineProps } from 'vue';
 import { useStore } from 'vuex';
+import Swal from "sweetalert2";
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -39,16 +40,27 @@ const deleteProduct = async () => {
     });
 
     if (response.ok) {
-      alert('상품 노출 상태가 변경되었습니다.');
-      // 페이지를 새로 고쳐 변경된 내용을 반영합니다.
+      await Swal.fire({
+        icon: 'success',
+        title: '변경 성공!',
+        text: '상품 노출 상태가 변경되었습니다.',
+      });
       props.closeDeletePopup();
       location.reload();
     } else {
-      alert('상품 노출 상태 변경에 실패했습니다.');
+      await Swal.fire({
+        icon: 'error',
+        title: '변경 실패!',
+        text: '상품 노출 상태 변경에 실패하였습니다.',
+      });
     }
   } catch (error) {
     console.error('Error updating product exposure status:', error);
-    alert('상품 노출 상태 변경 중 오류가 발생했습니다.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '오류 발생!',
+      text: '오류가 발생하였습니다.',
+    });
   }
 };
 </script>

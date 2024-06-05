@@ -59,6 +59,8 @@
 import { onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
 import CategoryList from "@/components/amdin/Category/CategoryList.vue";
+import Swal from "sweetalert2";
+
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -140,12 +142,20 @@ const fetchThirdCategories = async (categorySecondCode) => {
 
 const saveCategoryFirst = async () => {
   if (!insertCategoryFirstName.value.trim()) {
-    alert('대분류 카테고리명을 입력해주세요.');
+    await Swal.fire({
+      icon: 'success',
+      title: '카테고리명 누락',
+      text: '대분류 카테고리명을 입력해주세요.',
+    });
     return;
   }
   const existingFirstNames = firstCategories.value.map(category => category.categoryFirstName);
   if (existingFirstNames.includes(insertCategoryFirstName.value.trim())) {
-    alert('이미 존재하는 대분류 카테고리명입니다.');
+    await Swal.fire({
+      icon: 'success',
+      title: '카테고리 중복',
+      text: '이미 존재하는 대분류 카테고리명입니다.',
+    });
     return;
   }
   const savedFirstData = {
@@ -168,12 +178,14 @@ const saveCategoryFirst = async () => {
       const errorFirstText = await responseFirst.text();
       throw new Error(`카테고리 대분류 추가 실패했습니다. 상태 코드: ${responseFirst.status}, 메시지: ${errorFirstText}`);
     }
+    await Swal.fire({
+      icon: 'success',
+      title: '카테고리 등록 성공!',
+      text: '카테고리 대분류 등록에 성공했습니다.',
+    });
 
-    console.log('카테고리 대분류 등록에 성공했습니다.');
-
-    // 데이터를 새로고침하고 화면을 갱신합니다.
     fetchFirstCategories();
-    insertCategoryFirstName.value = ''; // 입력 필드 초기화
+    insertCategoryFirstName.value = '';
 
   } catch (error) {
     console.error('오류: ', error);
@@ -182,17 +194,29 @@ const saveCategoryFirst = async () => {
 
 const saveCategorySecond = async () => {
   if (!selectedFirstCategory.value) {
-    alert('대분류 카테고리를 선택해주세요.');
+    await Swal.fire({
+      icon: 'success',
+      title: '상위 카테고리 누락',
+      text: '대분류 카테고리를 선택해주세요.',
+    });
     return;
   }
 
   if (!insertCategorySecondName.value.trim()) {
-    alert('중분류 카테고리명을 입력해주세요.');
+    await Swal.fire({
+      icon: 'success',
+      title: '카테고리명 누락',
+      text: '중분류 카테고리명을 입력해주세요.',
+    });
     return;
   }
   const existingSecondNames = secondCategories.value.map(category => category.categorySecondName);
   if (existingSecondNames.includes(insertCategorySecondName.value.trim())) {
-    alert('이미 존재하는 중분류 카테고리명입니다.');
+    await Swal.fire({
+      icon: 'success',
+      title: '카테고리 중복',
+      text: '이미 존재하는 중분류 카테고리명입니다.',
+    });
     return;
   }
   const savedSecondData = {
@@ -216,12 +240,14 @@ const saveCategorySecond = async () => {
       const errorSecondText = await responseSecond.text();
       throw new Error(`카테고리 중분류 추가 실패했습니다. 상태 코드: ${responseSecond.status}, 메시지: ${errorSecondText}`);
     }
+    await Swal.fire({
+      icon: 'success',
+      title: '카테고리 등록 성공!',
+      text: '카테고리 중분류 등록에 성공했습니다.',
+    });
 
-    console.log('카테고리 중분류 등록에 성공했습니다.');
-
-    // 데이터를 새로고침하고 화면을 갱신합니다.
     fetchSecondCategories(selectedFirstCategory.value);
-    insertCategorySecondName.value = ''; // 입력 필드 초기화
+    insertCategorySecondName.value = '';
 
   } catch (error) {
     console.error('오류: ', error);
@@ -230,16 +256,28 @@ const saveCategorySecond = async () => {
 
 const saveCategoryThird = async () => {
   if (!selectedSecondCategory.value) {
-    alert('중분류 카테고리를 선택해주세요.');
+    await Swal.fire({
+      icon: 'success',
+      title: '상위 카테고리 누락',
+      text: '중분류 카테고리를 선택해주세요.',
+    });
     return;
   }
   if (!insertCategoryThirdName.value.trim()) {
-    alert('소분류 카테고리명을 입력해주세요.');
+    await Swal.fire({
+      icon: 'success',
+      title: '카테고리명 누락',
+      text: '소분류 카테고리명을 입력해주세요.',
+    });
     return;
   }
   const existingThirdNames = thirdCategories.value.map(category => category.categoryThirdName);
   if (existingThirdNames.includes(insertCategoryThirdName.value.trim())) {
-    alert('이미 존재하는 중분류 카테고리명입니다.');
+    await Swal.fire({
+      icon: 'success',
+      title: '카테고리 중복',
+      text: '이미 존재하는 소분류 카테고리명입니다.',
+    });
     return;
   }
   const savedThirdData = {
@@ -263,12 +301,14 @@ const saveCategoryThird = async () => {
       const errorThirdText = await responseThird.text();
       throw new Error(`카테고리 소분류 추가 실패했습니다. 상태 코드: ${responseThird.status}, 메시지: ${errorThirdText}`);
     }
+    await Swal.fire({
+      icon: 'success',
+      title: '카테고리 등록 성공!',
+      text: '카테고리 소분류 등록에 성공했습니다.',
+    });
 
-    console.log('카테고리 소분류 등록에 성공했습니다.');
-
-    // 데이터를 새로고침하고 화면을 갱신합니다.
     fetchThirdCategories(selectedSecondCategory.value);
-    insertCategoryThirdName.value = ''; // 입력 필드 초기화
+    insertCategoryThirdName.value = '';
     location.reload(CategoryList);
   } catch (error) {
     console.error('오류: ', error);
@@ -282,11 +322,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.category-top {
-  display: inline-block;
-  vertical-align: middle;
-  line-height: 50px; /* 이미지 높이와 일치하게 설정 */
-}
 .category-top img {
   vertical-align: middle;
 }
@@ -312,8 +347,8 @@ onMounted(() => {
   width: 1350px;
   display: flex;
   justify-content: space-between;
-  align-items: flex-start; /* Align items to the top */
-  height: auto; /* Set height to auto */
+  align-items: flex-start;
+  height: auto;
   padding: 30px;
 }
 .category-column {
@@ -323,10 +358,10 @@ onMounted(() => {
   width: 30%;
 }
 .post-category {
-  height: 50px; /* 원하는 높이로 설정 */
+  height: 50px;
   width: 100%;
-  background-color: #f0f0f0; /* 임의의 배경색 설정 */
-  margin-bottom: 10px; /* 간격 조절 */
+  background-color: #f0f0f0;
+  margin-bottom: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -336,24 +371,24 @@ onMounted(() => {
   display: flex;
   align-items: center;
   width: 100%;
-  margin-bottom: 10px; /* 입력창과 리스트 사이의 간격 */
+  margin-bottom: 10px;
 }
 .postInput {
   flex-grow: 1;
-  padding: 5px; /* 여백 추가 */
+  padding: 5px;
 }
 .input-container button {
-  margin-left: 5px; /* 버튼과 입력창 사이의 간격 */
+  margin-left: 5px;
   height: 29px;
   text-align: center;
 }
 .categoryFirst-select, .categorySecond-select, .categoryThird-select {
   border: 1px solid black;
   width: 90%;
-  min-height: 400px; /* Set a minimum height */
+  min-height: 400px;
   padding: 10px;
-  overflow-y: auto; /* Enable vertical scrolling */
-  max-height: 400px; /* Set a maximum height */
+  overflow-y: auto;
+  max-height: 400px;
 }
 
 .categoryFirst-select ul, .categorySecond-select ul, .categoryThird-select ul {

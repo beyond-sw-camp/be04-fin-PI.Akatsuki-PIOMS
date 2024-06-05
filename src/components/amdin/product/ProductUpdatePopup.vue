@@ -106,10 +106,8 @@
                       <input id="imgUpload" type="file" @change="previewImage" hidden />
                       <button v-if="imagePreview !== imageSrc && imgOn" @click="resetImage" class="img-close-button">X</button>
                       <label for="imgUpload">
-                        <!-- Display current product image if available -->
-                        <img class="img" v-if="props.currentProductImgUrl" :src="props.currentProductImgUrl" />
-                        <!-- Display default image if current product image is not available -->
-                        <img class="img" v-else :src="imageSrc" />
+                        <img class="img" v-if="!imgOn" :src="imageSrc"/>
+                        <img class="img" v-if="imgOn" :src="imagePreview" />
                       </label>
                       <br />
                     </form>
@@ -133,6 +131,7 @@ import {onMounted, ref, defineProps, watch} from 'vue';
 import { useStore } from 'vuex';
 import ProductList from "@/components/amdin/product/ProductList.vue";
 import imageSrc from "@/assets/icon/picture.png";
+import Swal from "sweetalert2";
 
 const store = useStore();
 const accessToken = store.state.accessToken;
@@ -195,16 +194,18 @@ const submitProduct = async () => {
   const formData = new FormData();
 
   if(!file) {
-    alert('상품의 사진을 첨부해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '이미지 누락',
+      text: '이미지를 첨부해주세요.',
+    });
     return;
   }
 
-  // 이미지 파일 추가
   if (file) {
     formData.append('file', file);
   }
 
-  // 상품 정보 추가
   formData.append('productName', updateName.value !== '' ? updateName.value : props.currentProductName);
   formData.append('productCount', updateCount.value !== '' ? updateCount.value : props.currentProductCount);
   formData.append('productPrice', updatePrice.value !== '' ? updatePrice.value : props.currentProductPrice);
@@ -217,7 +218,7 @@ const submitProduct = async () => {
   formData.append('productContent', updateContent.value !== '' ? updateContent.value : props.currentProductContent);
   console.log(formData.values());
   try {
-    const response = await fetch(`http://api.pioms.shop/admin/product/update/image/${props.currentProductCode}`, {
+    const response = await fetch(`http://localhost:5000/admin/product/update/image/${props.currentProductCode}`, {
       method: 'PUT',
       credentials: 'include',
       body: formData,
@@ -241,13 +242,13 @@ const fetchCategories = async (level) => {
   let url = '';
   switch (level) {
     case 'first':
-      url = 'http://api.pioms.shop/admin/category/first';
+      url = 'http://localhost:5000/admin/category/first';
       break;
     case 'second':
-      url = `http://api.pioms.shop/admin/category/second/list/detail/categoryfirst/${updateFirst.value}`;
+      url = `http://localhost:5000/admin/category/second/list/detail/categoryfirst/${updateFirst.value}`;
       break;
     case 'third':
-      url = `http://api.pioms.shop/admin/category/third/list/detail/categorysecond/${updateSecond.value}`;
+      url = `http://localhost:5000/admin/category/third/list/detail/categorysecond/${updateSecond.value}`;
       break;
   }
 
@@ -374,8 +375,8 @@ watch(updateSecond, async (newVal) => {
   font-size: 2em;
   cursor: pointer;
   color: #333;
-  padding: 0; /* 추가 */
-  margin: 0; /* 추가 */
+  padding: 0;
+  margin: 0;
 }
 
 .popup-header {
@@ -387,8 +388,6 @@ watch(updateSecond, async (newVal) => {
   background-color: #D9D9D9;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  //border-radius: 5px;
-  //margin-bottom: 20px;;
 }
 
 .popup-body {
@@ -472,14 +471,7 @@ h2 {
   border-right: none;
   height: 30px;
 }
-.category-table {
-  border-collapse: collapse;
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 10px;
-  border-top: none;
-}
+
 .second-insert-table {
   border-collapse: collapse;
   background-color: #f9f9f9;
@@ -549,8 +541,6 @@ h2 {
   border-radius: 5px;
   cursor: pointer;
   font-size: 1em;
-  //margin-left: 80%;
-  //margin-top: 2%;
 }
 
 .action-button:hover {
