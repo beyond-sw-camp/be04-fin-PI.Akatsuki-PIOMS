@@ -6,8 +6,8 @@
         <p>상품 코드: {{ currentProductCode }}</p>
         <p>상품명: {{ currentProductName }}</p>
         <p>현재 상품 노출 상태: {{ currentProductExposureStatus ? '노출' : '미노출' }}</p>
-        <button @click="deleteProduct">수정</button>
-        <button @click="closeDeletePopup" class="close-button">x</button>
+        <button @click="deleteProduct" class="action-button">수정</button>
+        <button @click="closeDeletePopup" class="close-button">닫기</button>
       </div>
     </div>
   </div>
@@ -76,28 +76,46 @@ const deleteProduct = async () => {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 9999; /* Ensure modal is above other content */
 }
 
 .modal-content {
-  background: white;
+  background: #ffffff;
   padding: 20px;
-  border-radius: 5px;
+  border-radius: 8px;
   width: 300px;
   text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .close-button {
-  background: red;
-  color: white;
+  background: #e0e0e0;
+  color: #333333;
   border: none;
-  padding: 5px 10px;
+  padding: 8px 16px;
   cursor: pointer;
+  border-radius: 4px;
   margin-left: 10px;
+}
+
+.close-button:hover {
+  background: #cccccc;
+}
+
+.action-button {
+  background: #4caf50;
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.action-button:hover {
+  background: #45a049;
 }
 
 button {
   margin-top: 10px;
-  padding: 5px 10px;
-  cursor: pointer;
 }
 </style>
