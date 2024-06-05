@@ -2,7 +2,6 @@
   <div class="popup-overlay" @click.self="showPostPopup">
     <div class="popup-content">
       <div class="popup-header">
-        <button class="close-button" @click="showPostPopup">×</button>
         <h4>상품 등록</h4>
       </div>
       <div class="popup-body">
@@ -97,14 +96,14 @@
               <tr>
                 <td class="second-insert-label"><div class="second-insert-label0">상세정보</div></td>
                 <td class="second-insert-input">
-                  <input type="text" style="width: 99%; height: 150px" v-model="insertContent" class="textInput" placeholder="상품의 상세 정보를 입력해주세요.">
+                  <textarea type="text" style="width: 99%; height: 150px; resize: none" v-model="insertContent" class="textInput" placeholder="상품의 상세 정보를 입력해주세요." >
+                  </textarea>
                 </td>
               </tr>
               <tr>
                 <td class="second-insert-label1">
                   <div class="label-content">
                     이미지<br>
-                    (최대 3장)
                   </div>
                 </td>
                 <td class="second-insert-input1">
@@ -113,7 +112,7 @@
                       <input id="imgUpload" type="file" @change="previewImage" hidden />
                       <button v-if="imagePreview !== imageSrc && imgOn" @click="resetImage" class="img-close-button">X</button>
                       <label for="imgUpload">
-                        <img class="img" v-if="!imgOn" :src="imageSrc" />
+                        <img class="img" v-if="!imgOn" :src="imageSrc" style="width: 100px;height: 100px" />
                         <img class="img" v-if="imgOn" :src="imagePreview" />
                       </label>
                       <br />
@@ -125,8 +124,8 @@
           </div>
         </div>
         <div style="display: flex; gap: 10px; float: right; padding-top: 2%">
-          <button class="action-button" @click="closePopup">취소</button>
           <button class="post-button" @click="uploadAndSaveProduct">등록</button>
+          <button class="action-button" @click="closePopup">취소</button>
         </div>
       </div>
     </div>
@@ -485,19 +484,6 @@ const uploadAndSaveProduct = async () => {
   max-height: 84vh;
 }
 
-.close-button {
-  position: absolute;
-  top: 50px;
-  right: 80px;
-  background: none;
-  border: none;
-  font-size: 2em;
-  cursor: pointer;
-  color: #333;
-  padding: 0;
-  margin: 0;
-}
-
 .popup-header {
   display: flex;
   height: 25px;
@@ -624,9 +610,6 @@ h2 {
   font-size: 1.5em;
   cursor: pointer;
   color: #333;
-}
-.close-button:hover{
-  background-color: #00ff0000;
 }
 .img-close-button:hover {
   background-color: #00ff0000;

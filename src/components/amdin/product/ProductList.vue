@@ -1,4 +1,4 @@
-<template>
+<template xmlns="http://www.w3.org/1999/html">
   <div style="margin-top: 50px;">
 <!--    <div class="headerTitle" align="center">-->
 <!--        <h3 class="product-title"><img src="@/assets/icon/Cloth.png">상품 및 상품 카테고리 관리 > 상품 관리 > 상품 전체 조회 및 관리</h3>-->
@@ -30,7 +30,7 @@
           <td class="filter-label">상품노출상태</td>
           <td class="filter-input">
             <select id="selectedExposureStatus" v-model="selectedExposureStatus" class="textInput">
-              <option hidden="hidden" value="">전체</option>
+              <option hidden="hidden" value="전체">전체</option>
               <option value="노출">노출</option>
               <option value="미노출">미노출</option>
             </select>
@@ -63,7 +63,7 @@
           </td>
         </tr>
         <tr>
-          <td class="filter-label">카테고리 구분</td>
+          <td class="filter-label">카테고리<br>구분</td>
           <td class="filter-input">
             <select id="firstCategory" v-model="selectedFirstCategory" @change="fetchSecondCategories" class="categories">
               <option value="">대분류</option>
@@ -510,6 +510,7 @@ fetchThirdCategories();
 
 .filter-table td {
   padding: 5px 10px;
+  font-size: 16px;
 }
 
 .filter-label {
@@ -564,7 +565,7 @@ fetchThirdCategories();
   justify-content: space-between;
   align-items: center;
   position: absolute;
-  left: 19%;
+  left: 16.5%;
   width: 1265px;
 }
 
@@ -597,6 +598,7 @@ fetchThirdCategories();
   width: 100%;
   height: 10px;
   table-layout: fixed;
+  font-size: 16px;
 }
 
 .table th,
@@ -607,7 +609,9 @@ fetchThirdCategories();
   height: 10px;
   table-layout: fixed;
 }
-
+.table td {
+  font-size: 14px;
+}
 .header1 {
   background-color: #D9D9D9;
   font-weight: bold;
