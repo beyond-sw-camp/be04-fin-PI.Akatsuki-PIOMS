@@ -6,7 +6,7 @@
       <p>카테고리 이름: {{ currentThirdName}}</p>
       <input type="text" v-bind:value="currentThirdName" v-on:input="updateThirdName= $event.target.value">
       <button @click="closePopup" class="close-button">X</button>
-      <button @click="saveCategoryThird">수정</button>
+      <button @click="saveCategoryThird" class="update-button">수정</button>
     </div>
   </div>
 </template>
@@ -92,8 +92,11 @@ const closePopup = () => {
   background-color: white;
   padding: 20px;
   border-radius: 8px;
-  min-width: 500px;
-  min-height: 300px;
+  min-width: 300px;
+  min-height: 200px;
+  display: flex; /* 추가 */
+  flex-direction: column; /* 추가 */
+  align-items: center; /* 추가 */
 }
 
 .close-button {
@@ -104,5 +107,15 @@ const closePopup = () => {
   border: none;
   font-size: 24px;
   cursor: pointer;
+}
+.update-button {
+  font-weight: bold;
+  font-size: 16px;
+  width: 50px;
+  height: 30px;
+  margin-top: 5%;
+  border: none;
+  background-color: #344DAF;
+  color: #FFFFFF;
 }
 </style>
