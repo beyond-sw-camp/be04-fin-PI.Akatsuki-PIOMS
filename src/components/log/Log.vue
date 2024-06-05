@@ -51,10 +51,11 @@
         <button @click="applyFilters" class="search-btn">
           <img src="@/assets/icon/search.png" alt="Search" />
         </button>
-      <br>
-      <div>
-        <button style="float:right;" @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
-      </div>
+        <br>
+        <div>
+          <button style="float:right;" @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
+        </div>
+
       </div>
     </div>
     <div class="post-btn">
@@ -250,6 +251,8 @@ onMounted(() => {
   height: 26px;
   border: none;
   background-color: white;
+  padding-bottom: 36px;
+  padding-left: initial;
   cursor: pointer;
 }
 .container {
@@ -416,8 +419,8 @@ onMounted(() => {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  max-width: 42%;
-  max-height: 20%;
+  width: 40%;
+  height: 28%;
   overflow-y: auto;
   text-align: center;
   padding-top: 10px;
