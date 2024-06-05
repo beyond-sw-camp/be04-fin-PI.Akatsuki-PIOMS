@@ -49,6 +49,7 @@
     </div>
   </div>
 
+<!-- 여기서부터 배송 항목 조회 -->
   <div class="my-delivery-list">
     <div>
       <img class="delivery" src="@/assets/icon/Delivery.png"/>
@@ -74,10 +75,9 @@
         <button class="btn-reset" @click="resetFilter">
           <img class="reset-icon" src="@/assets/icon/reset.png" />
         </button>
-        <button class="btn-search" @click="applyFilter">
-          <img class="search-icon" src="@/assets/icon/search.png" />
-        </button>
       </div>
+
+
       <br/>
       <div v-if="filteredOrders.length">
         <table class="delivery-table">
@@ -85,48 +85,84 @@
           <tr>
             <th class="no">No</th>
             <th class="order">주문 번호</th>
-            <th class="invoice">송장 번호</th>
+            <th class="invoiceCode">송장 번호</th>
             <th class="address">배송지</th>
             <th class="status">배송 상태</th>
             <th class="owner">점주명</th>
           </tr>
           </thead>
           <tbody>
-          <tr v-for="(order, index) in filteredOrders" :key="index">
+          <tr v-for="(order, index) in filteredOrders" :key="order.orderCode">
             <td>{{ index + 1 }}</td>
             <td>{{ order.orderCode }}</td>
-            <td>{{ order.invoiceCode }}</td>
+            <td class="invoice" @click="openInvoicePopup(order)">{{ order.invoiceCode }}</td>
             <td>{{ order.franchiseAddress }}</td>
-            <td>{{ order.deliveryStatus }}</td>
+            <td style="cursor: pointer" @click="openStatusPopup(order)">{{ order.deliveryStatus }}</td>
             <td>{{ order.franchiseOwnerName }}</td>
           </tr>
           </tbody>
         </table>
       </div>
     </div>
-  </div>
 
+    <!-- 송장 팝업 -->
+    <Invoice v-if="showInvoicePopup" :invoice="selectedInvoice" @close="closeInvoicePopup" />
+
+    <div v-if="showInvoicePopup" class="popup">
+      <div>
+        <span class="invoice-close-btn" @click="closeInvoicePopup">x</span>
+        <Invoice :invoice="selectedInvoice" />
+      </div>
+    </div>
+
+
+    <!-- 배송 상태 수정 팝업 -->
+    <DriverDashboardStatusPopup
+        v-if="showStatusPopup"
+        :invoice="selectedInvoice"
+        :deliveryStatus="deliveryStatus"
+        @close="closeStatusPopup"
+    />
+
+  </div>
 </template>
 
 <script setup>
 import { computed, onMounted, ref } from "vue";
 import { useStore } from 'vuex';
+import Invoice from "@/components/driver/Invoice.vue";
+import DriverDashboardStatusPopup from "@/components/driver/DriverDashboardStatusPopup.vue";
 
 const store = useStore();
 const accessToken = store.state.accessToken;
 
 const lists = ref([]);
-const deliveryList = ref([
-  { label: 'No'},
-  { key: 'requestCode', label: '주문(발주)번호' },
-  { key: 'invoiceCode', label: '배송(송장)번호'},
-  { key: 'franchiseAddress', label: '배송지'},
-  { key: 'deliveryStatus', label: '배송상태'},
-  { key: 'franchiseOwnerName', label: '점주명'},
-]);
+const showStatusPopup = ref(false);
+const showInvoicePopup = ref(false);
+const selectedInvoice = ref('');
+const deliveryStatus = ref('');
 
 const beforeDiv = ref();
 const driverCode = 8;
+
+const openInvoicePopup = (order) => {
+  selectedInvoice.value = order;
+  showInvoicePopup.value = true;
+};
+
+const closeInvoicePopup = () => {
+  showInvoicePopup.value = false;
+};
+
+const openStatusPopup = (order) => {
+  selectedInvoice.value = order;
+  deliveryStatus.value = order.deliveryStatus;
+  showStatusPopup.value = true;
+};
+
+const closeStatusPopup = () => {
+  showStatusPopup.value = false;
+};
 
 const getCountBeforeDelivery = async () => {
   try {
@@ -309,7 +345,6 @@ onMounted(() => {
   getCountIngDelivery();
   getCountAfterDelivery();
 });
-
 
 </script>
 
@@ -519,12 +554,15 @@ hr.hr2 {
    border-radius: 8px;
    width: 400px;
    text-align: center;
+   position: relative; /* 추가된 부분 */
  }
+
  .close-btn {
-   position: relative;
-   top: -10px;
-   right: -200px;
+   position: absolute; /* 변경된 부분 */
+   top: 8px; /* 변경된 부분 */
+   right: 15px; /* 변경된 부분 */
    cursor: pointer;
+   font-size: 20px;
  }
  .data-table {
    list-style-type: none;
@@ -554,17 +592,21 @@ hr.hr2 {
    width: 660px;
    padding: 8px;
    border: 1px solid #d9d9d9;
+   position: relative;
+   left: -4px;
  }
 
  .delivery-status-title {
    display: flex;
    justify-content: flex-start;
-   font-size: 16px;
+   font-size: 14px;
+ }
+ .delivery-status-title input {
    position: relative;
-   top: 2px;
+   top: 1px;
  }
  .filter-label {
-   font-size: 16px;
+   font-size: 14px;
    width: 80px;
    background-color: #d9d9d9;
  }
@@ -614,7 +656,7 @@ hr.hr2 {
  .order {
    width: 500px !important;
  }
- .invoice {
+ .invoiceCode {
    width: 500px !important;
  }
 .address {
@@ -626,4 +668,18 @@ hr.hr2 {
 .owner {
   width: 500px !important;
 }
+.invoice {
+  cursor: pointer;
+  text-decoration: underline #444444;
+}
+
+ .invoice-close-btn {
+   position: absolute !important;
+   top: 130px !important;
+   right: 430px !important;
+   cursor: pointer;
+   font-size: 20px;
+   color: #444444;
+   z-index: 9999;
+ }
 </style>

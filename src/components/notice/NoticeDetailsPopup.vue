@@ -79,7 +79,7 @@ const props = defineProps({
 }
 
 .close-btn {
-  background: red;
+  background: #444444;
   color: white;
   border: none;
   padding: 10px;
