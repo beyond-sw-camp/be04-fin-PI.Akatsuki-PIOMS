@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import store from '@/store/store.js';ㄴ
+import store from '@/store/store.js';
 import Swal from 'sweetalert2';
 
 import AnswerFormRegister from "@/components/amdin/ask/AnswerFormRegister.vue";
