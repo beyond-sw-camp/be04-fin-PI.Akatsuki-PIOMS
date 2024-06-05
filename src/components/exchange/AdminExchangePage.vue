@@ -174,7 +174,7 @@ const getExchangeList = async () => {
     }
     // const response = await fetch(`/api/admin/exchanges`, {
     // const response = await fetch(`http:///api.pioms.shop/admin/exchanges`, {
-    const response = await fetch(`http:///api.pioms.shop/admin/exchange/list`, {
+    const response = await fetch(`http://api.pioms.shop/admin/exchange/list`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
