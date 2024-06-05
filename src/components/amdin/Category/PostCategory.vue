@@ -144,6 +144,7 @@
 .categoryPost {
   border: none;
   background-color: #344DAF90;
+  border-radius: 4px;
 }
 </style>
 <script setup>

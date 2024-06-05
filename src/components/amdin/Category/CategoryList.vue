@@ -341,15 +341,15 @@ ul {
 }
 
 .action-button:hover {
-  background-color: #FF6285;
+  background-color: #FF628580;
 }
 
 .action-button:last-child {
-  background-color: #FF6285;
+  background-color: #FF628580;
 }
 
 .action-button:last-child:hover {
-  background-color: #FF6285;
+  background-color: #FF628580;
 }
 </style>
 
