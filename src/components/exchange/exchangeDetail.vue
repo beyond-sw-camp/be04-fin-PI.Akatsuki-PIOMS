@@ -1,265 +1,168 @@
 <template>
-  <div class="popup-overlay" >
-       <div class="popup-content">
-           <button class="close" @click="showDetailPopup" >돌아가기</button>
-           <br>
-          
-           <br>
-                <h1 align="center">발주서</h1>
+  <div class="popup-overlay">
+    <div class="popup-content">
+      <br>
+      <div class="info" style="min-height: 700px;">
+        <h1 align="center">반품 및 교환 주문서</h1>
 
-           <div class="info">
-                <div style="display:flex;" align="center">
-                  <div class="divvv-title">
-                    수신처      
-                  </div>
-                  <div class="divvv-title">
-                    발신처      
-                  </div>
-                </div>
-
-
-                <div style="display:flex;" align="center">
-                
-                    <div class="divvv">
-                        <div class="divvv2" >
-                          <div class="divvv3">
-                            관리자
-                          </div>
-                          <div class="divvv3">
-                            {{ item.adminCode }}
-                          </div>
-                        </div>
-                        <div class="divvv2">
-                          <div class="divvv3">
-                              관리자명 
-                          </div>
-                          <div class="divvv3">
-                             {{ item.adminName }}
-                          </div>
-                        </div>
-                        <div class="divvv2">
-                          <div class="divvv3">
-                            점주전화번호
-                          </div>
-                          <div class="divvv3">
-                             {{item.franchiseOwnerPhone}}
-                          </div>
-                        </div>
-                    </div>
-
-                    <div class="divvv">
-                      <div class="divvv2" >
-                          <div class="divvv3">
-                            가맹점
-                          </div>
-                          <div class="divvv3">
-                            {{ item.franchiseName }}
-                          </div>
-                        </div>
-                        <div class="divvv2">
-                          <div class="divvv3">
-                              점주명 
-                          </div>
-                          <div class="divvv3">
-                             {{ item.franchiseOwnerName }}
-                          </div>
-                        </div>
-                        <div class="divvv2">
-                          <div class="divvv3">
-                            점주전화번호
-                          </div>
-                          <div class="divvv3">
-                             {{item.franchiseOwnerPhone}}
-                          </div>
-                        </div>
-                </div>  
+        <div style="display:flex;" align="center">
+          <div class="divvv2">
+            <div class="divvv3-title">
+              가맹점명
             </div>
-            
-
-            <div class="divvv-title">
-                발주상품
+            <div class="divvv3">
+              {{ item.franchiseName }}
             </div>
-            <div style="display: block; font-size: 1.5lh; display:flex; justify-content: center; font-weight: 1000; width:100%;" align = "center">
-              <table>
-                <thead>
-                  <tr>
-                    <th v-for="(header, index) in headers" :key="index">{{ header.label }}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="table" v-for="(product, rowIndex) in list" :key="rowIndex">
-                    <td v-for="(header, colIndex) in headers" :key="colIndex">
-                      <div >{{ product[header.key] }}</div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <br><br>
-            <div class="divvv-title" style="border-top: 2px black solid;">
-                반품상품
-            </div>
-            <div style="display: block; font-size: 1.5lh; display:flex; justify-content: center; font-weight: 1000; width:100%" align = "center">
-              <table>
-                <thead>
-                  <tr>
-                    <th v-for="(header, index) in exchangeHeaders" :key="index">{{ header.label }}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="table" v-for="(product, rowIndex) in exchangeList" :key="rowIndex">
-                    <td v-for="(header, colIndex) in exchangeHeaders" :key="colIndex">
-                      <div >{{ product[header.key] }}</div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            
-            <br>
-            <br>
-            <br>
-            <br>
-            <div class="but-group">
-              <input class="but" type="button" value="발주승인" @click="accpetOrder">
-              <input class="but" type="button" value="발주반려" @click="clickDeny">
-            </div>
-
-            <div v-if="isDenied">
-              <div class="popup-overlay"  >
-                <div class="popup-content" style="width: 600px; height: 600px;">
-                  <form @submit.prevent="denyOrder">
-                    <h2>반려사유 </h2>
-                    <textarea v-model="reason" cols="30" rows="5"></textarea><br>
-
-                    <div style="display: block; font-size: 1.5lh; display:flex; justify-content: center; font-weight: 1000; width:100%;" align="center">
-                      <table>
-                        <thead >
-                          <tr>
-                            <th  v-for="(header, index) in headers" :key="index" >{{ header.label }}</th>
-                          </tr>
-                        </thead>
-                        <tbody >
-                          <tr class="table" v-for="(product, rowIndex) in list" :key="rowIndex">
-                            <td v-for="(header, colIndex) in headers" :key="colIndex">
-                              <div>{{ product[header.key] }}</div>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <div class="but-group">
-                      <button type="button" class="close" @click="clickDeny">취소</button>
-                      &nbsp;&nbsp;&nbsp;
-                      <button type="submit" class="close">등록</button>
-                    </div>
-                  </form> 
-                </div>
-              </div>
-            </div>
-            
           </div>
-          발주일자 : {{ item.orderDate }}
-           <br>
-           주문코드 : {{ item.orderCode }}<br>   
-       </div>
-   </div>
+          <div class="divvv2">
+            <div class="divvv3-title">
+              점주명
+            </div>
+            <div class="divvv3">
+              {{ item.franchiseOwnerName }}
+            </div>
+          </div>
+          <div class="divvv2">
+            <div class="divvv3-title">
+              반품번호
+            </div>
+            <div class="divvv3">
+              {{ item.exchangeCode }}
+            </div>
+          </div>
+        </div>
 
-   
+        <div class="divvv-title">
+          반품 및 교환 항목
+        </div>
+        <div class="table-container">
+          <table class="table">
+            <thead>
+              <tr class="header1">
+                <th>상품 코드</th>
+                <th>상품 이름</th>
+                <th>반품 수량</th>
+                <th>정상 수량</th>
+                <th>폐기 수량</th>
+                <th>반품/폐기</th>
+              </tr>
+            </thead>
+            <!-- 처리 대기중인 교환인 경우 -->
+            <tr class="allpost"  v-for="(product, index) in list" :key="index" align="center" v-if="item.exchangeStatus=='처리대기' ">
+              <td>{{ product.productCode }}</td>
+              <td>{{ product.productName }}</td>
+              <td>{{ product.exchangeProductCount }}</td>
+              <td><input type="number" v-model.number="product.exchangeNormalCount" min="0" /></td>
+              <td><input type="number" v-model.number="product.exchangeDiscount" min="0" /></td>
+              <td>{{ product.exchangeProductStatus }}</td>
+            </tr>
+            <!-- 처리 대기중인 아닌 경우 -->
+            <tr v-for="(product, index) in list" align="center" v-else>
+              <td>{{ product.productCode }}</td>
+              <td>{{ product.productName }}</td>
+              <td>{{ product.exchangeProductCount }}</td>
+              <td>{{ product.exchangeProductNormalCount }}</td>
+              <td>{{ product.exchangeProductDiscount }}</td>
+              <td>{{ product.exchangeProductStatus }}</td>
+            </tr>
+          </table>
+        </div>
+        <br><br><br><br>
 
-       
+      </div>
+      신청일자 : {{ item.exchangeDate }}
+      <div class="action-buttons" >
+          <input v-if="item.exchangeStatus=='처리대기' " class="cancel-btn" type="button" value="저장하기" @click="checkExchange">
+          <input class="cancel-btn" type="button" value="돌아가기" @click="showDetailPopup">
+        </div>
+      <br>
+    </div>
+  </div>
 </template>
 
 <script setup>
-   import { ref } from "vue";
-   import axios from 'axios';
+import { ref } from "vue";
+import { useStore } from 'vuex';
+import Swal from "sweetalert2"; // Vuex store 임포트
+import AdminExchangePage from "@/components/exchange/AdminExchangePage.vue"; // Vuex store 임포트
+const store = useStore(); // Vuex store 사용
 
-   const headers = ref([
-    /*{ key: 'requestProductCode', label: '상품 코드' },*/
-    { key: 'productName', label: '상품명' },
-    { key: 'requestProductCount', label: '요청 수량' },
-  ]);
-  const exchangeHeaders = ref([
-    { key: 'productName', label: '상품명' },
-    { key: 'exchangeProductCount', label: '요청 수량' },
-  ]);
+const headers = ref([
+  { key: 'productName', label: '상품명' },
+  { key: 'exchangeProductStatus', label: '반품/폐기' },
+  { key: 'exchangeProductCount', label: '요청 수량' },
+  { key: 'exchangeNormalCount', label: '정상 수량' },
+  { key: 'exchangeDiscount', label: '폐기 수량' },
+]);
 
- const props = defineProps({
-   showDetailPopup: Function,
-   popupVisible: Boolean,
-   writeActive: Boolean,
-   detailItem: Object,
- });
- const item = props.detailItem;
- const list = props.detailItem.orderProductList;
- const exchangeList = props.detailItem.exchangeProductList;
-
- // 추후 개선 예정 
- const adminCode = 2;
- const franchiseCode = 1;
-
- console.log(item);
- console.log(list);
- console.log(exchangeList);
+const props = defineProps({
+  showDetailPopup: Function,
+  popupVisible: Boolean,
+  writeActive: Boolean,
+  detailItem: Object,
+});
+const item = props.detailItem;
+const list = props.detailItem.products;
 
 
-const accpetOrder = async () => {
-    try {
-      const response = await fetch(`/api/admin/order/${item.orderCode}/accept?adminCode=${adminCode}`, {
-        method: 'PUT',
-      });
-      if(response.status ==406){
-        alert("이 발주는 이미 처리되어 있습니다.");
-        props.showDetailPopup();
-        return;
-      }
-      if (!response.ok) {
-        alert("헉 왜 주문 승인 안되지????????????")
-        throw new Error('네트워크 오류 발생');
-      }
-      props.showDetailPopup();
 
-    } catch (error) {
-      console.error('오류 발생:', error);
+const checkExchange = async () => {
+  const requestData = {
+    exchangeStatus: "처리완료",
+    products: list.map(product => ({
+      exchangeProductCode: product.exchangeProductCode,
+      productCode : product.productCode,
+      exchangeProductCount: product.exchangeProductCount,
+      exchangeProductNormalCount: product.exchangeNormalCount,
+      exchangeProductDiscount: product.exchangeDiscount
+    }))
+  };
+
+  console.log(requestData);
+
+  try {
+
+ const accessToken = store.state.accessToken;
+    if (!accessToken) {
+      throw new Error('No access token found');
     }
-};
-
-const isDenied = ref(false);
-const reason = ref('');
-const clickDeny = () =>{
-  isDenied.value = !isDenied.value;
-}
-
-const denyOrder = async () => {
-  console.log(item.orderCode);
-    try {
-      const response = await fetch(`/api/admin/order/${item.orderCode}/deny?adminCode=${adminCode}&denyMessage=${reason.value}`, {
-        method: 'PUT',
-      });
-      if(response.status ==406){
-        alert("이 발주는 이미 처리되어 있습니다.");
-        clickDeny();
-        props.showDetailPopup();
-        return;
-      }
-      if (!response.ok) {
-        alert("헉 왜 주문 거절 안되지????????????")
-        throw new Error('네트워크 오류 발생');
-      }
-    } catch (error) {
-      alert("헉 왜 주문 거절 안되지????????????");
-      console.error('오류 발생:', error);
+    const response = await fetch(`http://api.pioms.shop/admin/exchange/${item.exchangeCode}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestData)
+    });
+    if (!response.ok) {
+      throw new Error('네트워크 오류 발생');
     }
+    await Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "반품 처리 완료되었습니다.",
+      showConfirmButton: false,
+      timer: 1500
+    });
+    props.showDetailPopup();
+    location.reload(AdminExchangePage);
+  } catch (error) {
+    await Swal.fire({
+      position: "center",
+      icon: "error",
+      title: "잘못된 요청입니다.",
+      showConfirmButton: false,
+      timer: 1500
+    });
+    console.error('오류 발생:', error);
+  }
 };
-
 
 
 </script>
 
 
 <style scoped>
-
-
-
-  </style>
-  
+  @import "../../assets/css/order.css" ;
+  @import "../../assets/css/popup.css" ;
+</style>

@@ -1,64 +1,61 @@
 <template>
-  <div class="category-top">
-    <img src="@/assets/icon/Cloth.png" alt="" style="width: 40px; height: 40px">
-    <span>
-    상품 및 상품 카테고리 관리 > 상품 카테고리 관리 > 상품 카테고리 전체 조회
-    </span>
+  <div class="headerTitle" align="left" style="margin-left: 17%; margin-top: 1%">
+    <p class="product-title"><img src="@/assets/icon/Cloth.png" style="width: 20px;height: 20px">상품 및 상품 카테고리 관리 > 상품 카테고리 관리 > 상품 카테고리 전체 조회 및 수정/삭제</p>
   </div>
-  <div class="category-select">
-    <div class="categoryFirst-select">
-      <div class="select-title"><p>1차 카테고리(대분류)</p></div>
-      <ul>
-        <li v-for="category in firstCategories" :key="category.categoryFirstCode" class="category-item">
-          <div class="category-content">
-            <button @click="fetchSecondCategories(category.categoryFirstCode)" style="width: 200px">
-              <span>
+  <div class="category-container">
+    <div class="category-select">
+      <div class="category-section">
+        <div class="select-title"><p>1차 카테고리(대분류)</p></div>
+        <ul>
+          <li v-for="category in firstCategories" :key="category.categoryFirstCode" class="category-item">
+            <div class="category-content">
+              <button @click="fetchSecondCategories(category.categoryFirstCode)">
                 {{ category.categoryFirstName }}
-              </span>
-            </button>
-            <div class="category-actions">
-              <button @click="editCategoryFirst(category.categoryFirstCode,category.categoryFirstName)" class="MD-btn">수정</button>
-              <button @click="deleteCategoryFirst(category.categoryFirstCode, category.categoryFirstName)" class="MD-btn">삭제</button>
+              </button>
+              <div class="category-actions">
+                <button @click="editCategoryFirst(category.categoryFirstCode,category.categoryFirstName)" class="action-button">수정</button>
+                <button @click="deleteCategoryFirst(category.categoryFirstCode, category.categoryFirstName)" class="action-button1">삭제</button>
+              </div>
             </div>
-          </div>
-        </li>
-      </ul>
-    </div>
-    <div class="categorySecond-select">
-      <div class="select-title"><p>2차 카테고리(중분류)</p></div>
-      <ul>
-        <li v-for="category in secondCategories" :key="category.categorySecondCode" class="category-item">
-          <div class="category-content">
-            <button @click="fetchThirdCategories(category.categorySecondCode)" style="width: 200px">
-              <span>
+          </li>
+        </ul>
+      </div>
+      <div class="category-section">
+        <div class="select-title">
+          <p>2차 카테고리(중분류)</p>
+        </div>
+        <ul>
+          <li v-for="category in secondCategories" :key="category.categorySecondCode" class="category-item">
+            <div class="category-content">
+              <button @click="fetchThirdCategories(category.categorySecondCode)">
                 {{ category.categorySecondName }}
-              </span>
-            </button>
-            <div class="category-actions">
-              <button @click="editCategorySecond(category.categorySecondCode, category.categorySecondName)" class="MD-btn">수정</button>
-              <button @click="deleteCategorySecond(category.categorySecondCode, category.categorySecondName)" class="MD-btn">삭제</button>
+              </button>
+              <div class="category-actions">
+                <button @click="editCategorySecond(category.categorySecondCode, category.categorySecondName)" class="action-button">수정</button>
+                <button @click="deleteCategorySecond(category.categorySecondCode, category.categorySecondName)" class="action-button1">삭제</button>
+              </div>
             </div>
-          </div>
-        </li>
-      </ul>
-    </div>
-    <div class="categoryThird-select">
-      <div class="select-title"><p>3차 카테고리(소분류)</p></div>
-      <ul>
-        <li v-for="category in thirdCategories" :key="category.categoryThirdCode" class="category-item">
-          <div class="category-content">
-            <button style="width: 200px">
-              <span>
+          </li>
+        </ul>
+      </div>
+      <div class="category-section">
+        <div class="select-title">
+          <p>3차 카테고리(소분류)</p>
+        </div>
+        <ul>
+          <li v-for="category in thirdCategories" :key="category.categoryThirdCode" class="category-item">
+            <div class="category-content">
+              <button>
                 {{ category.categoryThirdName }}
-              </span>
-            </button>
-            <div class="category-actions">
-              <button @click="editCategoryThird(category.categoryThirdCode, category.categoryThirdName)" class="MD-btn">수정</button>
-              <button @click="deleteCategoryThird(category.categoryThirdCode, category.categoryThirdName)" class="MD-btn">삭제</button>
+              </button>
+              <div class="category-actions">
+                <button @click="editCategoryThird(category.categoryThirdCode, category.categoryThirdName)" class="action-button">수정</button>
+                <button @click="deleteCategoryThird(category.categoryThirdCode, category.categoryThirdName)" class="action-button1">삭제</button>
+              </div>
             </div>
-          </div>
-        </li>
-      </ul>
+          </li>
+        </ul>
+      </div>
     </div>
     <CategoryFirstPopup v-if="editCategoryFirstVisible" :currentFirstCode="currentFirstCode" :currentFirstName="currentFirstName" @close="editCategoryFirstVisible = false"/>
     <CategorySecondPopup v-if="editCategorySecondVisible" :currentSecondCode="currentSecondCode" :currentSecondName="currentSecondName" @close="editCategorySecondVisible = false"/>
@@ -103,7 +100,7 @@ const currentThirdName = ref('');
 
 const getCategoryFirstId = async () => {
   try {
-    const response = await fetch('http://localhost:5000/admin/category/first', {
+    const response = await fetch('http://api.pioms.shop/admin/category/first', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -128,7 +125,7 @@ const getCategoryFirstId = async () => {
 };
 const fetchFirstCategories = async () => {
   try {
-    const response = await fetch('http://localhost:5000/admin/category/first', {
+    const response = await fetch('http://api.pioms.shop/admin/category/first', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -150,7 +147,7 @@ const fetchSecondCategories = async (categoryFirstCode) => {
   }
   selectedFirstCategory.value = categoryFirstCode;
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/second/list/detail/categoryfirst/${categoryFirstCode}`,{
+    const response = await fetch(`http://api.pioms.shop/admin/category/second/list/detail/categoryfirst/${categoryFirstCode}`,{
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -174,7 +171,7 @@ const fetchThirdCategories = async (categorySecondCode) => {
   }
   selectedSecondCategory.value = categorySecondCode;
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/third/list/detail/categorysecond/${categorySecondCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/category/third/list/detail/categorysecond/${categorySecondCode}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -251,97 +248,141 @@ fetchThirdCategories();
 </script>
 
 <style scoped>
-.category-top {
-  margin-left: 8%;
+.product-sub-title img {
+  width: 20px;
+  height: 20px;
 }
-.category-top img {
-  vertical-align: middle;
+.headerTitle p {
+  font-weight: bold;
+  font-size: 20px;
 }
-.category-top span {
-  vertical-align: middle;
+.headerTitle img {
+  width: 10px;
+  height: 10px;
+}
+.headerTitle h6 {
+  margin-bottom: 5%;
+}
+.headerTitle h3,
+.headerTitle h6 {
+  margin: 0
+}
+.category-container {
+  max-width: 1225px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.filter-category select {
-  margin-right: 10px;
+.category-select {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  gap: 20px;
 }
+
+.category-section {
+  flex: 1;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  height: 400px;
+  overflow-y: auto;
+}
+
+.select-title {
+  background-color: #d9d9d9;
+  color: #ffffff;
+  text-align: center;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.select-title p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
 .category-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 0;
+  padding: 10px;
+  border-bottom: 1px solid #eaeaea;
 }
 
 .category-content {
   display: flex;
-
+  align-items: center;
   flex-grow: 1;
 }
+
 .category-content button {
-  width: 50px;
-  border-radius: 5px;
+  flex-grow: 1;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
 }
+
+.category-content button:hover {
+  background-color: #e0e0e0;
+}
+
 .category-actions {
   display: flex;
   gap: 8px;
+  margin-left: 3%;
 }
 
-.filter-categoryName input {
-  margin-right: 10px;
-}
-
-.filter-table tr {
-  width: 100%;
-  table-layout: fixed;
-}
-.select-title {
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  background-color: #888888;
-  border-radius: 10px;
-  height: 50px;
-}
-.category-select {
-  width: 1450px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start; /* Align items to the top */
-  height: auto; /* Set height to auto */
-  padding: 30px;
-}
-
-.categoryFirst-select, .categorySecond-select, .categoryThird-select {
-  width: 370px;
-  min-height: 400px; /* Set a minimum height */
-  padding: 10px;
-  overflow-y: auto; /* Enable vertical scrolling */
-  max-height: 400px; /* Set a maximum height */
-  margin-left: 5%;
+.action-button {
+  color: #000000;
+  font-weight: bold;
   border: none;
-  border-radius: 15px;
-  background-color: #d9d9d9;
-}
-
-.categoryFirst-select ul, .categorySecond-select ul, .categoryThird-select ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  border-radius: 5px;
-}
-
-.categoryFirst-select li, .categorySecond-select li, .categoryThird-select li {
-  margin-bottom: 10px;
-}
-
-.categoryFirst-select button, .categorySecond-select button, .categoryThird-select button {
-  width: 100%;
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 6px 12px;
   cursor: pointer;
-  text-align: left;
+  transition: background-color 0.3s;
+}
+.action-button1 {
+  color: #FFFFFF;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.categoryFirst-select button:hover, .categorySecond-select button:hover, .categoryThird-select button:hover {
-  background-color: #f0f0f0;
+.action-button1:hover {
+  background-color: #FF6285;
+}
+
+.action-button1:last-child {
+  background-color: #FF6285;
+}
+
+.action-button1:last-child:hover {
+  background-color: #FF6285;
 }
 </style>
+
+
+

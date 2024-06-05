@@ -1,25 +1,25 @@
 <template>
-  <div class="login-container">
-    <div class="logo">
-      <span><img src="@/assets/icon/PIOMS_로고.png" alt="PIOMS Logo"></span>
+    <div class="login-container">
+      <div class="logo">
+        <span><img src="@/assets/icon/PIOMS_로고.png" alt="PIOMS Logo"></span>
+      </div>
+      <div class="login-form">
+        <h2>관리자 로그인</h2>
+        <div class="input-group">
+          <i class="fas fa-user"></i>
+          <input type="text" v-model="username" placeholder="아이디" @keydown.enter="login" />
+        </div>
+        <div class="input-group">
+          <i class="fas fa-key"></i>
+          <input type="password" v-model="password" placeholder="비밀번호" @keydown.enter="login" />
+        </div>
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" v-model="accessNumber" placeholder="Access Number" @keydown.enter="login" />
+        </div>
+        <button class="login-button" @click="login">로그인</button>
+      </div>
     </div>
-    <div class="login-form">
-      <h2>Admin 로그인</h2>
-      <div class="input-group">
-        <i class="fas fa-user"></i>
-        <input type="text" v-model="username" placeholder="아이디" @keydown.enter="login" />
-      </div>
-      <div class="input-group">
-        <i class="fas fa-key"></i>
-        <input type="password" v-model="password" placeholder="비밀번호" @keydown.enter="login" />
-      </div>
-      <div class="input-group">
-        <i class="fas fa-lock"></i>
-        <input type="password" v-model="accessNumber" placeholder="Access Number" @keydown.enter="login" />
-      </div>
-      <button class="login-button" @click="login">로그인</button>
-    </div>
-  </div>
 </template>
 
 <script setup>
@@ -27,6 +27,7 @@ import { ref } from 'vue';
 import Swal from 'sweetalert2';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import { jwtDecode } from 'jwt-decode';
 
 const username = ref('');
 const password = ref('');
@@ -39,7 +40,7 @@ const login = async () => {
   try {
     console.log('로그인 시도:', { username: username.value, password: password.value, accessNumber: accessNumber.value });
 
-    const response = await fetch('http://localhost:5000/admin/login', {
+    const response = await fetch('http://api.pioms.shop/admin/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -49,7 +50,7 @@ const login = async () => {
         password: password.value,
         accessNumber: accessNumber.value
       }),
-      credentials: 'include' // 쿠키를 포함하기 위해 설정
+      credentials: 'include'
     });
 
     if (response.ok) {
@@ -61,6 +62,17 @@ const login = async () => {
 
       if (accessToken) {
         await store.dispatch('login', { accessToken });
+
+        const decodedToken = jwtDecode(accessToken);
+        const usernameFromToken = decodedToken.username;
+
+        Swal.fire({
+          icon: 'success',
+          title: `${usernameFromToken}님 환영합니다`,
+          showConfirmButton: false,
+          timer: 2000
+        });
+
         await router.push('/admin/home');
       } else {
         throw new Error('Access token not found');
@@ -86,12 +98,13 @@ const login = async () => {
 <style scoped>
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
 
+
 .login-container {
+  height: 90vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 90vh;
 }
 
 .logo {
@@ -115,9 +128,9 @@ const login = async () => {
   background: white;
   padding: 40px;
   border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 18px 20px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
-  width: 300px; /* 폼의 고정된 너비를 설정 */
+  width: 300px;
 }
 
 .login-form h2 {

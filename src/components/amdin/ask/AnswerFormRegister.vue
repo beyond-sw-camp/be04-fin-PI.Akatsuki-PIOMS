@@ -5,23 +5,23 @@
         <div v-if="askData" class="form-wrapper">
           <table class="detail-table">
             <tr>
-              <td class="label">점주명:</td>
+              <td class="label">점주명</td>
               <td>{{ askData.franchiseOwnerName }}</td>
-              <td class="label">가맹점:</td>
+              <td class="label">가맹점</td>
               <td>{{ askData.franchiseName }}</td>
             </tr>
             <tr>
-              <td class="label">제목:</td>
+              <td class="label">제목</td>
               <td colspan="3">{{ askData.askTitle }}</td>
             </tr>
             <tr>
-              <td class="label">내용:</td>
+              <td class="label">내용</td>
               <td colspan="3" class="content-td">{{ askData.askContent }}</td>
             </tr>
             <tr>
-              <td class="label">등록일:</td>
+              <td class="label">등록일</td>
               <td>{{ formatDate(askData.askEnrollDate) }}</td>
-              <td class="label">수정일:</td>
+              <td class="label">수정일</td>
               <td>{{ formatDate(askData.askUpdateDate) }}</td>
             </tr>
           </table>
@@ -43,7 +43,11 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { defineEmits } from 'vue';
+import { useStore } from 'vuex';
+import Swal from "sweetalert2";
 
+const store = useStore();
+const accessToken = store.state.accessToken;
 const askData = ref(null);
 const answer = ref('');
 const route = useRoute();
@@ -59,10 +63,12 @@ const fetchAskData = async () => {
     console.error('askCode is not defined');
     return;
   }
+
   try {
-    const response = await fetch(`http://localhost:5000/admin/ask/${askCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/ask/${askCode}`, {
       method: 'GET',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     });
@@ -100,9 +106,10 @@ const submitAnswer = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://localhost:5000/admin/ask/answer/${askCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/ask/answer/${askCode}`, {
       method: 'POST',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -115,8 +122,14 @@ const submitAnswer = async () => {
     }
 
     console.log('Answer submitted successfully');
+    await Swal.fire({
+      icon: 'success',
+      title: '등록 성공',
+      text: '답변이 작성되었습니다.',
+    });
     emit('refreshData');
     props.closeRegist(); // Close the popup after successful submission
+    window.location.reload(); // 페이지 새로고침
   } catch (error) {
     console.error('Failed to submit answer:', error);
   }
@@ -124,6 +137,7 @@ const submitAnswer = async () => {
 
 onMounted(fetchAskData);
 </script>
+
 
 <style scoped>
 .container {
@@ -192,7 +206,7 @@ textarea {
   gap: 10px;
   justify-content: flex-end;
   background-color: white;
-  padding: 5px;
+  //padding: 5px;
 }
 
 .cancel-btn {
@@ -244,9 +258,9 @@ textarea {
   padding: 20px;
   border-radius: 30px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  width: 50%;
+  width: 40%;
   max-width: 2000px;
-  height: 73%;
+  height: 70%;
   overflow-y: auto;
   max-height: 90vh;
 }

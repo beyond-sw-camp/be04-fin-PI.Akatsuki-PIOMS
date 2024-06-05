@@ -2,7 +2,7 @@
   <div>
     <div class="headerTitle">
         <h3 class="product-title"><img src="@/assets/icon/Cloth.png">상품 및 재고 관리 > 재고 관리 > 재고 알림 관리 </h3>
-    <h6 class="product-sub-title">조회할 상품의 조건을 선택 후
+    <h6 class="product-sub-title" style="margin-top: 1%; margin-bottom: 1%">조회할 상품의 조건을 선택 후
       <img src="@/assets/icon/reset.png">초기화 또는 <img src="@/assets/icon/search.png">검색을 눌러주세요.
     </h6>
     </div>
@@ -13,11 +13,12 @@
         <tr>
           <td class="filter-label">상품명</td>
           <td class="filter-input">
-            <input type="text" v-model="filterProductName" class="textInput"/>
+            <input type="text" v-model="filterProductName" @keyup.enter="applyFilters" class="textInput" placeholder="상품명을 입력하세요."/>
           </td>
           <td class="filter-label">상품상태</td>
           <td class="filter-input">
             <select id="filterStatus" v-model="filterStatus" class="textInput">
+              <option hidden="hidden" value="">전체</option>
               <option value="공급가능">공급가능</option>
               <option value="일시제한">일시제한</option>
               <option value="단종">단종</option>
@@ -29,6 +30,7 @@
           <td class="filter-label">색상</td>
           <td class="filter-input">
             <select id="filterColor" v-model="filterColor" class="textInput">
+              <option hidden="hidden" value="">전체</option>
               <option value="빨간색">빨간색</option>
               <option value="주황색">주황색</option>
               <option value="노란색">노란색</option>
@@ -41,6 +43,7 @@
           <td class="filter-label">사이즈</td>
           <td class="filter-input">
             <select id="filterSize" v-model="filterSize" class="textInput">
+              <option hidden="hidden" value="">전체</option>
               <option value="90">90</option>
               <option value="95">95</option>
               <option value="100">100</option>
@@ -93,7 +96,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost" :id="'row-' + rowIndex">
+        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost" :id="'row-' + rowIndex"
+            @click="showDetailPopup(item.productCode,item.productName,item.productCount,item.productPrice,item.productStatus,item.productColor,item.productSize,item.categoryFirstName,item.categorySecondName,item.categoryThirdName,item.productContent)">
           <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">
               {{ item[header.key] }}
             <template v-if="header.key === 'imgUrl'">
@@ -112,13 +116,26 @@
       <span> {{currentPage}} / {{totalPages}} </span>
       <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
     </div>
+    <ProductDetailPopup v-if="detailPopup" :currentProductCode="currentProductCode"
+                        :currentProductName="currentProductName"
+                        :currentProductCount="currentProductCount"
+                        :currentProductPrice="currentProductPrice"
+                        :currentProductStatus="currentProductStatus"
+                        :currentProductColor="currentProductColor"
+                        :currentProductSize="currentProductSize"
+                        :currentCategoryFirstName="currentCategoryFirstName"
+                        :currentCategorySecondName="currentCategorySecondName"
+                        :currentCategoryThirdName="currentCategoryThirdName"
+                        :currentProductContent="currentProductContent"
+                        :closeEdit="closePopup"/>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import {ref, computed, onMounted, watchEffect} from 'vue';
 import axios from "axios";
 import { useStore } from 'vuex';
+import ProductDetailPopup from "@/components/franchise/product/ProductDetailPopup.vue";
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -133,7 +150,9 @@ const headers = ref([
   { key: 'productStatus', label: '상품 상태'},
   { key: 'productColor', label: '색상'},
   { key: 'productSize', label: '사이즈'},
-  { key: 'categoryThirdCode', label: '카테고리 코드'},
+  { key: 'categoryFirstName', label: '카테고리 코드'},
+  { key: 'categorySecondName', label: '카테고리 코드'},
+  { key: 'categoryThirdName', label: '카테고리 코드'},
 ]);
 
 const filteredLists = ref([]);
@@ -153,12 +172,78 @@ const selectedSecondCategory = ref('');
 const selectedThirdCategory = ref('');
 const productImages = ref({});
 
+const currentProductCode = ref('');
+const currentProductName = ref('');
+const currentProductCount = ref('');
+const currentProductPrice = ref('');
+const currentProductStatus = ref('');
+const currentProductColor = ref('');
+const currentProductSize = ref('');
+const currentCategoryFirstName = ref('');
+const currentCategorySecondName = ref('');
+const currentCategoryThirdName = ref('');
+const currentProductContent = ref('');
+
+const detailPopup = ref(false);
+
+const showDetailPopup = (productCode, productName, productCount, productPrice, productStatus, productColor, productSize,
+                         categoryFirstName, categorySecondName, categoryThirdName, productContent) => {
+  detailPopup.value = !detailPopup.value;
+  setCurrentProductCode(productCode);
+  setCurrentProductName(productName);
+  setCurrentProductCount(productCount);
+  setCurrentProductPrice(productPrice);
+  setCurrentProductStatus(productStatus);
+  setCurrentProductColor(productColor);
+  setCurrentProductSize(productSize);
+  setCurrentCategoryFirstName(categoryFirstName);
+  setCurrentCategorySecondName(categorySecondName);
+  setCurrentCategoryThirdName(categoryThirdName);
+  setCurrentProductContent(productContent);
+}
+const closePopup = () => {
+  detailPopup.value = !detailPopup.value;
+}
+const setCurrentProductCode = (productCode) => {
+  currentProductCode.value = productCode;
+};
+const setCurrentProductName = (productName) => {
+  currentProductName.value = productName;
+}
+const setCurrentProductCount = (productCount) => {
+  currentProductCount.value = productCount;
+}
+const setCurrentProductPrice = (productPrice) => {
+  currentProductPrice.value = productPrice;
+}
+const setCurrentProductStatus = (productStatus) => {
+  currentProductStatus.value = productStatus;
+}
+const setCurrentProductColor = (productColor) => {
+  currentProductColor.value = productColor;
+}
+const setCurrentProductSize = (productSize) => {
+  currentProductSize.value = productSize;
+}
+const setCurrentProductContent = (productContent) => {
+  currentProductContent.value = productContent;
+}
+const setCurrentCategoryFirstName = (categoryFirstName) => {
+  currentCategoryFirstName.value = categoryFirstName;
+}
+const setCurrentCategorySecondName = (categorySecondName) => {
+  currentCategorySecondName.value = categorySecondName;
+}
+const setCurrentCategoryThirdName = (categoryThirdName) => {
+  currentCategoryThirdName.value = categoryThirdName;
+}
 const getProductImageUrl = (productCode) => {
   return productImages.value[productCode] || 'path/to/default-image.jpg';
 };
 const fetchProductImages = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/admin/product/productImage`, {
+
+    const response = await fetch(`http://api.pioms.shop/admin/product/productImage`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -182,7 +267,7 @@ const fetchProductImages = async () => {
 };
 const fetchFirstCategories = async () => {
   try {
-    const response = await fetch('http://localhost:5000/admin/category/first', {
+    const response = await fetch('http://api.pioms.shop/admin/category/first', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -203,7 +288,7 @@ const fetchSecondCategories = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -226,7 +311,7 @@ const fetchThirdCategories = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -266,7 +351,7 @@ const resetFilters = () => {
 };
 const getMemberId = async () => {
   try {
-    const response = await fetch('http://localhost:5000/franchise/product', {
+    const productResponse = await fetch('http://api.pioms.shop/franchise/product', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -274,36 +359,64 @@ const getMemberId = async () => {
       },
     });
 
-    if (!response.ok) {
+    if (!productResponse.ok) {
       throw new Error('네트워크 오류 발생');
     }
 
-    const data = await response.json();
-    if (data.length > 0) {
-      lists.value = data.map(({ product, ...rest }) => rest);
-      filteredLists.value = lists.value;
-    } else {
-      lists.value = [];
-      filteredLists.value = [];
+    const productData = await productResponse.json();
+
+    const franchiseWarehouseResponse = await fetch('http://api.pioms.shop/franchise/warehouse', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!franchiseWarehouseResponse.ok) {
+      throw new Error('프랜차이즈 웨어하우스 정보를 가져오는 중 오류 발생');
     }
+
+    const franchiseWarehouseData = await franchiseWarehouseResponse.json();
+
+    lists.value = productData.map(product => {
+      const correspondingWarehouse = franchiseWarehouseData.find(warehouse =>
+          warehouse.product.productCode === product.productCode);
+      return {
+        productCode: product.productCode,
+        productName: product.productName,
+        imgUrl: product.imgUrl,
+        franchiseWarehouseCount: correspondingWarehouse ? correspondingWarehouse.franchiseWarehouseCount : 0,
+        franchiseWarehouseEnable: correspondingWarehouse ? correspondingWarehouse.franchiseWarehouseEnable : 0,
+        productNoticeCount: product.productNoticeCount,
+        productStatus: product.productStatus,
+        productColor: product.productColor,
+        productSize: product.productSize,
+        categoryFirstName: product.categoryFirstName,
+        categorySecondName: product.categorySecondName,
+        categoryThirdName: product.categoryThirdName,
+      };
+    });
+
+    filteredLists.value = lists.value;
   } catch (error) {
     console.error('오류 발생:', error);
   }
 };
 const downloadExcel = () => {
   axios({
-    url: 'http://localhost:5000/franchise/exceldownload/product-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
+    url: 'http://api.pioms.shop/franchise/exceldownload/product-excel',
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
     },
-    responseType: 'blob', // 서버에서 반환되는 데이터의 형식을 명시
+    responseType: 'blob',
   }).then((response) => {
     const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }));
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', 'productList.xlsx'); // 원하는 파일 이름 설정
+    link.setAttribute('download', 'productList.xlsx');
     document.body.appendChild(link);
     link.click();
   }).catch((error) => {
@@ -422,10 +535,10 @@ fetchThirdCategories();
 }
 .post-btn {
   display: flex;
-  justify-content: flex-end; /* 양 끝에 정렬 */
-  align-items: center; /* 수직 가운데 정렬 */
-  position: absolute; /* 절대 위치 설정 */
-  left: 15.5%; /* 좌측 정렬 */
+  justify-content: flex-end;
+  align-items: center;
+  position: absolute;
+  left: 15.5%;
   width: 1210px;
 }
 
@@ -498,17 +611,6 @@ fetchThirdCategories();
   font-size: 12px;
 }
 
-.button-as-text {
-  background: none;
-  border: none;
-  padding: 0;
-  margin: 0;
-  color: inherit;
-  font: inherit;
-  cursor: pointer;
-  outline: inherit;
-  text-align: left; /* 텍스트 정렬을 위해 필요시 사용 */
-}
 .textInput {
   border: 1px solid rgba(217, 217, 217, 0.7);
 }

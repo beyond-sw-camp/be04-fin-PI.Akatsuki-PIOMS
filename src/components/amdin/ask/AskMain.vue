@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <!-- Breadcrumb 컴포넌트 추가 -->
-    <Breadcrumb :crumbs="breadcrumbs" />
+<!--    <Breadcrumb :crumbs="breadcrumbs" />-->
 
     <div class="filter-section">
       <table class="filter-table">
@@ -134,7 +134,7 @@ const fetchAsks = async () => {
       throw new Error('No access token found');
     }
 
-    const response = await fetch('http://localhost:5000/admin/ask/list', {
+    const response = await fetch('http://api.pioms.shop/admin/ask/list', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -263,6 +263,7 @@ const closeEdit = () =>{
 .filter-table td {
   padding: 5px 10px;
   font-size: 16px;
+  height: 30px;
 }
 
 .filter-label {

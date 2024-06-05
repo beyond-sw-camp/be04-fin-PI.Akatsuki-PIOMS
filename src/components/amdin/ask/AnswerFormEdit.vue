@@ -5,23 +5,23 @@
     <div v-if="askData" class="form-wrapper">
       <table class="detail-table">
         <tr>
-          <td class="label">점주명:</td>
+          <td class="label">점주명</td>
           <td>{{ askData.franchiseOwnerName }}</td>
-          <td class="label">가맹점:</td>
+          <td class="label">가맹점</td>
           <td>{{ askData.franchiseName }}</td>
         </tr>
         <tr>
-          <td class="label">제목:</td>
+          <td class="label">제목</td>
           <td colspan="3">{{ askData.askTitle }}</td>
         </tr>
         <tr>
-          <td class="label">내용:</td>
+          <td class="label">내용</td>
           <td colspan="3" class="content-td">{{ askData.askContent }}</td>
         </tr>
         <tr>
-          <td class="label">등록일:</td>
+          <td class="label">등록일</td>
           <td>{{ formatDate(askData.askEnrollDate) }}</td>
-          <td class="label">수정일:</td>
+          <td class="label">수정일</td>
           <td>{{ formatDate(askData.askUpdateDate) }}</td>
         </tr>
       </table>
@@ -42,7 +42,11 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { defineEmits } from 'vue';
+import { useStore } from 'vuex';
+import Swal from "sweetalert2";
 
+const store = useStore();
+const accessToken = store.state.accessToken;
 const askData = ref(null);
 const answer = ref('');
 const emit = defineEmits(['refreshData']);
@@ -58,9 +62,10 @@ const fetchAskData = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://localhost:5000/admin/ask/${askCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/ask/${askCode}`, {
       method: 'GET',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     });
@@ -99,9 +104,10 @@ const submitAnswer = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://localhost:5000/admin/ask/answer/${askCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/ask/answer/${askCode}`, {
       method: 'POST',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -113,9 +119,14 @@ const submitAnswer = async () => {
       throw new Error(`Failed to submit answer: ${response.statusText}`);
     }
 
-    // Close the form after successful submission
+    await Swal.fire({
+      icon: 'success',
+      title: '수정 성공',
+      text: '수정이 완료되었습니다.',
+    });
     emit('refreshData');
     props.closeEdit();
+    window.location.reload(); // 페이지 새로고침
   } catch (error) {
     console.error('Failed to submit answer:', error);
   }
@@ -123,6 +134,7 @@ const submitAnswer = async () => {
 
 onMounted(fetchAskData);
 </script>
+
 
 <style scoped>
 .container {
@@ -137,13 +149,13 @@ onMounted(fetchAskData);
   width: 100%;
   max-width: 1200px;
   background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  //border-radius: 8px;
+  //box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
 }
 
 .detail-table {
-  width: 100%x;
+  width: 100%;
   border-collapse: collapse;
   align-content: center;
   justify-content: center;
@@ -190,7 +202,7 @@ textarea {
   gap: 10px;
   justify-content: flex-end;
   background-color: white;
-  padding: 5px;
+  //padding: 5px;
 }
 
 .cancel-btn {
@@ -238,14 +250,15 @@ textarea {
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: #f5f5f5;
-  padding: 40px;
+  padding: 20px;
   border-radius: 30px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  width: 50%;
+  width: 40%;
   max-width: 2000px;
-  height: 65%;
+  height: 61%;
+
   overflow-y: auto;
-  max-height: 84vh;
+  max-height: 90vh;
 }
 
 .popup-content h2 {

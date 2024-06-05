@@ -5,32 +5,32 @@
         <div v-if="askData" class="form-wrapper">
           <table class="detail-table">
             <tr>
-              <td class="label">점주명:</td>
+              <td class="label">점주명</td>
               <td>{{ askData.franchiseOwnerName }}</td>
-              <td class="label">가맹점:</td>
+              <td class="label">가맹점</td>
               <td>{{ askData.franchiseName }}</td>
             </tr>
             <tr>
-              <td class="label">제목:</td>
+              <td class="label">제목</td>
               <td colspan="3">
                 <input v-model="askData.askTitle" placeholder="제목을 입력하세요" />
               </td>
             </tr>
             <tr>
-              <td class="label">내용:</td>
+              <td class="label">내용</td>
               <td colspan="3" class="content-td">
                 <textarea v-model="askData.askContent" placeholder="내용을 입력하세요"></textarea>
               </td>
             </tr>
             <tr>
-              <td class="label">등록일:</td>
+              <td class="label">등록일</td>
               <td>{{ formatDate(askData.askEnrollDate) }}</td>
-              <td class="label">수정일:</td>
+              <td class="label">수정일</td>
               <td>{{ formatDate(askData.askUpdateDate) }}</td>
             </tr>
           </table>
           <div class="action-buttons">
-            <button @click="closeEdit" class="cancel-btn">취소</button>
+            <button @click="props.closeEdit" class="cancel-btn">취소</button>
             <button @click="submitUpdate" class="submit-btn">수정</button>
           </div>
         </div>
@@ -41,25 +41,27 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { defineEmits } from 'vue';
+import { defineProps, defineEmits } from 'vue';
+import { useStore } from 'vuex';
+import Swal from 'sweetalert2';
 
+const store = useStore();
+const accessToken = store.state.accessToken;
 const askData = ref(null);
+const props = defineProps(['askCode', 'closeEdit']);
 const emit = defineEmits(['refreshData']);
-const props = defineProps({
-  askCode: Object,
-  closeEdit: Function
-});
 
 const fetchAskData = async () => {
-  const askCode = props.askCode.askCode;
-  if (!askCode) {
+  if (!props.askCode) {
     console.error('askCode is not defined');
     return;
   }
+
   try {
-    const response = await fetch(`http://localhost:5000/franchise/ask/${askCode}`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/ask/${props.askCode}`, {
       method: 'GET',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     });
@@ -70,7 +72,6 @@ const fetchAskData = async () => {
 
     const data = await response.json();
     askData.value = data;
-    answer.value = data.askAnswer || ''; // 이미 작성된 답변을 불러옵니다.
   } catch (error) {
     console.error('Failed to fetch ask data:', error);
   }
@@ -92,19 +93,24 @@ const formatDate = (dateString) => {
 };
 
 const submitUpdate = async () => {
-  const askCode = props.askCode.askCode;
+  const askCode = props.askCode;
   if (!askCode) {
     console.error('askCode is not defined');
     return;
   }
   if (!askData.value.askTitle.trim() || !askData.value.askContent.trim()) {
-    alert('제목과 내용은 필수 작성 요소입니다.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '등록 실패',
+      text: '제목과 내용은 필수 작성요소입니다.',
+    });
     return;
   }
   try {
-    const response = await fetch(`http://localhost:5000/franchise/update/${askCode}`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/update/${askCode}`, {
       method: 'PUT',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -116,8 +122,14 @@ const submitUpdate = async () => {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
+    await Swal.fire({
+      icon: 'success',
+      title: '수정 성공',
+      text: '수정이 완료되었습니다.',
+    });
     emit('refreshData');
     props.closeEdit();
+    window.location.reload(); // 페이지 새로고침
   } catch (error) {
     console.error('Failed to submit update:', error);
   }

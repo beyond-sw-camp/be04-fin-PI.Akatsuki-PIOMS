@@ -48,6 +48,7 @@
 <script setup>
 import { ref } from 'vue';
 
+
 const franchises = ref([]);
 const keyword = ref('branchName');
 const searchText = ref('');
@@ -55,7 +56,7 @@ const status = ref('active');
 
 const fetchFranchises = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/admin/franchise/list?keyword=${keyword.value}&searchText=${encodeURIComponent(searchText.value)}&status=${status.value}`);
+    const response = await fetch(`http://api.pioms.shop/admin/franchise/list?keyword=${keyword.value}&searchText=${encodeURIComponent(searchText.value)}&status=${status.value}`);
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }

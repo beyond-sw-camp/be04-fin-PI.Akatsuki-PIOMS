@@ -19,6 +19,8 @@
 import { defineProps, defineEmits, ref } from 'vue';
 import { useStore } from 'vuex';
 import CategoryList from "@/components/amdin/Category/CategoryList.vue";
+import Swal from "sweetalert2";
+
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -42,15 +44,36 @@ const closeDeleteModal = () => {
 const deleteCategoryFirst = async () => {
 
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/first/delete/${props.currentFirstCode}`, {
+    const categorySecondResponse = await fetch(`http://api.pioms.shop/admin/category/second/list/detail/categoryfirst/${props.currentFirstCode}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    })
+    const categorySeconds = await categorySecondResponse.json();
+
+    if(categorySeconds.length > 0) {
+      await Swal.fire({
+        icon: 'success',
+        title: '대분류 카테고리 삭제 실패',
+        text: '카테고리를 삭제할 수 없습니다. 하위 카테고리가 존재합니다.',
+      });
+      return;
+    }
+
+    const response = await fetch(`http://api.pioms.shop/admin/category/first/delete/${props.currentFirstCode}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     });
-
-    console.log('카테고리 대분류를 삭제하였습니다.');
+    await Swal.fire({
+      icon: 'success',
+      title: '카테고리 삭제 성공!',
+      text: '대분류 카테고리를 삭제하였습니다.',
+    });
     location.reload(CategoryList);
     emits('close');
   } catch (error) {
@@ -119,10 +142,12 @@ const closePopup = () => {
 .confirm-button {
   background-color: #344DAF;
   color: white;
+  border: none;
 }
 
 .cancel-button {
   background-color: #FF6285;
+  border: none;
   color: white;
 }
 </style>

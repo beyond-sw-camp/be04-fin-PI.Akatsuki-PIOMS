@@ -1,21 +1,22 @@
 <template>
   <div>
-    <div class="modal" @click.self="closeDeletePopup">
+    <div class="modal">
       <div class="modal-content">
         <h3>상품 노출 상태 변경</h3>
         <p>상품 코드: {{ currentProductCode }}</p>
         <p>상품명: {{ currentProductName }}</p>
         <p>현재 상품 노출 상태: {{ currentProductExposureStatus ? '노출' : '미노출' }}</p>
-        <button @click="closeDeletePopup" class="close-button">x</button>
-        <button @click="deleteProduct">수정</button>
+        <button @click="deleteProduct" class="action-button">수정</button>
+        <button @click="closeDeletePopup" class="close-button">닫기</button>
       </div>
     </div>
   </div>
 </template>
-
 <script setup>
-import { ref, defineProps } from 'vue';
+import { defineProps } from 'vue';
 import { useStore } from 'vuex';
+import Swal from "sweetalert2";
+
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -29,7 +30,7 @@ const props = defineProps({
 const deleteProduct = async () => {
   try {
     const newStatus = !props.currentProductExposureStatus;
-    const response = await fetch(`http://localhost:5000/admin/product/delete/${props.currentProductCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/product/delete/${props.currentProductCode}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -39,20 +40,25 @@ const deleteProduct = async () => {
     });
 
     if (response.ok) {
-      alert('상품 노출 상태가 변경되었습니다.');
-      // 페이지를 새로 고쳐 변경된 내용을 반영합니다.
+      await Swal.fire({
+        icon: 'success',
+        title: '변경 성공!',
+        text: '상품 노출 상태가 변경되었습니다.',
+      });
       props.closeDeletePopup();
       location.reload();
     } else {
-      alert('상품 노출 상태 변경에 실패했습니다.');
+      await Swal.fire({
+        icon: 'error',
+        title: '변경 실패!',
+        text: '상품 노출 상태 변경에 실패하였습니다.',
+      });
     }
   } catch (error) {
     console.error('Error updating product exposure status:', error);
-    alert('상품 노출 상태 변경 중 오류가 발생했습니다.');
   }
 };
 </script>
-
 <style scoped>
 .modal {
   position: fixed;
@@ -64,28 +70,46 @@ const deleteProduct = async () => {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
 .modal-content {
-  background: white;
+  background: #ffffff;
   padding: 20px;
-  border-radius: 5px;
+  border-radius: 8px;
   width: 300px;
   text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .close-button {
-  background: red;
-  color: white;
+  background: #e0e0e0;
+  color: #333333;
   border: none;
-  padding: 5px 10px;
+  padding: 8px 16px;
   cursor: pointer;
-  margin-right: 10px;
+  border-radius: 4px;
+  margin-left: 10px;
+}
+
+.close-button:hover {
+  background: #cccccc;
+}
+
+.action-button {
+  background: #4caf50;
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.action-button:hover {
+  background: #45a049;
 }
 
 button {
   margin-top: 10px;
-  padding: 5px 10px;
-  cursor: pointer;
 }
 </style>

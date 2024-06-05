@@ -1,25 +1,20 @@
 <template>
   <div class="popup-overlay" >
        <div class="popup-content">
-           <button class="close" @click="showDetailPopup" >돌아가기</button>
-           <br>
-          
-           <br>
+           <br>          <br>
                 <h1 align="center">발주서</h1>
 
            <div class="info">
                 <div style="display:flex;" align="center">
                   <div class="divvv-title">
-                    수신처      
+                    수신처
                   </div>
                   <div class="divvv-title">
-                    발신처      
+                    발신처
                   </div>
                 </div>
-
-
                 <div style="display:flex;" align="center">
-                
+
                     <div class="divvv">
                         <div class="divvv2" >
                           <div class="divvv3-title">
@@ -31,7 +26,7 @@
                         </div>
                         <div class="divvv2">
                           <div class="divvv3-title">
-                              관리자명 
+                              관리자명
                           </div>
                           <div class="divvv3">
                              {{ item.adminName }}
@@ -42,7 +37,7 @@
                             점주전화번호
                           </div>
                           <div class="divvv3">
-                             {{item.franchiseOwnerPhone}}
+                             {{item.adminPhone}}
                           </div>
                         </div>
                     </div>
@@ -58,7 +53,7 @@
                         </div>
                         <div class="divvv2">
                           <div class="divvv3-title">
-                              점주명 
+                              점주명
                           </div>
                           <div class="divvv3">
                              {{ item.franchiseOwnerName }}
@@ -72,22 +67,22 @@
                              {{item.franchiseOwnerPhone}}
                           </div>
                         </div>
-                </div>  
+                </div>
             </div>
-            
+
 
             <div class="divvv-title">
                 발주상품
             </div>
-            <div style="display: block; font-size: 1.5lh; display:flex; justify-content: center; font-weight: 1000; width:100%;" align = "center">
-              <table>
+            <div class="table-container">
+              <table class="table">
                 <thead>
-                  <tr>
+                  <tr class="header1">
                     <th v-for="(header, index) in headers" :key="index">{{ header.label }}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr class="table" v-for="(product, rowIndex) in list" :key="rowIndex">
+                  <tr class="allpost" v-for="(product, rowIndex) in list" :key="rowIndex">
                     <td v-for="(header, colIndex) in headers" :key="colIndex">
                       <div >{{ product[header.key] }}</div>
                     </td>
@@ -99,15 +94,15 @@
             <div class="divvv-title" style="border-top: 2px black solid;">
                 반품상품
             </div>
-            <div style="display: block; font-size: 1.5lh; display:flex; justify-content: center; font-weight: 1000; width:100%" align = "center">
-              <table>
+            <div class="table-container">
+              <table class="table">
                 <thead>
-                  <tr>
-                    <th v-for="(header, index) in exchangeHeaders" :key="index">{{ header.label }}</th>
+                  <tr class="header1">
+                    <th v-for="(header, index) in exchangeHeaders" :key="exchangeList">{{ header.label }}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr class="table" v-for="(product, rowIndex) in exchangeList" :key="rowIndex">
+                  <tr class="allpost" v-for="(product, rowIndex) in exchangeList" :key="rowIndex">
                     <td v-for="(header, colIndex) in exchangeHeaders" :key="colIndex">
                       <div >{{ product[header.key] }}</div>
                     </td>
@@ -115,15 +110,13 @@
                 </tbody>
               </table>
             </div>
-            
+
             <br>
             <br>
             <br>
             <br>
-            <div class="but-group">
-              <input class="but" type="button" value="발주승인" @click="accpetOrder">
-              <input class="but" type="button" value="발주반려" @click="clickDeny">
-            </div>
+
+
 
             <div v-if="isDenied">
               <div class="popup-overlay"  >
@@ -132,15 +125,15 @@
                     <h2>반려사유 </h2>
                     <textarea v-model="reason" cols="30" rows="5"></textarea><br>
 
-                    <div style="display: block; font-size: 1.5lh; display:flex; justify-content: center; font-weight: 1000; width:100%;" align="center">
-                      <table>
+                    <div class="table-container">
+                      <table class="table">
                         <thead >
-                          <tr>
+                          <tr class="header1">
                             <th  v-for="(header, index) in headers" :key="index" >{{ header.label }}</th>
                           </tr>
                         </thead>
                         <tbody >
-                          <tr class="table" v-for="(product, rowIndex) in list" :key="rowIndex">
+                          <tr class="allpost" v-for="(product, rowIndex) in list" :key="rowIndex">
                             <td v-for="(header, colIndex) in headers" :key="colIndex">
                               <div>{{ product[header.key] }}</div>
                             </td>
@@ -149,30 +142,46 @@
                       </table>
                     </div>
                     <div class="but-group">
-                      <button type="button" class="close" @click="clickDeny">취소</button>
+                      <button type="button" class="cancel-btn" @click="clickDeny">취소</button>
                       &nbsp;&nbsp;&nbsp;
-                      <button type="submit" class="close">등록</button>
+                      <button type="submit" class="submit-btn">등록</button>
                     </div>
-                  </form> 
+                  </form>
                 </div>
               </div>
             </div>
-            
+
           </div>
-          발주일자 : {{ item.orderDate }}
-           <br>
-           주문코드 : {{ item.orderCode }}<br>   
+          <div class="action-buttons" v-if="item.orderCondition == '승인대기'">
+              <input class="cancel-btn" type="button" value="발주승인" @click="accpetOrder">
+              <input class="cancel-btn" type="button" value="발주반려" @click="clickDeny">
+            </div>
+         <div>
+          발주일 : {{ item.orderDate }} &nbsp;&nbsp;&nbsp;&nbsp;
+           주문코드 : {{ item.orderCode }}<br>
+           <div style="float: right">
+             <button class="cancel-btn" @click="showDetailPopup" >돌아가기</button>
+           </div>
+         </div>
+         <br><br>
        </div>
    </div>
 
-   
 
-       
+
+
 </template>
 
 <script setup>
    import { ref } from "vue";
    import axios from 'axios';
+   import { useStore } from 'vuex'; // Vuex store 임포트
+   import Swal from "sweetalert2";
+   import AdminExchangePage from "@/components/exchange/AdminExchangePage.vue";
+   import FranchiseOrderPage from "@/components/order/FranchiseOrderPage.vue"; // Vuex store 임포트
+
+   const store = useStore(); // Vuex store 사용
+
 
    const headers = ref([
     /*{ key: 'requestProductCode', label: '상품 코드' },*/
@@ -189,37 +198,53 @@
    popupVisible: Boolean,
    writeActive: Boolean,
    detailItem: Object,
+   getOrderList: Function,
  });
  const item = props.detailItem;
  const list = props.detailItem.orderProductList;
  const exchangeList = props.detailItem.exchangeProductList;
 
- // 추후 개선 예정 
+ // 추후 개선 예정
  const adminCode = 2;
  const franchiseCode = 1;
-
- console.log(item);
- console.log(list);
- console.log(exchangeList);
-
-
 const accpetOrder = async () => {
     try {
-      const response = await fetch(`/api/admin/order/${item.orderCode}/accept?adminCode=${adminCode}`, {
-        method: 'PUT',
-      });
-      if(response.status ==406){
-        alert("이 발주는 이미 처리되어 있습니다.");
-        props.showDetailPopup();
-        return;
-      }
-      if (!response.ok) {
-        alert("헉 왜 주문 승인 안되지????????????")
-        throw new Error('네트워크 오류 발생');
-      }
-      props.showDetailPopup();
 
+      const accessToken = store.state.accessToken;
+        if (!accessToken) {
+          throw new Error('No access token found');
+      }
+      const response = await fetch(`http://api.pioms.shop/admin/order/${item.orderCode}/accept`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include'
+      });
+
+      if (!response.ok) {
+        throw new Error("error")
+      }
+      await Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "발주 등록 완료되었습니다.",
+        showConfirmButton: false,
+        timer: 1500
+      });
+      props.showDetailPopup();
+      location.reload(FranchiseOrderPage);
     } catch (error) {
+      await Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "잘못된 요청입니다.",
+        showConfirmButton: false,
+        timer: 1500
+      });
+      location.reload(FranchiseOrderPage);
+
       console.error('오류 발생:', error);
     }
 };
@@ -231,35 +256,57 @@ const clickDeny = () =>{
 }
 
 const denyOrder = async () => {
-  console.log(item.orderCode);
+
     try {
-      const response = await fetch(`/api/admin/order/${item.orderCode}/deny?adminCode=${adminCode}&denyMessage=${reason.value}`, {
-        method: 'PUT',
-      });
-      if(response.status ==406){
-        alert("이 발주는 이미 처리되어 있습니다.");
-        clickDeny();
-        props.showDetailPopup();
-        return;
+      const accessToken = store.state.accessToken;
+      if (!accessToken) {
+        throw new Error('No access token found');
       }
+
+      const response = await fetch(`http://api.pioms.shop/admin/order/${item.orderCode}/deny?denyMessage=${reason.value}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include'
+      });
       if (!response.ok) {
-        alert("헉 왜 주문 거절 안되지????????????")
+        props.showDetailPopup();
         throw new Error('네트워크 오류 발생');
       }
+      await Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "발주 거절 처리 완료되었습니다.",
+        showConfirmButton: false,
+        timer: 1500
+      });
+      location.reload(AdminOrderPage);
     } catch (error) {
-      alert("헉 왜 주문 거절 안되지????????????");
-      console.error('오류 발생:', error);
+      await Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "잘못된 요청입니다.",
+        showConfirmButton: false,
+        timer: 1500
+      });
+      location.reload(FranchiseOrderPage);
+
+      props.showDetailPopup();
     }
 };
 
 
-
+console.log(props.detailItem);
+console.log(exchangeList);
 </script>
 
 
 <style scoped>
+  @import "../../assets/css/popup.css" ;
+  @import "../../assets/css/order.css" ;
 
 
 
-  </style>
-  
+</style>

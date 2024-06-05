@@ -1,8 +1,7 @@
 <template>
-  <div class="popup-overlay" @click.self="closePopup">
+  <div class="popup-overlay" @click.self="showPostPopup">
     <div class="popup-content">
       <div class="popup-header">
-        <button class="close-button" @click="closePopup">×</button>
         <h4>상품 등록</h4>
       </div>
       <div class="popup-body">
@@ -97,14 +96,14 @@
               <tr>
                 <td class="second-insert-label"><div class="second-insert-label0">상세정보</div></td>
                 <td class="second-insert-input">
-                  <input type="text" style="width: 99%; height: 150px" v-model="insertContent" class="textInput" placeholder="상품의 상세 정보를 입력해주세요.">
+                  <textarea type="text" style="width: 99%; height: 150px; resize: none" v-model="insertContent" class="textInput" placeholder="상품의 상세 정보를 입력해주세요." >
+                  </textarea>
                 </td>
               </tr>
               <tr>
                 <td class="second-insert-label1">
                   <div class="label-content">
                     이미지<br>
-                    (최대 3장)
                   </div>
                 </td>
                 <td class="second-insert-input1">
@@ -113,7 +112,7 @@
                       <input id="imgUpload" type="file" @change="previewImage" hidden />
                       <button v-if="imagePreview !== imageSrc && imgOn" @click="resetImage" class="img-close-button">X</button>
                       <label for="imgUpload">
-                        <img class="img" v-if="!imgOn" :src="imageSrc" />
+                        <img class="img" v-if="!imgOn" :src="imageSrc" style="width: 100px;height: 100px" />
                         <img class="img" v-if="imgOn" :src="imagePreview" />
                       </label>
                       <br />
@@ -124,8 +123,10 @@
             </table>
           </div>
         </div>
-        <button class="action-button" @click="closePopup">취소</button>
-        <button class="post-button" @click="uploadAndSaveProduct">등록</button>
+        <div style="display: flex; gap: 10px; float: right; padding-top: 2%">
+          <button class="post-button" @click="uploadAndSaveProduct">등록</button>
+          <button class="action-button" @click="closePopup">취소</button>
+        </div>
       </div>
     </div>
   </div>
@@ -136,6 +137,8 @@ import { onMounted, defineEmits, ref } from 'vue';
 import imageSrc from '@/assets/icon/picture.png';
 import { useStore } from 'vuex';
 import ProductList from "@/components/amdin/product/ProductList.vue";
+import Swal from "sweetalert2";
+
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -162,13 +165,13 @@ const fetchCategories = async (level) => {
   let url = '';
   switch (level) {
     case 'first':
-      url = 'http://localhost:5000/admin/category/first';
+      url = 'http://api.pioms.shop/admin/category/first';
       break;
     case 'second':
-      url = `http://localhost:5000/admin/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`;
+      url = `http://api.pioms.shop/admin/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`;
       break;
     case 'third':
-      url = `http://localhost:5000/admin/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`;
+      url = `http://api.pioms.shop/admin/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`;
       break;
   }
 
@@ -220,7 +223,7 @@ const uploadImage = async () => {
   const fileInput = document.querySelector('input[type="file"]');
   const file = fileInput.files[0];
   if (!file) {
-    await saveProduct(''); // 이미지가 없는 경우 saveProduct 호출
+    await saveProduct('');
     return;
   }
 
@@ -228,7 +231,7 @@ const uploadImage = async () => {
   formData.append('file', file);
 
   try {
-    const response = await fetch(`http://localhost:5000/admin/product/image`, {
+    const response = await fetch(`http://api.pioms.shop/admin/product/image`, {
       method: 'POST',
       credentials: 'include',
       body: formData,
@@ -244,8 +247,8 @@ const uploadImage = async () => {
 
     const data = await response.json();
     console.log('이미지 URL:', data);
-    imageUrl = data.imgUrl; // 이미지 URL 저장
-    await saveProduct(imageUrl); // saveProduct 호출 시 이미지 URL 전달
+    imageUrl = data.imgUrl;
+    await saveProduct(imageUrl);
   } catch (error) {
     console.error('오류:', error);
   }
@@ -269,7 +272,7 @@ const saveProduct = async (imageUrl) => {
   console.log('Request Data:', requestData);
 
   try {
-    const response = await fetch('http://localhost:5000/admin/product/create?requesterAdminCode=1', {
+    const response = await fetch('http://api.pioms.shop/admin/product/create?requesterAdminCode=1', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -292,6 +295,9 @@ const saveProduct = async (imageUrl) => {
 const closePopup = () => {
   emit('close');
 };
+const showPostPopup = () => {
+  emit('close');
+}
 onMounted(() => {
   const numberInputs = document.querySelectorAll('input[type="number"]');
   numberInputs.forEach(input => {
@@ -308,50 +314,93 @@ onMounted(() => {
   fetchCategories('first');
 });
 
-
 const uploadAndSaveProduct = async () => {
   if(!insertProductName.value.trim()) {
-    alert('상품명을 입력해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '상품명 항목 누락',
+      text: '상품명을 입력해주세요.',
+    });
     return;
   }
   if(!insertProductCount.value) {
-    alert('상품의 재고량을 입력해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '재고량 항목 누락',
+      text: '재고량을 입력해주세요.',
+    });
     return;
   }
   if(!insertProductPrice.value) {
-    alert('상품 가격을 입력해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '가격 항목 누락',
+      text: '가격을 입력해주세요.',
+    });
     return;
   }
   if(!insertStatus.value.trim()) {
-    alert('상품의 상태를 정해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '상품상태 항목 누락',
+      text: '상품 상태를 정해주세요.',
+    });
     return;
   }
   if(!selectedExposureStatus.value.trim()) {
-    alert('상품의 노출상태를 정해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '상품 노출 상태 항목 누락',
+      text: '상품 노출 상태를 정해주세요.',
+    });
     return;
   }
   if(!insertColor.value.trim()) {
-    alert('상품의 색상을 정해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '색상 항목 누락',
+      text: '색상을 정해주세요.',
+    });
     return;
   }
   if(!insertSize.value.trim()) {
-    alert('상품의 사이즈를 정해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '사이즈 항목 누락',
+      text: '사이즈를 정해주세요.',
+    });
     return;
   }
   if(!selectedFirstCategory.value) {
-    alert('대분류 카테고리를 정해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '대분류 카테고리 항목 누락',
+      text: '대분류 카테고리를 정해주세요.',
+    });
     return;
   }
   if(!selectedSecondCategory.value) {
-    alert('중분류 카테고리를 정해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '중분류 카테고리 항목 누락',
+      text: '중분류 카테고리를 정해주세요.',
+    });
     return;
   }
   if(!selectedThirdCategory.value) {
-    alert('소분류 카테고리를 정해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '소분류 카테고리 항목 누락',
+      text: '소분류 카테고리를 정해주세요.',
+    });
     return;
   }
   if(!insertContent.value.trim()) {
-    alert('상품의 상세정보를 입력해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '상세정보 항목 누락',
+      text: '상품 상세정보를 입력해주세요.',
+    });
     return;
   }
   const fileInput = document.querySelector('input[type="file"]');
@@ -360,16 +409,18 @@ const uploadAndSaveProduct = async () => {
   const formData = new FormData();
 
   if(!file) {
-    alert('상품의 사진을 첨부해주세요.');
+    await Swal.fire({
+      icon: 'warning',
+      title: '상품 이미지 누락',
+      text: '이미지를 첨부해주세요.',
+    });
     return;
   }
 
-  // 이미지 파일 추가
   if (file) {
     formData.append('file', file);
   }
 
-  // 상품 정보 추가
   formData.append('productName', insertProductName.value);
   formData.append('productCount', insertProductCount.value);
   formData.append('productPrice', insertProductPrice.value);
@@ -383,7 +434,7 @@ const uploadAndSaveProduct = async () => {
   formData.append('categoryThirdCode', selectedThirdCategory.value);
 
   try {
-    const response = await fetch('http://localhost:5000/admin/product/image', {
+    const response = await fetch('http://api.pioms.shop/admin/product/image', {
       method: 'POST',
       credentials: 'include',
       body: formData,
@@ -410,40 +461,27 @@ const uploadAndSaveProduct = async () => {
 <style scoped>
 .popup-overlay {
   position: fixed;
-  left: 50%;
-  top: 50%;
-  width: 50%;
-  margin-left: -25%;
-  height: 300px;
-  margin-top: -150px;
-  z-index: 1000;
-  background: white;
-  border: 1px solid #d1d8dd;
-  box-shadow: 0 0 6px 1px rgb(0 0 0 / 30%);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
 }
 
 .popup-content {
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
-  position: relative;
-  width: 1200px;
-  height: 1200px;
-  text-align: center;
-  overflow-y: auto; /* 내용이 많을 경우 스크롤 추가 */
-}
-
-.close-button {
-  position: absolute;
-  top: 32px;
-  right: 80px;
-  background: none;
-  border: none;
-  font-size: 2em;
-  cursor: pointer;
-  color: #333;
-  padding: 0; /* 추가 */
-  margin: 0; /* 추가 */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f5f5f5;
+  padding: 40px;
+  border-radius: 30px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  width: 60%;
+  height: 65%;
+  overflow-y: auto;
+  max-height: 84vh;
 }
 
 .popup-header {
@@ -455,12 +493,10 @@ const uploadAndSaveProduct = async () => {
   background-color: #D9D9D9;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  width: 1063px;
-  margin-left: 3.2%;
+  width: 95%;
 }
 
 .popup-body {
-  padding: 10px;
   padding-top: unset;
 }
 
@@ -510,8 +546,6 @@ h2 {
   border-right: none;
   height: 30px;
 }
-
-.insert-input input {}
 
 .second-insert-table {
   border-collapse: collapse;
@@ -567,6 +601,7 @@ h2 {
 
 .imgForm {
   text-align: center;
+  width: 100%;
 }
 
 .img-close-button {
@@ -575,9 +610,6 @@ h2 {
   font-size: 1.5em;
   cursor: pointer;
   color: #333;
-}
-.close-button:hover{
-  background-color: #00ff0000;
 }
 .img-close-button:hover {
   background-color: #00ff0000;
@@ -602,8 +634,6 @@ h2 {
   border-radius: 5px;
   cursor: pointer;
   font-size: 1em;
-  margin-left: 80%;
-  margin-top: 2%;
 }
 
 .action-button:hover {
@@ -631,5 +661,10 @@ h2 {
   border-radius: 5px;
   margin-left: 1%;
 }
+.img{
+  width: 200px;
+  height:200px;
+}
+
 </style>
 

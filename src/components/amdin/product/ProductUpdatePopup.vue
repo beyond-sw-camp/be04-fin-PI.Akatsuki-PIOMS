@@ -2,41 +2,45 @@
   <div class="popup-overlay" @click.self="closeEdit">
     <div class="popup-content">
       <div class="popup-header">
-        <button class="close-button" @click="closeEdit">×</button>
         <h4>상품 수정</h4>
       </div>
       <div class="popup-body">
         <div class="insert-section">
           <div class="table-wrapper">
-            <table class="category-table">
+            <table class="top-table">
               <tr>
                 <td class="second-insert-label">
                   <div class="second-insert-label0">카테고리 구분</div>
                 </td>
                 <td class="second-insert-input">
-<!--                  <h6 style="margin: 0">{{currentCategoryFirstName}} > {{currentCategorySecondName}} > {{currentCategoryThirdName}}</h6>-->
-                  <select v-model="updateFirst" @change="fetchCategories('second')" class="categories">
-                    <option value="">{{currentCategoryFirstName}}</option>
+                  <select v-model="updateFirst" @change="fetchCategories('second')" class="categories" >
+                    <option value="" hidden="hidden">{{ getCategoryFirstName(props.currentCategoryFirstCode) }}</option>
                     <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">
                       {{ category.categoryFirstName }}
                     </option>
                   </select>
                   <select v-model="updateSecond" @change="fetchCategories('third')" class="categories-g">
-                    <option value="">{{currentCategorySecondName}}</option>
+                    <option value="" hidden="hidden">{{ getCategorySecondName(props.currentCategorySecondCode) }}</option>
                     <option v-for="category in secondCategories" :key="category.categorySecondCode" :value="category.categorySecondCode">
                       {{ category.categorySecondName }}
                     </option>
                   </select>
                   <select v-model="updateThird" class="categories-g">
-                    <option value="">{{currentCategoryThirdName}}</option>
+                    <option value="" hidden="hidden">{{ getCategoryThirdName(props.currentCategoryThirdCode) }}</option>
                     <option v-for="category in thirdCategories" :key="category.categoryThirdCode" :value="category.categoryThirdCode">
                       {{ category.categoryThirdName }}
                     </option>
                   </select>
                 </td>
+              </tr>
+              <tr>
                 <td class="insert-label">상품명</td>
                 <td class="insert-input-name">
                   <input type="text" :value="currentProductName" @input="updateName = $event.target.value" class="textInput" />
+                </td>
+                <td class="insert-label">재고량</td>
+                <td class="insert-input">
+                  <input type="number" :value="currentProductCount" @input="updateCount = $event.target.value" class="textInput" />
                 </td>
               </tr>
             </table>
@@ -64,14 +68,12 @@
                     <option value="110">110</option>
                   </select>
                 </td>
+
               </tr>
             </table>
             <table class="insert-table">
               <tr>
-                <td class="insert-label">재고량</td>
-                <td class="insert-input">
-                  <input type="number" :value="currentProductCount" @input="updateCount = $event.target.value" class="textInput" />
-                </td>
+
                 <td class="insert-label">가격</td>
                 <td class="insert-input">
                   <input type="number" :value="currentProductPrice" @input="updatePrice = $event.target.value" class="textInput" />
@@ -93,29 +95,56 @@
                   <div class="second-insert-label0">상세정보</div>
                 </td>
                 <td class="second-insert-input">
-                  <textarea :value="currentProductContent" @input="updateContent = $event.target.value" class="textInput" style="width: 99%; height: 150px"></textarea>
+                  <textarea :value="currentProductContent" @input="updateContent = $event.target.value" class="textInput" style="width: 99%; height: 150px; resize: none"></textarea>
+                </td>
+              </tr>
+              <tr>
+                <td class="second-insert-input1">
+                  <div class="imgForm">
+                  </div>
                 </td>
               </tr>
             </table>
+            <form style="display: flex; justify-content: center; margin-top: 5%">
+              <input id="imgUpload" type="file" @change="previewImage" hidden />
+              <button v-if="imagePreview !== imageSrc && imgOn" @click="resetImage" class="img-close-button">X</button>
+              <label for="imgUpload">
+                <img class="img" v-if="!imgOn" :src="imageSrc"/>
+                <img class="img" v-if="imgOn" :src="imagePreview" />
+              </label>
+              <br />
+            </form>
           </div>
         </div>
-        <button class="action-button" @click="closeEdit">취소</button>
-        <button class="post-button" @click="submitProduct">수정</button>
+        <div style="display: flex; gap: 10px; float: right; padding-top: 2%">
+          <button class="post-button" @click="submitProduct">수정</button>
+          <button class="action-button" @click="closeEdit">취소</button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref, defineProps } from 'vue';
+import {onMounted, ref, defineProps, watch} from 'vue';
 import { useStore } from 'vuex';
 import ProductList from "@/components/amdin/product/ProductList.vue";
+import imageSrc from "@/assets/icon/picture.png";
+import Swal from "sweetalert2";
+
 const store = useStore();
 const accessToken = store.state.accessToken;
+
+const imagePreview = ref(imageSrc);
+const imgOn = ref(false);
 
 const firstCategories = ref([]);
 const secondCategories = ref([]);
 const thirdCategories = ref([]);
+const categoryFirstMap = ref({});
+const categorySecondMap = ref({});
+const categoryThirdMap = ref({});
+
 const updateName = ref('');
 const updateCount = ref('');
 const updatePrice = ref('');
@@ -126,7 +155,6 @@ const updateFirst = ref('');
 const updateSecond = ref('');
 const updateThird = ref('');
 const updateContent = ref('');
-
 const props = defineProps({
   currentProductCode: String,
   currentProductName: String,
@@ -135,43 +163,72 @@ const props = defineProps({
   currentProductStatus: String,
   currentProductColor: String,
   currentProductSize: String,
-  currentCategoryFirstName: String,
-  currentCategorySecondName: String,
-  currentCategoryThirdName: String,
+  currentCategoryFirstCode: String,
+  currentCategorySecondCode: String,
+  currentCategoryThirdCode: String,
   currentProductContent: String,
+  currentProductImgUrl: String,
   closeEdit: Function
 });
+
+const resetImage = () => {
+  imagePreview.value = imageSrc;
+  imgOn.value = false;
+};
+const previewImage = (event) => {
+  const file = event.target.files[0];
+  if(file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      imagePreview.value = reader.result;
+      imgOn.value = true;
+    };
+    reader.readAsDataURL(file);
+  }
+};
 const submitProduct = async () => {
-  const requestData = {
-    productName: updateName.value !== '' ? updateName.value : props.currentProductName,
-    productCount: updateCount.value !== '' ? updateCount.value : props.currentProductCount,
-    productPrice: updatePrice.value !== '' ? updatePrice.value : props.currentProductPrice,
-    productStatus: updateStatus.value !== '' ? updateStatus.value : props.currentProductStatus,
-    productColor: updateColor.value !== '' ? updateColor.value : props.currentProductColor,
-    productSize: updateSize.value !== '' ? updateSize.value : props.currentProductSize,
-    categoryFirstCode: updateFirst.value !== '' ? updateFirst.value : props.currentCategoryFirstName,
-    categorySecondCode: updateSecond.value !== '' ? updateSecond.value : props.currentCategorySecondName,
-    categoryThirdCode: updateThird.value !== '' ? updateThird.value : props.currentCategoryThirdName,
-    productContent: updateContent.value !== '' ? updateContent.value : props.currentProductContent
-  };
+  const fileInput = document.querySelector('input[type="file"]');
+  const file = fileInput.files[0];
 
-  console.log('Request Data : ', requestData);
+  const formData = new FormData();
 
+  if(!file) {
+    await Swal.fire({
+      icon: 'warning',
+      title: '이미지 누락',
+      text: '이미지를 첨부해주세요.',
+    });
+    return;
+  }
+
+  if (file) {
+    formData.append('file', file);
+  }
+
+  formData.append('productName', updateName.value !== '' ? updateName.value : props.currentProductName);
+  formData.append('productCount', updateCount.value !== '' ? updateCount.value : props.currentProductCount);
+  formData.append('productPrice', updatePrice.value !== '' ? updatePrice.value : props.currentProductPrice);
+  formData.append('productStatus', updateStatus.value !== '' ? updateStatus.value : props.currentProductStatus);
+  formData.append('productColor', updateColor.value !== '' ? updateColor.value : props.currentProductColor);
+  formData.append('productSize', updateSize.value !== '' ? updateSize.value : props.currentProductSize);
+  formData.append('categoryFirstCode', updateFirst.value !== '' ? updateFirst.value : props.currentCategoryFirstCode);
+  formData.append('categorySecondCode', updateSecond.value !== '' ? updateSecond.value : props.currentCategorySecondCode);
+  formData.append('categoryThirdCode', updateThird.value !== '' ? updateThird.value : props.currentCategoryThirdCode);
+  formData.append('productContent', updateContent.value !== '' ? updateContent.value : props.currentProductContent);
+  console.log(formData.values());
   try {
-    const response = await fetch(`http://localhost:5000/admin/product/update/${props.currentProductCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/product/update/image/${props.currentProductCode}`, {
       method: 'PUT',
+      credentials: 'include',
+      body: formData,
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(requestData)
     });
 
     if (!response.ok) {
-      const errorMessage = await response.text();
-      throw new Error(`수정 실패: ${errorMessage}`);
+      throw new Error('이미지 업로드에 실패했습니다.');
     }
-
     console.log('드디어 수정 성공!');
     location.reload(ProductList);
     props.closeEdit();
@@ -180,18 +237,17 @@ const submitProduct = async () => {
   }
 };
 
-
 const fetchCategories = async (level) => {
   let url = '';
   switch (level) {
     case 'first':
-      url = 'http://localhost:5000/admin/category/first';
+      url = 'http://api.pioms.shop/admin/category/first';
       break;
     case 'second':
-      url = `http://localhost:5000/admin/category/second/list/detail/categoryfirst/${updateFirst.value}`;
+      url = `http://api.pioms.shop/admin/category/second/list/detail/categoryfirst/${updateFirst.value}`;
       break;
     case 'third':
-      url = `http://localhost:5000/admin/category/third/list/detail/categorysecond/${updateSecond.value}`;
+      url = `http://api.pioms.shop/admin/category/third/list/detail/categorysecond/${updateSecond.value}`;
       break;
   }
 
@@ -210,22 +266,40 @@ const fetchCategories = async (level) => {
     switch (level) {
       case 'first':
         firstCategories.value = data;
+        data.forEach(category => {
+          categoryFirstMap.value[category.categoryFirstCode] = category.categoryFirstName;
+        });
         break;
       case 'second':
         secondCategories.value = data;
+        data.forEach(category => {
+          categorySecondMap.value[category.categorySecondCode] = category.categorySecondName;
+        });
         thirdCategories.value = [];
         updateSecond.value = '';
         break;
       case 'third':
         thirdCategories.value = data;
+        data.forEach(category => {
+          categoryThirdMap.value[category.categoryThirdCode] = category.categoryThirdName;
+        });
         break;
     }
   } catch (error) {
     console.error('Error:', error);
   }
 };
+const getCategoryFirstName = (code) => {
+  return categoryFirstMap.value[code] || '';
+};
+const getCategorySecondName = (code) => {
+  return categorySecondMap.value[code] || '';
+};
+const getCategoryThirdName = (code) => {
+  return categoryThirdMap.value[code] || '';
+};
 
-onMounted(() => {
+onMounted(async () => {
   const numberInputs = document.querySelectorAll('input[type="number"]');
   numberInputs.forEach(input => {
     input.addEventListener('keypress', (event) => {
@@ -237,49 +311,59 @@ onMounted(() => {
       input.value = input.value.replace(/[^0-9]/g, '');
     });
   });
-  fetchCategories('first');
+
+  await fetchCategories('first');
+
+  if (props.currentCategoryFirstCode) {
+    updateFirst.value = props.currentCategoryFirstCode;
+    await fetchCategories('second');
+  }
+  if (props.currentCategorySecondCode) {
+    updateSecond.value = props.currentCategorySecondCode;
+    await fetchCategories('third');
+  }
+});
+
+watch(updateFirst, async (newVal) => {
+  if (newVal) {
+    await fetchCategories('second');
+  }
+});
+watch(updateSecond, async (newVal) => {
+  if (newVal) {
+    await fetchCategories('third');
+  }
 });
 </script>
 
 <style scoped>
+
+
 .popup-overlay {
   position: fixed;
-  left: 50%;
-  top: 50%;
-  width: 50%;
-  margin-left: -25%;
-  height: 300px;
-  margin-top: -150px;
-  z-index: 1000;
-  background: white;
-  border: 1px solid #d1d8dd;
-  box-shadow: 0 0 6px 1px rgb(0 0 0 / 30%);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
 }
 
 .popup-content {
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
-  position: relative;
-  width: 1200px;
-  height: 1200px;
-  text-align: center;
-  overflow-y: auto; /* 내용이 많을 경우 스크롤 추가 */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 30px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  width: 50%;
+  max-width: 2000px;
+  height: 73%;
+  overflow-y: auto;
+  max-height: 90vh;
 }
-
-.close-button {
-  position: absolute;
-  top: 32px;
-  right: 80px;
-  background: none;
-  border: none;
-  font-size: 2em;
-  cursor: pointer;
-  color: #333;
-  padding: 0; /* 추가 */
-  margin: 0; /* 추가 */
-}
-
 .popup-header {
   display: flex;
   height: 25px;
@@ -289,17 +373,10 @@ onMounted(() => {
   background-color: #D9D9D9;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  width: 1063px;
-  margin-left: 3.2%;
 }
 
 .popup-body {
-  padding: 10px;
   padding-top: unset;
-}
-
-.close-button:hover {
-  background-color: #00ff0000;
 }
 
 h2 {
@@ -324,14 +401,17 @@ h2 {
 }
 
 .insert-section {
-  display: flex;
   justify-content: center;
+  width: 100%;
 }
 
 .insert-table {
   border-collapse: collapse;
+  background-color: #f9f9f9;
   border: 1px solid #ddd;
+  border-radius: 5px;
   padding: 10px;
+  border-top: none;
 }
 .table-wrapper {
   border-radius: 0 !important;
@@ -348,35 +428,31 @@ h2 {
   font-weight: bold;
   text-align: center;
   font-size: 12px;
-  width: 10%;
+  min-width: 100px;
+  max-width: 100px;
   background-color: #D9D9D9;
   border: 1px solid #ddd;
   height: 50px;
 }
 
 .insert-input {
-  width: 200px;
+  width: 100%;
+  min-width: 200px;
+  max-width: 200px;
   text-align: left;
   border: 1px solid lightgray;
   border-right: none;
   height: 30px;
-
 }
 .insert-input-name {
-  width: 500px;
+  width: 100%;
+  min-width: 200px;
   text-align: left;
   border: 1px solid lightgray;
   border-right: none;
   height: 30px;
 }
-.category-table {
-  border-collapse: collapse;
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 10px;
-  border-top: none;
-}
+
 .second-insert-table {
   border-collapse: collapse;
   background-color: #f9f9f9;
@@ -401,16 +477,19 @@ h2 {
   font-weight: bold;
   text-align: center;
   font-size: 12px;
-  width: 10%;
+  min-width: 100px;
+  max-width: 100px;
   background-color: #D9D9D9;
   border: 1px solid #ddd;
-
+  height: 50px;
 }
 
 .second-insert-input {
-  width: 490px;
+  width: 100%;
   border: 1px solid lightgray;
   border-right: none;
+  text-align: left;
+
 }
 
 .textInput {
@@ -443,9 +522,6 @@ h2 {
   border-radius: 5px;
   cursor: pointer;
   font-size: 1em;
-  margin-left: 80%;
-  margin-top: 2%;
-
 }
 
 .action-button:hover {
@@ -454,6 +530,7 @@ h2 {
 .second-insert-label0 {
   text-align: center;
   font-size: 12px;
+
 }
 .top-table {
   border-collapse: collapse;
@@ -465,5 +542,19 @@ h2 {
 }
 .top-table tr {
   text-align: center;
+}
+.img-close-button {
+  top: 10px;
+  right: 10px;
+  background-color: #FF6285;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 </style>
