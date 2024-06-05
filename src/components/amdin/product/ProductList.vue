@@ -431,18 +431,18 @@ const getMemberId = async () => {
 };
 const downloadExcel = () => {
   axios({
-    url: 'http://api.pioms.shop/admin/exceldownload/product-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
+    url: 'http://api.pioms.shop/admin/exceldownload/product-excel',
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
     },
-    responseType: 'blob', // 서버에서 반환되는 데이터의 형식을 명시
+    responseType: 'blob',
   }).then((response) => {
     const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }));
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', 'ProductList.xlsx'); // 원하는 파일 이름 설정
+    link.setAttribute('download', 'ProductList.xlsx');
     document.body.appendChild(link);
     link.click();
   }).catch((error) => {
@@ -561,10 +561,10 @@ fetchThirdCategories();
 }
 .post-btn {
   display: flex;
-  justify-content: space-between; /* 양 끝에 정렬 */
-  align-items: center; /* 수직 가운데 정렬 */
-  position: absolute; /* 절대 위치 설정 */
-  left: 19%; /* 좌측 정렬 */
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  left: 19%;
   width: 1265px;
 }
 
@@ -645,26 +645,13 @@ fetchThirdCategories();
   font: inherit;
   cursor: pointer;
   outline: inherit;
-  text-align: left; /* 텍스트 정렬을 위해 필요시 사용 */
+  text-align: left;
 }
 .textInput {
   border: 1px solid rgba(217, 217, 217, 0.7);
 }
 .categories {
   border: 1px solid rgba(217, 217, 217, 0.7);
-}
-.product-title {
-  margin-left: 18%;
-}
-.headerTitle {
-  text-align: left;
-  margin-left: 19.5%;
-  //min-width: 1200px;
-  //max-width: 1200px;
-}
-
-.product-sub-title {
-  margin-left: 18%;
 }
 .product-sub-title img {
   width: 20px;

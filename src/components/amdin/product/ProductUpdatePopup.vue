@@ -202,12 +202,10 @@ const submitProduct = async () => {
     return;
   }
 
-  // 이미지 파일 추가
   if (file) {
     formData.append('file', file);
   }
 
-  // 상품 정보 추가
   formData.append('productName', updateName.value !== '' ? updateName.value : props.currentProductName);
   formData.append('productCount', updateCount.value !== '' ? updateCount.value : props.currentProductCount);
   formData.append('productPrice', updatePrice.value !== '' ? updatePrice.value : props.currentProductPrice);
@@ -377,8 +375,8 @@ watch(updateSecond, async (newVal) => {
   font-size: 2em;
   cursor: pointer;
   color: #333;
-  padding: 0; /* 추가 */
-  margin: 0; /* 추가 */
+  padding: 0;
+  margin: 0;
 }
 
 .popup-header {
@@ -390,8 +388,6 @@ watch(updateSecond, async (newVal) => {
   background-color: #D9D9D9;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  //border-radius: 5px;
-  //margin-bottom: 20px;;
 }
 
 .popup-body {
@@ -475,14 +471,7 @@ h2 {
   border-right: none;
   height: 30px;
 }
-.category-table {
-  border-collapse: collapse;
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 10px;
-  border-top: none;
-}
+
 .second-insert-table {
   border-collapse: collapse;
   background-color: #f9f9f9;
@@ -552,8 +541,6 @@ h2 {
   border-radius: 5px;
   cursor: pointer;
   font-size: 1em;
-  //margin-left: 80%;
-  //margin-top: 2%;
 }
 
 .action-button:hover {

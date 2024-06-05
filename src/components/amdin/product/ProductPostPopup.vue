@@ -224,7 +224,7 @@ const uploadImage = async () => {
   const fileInput = document.querySelector('input[type="file"]');
   const file = fileInput.files[0];
   if (!file) {
-    await saveProduct(''); // 이미지가 없는 경우 saveProduct 호출
+    await saveProduct('');
     return;
   }
 
@@ -248,8 +248,8 @@ const uploadImage = async () => {
 
     const data = await response.json();
     console.log('이미지 URL:', data);
-    imageUrl = data.imgUrl; // 이미지 URL 저장
-    await saveProduct(imageUrl); // saveProduct 호출 시 이미지 URL 전달
+    imageUrl = data.imgUrl;
+    await saveProduct(imageUrl);
   } catch (error) {
     console.error('오류:', error);
   }
@@ -418,12 +418,10 @@ const uploadAndSaveProduct = async () => {
     return;
   }
 
-  // 이미지 파일 추가
   if (file) {
     formData.append('file', file);
   }
 
-  // 상품 정보 추가
   formData.append('productName', insertProductName.value);
   formData.append('productCount', insertProductCount.value);
   formData.append('productPrice', insertProductPrice.value);
@@ -482,7 +480,6 @@ const uploadAndSaveProduct = async () => {
   border-radius: 30px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   width: 60%;
-  //max-width: 2000px;
   height: 65%;
   overflow-y: auto;
   max-height: 84vh;
@@ -497,8 +494,8 @@ const uploadAndSaveProduct = async () => {
   font-size: 2em;
   cursor: pointer;
   color: #333;
-  padding: 0; /* 추가 */
-  margin: 0; /* 추가 */
+  padding: 0;
+  margin: 0;
 }
 
 .popup-header {
@@ -510,13 +507,10 @@ const uploadAndSaveProduct = async () => {
   background-color: #D9D9D9;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  //width: 1063px;
   width: 95%;
-  //margin-left: 3.2%;
 }
 
 .popup-body {
-  //padding: 10px;
   padding-top: unset;
 }
 
@@ -566,8 +560,6 @@ h2 {
   border-right: none;
   height: 30px;
 }
-
-.insert-input input {}
 
 .second-insert-table {
   border-collapse: collapse;
