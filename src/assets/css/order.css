@@ -99,13 +99,11 @@
   }
 
 .action-buttons {
-  display: grid;
-  grid-template-columns: 25% 5% 3% 3% 27% 6%;
+  max-width: 1300px;
   justify-content: center; /* 가운데 정렬 */
-  margin-top: 10px;
-  margin-bottom: 20px;
+//margin-bottom: 20px;
+  align-items: center;
 }
-
 .reset-btn{
   background-color: #fff;
   color: black;
@@ -115,7 +113,6 @@
   padding: 8px 8px;
   font-size: 14px;
   margin: 0 5px;
-  grid-column-start: 3;
 }
 
 .search-btn {

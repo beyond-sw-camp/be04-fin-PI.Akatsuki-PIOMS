@@ -19,6 +19,8 @@
 import { defineProps, defineEmits, ref } from 'vue';
 import { useStore } from 'vuex';
 import CategoryList from "@/components/amdin/Category/CategoryList.vue";
+import Swal from "sweetalert2";
+
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -50,7 +52,11 @@ const deleteCategorySecond = async () => {
     const categoryThirds = await categoryThirdResponse.json();
 
     if(categoryThirds.length > 0) {
-      alert("카테고리를 삭제할 수 없습니다. 하위 카테고리가 존재합니다.");
+      await Swal.fire({
+        icon: 'success',
+        title: '중분류 카테고리 삭제 실패',
+        text: '카테고리를 삭제할 수 없습니다. 하위 카테고리가 존재합니다.',
+      });
       return;
     }
 

@@ -1,64 +1,160 @@
 <template>
-<!--  <div class="category-top">-->
-<!--    <img src="@/assets/icon/Cloth.png" alt="" style="width: 40px; height: 40px">-->
-<!--    <span>-->
-<!--    상품 및 상품 카테고리 관리 > 상품 카테고리 관리 > 상품 카테고리 조회 및 등록-->
-<!--    </span>-->
-<!--  </div>-->
-  <div align="center">
-  <div class="category-select">
-    <div class="category-column">
-      <div class="post-category">카테고리(대분류)</div>
-      <div class="input-container">
-        <input type="text" class="postInput" v-model="insertCategoryFirstName" placeholder="대분류 카테고리명을 입력해주세요.">
-        <button @click="saveCategoryFirst">등록</button>
-      </div>
-      <div class="categoryFirst-select">
-        <ul>
-          <li v-for="category in firstCategories" :key="category.categoryFirstCode">
-            <div>
+  <div class="category-container">
+    <div class="category-select">
+      <div class="category-column">
+        <div class="post-category"><p>1차 카테고리(대분류)</p></div>
+        <div class="input-container">
+          <input type="text" class="postInput" v-model="insertCategoryFirstName" placeholder="대분류 카테고리명을 입력해주세요.">
+          <button @click="saveCategoryFirst" class="categoryPost">등록</button>
+        </div>
+        <div class="category-section">
+          <ul>
+            <li v-for="category in firstCategories" :key="category.categoryFirstCode">
               <button @click="fetchSecondCategories(category.categoryFirstCode)">{{ category.categoryFirstName }}</button>
-            </div>
-          </li>
-        </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="category-column">
+        <div class="post-category"><p>2차 카테고리(중분류)</p></div>
+        <div class="input-container">
+          <input type="text" class="postInput" v-model="insertCategorySecondName" placeholder="중분류 카테고리명을 입력해주세요.">
+          <button @click="saveCategorySecond" class="categoryPost">등록</button>
+        </div>
+        <div class="category-section">
+          <ul>
+            <li v-for="category in secondCategories" :key="category.categorySecondCode">
+              <button @click="fetchThirdCategories(category.categorySecondCode)">{{ category.categorySecondName }}</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="category-column">
+        <div class="post-category"><p>3차 카테고리(소분류)</p></div>
+        <div class="input-container">
+          <input type="text" class="postInput" v-model="insertCategoryThirdName" placeholder="소분류 카테고리명을 입력해주세요.">
+          <button @click="saveCategoryThird" class="categoryPost">등록</button>
+        </div>
+        <div class="category-section">
+          <ul>
+            <li v-for="category in thirdCategories" :key="category.categoryThirdCode">
+              <button>{{ category.categoryThirdName }}</button>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
-    <div class="category-column">
-      <div class="post-category">카테고리(중분류)</div>
-      <div class="input-container">
-        <input type="text" class="postInput" v-model="insertCategorySecondName" placeholder="중분류 카테고리명을 입력해주세요.">
-        <button @click="saveCategorySecond">등록</button>
-      </div>
-      <div class="categorySecond-select">
-        <ul>
-          <li v-for="category in secondCategories" :key="category.categorySecondCode">
-            <button @click="fetchThirdCategories(category.categorySecondCode)">{{ category.categorySecondName }}</button>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="category-column">
-      <div class="post-category">카테고리(소분류)</div>
-      <div class="input-container">
-        <input type="text" class="postInput" v-model="insertCategoryThirdName" placeholder="소분류 카테고리명을 입력해주세요.">
-        <button @click="saveCategoryThird">등록</button>
-      </div>
-      <div class="categoryThird-select">
-        <ul>
-          <li v-for="category in thirdCategories" :key="category.categoryThirdCode">
-            <button>{{ category.categoryThirdName }}</button>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
   </div>
 </template>
 
+
+
+<style scoped>
+.category-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 4%;
+}
+
+.category-select {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 20px;
+}
+
+.category-column {
+  flex: 1;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  height: 400px;
+  overflow-y: auto;
+}
+
+.post-category {
+  background-color: #d9d9d9;
+  color: #ffffff;
+  text-align: center;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+.post-category p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 10px;
+}
+.input-container input {
+  border: 1px solid #d9d9d9;
+  border-radius: 5px;
+}
+.postInput {
+  flex-grow: 1;
+  padding: 5px;
+}
+
+.input-container button {
+  margin-left: 5px;
+  height: 29px;
+  text-align: center;
+}
+
+.category-section {
+  overflow-y: auto;
+  max-height: 400px;
+}
+
+.category-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.category-section button {
+  width: 80%;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  text-align: left;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.category-section button:hover {
+  background-color: #f0f0f0;
+}
+.categoryPost {
+  color: #FFFFFF;
+  font-weight: bold;
+  border: none;
+  background-color: #344DAF;
+  border-radius: 4px;
+}
+</style>
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
 import CategoryList from "@/components/amdin/Category/CategoryList.vue";
+import Swal from "sweetalert2";
+
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -140,12 +236,20 @@ const fetchThirdCategories = async (categorySecondCode) => {
 
 const saveCategoryFirst = async () => {
   if (!insertCategoryFirstName.value.trim()) {
-    alert('대분류 카테고리명을 입력해주세요.');
+    await Swal.fire({
+      icon: 'success',
+      title: '카테고리명 누락',
+      text: '대분류 카테고리명을 입력해주세요.',
+    });
     return;
   }
   const existingFirstNames = firstCategories.value.map(category => category.categoryFirstName);
   if (existingFirstNames.includes(insertCategoryFirstName.value.trim())) {
-    alert('이미 존재하는 대분류 카테고리명입니다.');
+    await Swal.fire({
+      icon: 'success',
+      title: '카테고리 중복',
+      text: '이미 존재하는 대분류 카테고리명입니다.',
+    });
     return;
   }
   const savedFirstData = {
@@ -168,12 +272,14 @@ const saveCategoryFirst = async () => {
       const errorFirstText = await responseFirst.text();
       throw new Error(`카테고리 대분류 추가 실패했습니다. 상태 코드: ${responseFirst.status}, 메시지: ${errorFirstText}`);
     }
+    await Swal.fire({
+      icon: 'success',
+      title: '카테고리 등록 성공!',
+      text: '카테고리 대분류 등록에 성공했습니다.',
+    });
 
-    console.log('카테고리 대분류 등록에 성공했습니다.');
-
-    // 데이터를 새로고침하고 화면을 갱신합니다.
     fetchFirstCategories();
-    insertCategoryFirstName.value = ''; // 입력 필드 초기화
+    insertCategoryFirstName.value = '';
 
   } catch (error) {
     console.error('오류: ', error);
@@ -182,17 +288,29 @@ const saveCategoryFirst = async () => {
 
 const saveCategorySecond = async () => {
   if (!selectedFirstCategory.value) {
-    alert('대분류 카테고리를 선택해주세요.');
+    await Swal.fire({
+      icon: 'success',
+      title: '상위 카테고리 누락',
+      text: '대분류 카테고리를 선택해주세요.',
+    });
     return;
   }
 
   if (!insertCategorySecondName.value.trim()) {
-    alert('중분류 카테고리명을 입력해주세요.');
+    await Swal.fire({
+      icon: 'success',
+      title: '카테고리명 누락',
+      text: '중분류 카테고리명을 입력해주세요.',
+    });
     return;
   }
   const existingSecondNames = secondCategories.value.map(category => category.categorySecondName);
   if (existingSecondNames.includes(insertCategorySecondName.value.trim())) {
-    alert('이미 존재하는 중분류 카테고리명입니다.');
+    await Swal.fire({
+      icon: 'success',
+      title: '카테고리 중복',
+      text: '이미 존재하는 중분류 카테고리명입니다.',
+    });
     return;
   }
   const savedSecondData = {
@@ -216,12 +334,14 @@ const saveCategorySecond = async () => {
       const errorSecondText = await responseSecond.text();
       throw new Error(`카테고리 중분류 추가 실패했습니다. 상태 코드: ${responseSecond.status}, 메시지: ${errorSecondText}`);
     }
+    await Swal.fire({
+      icon: 'success',
+      title: '카테고리 등록 성공!',
+      text: '카테고리 중분류 등록에 성공했습니다.',
+    });
 
-    console.log('카테고리 중분류 등록에 성공했습니다.');
-
-    // 데이터를 새로고침하고 화면을 갱신합니다.
     fetchSecondCategories(selectedFirstCategory.value);
-    insertCategorySecondName.value = ''; // 입력 필드 초기화
+    insertCategorySecondName.value = '';
 
   } catch (error) {
     console.error('오류: ', error);
@@ -230,16 +350,28 @@ const saveCategorySecond = async () => {
 
 const saveCategoryThird = async () => {
   if (!selectedSecondCategory.value) {
-    alert('중분류 카테고리를 선택해주세요.');
+    await Swal.fire({
+      icon: 'success',
+      title: '상위 카테고리 누락',
+      text: '중분류 카테고리를 선택해주세요.',
+    });
     return;
   }
   if (!insertCategoryThirdName.value.trim()) {
-    alert('소분류 카테고리명을 입력해주세요.');
+    await Swal.fire({
+      icon: 'success',
+      title: '카테고리명 누락',
+      text: '소분류 카테고리명을 입력해주세요.',
+    });
     return;
   }
   const existingThirdNames = thirdCategories.value.map(category => category.categoryThirdName);
   if (existingThirdNames.includes(insertCategoryThirdName.value.trim())) {
-    alert('이미 존재하는 중분류 카테고리명입니다.');
+    await Swal.fire({
+      icon: 'success',
+      title: '카테고리 중복',
+      text: '이미 존재하는 소분류 카테고리명입니다.',
+    });
     return;
   }
   const savedThirdData = {
@@ -263,12 +395,14 @@ const saveCategoryThird = async () => {
       const errorThirdText = await responseThird.text();
       throw new Error(`카테고리 소분류 추가 실패했습니다. 상태 코드: ${responseThird.status}, 메시지: ${errorThirdText}`);
     }
+    await Swal.fire({
+      icon: 'success',
+      title: '카테고리 등록 성공!',
+      text: '카테고리 소분류 등록에 성공했습니다.',
+    });
 
-    console.log('카테고리 소분류 등록에 성공했습니다.');
-
-    // 데이터를 새로고침하고 화면을 갱신합니다.
     fetchThirdCategories(selectedSecondCategory.value);
-    insertCategoryThirdName.value = ''; // 입력 필드 초기화
+    insertCategoryThirdName.value = '';
     location.reload(CategoryList);
   } catch (error) {
     console.error('오류: ', error);
@@ -280,103 +414,3 @@ onMounted(() => {
 });
 
 </script>
-
-<style scoped>
-.category-top {
-  display: inline-block;
-  vertical-align: middle;
-  line-height: 50px; /* 이미지 높이와 일치하게 설정 */
-}
-.category-top img {
-  vertical-align: middle;
-}
-.category-top span {
-  vertical-align: middle;
-}
-
-.filter-category select {
-  margin-right: 10px;
-}
-
-.filter-categoryName input {
-  margin-right: 10px;
-}
-
-.filter-table tr {
-  width: 100%;
-  table-layout: fixed;
-}
-
-.category-select {
-  margin-top: 3%;
-  width: 1350px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start; /* Align items to the top */
-  height: auto; /* Set height to auto */
-  padding: 30px;
-}
-.category-column {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 30%;
-}
-.post-category {
-  height: 50px; /* 원하는 높이로 설정 */
-  width: 100%;
-  background-color: #f0f0f0; /* 임의의 배경색 설정 */
-  margin-bottom: 10px; /* 간격 조절 */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 10px;
-}
-.input-container {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  margin-bottom: 10px; /* 입력창과 리스트 사이의 간격 */
-}
-.postInput {
-  flex-grow: 1;
-  padding: 5px; /* 여백 추가 */
-}
-.input-container button {
-  margin-left: 5px; /* 버튼과 입력창 사이의 간격 */
-  height: 29px;
-  text-align: center;
-}
-.categoryFirst-select, .categorySecond-select, .categoryThird-select {
-  border: 1px solid black;
-  width: 90%;
-  min-height: 400px; /* Set a minimum height */
-  padding: 10px;
-  overflow-y: auto; /* Enable vertical scrolling */
-  max-height: 400px; /* Set a maximum height */
-}
-
-.categoryFirst-select ul, .categorySecond-select ul, .categoryThird-select ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-
-}
-
-.categoryFirst-select li, .categorySecond-select li, .categoryThird-select li {
-  margin-bottom: 10px;
-}
-
-.categoryFirst-select button, .categorySecond-select button, .categoryThird-select button {
-  width: 90%;
-  padding: 10px;
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  cursor: pointer;
-  text-align: left;
-}
-
-.categoryFirst-select button:hover, .categorySecond-select button:hover, .categoryThird-select button:hover {
-  background-color: #f0f0f0;
-}
-</style>

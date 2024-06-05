@@ -71,14 +71,10 @@
 
       </div>
       신청일자 : {{ item.exchangeDate }}
-        <div class="action-buttons" v-if="item.exchangeStatus=='처리대기' ">
-          <input class="but" type="button" value="저장하기" @click="checkExchange">
-          <input class="but" type="button" value="돌아가기" @click="showDetailPopup">
+      <div class="action-buttons" >
+          <input v-if="item.exchangeStatus=='처리대기' " class="cancel-btn" type="button" value="저장하기" @click="checkExchange">
+          <input class="cancel-btn" type="button" value="돌아가기" @click="showDetailPopup">
         </div>
-      <div style="float: right">
-        <br>
-        <input class="cancel-btn" type="button" value="돌아가기" @click="showDetailPopup">
-      </div>
       <br>
     </div>
   </div>
@@ -86,8 +82,9 @@
 
 <script setup>
 import { ref } from "vue";
-import axios from 'axios';
-import { useStore } from 'vuex'; // Vuex store 임포트
+import { useStore } from 'vuex';
+import Swal from "sweetalert2"; // Vuex store 임포트
+import AdminExchangePage from "@/components/exchange/AdminExchangePage.vue"; // Vuex store 임포트
 const store = useStore(); // Vuex store 사용
 
 const headers = ref([
@@ -137,17 +134,26 @@ const checkExchange = async () => {
       },
       body: JSON.stringify(requestData)
     });
-
-    if (response.status == 406) {
-      alert("수량 다시 확인하세요.");
-      return;
-    }
     if (!response.ok) {
-      alert("서버 에러 발생 ");
       throw new Error('네트워크 오류 발생');
     }
+    await Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "반품 처리 완료되었습니다.",
+      showConfirmButton: false,
+      timer: 1500
+    });
     props.showDetailPopup();
+    location.reload(AdminExchangePage);
   } catch (error) {
+    await Swal.fire({
+      position: "center",
+      icon: "error",
+      title: "잘못된 요청입니다.",
+      showConfirmButton: false,
+      timer: 1500
+    });
     console.error('오류 발생:', error);
   }
 };
@@ -157,6 +163,6 @@ const checkExchange = async () => {
 
 
 <style scoped>
-  @import "../../assets/css/popup.css" ;
   @import "../../assets/css/order.css" ;
+  @import "../../assets/css/popup.css" ;
 </style>

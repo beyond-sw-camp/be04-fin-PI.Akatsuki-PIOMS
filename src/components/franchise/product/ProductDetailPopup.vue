@@ -111,7 +111,7 @@ const props = defineProps({
   width: 1200px;
   height: 1200px;
   text-align: center;
-  overflow-y: auto; /* 내용이 많을 경우 스크롤 추가 */
+  overflow-y: auto;
 }
 
 .close-button {
@@ -123,8 +123,8 @@ const props = defineProps({
   font-size: 2em;
   cursor: pointer;
   color: #333;
-  padding: 0; /* 추가 */
-  margin: 0; /* 추가 */
+  padding: 0;
+  margin: 0;
 }
 
 .popup-header {
@@ -272,15 +272,6 @@ h2 {
   border-radius: 5px;
   margin-left: 1%;
 }
-.post-button {
-  background-color: rgba(220, 20, 60, 0.8);
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1em;
-}
 .action-button {
   background-color: #D9D9D9;
   color: white;
@@ -293,7 +284,6 @@ h2 {
   margin-top: 2%;
 
 }
-
 .action-button:hover {
   background-color: gray;
 }

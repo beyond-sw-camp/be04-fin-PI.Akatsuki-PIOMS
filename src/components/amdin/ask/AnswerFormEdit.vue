@@ -5,23 +5,23 @@
     <div v-if="askData" class="form-wrapper">
       <table class="detail-table">
         <tr>
-          <td class="label">점주명:</td>
+          <td class="label">점주명</td>
           <td>{{ askData.franchiseOwnerName }}</td>
-          <td class="label">가맹점:</td>
+          <td class="label">가맹점</td>
           <td>{{ askData.franchiseName }}</td>
         </tr>
         <tr>
-          <td class="label">제목:</td>
+          <td class="label">제목</td>
           <td colspan="3">{{ askData.askTitle }}</td>
         </tr>
         <tr>
-          <td class="label">내용:</td>
+          <td class="label">내용</td>
           <td colspan="3" class="content-td">{{ askData.askContent }}</td>
         </tr>
         <tr>
-          <td class="label">등록일:</td>
+          <td class="label">등록일</td>
           <td>{{ formatDate(askData.askEnrollDate) }}</td>
-          <td class="label">수정일:</td>
+          <td class="label">수정일</td>
           <td>{{ formatDate(askData.askUpdateDate) }}</td>
         </tr>
       </table>
@@ -250,14 +250,15 @@ textarea {
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: #f5f5f5;
-  padding: 40px;
+  padding: 20px;
   border-radius: 30px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  width: 50%;
+  width: 40%;
   max-width: 2000px;
-  height: 65%;
+  height: 61%;
+
   overflow-y: auto;
-  max-height: 84vh;
+  max-height: 90vh;
 }
 
 .popup-content h2 {

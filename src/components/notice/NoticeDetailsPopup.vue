@@ -1,9 +1,8 @@
 <template>
-  <!-- 공지사항 상세 정보 팝업 -->
   <div class="overlay">
+  <!-- 공지사항 상세 정보 팝업 -->
     <div class="notice-form">
-
-      <div class="title" style="display: flex; justify-content: space-between;">
+      <div class="title" style="display: flex; justify-content: space-between; ">
         <h2>공지사항 상세 정보</h2>
         <button class="close-btn" @click="$emit('close')">X</button>
       </div>
@@ -17,15 +16,14 @@
           <div class="noticeContent">내용</div>
           <div class="text-area">{{ notice.noticeContent }}</div>
         </div>
+      <div style="display: flex; gap: 30px;">
         <div>
-          <div class="label">등록일</div>
-          <div>{{ notice.noticeEnrollDate }}</div>
+          <div class="label">등록일:  {{ notice.noticeEnrollDate }}</div>
         </div>
         <div>
-          <div class="label">수정일</div>
-          <div>{{ notice.noticeUpdateDate }}</div>
+          <div class="label">수정일: {{ notice.noticeUpdateDate }}</div>
         </div>
-
+      </div>
 
     </div>
   </div>
@@ -62,20 +60,18 @@ const props = defineProps({
 }
 
 .notice-form {
-  background: white;
-  padding: 20px;
+  background: #ffffff;
+  //padding: 0px 10px 10px 10px;
   border-radius: 10px;
-  border-color: #d9d9d9;
-  border: 5px;
+  border-color: black;
+  border: 5px solid;
   max-width: 500px;
   width: 100%;
-  min-height: 500px;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1001; /* 팝업 창이 가장 위에 오도록 z-index 조정 */
-
 }
 
 .close-btn {
@@ -164,5 +160,6 @@ const props = defineProps({
   border: 2px solid black;
 
 }
+
 
 </style>

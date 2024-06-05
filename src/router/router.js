@@ -29,7 +29,11 @@ import NoticeList from "@/components/notice/NoticeList.vue";
 import FranchiseDashBoard from "@/components/franchise/FranchiseDashBoard.vue";
 import DriverDashBoard from "@/components/driver/DriverDashBoard.vue";
 import NoticeListFrOwner from "@/components/notice/NoticeListFrOwner.vue";
+import DriverMemberPage from "@/components/amdin/member/DriverMemberPage.vue";
 
+import FrWarehousePage from "@/components/franchise/warehouse/FrWarehousePage.vue";
+import AdminDashBoard from "@/components/amdin/dashboard/AdminDashBoard.vue";
+import FrOwnerMemberPage from "@/components/franchise/member/FrOwnerMemberPage.vue";
 
 const routes = [
     {
@@ -173,6 +177,11 @@ const routes = [
         component: AdminMembers
     },
     {
+        path: '/admin/drivers',
+        name: 'DriverMemberList',
+        component: DriverMemberPage
+    },
+    {
         path: '/admin/logs',
         name: 'AdminLogs',
         component: Log,
@@ -189,6 +198,23 @@ const routes = [
         name: 'FranchiseDashBoard',
         component: FranchiseDashBoard
     },
+    {
+        path: '/franchise/warehouse',
+        name: 'FranchiseWarehouse',
+        component: FrWarehousePage
+    },
+    {
+        path: '/admin/home',
+        name: 'AdminDashBoard',
+        component: AdminDashBoard
+    },
+    {
+        path: '/admin/franchise/members',
+        name: 'FrOwnerMemberPage',
+        component: FrOwnerMemberPage
+    },
+
+
 ];
 
 const router = createRouter({

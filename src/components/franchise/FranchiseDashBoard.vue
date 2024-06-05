@@ -3,47 +3,59 @@
     <div class="main-content">
       <div class="top-row">
         <div class="section order-status">
-          <h2>
-            내 발주 현황
-          </h2>
+            <router-link to="/franchise/order/list" class="order-link">내 발주 현황</router-link>
           <hr class="section-divider" />
           <div class="status-boxes">
             <div class="status-box">
-              <div class="status-count">{{ orderStat.acceptCnt }}</div>
-              <div class="status-label">승인 완료</div>
+              <div class = labelbox>
+                <div class="status-label1 status-label-pending">승인 완료</div>
+              </div>
+              <div class="status-count-box">
+                <div class="status-count">{{ orderStat.acceptCnt || '-' }}</div>
+              </div>
             </div>
             <div class="status-box">
-              <div class="status-count">{{ orderStat.inspectionWaitCnt }}</div>
-              <div class="status-label">검수 대기</div>
+              <div class = labelbox>
+                <div class="status-label2 status-label-accepted">검수 대기</div>
+              </div>
+              <div class="status-count-box">
+                <div class="status-count">{{ orderStat.inspectionWaitCnt || '-' }}</div>
+              </div>
             </div>
             <div class="status-box">
-              <div class="status-count">{{ orderStat.inspectionFinishCnt }}</div>
-              <div class="status-label">검수 완료</div>
+              <div class = labelbox>
+                <div class="status-label3 status-label-denied">검수 완료</div>
+              </div>
+              <div class="status-count-box">
+                <div class="status-count">{{ orderStat.inspectionFinishCnt || '-' }}</div>
+              </div>
             </div>
           </div>
         </div>
         <div class="section inventory-alert">
-          <h2>재고 알림</h2>
+          <router-link to="/franchise/warehouse" class="warehouse-link">재고 알림</router-link>
           <hr class="section-divider" />
-          <div class="inventory-info" v-if="lowStockItems.length">
-            <div v-for="item in lowStockItems" :key="item.franchiseWarehouseCode">
+          <ul class="list">
+            <li v-for="item in paginatedLowStockItems" :key="item.franchiseWarehouseCode" class="list-item">
               <div>상품명: {{ item.product.productName }}</div>
               <div>재고: {{ item.franchiseWarehouseEnable }}</div>
-            </div>
-          </div>
-          <div v-else>
+            </li>
+          </ul>
+          <div v-if="!lowStockItems.length">
             <div>재고가 부족한 상품이 없습니다.</div>
+          </div>
+          <div class="pagination">
+            <button @click="prevLowStockPage" :disabled="lowStockCurrentPage === 1">이전</button>
+            <button @click="nextLowStockPage" :disabled="lowStockCurrentPage === lowStockTotalPages">다음</button>
           </div>
         </div>
       </div>
       <div class="bottom-row">
         <div class="section notice-list">
-          <router-link to="/admin/notice/list" class="notice-link">
-            공지사항 리스트
-          </router-link>
+          <router-link to="/franchise/notice/list" class="notice-link">공지사항 리스트</router-link>
           <ul class="list">
             <li v-for="item in paginatedNotices" :key="item.noticeCode" class="list-item">
-              <div class="notice-title">{{ item.noticeTitle }}</div>
+              <div class="notice-title">{{ truncateTitle(item.noticeTitle) }}</div>
               <div>{{ formatNoticeDate(item.noticeEnrollDate) }}</div>
             </li>
           </ul>
@@ -56,10 +68,9 @@
           <router-link to="/franchise/ask" class="inquiry-link">문의사항 리스트</router-link>
           <ul class="list">
             <li v-for="item in paginatedAsks" :key="item.askCode" class="list-item">
-              <div class="title">{{ item.askTitle }}</div>
+              <div class="title">{{ truncateTitle(item.askTitle) }}</div>
               <div class="status-container">
-                <div class="status"
-                     :class="{ 'status-pending': item.askStatus === '답변대기', 'status-complete': item.askStatus === '답변완료' }">
+                <div class="status" :class="{ 'status-pending': item.askStatus === '답변대기', 'status-complete': item.askStatus === '답변완료' }">
                   {{ item.askStatus }}
                 </div>
                 <div class="date">{{ formatAskDate(item.askEnrollDate) }}</div>
@@ -75,13 +86,7 @@
           <router-link to="/franchise/favorite/list" class="favorite-link">즐겨찾기 상품 목록</router-link>
           <ul class="list">
             <li v-for="item in paginatedFavorites" :key="item.franchiseWarehouseCode" class="list-item">
-              <div>
-                {{ item.product.productName }}
-                <span class="category">
-<!--                  {{ item.product.categoryThird.categorySecond.categorySecondName }} >-->
-<!--                  {{ item.product.categoryThird.categoryThirdName }}-->
-                </span>
-              </div>
+              <div>{{ item.product.productName }}</div>
               <div>{{ item.product.productStatus }}</div>
             </li>
           </ul>
@@ -111,12 +116,13 @@ const orderStat = ref({});
 const currentPage = ref(1);
 const noticeCurrentPage = ref(1);
 const favoritesCurrentPage = ref(1);
+const lowStockCurrentPage = ref(1);
 const itemsPerPage = 6;
-
+const lowStockItemsPerPage = 3;
 
 const fetchDashboardData = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/franchise/franchiseDashboard`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/franchiseDashboard`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -131,10 +137,28 @@ const fetchDashboardData = async () => {
     asks.value = data.askList.asks;
     favorites.value = data.favoriteList;
     orderStat.value = data.orderStat;
-    lowStockItems.value = data.favoriteList.filter(item => item.franchiseWarehouseEnable < 10);
+    lowStockItems.value = data.filter(item => item.franchiseWarehouseEnable < 10);
   } catch (error) {
     console.error('Failed to fetch dashboard data:', error);
+  }
+};
 
+const fetchProducts = async () => {
+  try {
+    const response = await fetch(`http://api.pioms.shop/franchise/warehouse/list/product`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    lowStockItems.value = data.filter(item => item.franchiseWarehouseEnable <= 5);
+  } catch (error) {
+    console.error('Failed to fetch products:', error);
   }
 };
 
@@ -156,6 +180,12 @@ const paginatedFavorites = computed(() => {
   return favorites.value.slice(start, end);
 });
 
+const paginatedLowStockItems = computed(() => {
+  const start = (lowStockCurrentPage.value - 1) * lowStockItemsPerPage;
+  const end = start + lowStockItemsPerPage;
+  return lowStockItems.value.slice(start, end);
+});
+
 const totalPages = computed(() => {
   return Math.ceil(asks.value.length / itemsPerPage);
 });
@@ -166,6 +196,10 @@ const noticeTotalPages = computed(() => {
 
 const favoritesTotalPages = computed(() => {
   return Math.ceil(favorites.value.length / itemsPerPage);
+});
+
+const lowStockTotalPages = computed(() => {
+  return Math.ceil(lowStockItems.value.length / lowStockItemsPerPage);
 });
 
 const prevPage = () => {
@@ -204,6 +238,22 @@ const nextFavoritesPage = () => {
   }
 };
 
+const prevLowStockPage = () => {
+  if (lowStockCurrentPage.value > 1) {
+    lowStockCurrentPage.value--;
+  }
+};
+
+const nextLowStockPage = () => {
+  if (lowStockCurrentPage.value < lowStockTotalPages.value) {
+    lowStockCurrentPage.value++;
+  }
+};
+
+const truncateTitle = (title, maxLength = 20) => {
+  return title.length > maxLength ? `${title.slice(0, maxLength)}...` : title;
+};
+
 const formatAskDate = (dateString) => {
   if (!dateString) return '-';
   const date = new Date(dateString);
@@ -228,26 +278,29 @@ const formatNoticeDate = (dateString) => {
   });
 };
 
-onMounted(fetchDashboardData);
+onMounted(() => {
+  fetchProducts();
+  fetchDashboardData();
+});
 </script>
 
 <style scoped>
-body{
-  overflow-x:hidden;
+body {
+  overflow-x: hidden;
 }
 
 .dashboard-container {
   display: flex;
   justify-content: center;
   width: 100%;
-  padding:20px;
+  padding: 20px;
   box-sizing: border-box;
 }
 
 .main-content {
   width: 100%;
   max-width: 1200px;
-  margin:0 auto;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
 }
@@ -271,6 +324,7 @@ body{
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border: 1px solid #ddd;
   flex: 1;
+  overflow: hidden;
 }
 
 .notice-list,
@@ -282,19 +336,72 @@ body{
 .status-boxes {
   display: flex;
   justify-content: space-around;
+  margin-top: 20px;
 }
 
 .status-box {
   text-align: center;
+  flex: 1;
+  border: 11px solid white;
+  border-radius: 10px;
+}
+
+.status-count-box {
+  text-align: center;
+  flex: 1;
+  border: 11px solid white;
 }
 
 .status-count {
+  display: flex;
   font-size: 24px;
   font-weight: bold;
+  background-color: #d9d9d9;
+  height: 70px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
 }
 
-.status-label {
+.status-label1,
+.status-label2,
+.status-label3{
   margin-top: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 6px;
+  color: white;
+}
+
+.labelbox{
+  display: flex;
+  border: 11px solid white;
+  align-items: baseline;
+  justify-content: center;
+}
+
+.status-label1{
+  height: 32px;
+  width: 100px;
+  background-color: #394CA9;
+  align-content: center;
+  align-items: center;
+}
+
+.status-label2{
+  height: 32px;
+  width: 100px;
+  background-color: #FC6F86;
+  align-content: center;
+  align-items: center;
+}
+
+.status-label3{
+  height: 32px;
+  width: 100px;
+  background-color: #FFCD4B;
+  align-content: center;
+  align-items: center;
 }
 
 .list {
@@ -319,45 +426,42 @@ body{
 }
 
 .notice-title {
-  font-size: 16px;
+  flex: 1;
+  font-size: 15px;
   color: #333;
   font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .notice-link,
 .inquiry-link,
-.favorite-link {
+.favorite-link,
+.order-link,
+.warehouse-link{
   display: block;
   font-size: 18px;
   font-weight: bold;
   color: #333;
   text-decoration: none;
-  margin-bottom: 10px;
-}
-
-.order-status {
-  flex: 1;
-  height: 80%;
-}
-
-.inventory-alert {
-  flex: 1;
-  height: 80%;
-}
-
-.favorite-products {
-  flex: 1;
+  margin-bottom: 15px;
 }
 
 .notice-link:hover,
 .inquiry-link:hover,
-.favorite-link:hover {
+.favorite-link:hover,
+.order-link:hover,
+warehouse-link:hover{
   color: #000;
 }
 
 .title {
   flex: 1;
   margin-right: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .status-container {
@@ -416,16 +520,27 @@ body{
   margin-left: 5px;
 }
 
-.section h2 {
-  font-size: 18px; /* 폰트 크기 키우기 */
-  font-weight: bold; /* 폰트 굵게 */
-  color: #333;
-}
-
 .section-divider {
   margin: 10px 0;
   border: none;
   border-top: 1px solid #ddd;
 }
 
+.orderStatus-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.icon {
+  width: 16px;
+  margin-right: 5px;
+}
+
+.unit {
+  font-size: 10px;
+}
 </style>

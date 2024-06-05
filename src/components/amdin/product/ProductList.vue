@@ -1,4 +1,4 @@
-<template>
+<template xmlns="http://www.w3.org/1999/html">
   <div style="margin-top: 50px;">
 <!--    <div class="headerTitle" align="center">-->
 <!--        <h3 class="product-title"><img src="@/assets/icon/Cloth.png">상품 및 상품 카테고리 관리 > 상품 관리 > 상품 전체 조회 및 관리</h3>-->
@@ -30,7 +30,7 @@
           <td class="filter-label">상품노출상태</td>
           <td class="filter-input">
             <select id="selectedExposureStatus" v-model="selectedExposureStatus" class="textInput">
-              <option hidden="hidden" value="">전체</option>
+              <option hidden="hidden" value="전체">전체</option>
               <option value="노출">노출</option>
               <option value="미노출">미노출</option>
             </select>
@@ -63,7 +63,7 @@
           </td>
         </tr>
         <tr>
-          <td class="filter-label">카테고리 구분</td>
+          <td class="filter-label">카테고리<br>구분</td>
           <td class="filter-input">
             <select id="firstCategory" v-model="selectedFirstCategory" @change="fetchSecondCategories" class="categories">
               <option value="">대분류</option>
@@ -164,6 +164,7 @@ import ProductUpdatePopup from "@/components/amdin/product/ProductUpdatePopup.vu
 import ProductDeletePopup from "@/components/amdin/product/ProductDeletePopup.vue";
 import axios from "axios";
 import { useStore } from 'vuex';
+
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -430,18 +431,18 @@ const getMemberId = async () => {
 };
 const downloadExcel = () => {
   axios({
-    url: 'http://api.pioms.shop/admin/exceldownload/product-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
+    url: 'http://api.pioms.shop/admin/exceldownload/product-excel',
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
     },
-    responseType: 'blob', // 서버에서 반환되는 데이터의 형식을 명시
+    responseType: 'blob',
   }).then((response) => {
     const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }));
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', 'ProductList.xlsx'); // 원하는 파일 이름 설정
+    link.setAttribute('download', 'ProductList.xlsx');
     document.body.appendChild(link);
     link.click();
   }).catch((error) => {
@@ -509,6 +510,7 @@ fetchThirdCategories();
 
 .filter-table td {
   padding: 5px 10px;
+  font-size: 16px;
 }
 
 .filter-label {
@@ -560,10 +562,10 @@ fetchThirdCategories();
 }
 .post-btn {
   display: flex;
-  justify-content: space-between; /* 양 끝에 정렬 */
-  align-items: center; /* 수직 가운데 정렬 */
-  position: absolute; /* 절대 위치 설정 */
-  left: 19%; /* 좌측 정렬 */
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  left: 16.5%;
   width: 1265px;
 }
 
@@ -596,6 +598,7 @@ fetchThirdCategories();
   width: 100%;
   height: 10px;
   table-layout: fixed;
+  font-size: 16px;
 }
 
 .table th,
@@ -606,7 +609,9 @@ fetchThirdCategories();
   height: 10px;
   table-layout: fixed;
 }
-
+.table td {
+  font-size: 14px;
+}
 .header1 {
   background-color: #D9D9D9;
   font-weight: bold;
@@ -644,26 +649,13 @@ fetchThirdCategories();
   font: inherit;
   cursor: pointer;
   outline: inherit;
-  text-align: left; /* 텍스트 정렬을 위해 필요시 사용 */
+  text-align: left;
 }
 .textInput {
   border: 1px solid rgba(217, 217, 217, 0.7);
 }
 .categories {
   border: 1px solid rgba(217, 217, 217, 0.7);
-}
-.product-title {
-  margin-left: 18%;
-}
-.headerTitle {
-  text-align: left;
-  margin-left: 19.5%;
-  //min-width: 1200px;
-  //max-width: 1200px;
-}
-
-.product-sub-title {
-  margin-left: 18%;
 }
 .product-sub-title img {
   width: 20px;

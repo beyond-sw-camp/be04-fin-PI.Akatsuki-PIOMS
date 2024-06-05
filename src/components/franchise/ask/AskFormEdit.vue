@@ -5,27 +5,27 @@
         <div v-if="askData" class="form-wrapper">
           <table class="detail-table">
             <tr>
-              <td class="label">점주명:</td>
+              <td class="label">점주명</td>
               <td>{{ askData.franchiseOwnerName }}</td>
-              <td class="label">가맹점:</td>
+              <td class="label">가맹점</td>
               <td>{{ askData.franchiseName }}</td>
             </tr>
             <tr>
-              <td class="label">제목:</td>
+              <td class="label">제목</td>
               <td colspan="3">
                 <input v-model="askData.askTitle" placeholder="제목을 입력하세요" />
               </td>
             </tr>
             <tr>
-              <td class="label">내용:</td>
+              <td class="label">내용</td>
               <td colspan="3" class="content-td">
                 <textarea v-model="askData.askContent" placeholder="내용을 입력하세요"></textarea>
               </td>
             </tr>
             <tr>
-              <td class="label">등록일:</td>
+              <td class="label">등록일</td>
               <td>{{ formatDate(askData.askEnrollDate) }}</td>
-              <td class="label">수정일:</td>
+              <td class="label">수정일</td>
               <td>{{ formatDate(askData.askUpdateDate) }}</td>
             </tr>
           </table>
@@ -77,9 +77,9 @@ const fetchAskData = async () => {
   }
 };
 
-const formatDate = (dateArray) => {
-  if (!dateArray) return '-';
-  const date = new Date(dateArray[0], dateArray[1] - 1, dateArray[2], dateArray[3], dateArray[4], dateArray[5]);
+const formatDate = (dateString) => {
+  if (!dateString) return '-';
+  const date = new Date(dateString);
   if (isNaN(date)) return 'Invalid Date';
   return date.toLocaleString('ko-KR', {
     year: 'numeric',
