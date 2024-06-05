@@ -105,7 +105,9 @@
 
 <script setup>
   import { ref } from "vue";
-  import { useStore } from 'vuex'; // Vuex store 임포트
+  import { useStore } from 'vuex';
+  import Swal from "sweetalert2";
+  import FranchiseOrderPage from "@/components/order/FranchiseOrderPage.vue"; // Vuex store 임포트
   const store = useStore(); // Vuex store 사용
 
 
@@ -150,7 +152,7 @@
     if (!accessToken) {
       throw new Error('No access token found');
     }
-      const response = await fetch("http://api.pioms.shop/franchise/product", {
+      const response = await fetch("http://localhost:5000/franchise/product", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -170,6 +172,7 @@
           selectedProducts.value.push(products.value.find(element => element.productCode == obj.productCode));
         console.log(selectedProducts.value);
       }
+
       console.log(products);
 
     } catch (error) {
@@ -222,7 +225,7 @@
       if (!accessToken) {
         throw new Error('No access token found');
       }
-      const response = await fetch(`http://api.pioms.shop/franchise/order`, {
+      const response = await fetch(`http://localhost:5000/franchise/order`, {
           method: "PUT",
           headers: {
             'Authorization': `Bearer ${accessToken}`,
@@ -231,21 +234,25 @@
           credentials: 'include',
           body: JSON.stringify(orderData)
         });
-      if (response.status == 406) {
-        alert("생각은 하셨나요? 신청 재고량 너무 많거나, 이미 승인 대기중인 발주가 존재합니다.");
-        props.clickUpdate();
-        throw new Error("");
-      }
+
       if (!response.ok) {
-        alert("불가불가불가사리");
-        props.clickUpdate();
+        console.log('error');
         throw new Error("네트워크 오류 발생");
       }
+
       const result = await response.json();
-      console.log("주문 성공:", result);
-      props.clickUpdate();
+      await Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "발주 수정 성공.",
+        showConfirmButton: false,
+        timer: 1500
+      });
+      location.reload(FranchiseOrderPage);
+
+
     } catch (error) {
-      console.error("주문 오류 발생:", error);
+      location.reload(FranchiseOrderPage);
     }
 
 };

@@ -32,7 +32,10 @@ import NoticeListFrOwner from "@/components/notice/NoticeListFrOwner.vue";
 import DriverMemberPage from "@/components/amdin/member/DriverMemberPage.vue";
 
 import FrWarehousePage from "@/components/franchise/warehouse/FrWarehousePage.vue";
+
 import AdminDashBoard from "@/components/amdin/dashboard/AdminDashBoard.vue";
+
+
 import FrOwnerMemberPage from "@/components/franchise/member/FrOwnerMemberPage.vue";
 
 const routes = [

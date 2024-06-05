@@ -129,7 +129,7 @@ import { useStore } from 'vuex';
 import Swal from "sweetalert2"; // Vuex store 임포트
 const store = useStore(); // Vuex store 사용
 
-let isLoading = false;
+const isLoading = ref(false);
 
 const lists = ref([]);
 
@@ -156,7 +156,25 @@ const filterInvoiceCode = ref('');
 const filterOrderDate = ref('');
 
 const getOrderList = async () => {
-
+  let timerInterval;
+  Swal.fire({
+    title: "반품신청서 불러오는 중입니다...",
+    timer: 2000,
+    timerProgressBar: true,
+    didOpen: () => {
+      Swal.showLoading();
+      const timer = Swal.getPopup().querySelector("b");
+      timerInterval = setInterval(() => {
+      }, 100);
+    },
+    willClose: () => {
+      clearInterval(timerInterval);
+    }
+  }).then((result) => {
+    if (result.dismiss === Swal.DismissReason.timer) {
+      console.log("I was closed by the timer");
+    }
+  });
   try {
     const accessToken = store.state.accessToken;
     if (!accessToken) {
@@ -171,6 +189,7 @@ const getOrderList = async () => {
       credentials: 'include'
     });
 
+
     if (!response.ok) {
       throw new Error('네트워크 오류 발생');
     }
@@ -179,13 +198,12 @@ const getOrderList = async () => {
     if (data.length > 0) {
       lists.value = data.map(({ ...rest }) => rest);
       filteredLists.value = lists.value;
-      console.log(lists);
     } else {
       lists.value = [];
       filteredLists.value = [];
     }
+    isLoading.value=true;
 
-    isLoading=true;
     await Swal.fire({
       position: "center",
       icon: "success",
@@ -195,6 +213,13 @@ const getOrderList = async () => {
     });
 
   } catch (error) {
+    await Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "발주 목록 불러오기 실패.",
+      showConfirmButton: false,
+      timer: 1500
+    });
     console.error('오류 발생:', error);
   }
 };

@@ -51,10 +51,9 @@
       <button @click="applyFilter" class="search-btn">
         <img src="@/assets/icon/search.png" alt="Search" />
       </button>
-    </div>
       <br>
       <button class="create-btn" style="float: right" @click="showPopup" >발주하기</button>
-<!--      <button class="create-btn"  @click="downloadExcel"><img src="@/assets/icon/excel.png" alt="excel"></button>-->
+    </div>
       <br><br><br>
     </div>
 
@@ -132,10 +131,6 @@ import axios from "axios";
 const store = useStore(); // Vuex store 사용
 const accessToken = store.state.accessToken;
 const lists = ref([]);
-
-// 추후 토큰으로 받을 예정
-const franchiseCode = 3;
-const franchiseOwnerCode = 3;
 
 const headers = ref([
   { key: 'orderCode', label: '발주번호' },
