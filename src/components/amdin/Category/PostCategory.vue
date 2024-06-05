@@ -1,4 +1,7 @@
 <template>
+  <div class="headerTitle" align="left" style="margin-left: 17%; margin-top: 1%">
+    <p class="product-title"><img src="@/assets/icon/Cloth.png" style="width: 20px;height: 20px">상품 및 상품 카테고리 관리 > 상품 카테고리 관리 > 상품 카테고리 등록</p>
+  </div>
   <div class="category-container">
     <div class="category-select">
       <div class="category-column">
@@ -50,8 +53,27 @@
 
 
 <style scoped>
+.product-sub-title img {
+  width: 20px;
+  height: 20px;
+}
+.headerTitle p {
+  font-weight: bold;
+  font-size: 20px;
+}
+.headerTitle img {
+  width: 10px;
+  height: 10px;
+}
+.headerTitle h6 {
+  margin-bottom: 5%;
+}
+.headerTitle h3,
+.headerTitle h6 {
+  margin: 0
+}
 .category-container {
-  max-width: 1200px;
+  max-width: 1225px;
   margin: 0 auto;
   padding: 20px;
   display: flex;
@@ -60,7 +82,6 @@
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-top: 4%;
 }
 
 .category-select {
