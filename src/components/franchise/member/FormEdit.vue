@@ -5,15 +5,15 @@
         <div v-if="franchiseOwnerData" class="form-wrapper">
           <table class="detail-table">
             <tr>
-              <td class="label">점주명:</td>
+              <td class="label">점주명</td>
               <td><input type="text" v-model="franchiseOwnerData.franchiseOwnerName" /></td>
-              <td class="label">가맹점:</td>
+              <td class="label">가맹점</td>
               <td>{{ franchiseOwnerData.franchiseName }}</td>
             </tr>
             <tr>
-              <td class="label">아이디:</td>
+              <td class="label">아이디</td>
               <td>{{ franchiseOwnerData.franchiseOwnerId }}</td>
-              <td class="label">비밀번호:</td>
+              <td class="label">비밀번호</td>
               <td>
                 <div class="password-field">
                   <input type="password" v-model="franchiseOwnerData.franchiseOwnerPwd" />
@@ -22,15 +22,15 @@
               </td>
             </tr>
             <tr>
-              <td class="label">이메일:</td>
+              <td class="label">이메일</td>
               <td><input type="email" v-model="franchiseOwnerData.franchiseOwnerEmail" /></td>
-              <td class="label">전화번호:</td>
+              <td class="label">전화번호</td>
               <td><input type="text" v-model="franchiseOwnerData.franchiseOwnerPhone" /></td>
             </tr>
             <tr>
-              <td class="label">등록일:</td>
+              <td class="label">등록일</td>
               <td>{{ formatDate(franchiseOwnerData.franchiseOwnerEnrollDate) }}</td>
-              <td class="label">수정일:</td>
+              <td class="label">수정일</td>
               <td>{{ formatDate(franchiseOwnerData.franchiseOwnerUpdateDate) }}</td>
             </tr>
           </table>
@@ -147,7 +147,7 @@ const deleteOwner = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://api.pioms.shop/admin/franchise/owner/delete/${franchiseOwnerCode}`, {
+    const response = await fetch(`http://localhost:5000/admin/franchise/owner/delete/${franchiseOwnerCode}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -171,8 +171,34 @@ const deleteOwner = async () => {
   }
 };
 
-const resetPassword = () => {
-  franchiseOwnerData.value.franchiseOwnerPwd = '';
+const resetPassword = async () => {
+  const franchiseOwnerCode = props.franchiseOwnerCode;
+  if (!franchiseOwnerCode) {
+    console.error('franchiseOwnerCode is not defined');
+    return;
+  }
+  try {
+    const response = await fetch(`http://api.pioms.shop/admin/franchise/owner/reset-password/${franchiseOwnerCode}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to reset password: ${response.statusText}`);
+    }
+
+    await Swal.fire({
+      icon: 'success',
+      title: '비밀번호 초기화 성공',
+      text: '비밀번호가 초기화되었습니다.',
+    });
+    fetchFranchiseOwnerData();  // 비밀번호 초기화 후 데이터를 다시 가져옴
+  } catch (error) {
+    console.error('Failed to reset password:', error);
+  }
 };
 
 onMounted(fetchFranchiseOwnerData);
@@ -322,9 +348,9 @@ textarea {
   padding: 40px;
   border-radius: 30px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  width: 50%;
+  width: 55%;
   max-width: 2000px;
-  height: 36%;
+  height: 42%;
   overflow-y: auto;
   max-height: 84vh;
 }
