@@ -142,8 +142,10 @@
   background-color: #f0f0f0;
 }
 .categoryPost {
+  color: #FFFFFF;
+  font-weight: bold;
   border: none;
-  background-color: #344DAF90;
+  background-color: #344DAF;
   border-radius: 4px;
 }
 </style>
