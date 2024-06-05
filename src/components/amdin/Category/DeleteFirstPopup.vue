@@ -1,13 +1,12 @@
 <template>
-  <div class="modal" @click.self="closePopup">
+  <div class="modal">
     <div class="modal-content">
-      <button @click="closePopup" class="close-button">x</button>
       <h3>대분류 카테고리 삭제</h3>
       <p>카테고리 코드: {{ currentFirstCode }}</p>
       <p>카테고리 이름: {{ currentFirstName}}</p>
       <div class="button-container">
-        <button @click="deleteCategoryFirst" class="confirm-button">예</button>
-        <button @click="closePopup" class="cancel-button">아니오</button>
+        <button @click="deleteCategoryFirst" class="confirm-button">삭제</button>
+        <button @click="closePopup" class="cancel-button">취소</button>
       </div>
     </div>
   </div>
