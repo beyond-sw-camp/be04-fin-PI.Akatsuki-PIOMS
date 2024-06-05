@@ -1,5 +1,5 @@
 <template>
-  <div class="modal" @click.self="closePopup">
+  <div class="modal">
     <div class="modal-content">
       <h3>대분류 카테고리 수정</h3>
       <p>카테고리 코드: {{ currentFirstCode }}</p>
@@ -15,6 +15,8 @@
 import { defineProps, defineEmits, ref } from 'vue';
 import { useStore } from 'vuex';
 import CategoryList from "@/components/amdin/Category/CategoryList.vue";
+import Swal from "sweetalert2";
+
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -25,7 +27,17 @@ const props = defineProps({
 const updateFirstName = ref('');
 const emits = defineEmits(['close', 'update:currentFirstName']);
 
+
 const saveCategoryFirst = async () => {
+  if (!updateFirstName.value.trim()) {
+    await Swal.fire({
+      icon: 'warning',
+      title: '카테고리명 누락',
+      text: '카테고리명을 입력해주세요.',
+    });
+    return;
+  }
+
   const requestData = {
     categoryFirstName: updateFirstName.value
   };
@@ -46,8 +58,11 @@ const saveCategoryFirst = async () => {
       const errorText = await response.text();
       throw new Error(`카테고리 대분류 수정에 실패했습니다. 상태 코드: ${response.status}, 메시지: ${errorText}`);
     }
-
-    console.log('카테고리 대분류가 성공적으로 수정되었습니다.');
+    await Swal.fire({
+      icon: 'success',
+      title: '카테고리 수정 성공!',
+      text: '카테고리 대분류가 성공적으로 수정되었습니다.',
+    });
     location.reload(CategoryList);
     emits('close');
   } catch (error) {

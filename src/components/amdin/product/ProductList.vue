@@ -122,6 +122,11 @@
                 {{ item.productExposureStatus ? '노출' : '미노출' }}
               </button>
             </template>
+            <template v-else-if="header.key === 'productStatus'">
+              <div :class="{'status-available': item.productStatus === '공급가능', 'status-unavailable': item.productStatus !== '공급가능'}">
+                {{ item.productStatus }}
+              </div>
+            </template>
             <template v-else>
               {{ item[header.key] }}
             </template>
@@ -677,5 +682,20 @@ fetchThirdCategories();
   border: none;
   border-radius: 10px;
   width: 75px;
+}
+.status-available {
+  background-color: #FFCD4B;
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-weight: bold;
+  height: 20px;
+
+}
+.status-unavailable {
+  background-color: #FF6285;
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-weight: bold;
+  height: 20px;
 }
 </style>

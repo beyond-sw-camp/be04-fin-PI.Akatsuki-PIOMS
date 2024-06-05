@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="modal" @click.self="closeDeletePopup">
+    <div class="modal">
       <div class="modal-content">
         <h3>상품 노출 상태 변경</h3>
         <p>상품 코드: {{ currentProductCode }}</p>
@@ -12,11 +12,11 @@
     </div>
   </div>
 </template>
-
 <script setup>
 import { defineProps } from 'vue';
 import { useStore } from 'vuex';
 import Swal from "sweetalert2";
+
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -56,15 +56,9 @@ const deleteProduct = async () => {
     }
   } catch (error) {
     console.error('Error updating product exposure status:', error);
-    await Swal.fire({
-      icon: 'warning',
-      title: '오류 발생!',
-      text: '오류가 발생하였습니다.',
-    });
   }
 };
 </script>
-
 <style scoped>
 .modal {
   position: fixed;
@@ -76,7 +70,7 @@ const deleteProduct = async () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999; /* Ensure modal is above other content */
+  z-index: 1000;
 }
 
 .modal-content {
