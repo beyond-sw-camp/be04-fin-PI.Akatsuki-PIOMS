@@ -11,7 +11,7 @@
               </button>
               <div class="category-actions">
                 <button @click="editCategoryFirst(category.categoryFirstCode,category.categoryFirstName)" class="action-button">수정</button>
-                <button @click="deleteCategoryFirst(category.categoryFirstCode, category.categoryFirstName)" class="action-button">삭제</button>
+                <button @click="deleteCategoryFirst(category.categoryFirstCode, category.categoryFirstName)" class="action-button1">삭제</button>
               </div>
             </div>
           </li>
@@ -29,7 +29,7 @@
               </button>
               <div class="category-actions">
                 <button @click="editCategorySecond(category.categorySecondCode, category.categorySecondName)" class="action-button">수정</button>
-                <button @click="deleteCategorySecond(category.categorySecondCode, category.categorySecondName)" class="action-button">삭제</button>
+                <button @click="deleteCategorySecond(category.categorySecondCode, category.categorySecondName)" class="action-button1">삭제</button>
               </div>
             </div>
           </li>
@@ -47,7 +47,7 @@
               </button>
               <div class="category-actions">
                 <button @click="editCategoryThird(category.categoryThirdCode, category.categoryThirdName)" class="action-button">수정</button>
-                <button @click="deleteCategoryThird(category.categoryThirdCode, category.categoryThirdName)" class="action-button">삭제</button>
+                <button @click="deleteCategoryThird(category.categoryThirdCode, category.categoryThirdName)" class="action-button1">삭제</button>
               </div>
             </div>
           </li>
@@ -333,6 +333,16 @@ ul {
 
 .action-button {
   color: #000000;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.action-button1 {
+  color: #FFFFFF;
+  font-weight: bold;
   border: none;
   border-radius: 4px;
   padding: 6px 12px;
@@ -340,16 +350,16 @@ ul {
   transition: background-color 0.3s;
 }
 
-.action-button:hover {
-  background-color: #FF628580;
+.action-button1:hover {
+  background-color: #FF6285;
 }
 
-.action-button:last-child {
-  background-color: #FF628580;
+.action-button1:last-child {
+  background-color: #FF6285;
 }
 
-.action-button:last-child:hover {
-  background-color: #FF628580;
+.action-button1:last-child:hover {
+  background-color: #FF6285;
 }
 </style>
 
