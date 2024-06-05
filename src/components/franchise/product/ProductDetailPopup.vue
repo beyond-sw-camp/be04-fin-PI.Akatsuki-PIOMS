@@ -284,7 +284,6 @@ h2 {
   margin-top: 2%;
 
 }
-
 .action-button:hover {
   background-color: gray;
 }
