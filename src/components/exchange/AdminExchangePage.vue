@@ -1,6 +1,6 @@
 <template>
 
-  <div>
+  <div v-if="isLoading">
     <div class="filter-section">
       <table class="filter-table">
         <tr>
@@ -116,7 +116,9 @@ import { ref, computed } from 'vue';
 import exchangePopup from './exchangePopup.vue';
 import ExchangeDetail from './exchangeDetail.vue';
 import { useStore } from 'vuex'; // Vuex store 임포트
+import Swal from "sweetalert2"; // Vuex store 임포트
 const store = useStore(); // Vuex store 사용
+const isLoading = ref(false);
 
 
 const lists = ref([]);
@@ -146,6 +148,25 @@ const filterInvoiceCode = ref('');
 const filterExchangeDate = ref('');
 
 const getExchangeList = async () => {
+  let timerInterval;
+  Swal.fire({
+    title: "반품신청서 불러오는 중입니다...",
+    timer: 1000,
+    timerProgressBar: true,
+    didOpen: () => {
+      Swal.showLoading();
+      const timer = Swal.getPopup().querySelector("b");
+      timerInterval = setInterval(() => {
+      }, 100);
+    },
+    willClose: () => {
+      clearInterval(timerInterval);
+    }
+  }).then((result) => {
+    if (result.dismiss === Swal.DismissReason.timer) {
+      console.log("I was closed by the timer");
+    }
+  });
   try {
     const accessToken = store.state.accessToken;
     if (!accessToken) {
@@ -165,6 +186,14 @@ const getExchangeList = async () => {
       throw new Error('네트워크 오류 발생');
     }
     const data = await response.json();
+    isLoading.value=true;
+    await Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "반품서 불러오기 성공",
+      showConfirmButton: false,
+      timer: 1500
+    });
     if (data.length > 0) {
       lists.value = data.map(({ ...rest }) => rest);
       filteredLists.value = lists.value;

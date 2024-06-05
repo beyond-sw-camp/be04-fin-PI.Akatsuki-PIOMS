@@ -78,7 +78,8 @@
 <script setup>
   import { ref } from "vue";
   import { useStore } from 'vuex';
-  import FranchiseExchangePage from "@/components/exchange/FranchiseExchangePage.vue"; // Vuex store 임포트
+  import FranchiseExchangePage from "@/components/exchange/FranchiseExchangePage.vue";
+  import Swal from "sweetalert2"; // Vuex store 임포트
   const store = useStore(); // Vuex store 사용e
 
   const props = defineProps({
@@ -131,6 +132,13 @@
       products.value = data;
       filteredLists.value = products.value;
     } catch (error) {
+      await Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "잘못된 요청입니다.",
+        showConfirmButton: false,
+        timer: 1500
+      });
       console.error("오류 발생:", error);
     }
   };
@@ -194,24 +202,30 @@
       body: JSON.stringify(exchangeData)
     });
 
-    if (response.status == 406) {
-      alert("잘못된 신청");
-      props.showPopup();
-      throw new Error("");
-    }
     if (!response.ok) {
-      alert("불가");
-      props.showPopup();
       throw new Error("네트워크 오류 발생");
     }
-
     const result = await response.json();
     console.log("주문 성공:", result);
+    await Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "반품 신청 완료되었습니다.",
+      showConfirmButton: false,
+      timer: 1500
+    });
     props.showPopup();
-    alert("반품 신청 되었습니다.")
+
     location.reload(FranchiseExchangePage);
 
   } catch (error) {
+    await Swal.fire({
+      position: "center",
+      icon: "error",
+      title: "잘못된 요청입니다.",
+      showConfirmButton: false,
+      timer: 1500
+    });
     console.error("주문 오류 발생:", error);
   }
 };

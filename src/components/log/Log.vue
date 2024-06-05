@@ -43,14 +43,19 @@
     </div>
 
     <!-- 액션 버튼 섹션 -->
-    <div class="action-buttons">
-      <button @click="resetFilters" class="reset-btn">
-        <img src="@/assets/icon/reset.png" alt="Reset" />
-      </button>
-      <button @click="applyFilters" class="search-btn">
-        <img src="@/assets/icon/search.png" alt="Search" />
-      </button>
-      <button @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
+    <div align="center">
+      <div class="action-buttons">
+        <button @click="resetFilters" class="reset-btn">
+          <img src="@/assets/icon/reset.png" alt="Reset" />
+        </button>
+        <button @click="applyFilters" class="search-btn">
+          <img src="@/assets/icon/search.png" alt="Search" />
+        </button>
+      <br>
+      <div>
+        <button style="float:right;" @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
+      </div>
+      </div>
     </div>
     <div class="post-btn">
     </div>
@@ -263,7 +268,7 @@ onMounted(() => {
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 10px;
-  width: 1360px;
+  width: 1300px;
 }
 
 .filter-table td {
@@ -297,9 +302,10 @@ onMounted(() => {
 }
 
 .action-buttons {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
+  max-width: 1300px;
+  justify-content: center; /* 가운데 정렬 */
+  //margin-bottom: 20px;
+  align-items: center;
 }
 
 .reset-btn, .search-btn {
@@ -325,8 +331,8 @@ onMounted(() => {
 }
 
 .table {
-  width: 1200px;
-  max-width: 1200px;
+  width: 1300px;
+  max-width: 1300px;
   border-collapse: collapse;
   background-color: #fff;
   border-radius: 10px;
