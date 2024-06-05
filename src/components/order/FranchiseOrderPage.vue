@@ -1,8 +1,4 @@
 <template>
-  <div class="breadcrumbs">
-    <img src="../../assets/icon/List.png" alt="List Icon" class="breadcrumb-icon" />
-    <span>주문 조회 및 관리</span>
-  </div>
 
     <div class="filter-section">
       <table class="filter-table">
@@ -47,16 +43,21 @@
 
       </table>
     </div>
-    <div class="action-buttons">
+  <div align="center" >
+    <div class="action-buttons"  >
       <button @click="resetFilters" class="reset-btn">
         <img src="@/assets/icon/reset.png" alt="Reset" />
       </button>
       <button @click="applyFilter" class="search-btn">
         <img src="@/assets/icon/search.png" alt="Search" />
       </button>
-      <button class="create-btn"  @click="showPopup" >발주하기</button>
+      <br>
+      <button class="create-btn" style="float: right" @click="showPopup" >발주하기</button>
+      <br><br><br>
 <!--      <button class="create-btn"  @click="downloadExcel"><img src="@/assets/icon/excel.png" alt="excel"></button>-->
     </div>
+  </div>
+
     <popup
         v-if="createPopup"
         :showPopup="showPopup"
@@ -184,7 +185,9 @@ const getOrderList = async () => {
     if (!accessToken) {
       throw new Error('No access token found');
     }
-    const response = await fetch(`http://api.pioms.shop/franchise/orders`, {
+
+    const response = await fetch(`http://localhost:5000/franchise/order/list`, {
+    //const response = await fetch(`http://api.pioms.shop/franchise/order/list`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

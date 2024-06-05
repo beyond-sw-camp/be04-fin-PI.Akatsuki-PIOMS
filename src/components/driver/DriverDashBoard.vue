@@ -158,7 +158,7 @@ const getCountBeforeDelivery = async () => {
 const ingDiv = ref();
 const getCountIngDelivery = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/driver/${driverCode}/ing-delivery/count`, {
+    const response = await fetch(`http://api.pioms.shop/driver/${driverCode}/ing-delivery/count`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -281,7 +281,7 @@ const resetFilter = () => {
 // 대쉬보드
 const getDriverDashBoard = async () => {
   try {
-    const response = await fetch('http://localhost:5000/driver/dashboard', {
+    const response = await fetch('http://api.pioms.shop/driver/dashboard', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

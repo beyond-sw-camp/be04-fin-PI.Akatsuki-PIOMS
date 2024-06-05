@@ -36,7 +36,7 @@
       <div class="divvv-title">상품 리스트</div>
 
       <div class="table-container">
-        <table class="table">
+        <table class="table" style="">
             <thead>
               <tr class="header1">
                 <th>상품 코드</th><th>상품 이름</th><th>상품 가격</th><th>본사 수량</th><th>상품 상태</th><th>색상</th><th>상품 설명</th><th>카테고리(대)</th><th>카테고리(중)</th><th>카테고리(소)</th><th>성별</th>
@@ -68,8 +68,8 @@
         </div>
       </div>
         <br>
-        <div class="divvv-title" style="height: 30px;">선택된 상품 리스트</div>
 
+        <div class="divvv-title" style="height: 30px;">선택된 상품 리스트</div>
         <div class="table-container">
           <table class="table">
           <thead>
@@ -92,10 +92,10 @@
           </tr>
         </table>
       </div >
-    <div class="action-buttons" >
         <p v-if="totalPrice > 0">총 가격: {{ totalPrice }}원</p>
-        <button class="cancel-btn" @click="exportOrder">발주신청하기</button>
-        <button class="cancel-btn" @click="showPopup" >돌아가기</button>
+        <div style="display: flex; justify-content: right; gap:10px;">
+        <button style="float: right" class="cancel-btn" @click="exportOrder">발주신청하기</button>
+        <button style="float: right" class="cancel-btn" @click="showPopup" >돌아가기</button>
       </div>
     </div>
   </div>
@@ -251,4 +251,5 @@
 </script>
 <style scoped>
   @import "../../assets/css/popup.css" ;
+  @import "../../assets/css/order.css" ;
 </style>

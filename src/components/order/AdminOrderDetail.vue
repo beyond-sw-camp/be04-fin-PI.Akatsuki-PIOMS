@@ -2,9 +2,6 @@
   <div class="popup-overlay" >
 
        <div class="popup-content">
-         <div style="float: right">
-           <button class="cancel-btn" @click="showDetailPopup" >x</button>
-         </div>
            <br>
 
            <br>
@@ -169,6 +166,7 @@
              <button class="cancel-btn" @click="showDetailPopup" >돌아가기</button>
            </div>
          </div>
+         <br><br>
        </div>
    </div>
 

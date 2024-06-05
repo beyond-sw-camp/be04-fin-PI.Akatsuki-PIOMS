@@ -35,10 +35,10 @@
         <div class="divvv-title">
           반품 및 교환 항목
         </div>
-        <div style="display: block; font-size: 1.5lh; display:flex; justify-content: center; font-weight: 1000; width:100%;" align="center">
-          <table>
+        <div class="table-container">
+          <table class="table">
             <thead>
-              <tr align="center">
+              <tr class="header1">
                 <th>상품 코드</th>
                 <th>상품 이름</th>
                 <th>반품 수량</th>
@@ -46,7 +46,7 @@
               </tr>
             </thead>
             <!-- 처리 대기중인 교환인 경우 -->
-            <tr v-for="(product, index) in list" :key="index" align="center">
+            <tr class="allpost" v-for="(product, index) in list" :key="index" align="center">
               <td>{{ product.productCode }}</td>
               <td>{{ product.productName }}</td>
               <td>{{ product.exchangeProductCount }}</td>
@@ -57,13 +57,12 @@
         <br><br><br><br>
 
         <br>
-        <div class="but-group" v-if="item.exchangeStatus=='반송신청'">
-          <input class="but" type="button" value="삭제하기" @click="deleteExchange">
-        </div>
-          <input class="but" type="button" value="돌아가기" @click="showDetailPopup">
-
       </div>
       신청일자 : {{ item.exchangeDate }}
+        <div class="action-buttons" >
+          <input class="cancel-btn" v-if="item.exchangeStatus=='반송신청'" type="button" value="삭제하기" @click="deleteExchange">
+          <input class="cancel-btn" type="button" value="돌아가기" @click="showDetailPopup">
+        </div>
       <br>
     </div>
   </div>
@@ -133,4 +132,6 @@ const deleteExchange = async () => {
 
 <style scoped>
   @import "../../assets/css/order.css" ;
+  @import "../../assets/css/popup.css" ;
+
 </style>
