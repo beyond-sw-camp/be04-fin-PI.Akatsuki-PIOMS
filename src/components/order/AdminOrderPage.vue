@@ -1,8 +1,5 @@
 <template>
-<!--    <div class="breadcrumbs">-->
-<!--    <img src="../../assets/icon/List.png" alt="List Icon" class="breadcrumb-icon" />-->
-<!--    <span>발주 조회 및 관리</span>-->
-<!--  </div>-->
+  <div v-if="isLoading">
     <div class="filter-section">
       <table class="filter-table">
         <tr>
@@ -119,6 +116,7 @@
       <span>페이지 {{ currentPage }} / {{ totalPages }}</span>
       <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
     </div>
+  </div>
 
 </template>
 
@@ -127,15 +125,13 @@
 <script setup>
 import { ref, computed } from 'vue';
 import OrderDetail from './AdminOrderDetail.vue';
-import { useStore } from 'vuex'; // Vuex store 임포트
+import { useStore } from 'vuex';
+import Swal from "sweetalert2"; // Vuex store 임포트
 const store = useStore(); // Vuex store 사용
 
+let isLoading = false;
 
 const lists = ref([]);
-
-// 추후 토큰으로 받을 예정
-const franchiseCode = ref(1);
-const adminCode = ref(2);
 
 const headers = ref([
   { key: 'orderCode', label: '발주번호' },
@@ -178,6 +174,7 @@ const getOrderList = async () => {
     if (!response.ok) {
       throw new Error('네트워크 오류 발생');
     }
+
     const data = await response.json();
     if (data.length > 0) {
       lists.value = data.map(({ ...rest }) => rest);
@@ -187,6 +184,16 @@ const getOrderList = async () => {
       lists.value = [];
       filteredLists.value = [];
     }
+
+    isLoading=true;
+    await Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "발주 목록 불러오기 성공.",
+      showConfirmButton: false,
+      timer: 1500
+    });
+
   } catch (error) {
     console.error('오류 발생:', error);
   }

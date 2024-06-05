@@ -55,6 +55,7 @@
         <div>
           <button style="float:right;" @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
         </div>
+
       </div>
     </div>
     <div class="post-btn">

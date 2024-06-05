@@ -206,7 +206,7 @@ textarea {
   gap: 10px;
   justify-content: flex-end;
   background-color: white;
-  padding: 5px;
+  //padding: 5px;
 }
 
 .cancel-btn {
@@ -258,7 +258,7 @@ textarea {
   padding: 20px;
   border-radius: 30px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  width: 50%;
+  width: 40%;
   max-width: 2000px;
   height: 70%;
   overflow-y: auto;
