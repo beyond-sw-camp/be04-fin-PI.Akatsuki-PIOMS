@@ -4,28 +4,9 @@
       <div class="logo-title">
         <img id="logo" src="@/assets/icon/PIOMSDelivery.png"/>
       </div>
-      <button onclick="generateInvoice()">
+      <button @click="printPage" class="print-btn">
         <img id="print" src="@/assets/icon/invoicePrint.png"/>
       </button>
-
-<!--        &lt;!&ndash; 이부분은 인쇄 안되는 영역 &ndash;&gt;-->
-<!--        <div class="leftDiv">-->
-<!--          <h1>1번 발주 송장</h1>-->
-<!--          <p>예시로 인쇄 기능 구현</p>-->
-<!--        </div>-->
-
-<!--        &lt;!&ndash; 이부분은 인쇄 되는 영역 &ndash;&gt;-->
-<!--        <div id="printableArea" class="rightDiv">-->
-<!--          <h1>2번 발주 송장</h1>-->
-<!--          <p>예시로 인쇄 기능 구현</p>-->
-<!--          <table>-->
-<!--            <tr class="td1">-->
-<!--              <td>항목 1</td>-->
-<!--            </tr>-->
-<!--            <tr class="td1">-->
-<!--              <td>항목 2</td>-->
-<!--            </tr>-->
-<!--          </table>-->
     </header>
 
 
@@ -87,13 +68,16 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue';
+import {defineProps, defineEmits, onMounted, ref} from 'vue';
 
+const hiddenBtn = ref(true);
 const props = defineProps({
   invoice: Object
 });
 
 const emits = defineEmits(['close']);
+
+
 
 function printPage() {
   window.print();
@@ -111,21 +95,25 @@ function printPage() {
     visibility: visible;
   }
   #printableArea {
-    position: absolute;
+    position: relative;
+    margin: 10px;
     left: 0;
     top: 0;
     width: 100%;
   }
+  /* 인쇄 버튼 숨기기 */
+  .print-btn {
+    display: none;
+  }
+  /* 배경 색 인쇄하기 설정 */
+  .fr, #se {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 }
 
-.leftDiv {
-  margin-right: 21rem;
-}
 
-.rightDiv {
-  margin-right: 21rem;
-}
-
+/* 송장 조회 */
 body {
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
