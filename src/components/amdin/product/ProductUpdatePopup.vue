@@ -106,10 +106,8 @@
                       <input id="imgUpload" type="file" @change="previewImage" hidden />
                       <button v-if="imagePreview !== imageSrc && imgOn" @click="resetImage" class="img-close-button">X</button>
                       <label for="imgUpload">
-                        <!-- Display current product image if available -->
-                        <img class="img" v-if="props.currentProductImgUrl" :src="props.currentProductImgUrl" />
-                        <!-- Display default image if current product image is not available -->
-                        <img class="img" v-else :src="imageSrc" />
+                        <img class="img" v-if="!imgOn" :src="imageSrc"/>
+                        <img class="img" v-if="imgOn" :src="imagePreview" />
                       </label>
                       <br />
                     </form>
@@ -222,7 +220,7 @@ const submitProduct = async () => {
   formData.append('productContent', updateContent.value !== '' ? updateContent.value : props.currentProductContent);
   console.log(formData.values());
   try {
-    const response = await fetch(`http://api.pioms.shop/admin/product/update/image/${props.currentProductCode}`, {
+    const response = await fetch(`http://localhost:5000/admin/product/update/image/${props.currentProductCode}`, {
       method: 'PUT',
       credentials: 'include',
       body: formData,
@@ -246,13 +244,13 @@ const fetchCategories = async (level) => {
   let url = '';
   switch (level) {
     case 'first':
-      url = 'http://api.pioms.shop/admin/category/first';
+      url = 'http://localhost:5000/admin/category/first';
       break;
     case 'second':
-      url = `http://api.pioms.shop/admin/category/second/list/detail/categoryfirst/${updateFirst.value}`;
+      url = `http://localhost:5000/admin/category/second/list/detail/categoryfirst/${updateFirst.value}`;
       break;
     case 'third':
-      url = `http://api.pioms.shop/admin/category/third/list/detail/categorysecond/${updateSecond.value}`;
+      url = `http://localhost:5000/admin/category/third/list/detail/categorysecond/${updateSecond.value}`;
       break;
   }
 

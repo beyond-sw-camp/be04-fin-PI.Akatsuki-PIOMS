@@ -315,7 +315,6 @@ onMounted(() => {
   fetchCategories('first');
 });
 
-
 const uploadAndSaveProduct = async () => {
   if(!insertProductName.value.trim()) {
     await Swal.fire({
