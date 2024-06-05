@@ -51,12 +51,12 @@
       <button @click="applyFilter" class="search-btn">
         <img src="@/assets/icon/search.png" alt="Search" />
       </button>
+    </div>
       <br>
       <button class="create-btn" style="float: right" @click="showPopup" >발주하기</button>
-      <br><br><br>
 <!--      <button class="create-btn"  @click="downloadExcel"><img src="@/assets/icon/excel.png" alt="excel"></button>-->
+      <br><br><br>
     </div>
-  </div>
 
     <popup
         v-if="createPopup"
