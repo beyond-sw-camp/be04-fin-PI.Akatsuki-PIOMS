@@ -66,7 +66,7 @@
           <td>{{ formatDate(franchiseOwner.franchiseOwnerUpdateDate) }}</td>
           <td>{{ formatDate(franchiseOwner.franchiseOwnerDeleteDate) }}</td>
           <td>{{ franchiseOwner.ownerPwdCheckCount }}</td>
-          <td>{{ franchiseOwner.ownerStatus }}</td>
+          <td>{{ franchiseOwner.franchiseOwnerStatus ? '활성화' : '비활성화' }}</td>
           <td>
             <button @click="showEdit(franchiseOwner)" class="editbutton">조회</button>
           </td>
@@ -86,6 +86,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
+import Swal from 'sweetalert2';
 import Edit from '@/components/franchise/member/FormEdit.vue';
 
 const store = useStore();
@@ -118,6 +119,7 @@ const fetchFranchises = async () => {
     }
     const data = await response.json();
     franchiseOwners.value = data || [];
+    franchiseOwners.value.sort((a, b) => new Date(b.franchiseOwnerEnrollDate) - new Date(a.franchiseOwnerEnrollDate));
     filteredFranchises.value = franchiseOwners.value;
     applyFilters();
   } catch (error) {
@@ -129,7 +131,7 @@ const applyFilters = () => {
   filteredFranchises.value = franchiseOwners.value.filter(franchise => {
     const matchesOwnerName = !filterOwnerName.value || franchise.franchiseOwnerName.includes(filterOwnerName.value);
     const matchesFranchiseName = !filterFranchiseName.value || franchise.franchiseName.includes(filterFranchiseName.value);
-    const matchesStatus = filterStatus.value === '' || franchise.ownerStatus === Number(filterStatus.value);
+    const matchesStatus = filterStatus.value === '' || franchise.franchiseOwnerStatus === (filterStatus.value === '1');
 
     return matchesOwnerName && matchesFranchiseName && matchesStatus;
   });
@@ -141,6 +143,38 @@ const resetFilters = () => {
   filterFranchiseName.value = '';
   filteredFranchises.value = franchiseOwners.value;
   currentPage.value = 1;
+};
+
+const resetPassword = async () => {
+  try {
+    const response = await fetch(`http://api.pioms.shop/admin/franchise/owner/reset-password/${franchiseOwnerCode.value}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${store.state.accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      Swal.fire('성공', '비밀번호가 초기화되었습니다.', 'success');
+      if (data.status) {
+        franchiseOwners.value = franchiseOwners.value.map(owner => {
+          if (owner.franchiseOwnerCode === franchiseOwnerCode.value) {
+            owner.franchiseOwnerStatus = data.status;
+          }
+          return owner;
+        });
+        applyFilters();
+      }
+    } else {
+      throw new Error(data.message || '비밀번호 초기화에 실패했습니다.');
+    }
+  } catch (error) {
+    console.error('Failed to reset password:', error);
+    Swal.fire('오류', '비밀번호 초기화에 실패했습니다.', 'error');
+  }
 };
 
 const formatDate = (dateString) => {
@@ -198,7 +232,6 @@ const closeEdit = () => {
 </script>
 
 <style scoped>
-/* (기존 스타일을 유지하되 필요한 경우 추가 및 수정) */
 .container {
   position: relative;
   min-height: 100vh;
@@ -339,16 +372,8 @@ td.boardname {
   font-weight: bold;
 }
 
-.editbutton-pending {
-  background-color: #ff6285;
-}
-
 .editbutton:hover {
   background-color: #ffbb00;
-}
-
-.editbutton-pending:hover {
-  background-color: #ff6275;
 }
 
 .pagination {
