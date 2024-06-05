@@ -6,8 +6,8 @@
         <p>상품 코드: {{ currentProductCode }}</p>
         <p>상품명: {{ currentProductName }}</p>
         <p>현재 상품 노출 상태: {{ currentProductExposureStatus ? '노출' : '미노출' }}</p>
-        <button @click="closeDeletePopup" class="close-button">x</button>
         <button @click="deleteProduct">수정</button>
+        <button @click="closeDeletePopup" class="close-button">x</button>
       </div>
     </div>
   </div>
@@ -92,7 +92,7 @@ const deleteProduct = async () => {
   border: none;
   padding: 5px 10px;
   cursor: pointer;
-  margin-right: 10px;
+  margin-left: 10px;
 }
 
 button {

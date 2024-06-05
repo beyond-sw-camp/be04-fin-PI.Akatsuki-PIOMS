@@ -2,7 +2,6 @@
   <div class="popup-overlay" @click.self="closeEdit">
     <div class="popup-content">
       <div class="popup-header">
-        <button class="close-button" @click="closeEdit">×</button>
         <h4>상품 수정</h4>
       </div>
       <div class="popup-body">
@@ -14,20 +13,20 @@
                   <div class="second-insert-label0">카테고리 구분</div>
                 </td>
                 <td class="second-insert-input">
-                  <select v-model="updateFirst" @change="fetchCategories('second')" class="categories">
-                    <option value="">{{ getCategoryFirstName(props.currentCategoryFirstCode) }}</option>
+                  <select v-model="updateFirst" @change="fetchCategories('second')" class="categories" >
+                    <option value="" hidden="hidden">{{ getCategoryFirstName(props.currentCategoryFirstCode) }}</option>
                     <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">
                       {{ category.categoryFirstName }}
                     </option>
                   </select>
                   <select v-model="updateSecond" @change="fetchCategories('third')" class="categories-g">
-                    <option value="">{{ getCategorySecondName(props.currentCategorySecondCode) }}</option>
+                    <option value="" hidden="hidden">{{ getCategorySecondName(props.currentCategorySecondCode) }}</option>
                     <option v-for="category in secondCategories" :key="category.categorySecondCode" :value="category.categorySecondCode">
                       {{ category.categorySecondName }}
                     </option>
                   </select>
                   <select v-model="updateThird" class="categories-g">
-                    <option value="">{{ getCategoryThirdName(props.currentCategoryThirdCode) }}</option>
+                    <option value="" hidden="hidden">{{ getCategoryThirdName(props.currentCategoryThirdCode) }}</option>
                     <option v-for="category in thirdCategories" :key="category.categoryThirdCode" :value="category.categoryThirdCode">
                       {{ category.categoryThirdName }}
                     </option>
@@ -96,30 +95,30 @@
                   <div class="second-insert-label0">상세정보</div>
                 </td>
                 <td class="second-insert-input">
-                  <textarea :value="currentProductContent" @input="updateContent = $event.target.value" class="textInput" style="width: 99%; height: 150px"></textarea>
+                  <textarea :value="currentProductContent" @input="updateContent = $event.target.value" class="textInput" style="width: 99%; height: 150px; resize: none"></textarea>
                 </td>
               </tr>
               <tr>
                 <td class="second-insert-input1">
                   <div class="imgForm">
-                    <form>
-                      <input id="imgUpload" type="file" @change="previewImage" hidden />
-                      <button v-if="imagePreview !== imageSrc && imgOn" @click="resetImage" class="img-close-button">X</button>
-                      <label for="imgUpload">
-                        <img class="img" v-if="!imgOn" :src="imageSrc"/>
-                        <img class="img" v-if="imgOn" :src="imagePreview" />
-                      </label>
-                      <br />
-                    </form>
                   </div>
                 </td>
               </tr>
             </table>
+            <form style="display: flex; justify-content: center; margin-top: 5%">
+              <input id="imgUpload" type="file" @change="previewImage" hidden />
+              <button v-if="imagePreview !== imageSrc && imgOn" @click="resetImage" class="img-close-button">X</button>
+              <label for="imgUpload">
+                <img class="img" v-if="!imgOn" :src="imageSrc"/>
+                <img class="img" v-if="imgOn" :src="imagePreview" />
+              </label>
+              <br />
+            </form>
           </div>
         </div>
         <div style="display: flex; gap: 10px; float: right; padding-top: 2%">
-          <button class="action-button" @click="closeEdit">취소</button>
           <button class="post-button" @click="submitProduct">수정</button>
+          <button class="action-button" @click="closeEdit">취소</button>
         </div>
       </div>
     </div>
@@ -365,20 +364,6 @@ watch(updateSecond, async (newVal) => {
   overflow-y: auto;
   max-height: 90vh;
 }
-
-.close-button {
-  position: absolute;
-  top: 32px;
-  right: 80px;
-  background: none;
-  border: none;
-  font-size: 2em;
-  cursor: pointer;
-  color: #333;
-  padding: 0;
-  margin: 0;
-}
-
 .popup-header {
   display: flex;
   height: 25px;
@@ -392,10 +377,6 @@ watch(updateSecond, async (newVal) => {
 
 .popup-body {
   padding-top: unset;
-}
-
-.close-button:hover {
-  background-color: #00ff0000;
 }
 
 h2 {
@@ -561,5 +542,19 @@ h2 {
 }
 .top-table tr {
   text-align: center;
+}
+.img-close-button {
+  top: 10px;
+  right: 10px;
+  background-color: #FF6285;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 </style>

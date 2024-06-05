@@ -30,7 +30,7 @@
           <td class="filter-label">상품노출상태</td>
           <td class="filter-input">
             <select id="selectedExposureStatus" v-model="selectedExposureStatus" class="textInput">
-              <option hidden="hidden" value="">전체</option>
+              <option hidden="hidden" value="전체">전체</option>
               <option value="노출">노출</option>
               <option value="미노출">미노출</option>
             </select>
@@ -564,7 +564,7 @@ fetchThirdCategories();
   justify-content: space-between;
   align-items: center;
   position: absolute;
-  left: 19%;
+  left: 16.5%;
   width: 1265px;
 }
 
