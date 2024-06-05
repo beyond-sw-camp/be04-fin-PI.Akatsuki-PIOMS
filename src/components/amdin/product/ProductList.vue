@@ -1,11 +1,11 @@
 <template xmlns="http://www.w3.org/1999/html">
-  <div style="margin-top: 50px;">
-<!--    <div class="headerTitle" align="center">-->
-<!--        <h3 class="product-title"><img src="@/assets/icon/Cloth.png">상품 및 상품 카테고리 관리 > 상품 관리 > 상품 전체 조회 및 관리</h3>-->
-<!--    <h6 class="product-sub-title" style="margin-top: 1%; margin-bottom: 1%">조회할 상품의 조건을 선택 후-->
-<!--      <img src="@/assets/icon/reset.png">초기화 또는 <img src="@/assets/icon/search.png">검색을 눌러주세요.-->
-<!--    </h6>-->
-<!--    </div>-->
+    <div class="headerTitle" align="left" style="margin-left: 17%; margin-top: 1%">
+        <p class="product-title"><img src="@/assets/icon/Cloth.png" style="width: 20px;height: 20px">상품 및 상품 카테고리 관리 > 상품 관리 > 상품 전체 조회 및 관리</p>
+    <h6 class="product-sub-title" style="margin-top: 1%; margin-bottom: 1%">조회할 상품의 조건을 선택 후
+      <img src="@/assets/icon/reset.png">초기화 또는 <img src="@/assets/icon/search.png">검색을 눌러주세요.
+    </h6>
+    </div>
+  <div>
     <div class="filter-section">
       <div>
       </div>
@@ -121,6 +121,11 @@
               <button class="button-as-text" @click="showDeletePopup(item.productCode, item.productName, item.productExposureStatus)">
                 {{ item.productExposureStatus ? '노출' : '미노출' }}
               </button>
+            </template>
+            <template v-else-if="header.key === 'productStatus'">
+              <div :class="{'status-available': item.productStatus === '공급가능', 'status-unavailable': item.productStatus !== '공급가능'}">
+                {{ item.productStatus }}
+              </div>
             </template>
             <template v-else>
               {{ item[header.key] }}
@@ -662,11 +667,12 @@ fetchThirdCategories();
   height: 20px;
 }
 .headerTitle img {
-  width: 30px;
-  height: 30px;
+  width: 10px;
+  height: 10px;
 }
-.headerTitle h6 {
-  margin-bottom: 5%;
+.headerTitle p {
+  font-size: 20px;
+  font-weight: bold;
 }
 .headerTitle h3,
 .headerTitle h6 {
@@ -676,5 +682,20 @@ fetchThirdCategories();
   border: none;
   border-radius: 10px;
   width: 75px;
+}
+.status-available {
+  background-color: #FFCD4B;
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-weight: bold;
+  height: 20px;
+
+}
+.status-unavailable {
+  background-color: #FF6285;
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-weight: bold;
+  height: 20px;
 }
 </style>

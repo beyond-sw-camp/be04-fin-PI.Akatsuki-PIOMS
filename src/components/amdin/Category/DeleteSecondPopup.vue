@@ -68,7 +68,11 @@ const deleteCategorySecond = async () => {
       },
     });
 
-    console.log('카테고리 대분류가 성공적으로 수정되었습니다.');
+    await Swal.fire({
+      icon: 'success',
+      title: '카테고리 삭제 성공!',
+      text: '중분류 카테고리를 삭제하였습니다.',
+    });
     location.reload(CategoryList);
     emits('close');
   } catch (error) {
@@ -135,11 +139,13 @@ const closePopup = () => {
 
 .confirm-button {
   background-color: #344DAF;
+  border: none;
   color: white;
 }
 
 .cancel-button {
   background-color: #FF6285;
+  border: none;
   color: white;
 }
 </style>
