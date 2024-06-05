@@ -1,9 +1,7 @@
 <template>
   <div class="popup-overlay" >
        <div class="popup-content">
-           <button class="cancel-btn" @click="showDetailPopup" >돌아가기</button>
            <br>
-
            <br>
                 <h1 align="center">발주서</h1>
 
@@ -83,7 +81,7 @@
               <table class="table">
                 <thead>
                   <tr class="header1">
-                    <th>상품 코드</th><th> 상품명</th> <th>요청 수량</th> <th v-if="item.orderCondition=='검수대기'"> 검수 수량</th>
+                    <th>상품 코드</th><th> 상품명</th> <th>요청 수량</th> <th v-if="item.orderCondition=='검수대기' ||item.orderCondition=='검수완료' "> 검수 수량</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -92,31 +90,33 @@
                       <td>{{ product.productName }}</td>
                       <td>{{ product.requestProductCount }}</td>
                       <td v-if="item.orderCondition=='검수대기'"> <input type="number"v-model.number="product.requestOrderGetCount" min="0"  ></td>
+                      <td v-if="item.orderCondition=='검수완료'">{{ product.requestProductGetCount }}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
             <br>
-            <div class="divvv-title" style="border-top: 2px black solid;">
-                반품상품
-            </div>
-            <div class="table-container">
-              <table class="table">
-                <thead>
-                  <tr class="header1">
-                    <th v-for="(header, index) in exchangeHeaders" :key="exchangeList">{{ header.label }}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="allpost" v-for="(product, rowIndex) in exchangeList" :key="rowIndex">
-                    <td v-for="(header, colIndex) in exchangeHeaders" :key="colIndex">
-                      <div >{{ product[header.key] }}</div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
+             <div v-if="exchangeList!=[]">
+              <div class="divvv-title" style="border-top: 2px black solid;">
+                  반품상품
+              </div>
+              <div class="table-container">
+                <table class="table">
+                  <thead>
+                    <tr class="header1">
+                      <th v-for="(header, index) in exchangeHeaders" :key="exchangeList">{{ header.label }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="allpost" v-for="(product, rowIndex) in exchangeList" :key="rowIndex">
+                      <td v-for="(header, colIndex) in exchangeHeaders" :key="colIndex">
+                        <div >{{ product[header.key] }}</div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+             </div>
 
              <div class="but-group">
                <input class="but" type="button" value="검수하기" @click="gumsoo" v-if="item.orderCondition == '검수대기'">
@@ -132,10 +132,11 @@
           </div>
           발주일자 : {{ item.orderDate }}
            <br>
-           주문코드 : {{ item.orderCode }}<br>
-          <div class="action-buttons">
+           주문코드 : {{ item.orderCode }}<br>   
+          <div class="action-buttons" v-if="item.orderCondition=='승인대기' || item.orderCondition=='승인거부'">
             <input class="cancel-btn" type="button" value="수정하기" @click="clickUpdate">
           </div>
+         <button style="float: right" class="cancel-btn" @click="showDetailPopup" >돌아가기</button>
        </div>
 
     <FranchiseOrderUpdatePopup
@@ -240,6 +241,7 @@ const gumsoo = async () => {
 
 <style scoped>
   @import "../../assets/css/popup.css" ;
+  @import "../../assets/css/order.css" ;
 
 
 </style>

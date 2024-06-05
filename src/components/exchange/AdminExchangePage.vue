@@ -1,8 +1,5 @@
 <template>
-<!--  <div class="breadcrumbs" style="margin-top: 50px;">-->
-<!--    <img src="../../assets/icon/List.png" alt="List Icon" class="breadcrumb-icon" />-->
-<!--    <span>교환 조회 및 관리</span>-->
-<!--  </div>-->
+
   <div>
     <div class="filter-section">
       <table class="filter-table">
@@ -45,13 +42,16 @@
 
       </table>
     </div>
-    <div class="action-buttons">
-      <button @click="resetFilters" class="reset-btn">
-        <img src="@/assets/icon/reset.png" alt="Reset" />
-      </button>
-      <button @click="applyFilter" class="search-btn">
-        <img src="@/assets/icon/search.png" alt="Search" />
-      </button>
+    <div align="center">
+      <div class="action-buttons">
+        <button @click="resetFilters" class="reset-btn">
+          <img src="@/assets/icon/reset.png" alt="Reset" />
+        </button>
+        <button @click="applyFilter" class="search-btn">
+          <img src="@/assets/icon/search.png" alt="Search" />
+        </button>
+        <br><br>
+      </div>
     </div>
     <ExchangeDetail v-if="createDetailPopup" :showDetailPopup="showDetailPopup" :popupVisible="createDetailPopup" :detailItem="detailItem"/>
 
@@ -152,7 +152,8 @@ const getExchangeList = async () => {
       throw new Error('No access token found');
     }
     // const response = await fetch(`/api/admin/exchanges`, {
-    const response = await fetch(`http://api.pioms.shop/admin/exchanges`, {
+    // const response = await fetch(`http:///api.pioms.shop/admin/exchanges`, {
+    const response = await fetch(`http:///localhost:5000/admin/exchange/list`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

@@ -3,7 +3,7 @@
     <div class="main-content">
       <div class="top-row">
         <div class="section order-status">
-          <router-link to="/franchise/notice/list" class="orderStatus-link">내 발주 현황</router-link>
+          <router-link to="/franchise/order/list" class="orderStatus-link">내 발주 현황</router-link>
           <hr class="section-divider" />
           <div class="status-boxes">
             <div class="status-box">
@@ -46,7 +46,7 @@
       </div>
       <div class="bottom-row">
         <div class="section notice-list">
-          <router-link to="/admin/notice/list" class="notice-link">
+          <router-link to="/franchise/notice/list" class="notice-link">
             공지사항 리스트
           </router-link>
           <ul class="list">
@@ -125,7 +125,7 @@ const lowStockItemsPerPage = 3;
 
 const fetchDashboardData = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/franchise/franchiseDashboard`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/franchiseDashboard`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -342,6 +342,7 @@ body{
 .status-boxes {
   display: flex;
   justify-content: space-around;
+  margin-top: 40px;
 }
 
 .status-box {
