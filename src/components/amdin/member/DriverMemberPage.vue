@@ -94,7 +94,7 @@ const resetFilters = () => {
 const getDriverMembers = async () => {
   try {
     // Fetch delivery drivers
-    const driverResponse = await fetch('http://localhost:5000/admin/driver/list', {
+    const driverResponse = await fetch('http://api.pioms.shop/admin/driver/list', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -109,7 +109,7 @@ const getDriverMembers = async () => {
     const driverData = await driverResponse.json();
 
     // Fetch franchises
-    const franchiseResponse = await fetch('http://localhost:5000/admin/franchise/list', {
+    const franchiseResponse = await fetch('http://api.pioms.shop/admin/franchise/list', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

@@ -225,7 +225,7 @@
       throw new Error('No access token found');
     }
     // const response = await fetch(`http://api.pioms.shop/franchise/order`, {
-    const response = await fetch(`http://localhost:5000/franchise/order`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/order`, {
         method: "POST",
         headers: {
           'Authorization': `Bearer ${accessToken}`,

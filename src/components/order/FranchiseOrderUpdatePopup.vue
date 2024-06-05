@@ -152,7 +152,7 @@
     if (!accessToken) {
       throw new Error('No access token found');
     }
-      const response = await fetch("http://localhost:5000/franchise/product", {
+      const response = await fetch("http://api.pioms.shop/franchise/product", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -225,7 +225,7 @@
       if (!accessToken) {
         throw new Error('No access token found');
       }
-      const response = await fetch(`http://localhost:5000/franchise/order`, {
+      const response = await fetch(`http://api.pioms.shop/franchise/order`, {
           method: "PUT",
           headers: {
             'Authorization': `Bearer ${accessToken}`,
