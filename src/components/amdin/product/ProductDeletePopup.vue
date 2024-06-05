@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue';
+import { defineProps } from 'vue';
 import { useStore } from 'vuex';
 import Swal from "sweetalert2";
 const store = useStore();
@@ -45,7 +45,6 @@ const deleteProduct = async () => {
         title: '변경 성공!',
         text: '상품 노출 상태가 변경되었습니다.',
       });
-      // 페이지를 새로 고쳐 변경된 내용을 반영합니다.
       props.closeDeletePopup();
       location.reload();
     } else {

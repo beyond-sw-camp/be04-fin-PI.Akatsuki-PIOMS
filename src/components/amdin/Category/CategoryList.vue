@@ -253,9 +253,6 @@ fetchThirdCategories();
 </script>
 
 <style scoped>
-.category-top {
-  margin-left: 8%;
-}
 .category-top img {
   vertical-align: middle;
 }
@@ -308,17 +305,17 @@ fetchThirdCategories();
   width: 1450px;
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* Align items to the top */
-  height: auto; /* Set height to auto */
+  align-items: flex-start;
+  height: auto;
   padding: 30px;
 }
 
 .categoryFirst-select, .categorySecond-select, .categoryThird-select {
   width: 370px;
-  min-height: 400px; /* Set a minimum height */
+  min-height: 400px;
   padding: 10px;
-  overflow-y: auto; /* Enable vertical scrolling */
-  max-height: 400px; /* Set a maximum height */
+  overflow-y: auto;
+  max-height: 400px;
   margin-left: 5%;
   border: none;
   border-radius: 15px;

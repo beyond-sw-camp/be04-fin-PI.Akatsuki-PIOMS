@@ -351,7 +351,6 @@ const resetFilters = () => {
 };
 const getMemberId = async () => {
   try {
-    // Product 데이터 가져오기
     const productResponse = await fetch('http://api.pioms.shop/franchise/product', {
       method: 'GET',
       headers: {
@@ -366,7 +365,6 @@ const getMemberId = async () => {
 
     const productData = await productResponse.json();
 
-    // FranchiseWarehouse 데이터 가져오기
     const franchiseWarehouseResponse = await fetch('http://api.pioms.shop/franchise/warehouse', {
       method: 'GET',
       headers: {
@@ -381,14 +379,13 @@ const getMemberId = async () => {
 
     const franchiseWarehouseData = await franchiseWarehouseResponse.json();
 
-    // 각 제품에 대한 FranchiseWarehouse 정보를 추가하여 목록 완성
     lists.value = productData.map(product => {
       const correspondingWarehouse = franchiseWarehouseData.find(warehouse =>
           warehouse.product.productCode === product.productCode);
       return {
         productCode: product.productCode,
         productName: product.productName,
-        imgUrl: product.imgUrl, // 예상 코드, 실제 이미지 URL을 가져오는 코드로 변경해야 함
+        imgUrl: product.imgUrl,
         franchiseWarehouseCount: correspondingWarehouse ? correspondingWarehouse.franchiseWarehouseCount : 0,
         franchiseWarehouseEnable: correspondingWarehouse ? correspondingWarehouse.franchiseWarehouseEnable : 0,
         productNoticeCount: product.productNoticeCount,
@@ -408,18 +405,18 @@ const getMemberId = async () => {
 };
 const downloadExcel = () => {
   axios({
-    url: 'http://api.pioms.shop/franchise/exceldownload/product-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
+    url: 'http://api.pioms.shop/franchise/exceldownload/product-excel',
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
     },
-    responseType: 'blob', // 서버에서 반환되는 데이터의 형식을 명시
+    responseType: 'blob',
   }).then((response) => {
     const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }));
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', 'productList.xlsx'); // 원하는 파일 이름 설정
+    link.setAttribute('download', 'productList.xlsx');
     document.body.appendChild(link);
     link.click();
   }).catch((error) => {
@@ -538,10 +535,10 @@ fetchThirdCategories();
 }
 .post-btn {
   display: flex;
-  justify-content: flex-end; /* 양 끝에 정렬 */
-  align-items: center; /* 수직 가운데 정렬 */
-  position: absolute; /* 절대 위치 설정 */
-  left: 15.5%; /* 좌측 정렬 */
+  justify-content: flex-end;
+  align-items: center;
+  position: absolute;
+  left: 15.5%;
   width: 1210px;
 }
 
@@ -614,17 +611,6 @@ fetchThirdCategories();
   font-size: 12px;
 }
 
-.button-as-text {
-  background: none;
-  border: none;
-  padding: 0;
-  margin: 0;
-  color: inherit;
-  font: inherit;
-  cursor: pointer;
-  outline: inherit;
-  text-align: left; /* 텍스트 정렬을 위해 필요시 사용 */
-}
 .textInput {
   border: 1px solid rgba(217, 217, 217, 0.7);
 }
