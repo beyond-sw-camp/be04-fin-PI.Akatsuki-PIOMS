@@ -33,6 +33,7 @@ import DriverMemberPage from "@/components/amdin/member/DriverMemberPage.vue";
 
 import FrWarehousePage from "@/components/franchise/warehouse/FrWarehousePage.vue";
 import AdminDashBoard from "@/components/amdin/dashboard/AdminDashBoard.vue";
+import FrOwnerMemberPage from "@/components/franchise/member/FrOwnerMemberPage.vue";
 
 const routes = [
     {
@@ -206,6 +207,11 @@ const routes = [
         path: '/admin/home',
         name: 'AdminDashBoard',
         component: AdminDashBoard
+    },
+    {
+        path: '/admin/franchise/members',
+        name: 'FrOwnerMemberPage',
+        component: FrOwnerMemberPage
     },
 
 
