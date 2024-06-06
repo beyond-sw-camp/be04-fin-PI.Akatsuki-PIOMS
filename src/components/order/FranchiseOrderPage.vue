@@ -182,7 +182,6 @@ const getOrderList = async () => {
       credentials: 'include'
     });
     if(response.status == 204){
-      alert("발주 내역이 없습니다.")
       return;
     }
 
