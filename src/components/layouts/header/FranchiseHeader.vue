@@ -70,23 +70,20 @@
       </li>
 
       <li>
-        <a href="#" class="label">발주 및 배송 관리</a>
+        <a href="#" class="label">발주 및 교환 관리</a>
         <div class="submenu_box2">
           <ul class="submenu">
             <li>
               <a href="#" class="depth1"><h4 id="depth1_title">발주 관리</h4></a>
               <ul class="submenu_sub">
                 <li><router-link to="/franchise/order/list" class="depth2">발주내역 조회 및 관리</router-link></li>
-                <li><router-link to="/franchise/invoice/list" class="depth2">명세서 조회</router-link></li>
               </ul>
               <hr class="hr3">
             </li>
             <li>
-              <a href="#" class="depth1"><h4 id="depth1_title">배송 관리</h4></a>
+              <a href="#" class="depth1"><h4 id="depth1_title">교환/반품 관리</h4></a>
               <ul class="submenu_sub">
-                <li><router-link to="/franchise/delivery/status" class="depth2">배송상태 조회 및 관리</router-link></li>
-                <li><router-link to="/franchise/return/list" class="depth2">반품 상품 조회</router-link></li>
-                <li><router-link to="/franchise/exchange/list" class="depth2">교환 상품 조회</router-link></li>
+                <li><router-link to="/franchise/exchange/list" class="depth2">교환/반품 관리</router-link></li>
               </ul>
             </li>
           </ul>
