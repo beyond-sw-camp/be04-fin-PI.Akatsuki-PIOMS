@@ -68,7 +68,7 @@ const saveAdmin = async () => {
   console.log('Request Data:', requestData);
 
   try {
-    const response = await fetch('http://api.pioms.shop/admin/register', {
+    const response = await fetch('http://localhost:5000/admin/register', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

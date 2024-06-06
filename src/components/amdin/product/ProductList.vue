@@ -256,7 +256,7 @@ const getProductImageUrl = (productCode) => {
 };
 const fetchProductImages = async () => {
   try {
-    const response = await fetch(`http://api.pioms.shop/admin/product/productImage`, {
+    const response = await fetch(`http://localhost:5000/admin/product/productImage`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -280,7 +280,7 @@ const fetchProductImages = async () => {
 };
 const fetchFirstCategories = async () => {
   try {
-    const response = await fetch('http://api.pioms.shop/admin/category/first', {
+    const response = await fetch('http://localhost:5000/admin/category/first', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -301,7 +301,7 @@ const fetchSecondCategories = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://api.pioms.shop/admin/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`, {
+    const response = await fetch(`http://localhost:5000/admin/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -324,7 +324,7 @@ const fetchThirdCategories = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://api.pioms.shop/admin/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`, {
+    const response = await fetch(`http://localhost:5000/admin/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -410,7 +410,7 @@ const setCurrentCategoryThirdCode = (categoryThirdCode) => {
 }
 const getMemberId = async () => {
   try {
-    const response = await fetch('http://api.pioms.shop/admin/product', {
+    const response = await fetch('http://localhost:5000/admin/product', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -436,7 +436,7 @@ const getMemberId = async () => {
 };
 const downloadExcel = () => {
   axios({
-    url: 'http://api.pioms.shop/admin/exceldownload/product-excel',
+    url: 'http://localhost:5000/admin/exceldownload/product-excel',
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${accessToken}`,

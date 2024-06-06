@@ -184,7 +184,7 @@ const fetchUsernameFromToken = () => {
 };
 const pdfDownload = async () => {
   try {
-    const response = await fetch('http://api.pioms.shop/admin/pdfdownload/admin-pdf', {
+    const response = await fetch('http://localhost:5000/admin/pdfdownload/admin-pdf', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

@@ -70,7 +70,7 @@ const selectedSecondCategory = ref('');
 
 const fetchFirstCategories = async () => {
   try {
-    const response = await fetch('http://api.pioms.shop/admin/category/first', {
+    const response = await fetch('http://localhost:5000/admin/category/first', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -93,7 +93,7 @@ const fetchSecondCategories = async (categoryFirstCode) => {
   }
   selectedFirstCategory.value = categoryFirstCode;
   try {
-    const response = await fetch(`http://api.pioms.shop/admin/category/second/list/detail/categoryfirst/${categoryFirstCode}`, {
+    const response = await fetch(`http://localhost:5000/admin/category/second/list/detail/categoryfirst/${categoryFirstCode}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -118,7 +118,7 @@ const fetchThirdCategories = async (categorySecondCode) => {
   }
   selectedSecondCategory.value = categorySecondCode;
   try {
-    const response = await fetch(`http://api.pioms.shop/admin/category/third/list/detail/categorysecond/${categorySecondCode}`, {
+    const response = await fetch(`http://localhost:5000/admin/category/third/list/detail/categorysecond/${categorySecondCode}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -158,7 +158,7 @@ const saveCategoryFirst = async () => {
   console.log('savedFirstData: ', savedFirstData);
 
   try {
-    const responseFirst = await fetch(`http://api.pioms.shop/admin/category/first/post?requesterAdminCode=1`, {
+    const responseFirst = await fetch(`http://localhost:5000/admin/category/first/post?requesterAdminCode=1`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -219,7 +219,7 @@ const saveCategorySecond = async () => {
   console.log('savedSecondData: ', savedSecondData);
 
   try {
-    const responseSecond = await fetch(`http://api.pioms.shop/admin/category/second/create`, {
+    const responseSecond = await fetch(`http://localhost:5000/admin/category/second/create`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -279,7 +279,7 @@ const saveCategoryThird = async () => {
   console.log('savedThirdData: ', savedThirdData);
 
   try {
-    const responseThird = await fetch(`http://api.pioms.shop/admin/category/third/create`, {
+    const responseThird = await fetch(`http://localhost:5000/admin/category/third/create`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

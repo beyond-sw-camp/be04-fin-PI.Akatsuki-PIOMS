@@ -134,7 +134,7 @@ const fetchAsks = async () => {
       throw new Error('No access token found');
     }
 
-    const response = await fetch('http://api.pioms.shop/admin/ask/list', {
+    const response = await fetch('http://localhost:5000/admin/ask/list', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

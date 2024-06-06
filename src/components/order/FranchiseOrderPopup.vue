@@ -9,7 +9,8 @@
       <div class="filter-container">
           <div class="radio-group">
             <div class="title"><label style="width:100px">검색 </label></div>
-            <input v-model="filter" placeholder="검색어를 입력하세요" @input="applyFilter" />
+            <input v-model="filter"  placeholder="검색어를 입력하세요" @input="applyFilter" @keydown.enter/>
+
           </div>
 
           <div class="radio-group">
@@ -130,6 +131,7 @@
   const applyFilter = () => {
     if(conditionFilter.value == ""){
       filteredLists.value = products.value;
+      console.log(filteredLists.value);
       return;
     }
     filteredLists.value = products.value.filter((item) => {
@@ -154,8 +156,8 @@
     if (!accessToken) {
       throw new Error('No access token found');
     }
-      // const response = await fetch("http://api.pioms.shop/franchise/product", {
-      const response = await fetch("http://api.pioms.shop/franchise/product", {
+      // const response = await fetch("http://localhost:5000/franchise/product", {
+      const response = await fetch("http://localhost:5000/franchise/product", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -224,8 +226,8 @@
     if (!accessToken) {
       throw new Error('No access token found');
     }
-    // const response = await fetch(`http://api.pioms.shop/franchise/order`, {
-    const response = await fetch(`http://api.pioms.shop/franchise/order`, {
+    // const response = await fetch(`http://localhost:5000/franchise/order`, {
+    const response = await fetch(`http://localhost:5000/franchise/order`, {
         method: "POST",
         headers: {
           'Authorization': `Bearer ${accessToken}`,

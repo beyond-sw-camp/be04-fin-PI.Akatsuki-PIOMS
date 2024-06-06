@@ -30,7 +30,7 @@ const props = defineProps({
 const deleteProduct = async () => {
   try {
     const newStatus = !props.currentProductExposureStatus;
-    const response = await fetch(`http://api.pioms.shop/admin/product/delete/${props.currentProductCode}`, {
+    const response = await fetch(`http://localhost:5000/admin/product/delete/${props.currentProductCode}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

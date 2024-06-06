@@ -44,7 +44,7 @@ const saveCategorySecond = async () => {
   console.log('Request Data:', requestData);
 
   try {
-    const response = await fetch(`http://api.pioms.shop/admin/category/second/update/${props.currentSecondCode}`, {
+    const response = await fetch(`http://localhost:5000/admin/category/second/update/${props.currentSecondCode}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

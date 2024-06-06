@@ -126,7 +126,7 @@ const checkExchange = async () => {
     if (!accessToken) {
       throw new Error('No access token found');
     }
-    const response = await fetch(`http://api.pioms.shop/admin/exchange/${item.exchangeCode}`, {
+    const response = await fetch(`http://localhost:5000/admin/exchange/${item.exchangeCode}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

@@ -106,7 +106,7 @@ const fetchFranchises = async () => {
       throw new Error('No access token found');
     }
 
-    const response = await fetch('http://api.pioms.shop/admin/franchise/owner/list', {
+    const response = await fetch('http://localhost:5000/admin/franchise/owner/list', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -147,7 +147,7 @@ const resetFilters = () => {
 
 const resetPassword = async () => {
   try {
-    const response = await fetch(`http://api.pioms.shop/admin/franchise/owner/reset-password/${franchiseOwnerCode.value}`, {
+    const response = await fetch(`http://localhost:5000/admin/franchise/owner/reset-password/${franchiseOwnerCode.value}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${store.state.accessToken}`,
