@@ -280,7 +280,7 @@ import { useStore } from 'vuex';
 import Swal from "sweetalert2"; // Vuex store 임포트
 const store = useStore(); // Vuex store 사용
 const asks = ref([]);
-const company = ref();
+const company = ref([]);
 const exchanges = ref([]);
 const franchises = ref([]);
 const notices = ref([]);
@@ -299,9 +299,9 @@ const getDash = async () => {
   console.log(userRole);
 
   if(userRole === 'ROLE_ROOT') {
-    url= 'http://api.pioms.shop/admin/rootDashboard'
+    url= 'http://localhost:5000/admin/rootDashboard'
   }else{
-    url= 'http://api.pioms.shop/admin/adminDashboard'
+    url= 'http://localhost:5000/admin/adminDashboard'
   }
 
   Swal.fire({
@@ -339,7 +339,7 @@ const getDash = async () => {
     const data = await response.json();
     console.log(data);
     asks.value = data.askList;
-    company.value = data.companyVO;
+    company.value.push(data.companyVO);
     exchanges.value = data.exchangeList;
     franchises.value = data.franchiseList;
     notices.value = data.noticeList;
@@ -354,6 +354,7 @@ const getDash = async () => {
       showConfirmButton: false,
       timer: 1500
     });
+
   } catch (error) {
     console.error('오류 발생:', error);
   }
