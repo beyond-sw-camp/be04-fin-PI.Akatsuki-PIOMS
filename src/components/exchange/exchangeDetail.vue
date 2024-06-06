@@ -72,8 +72,8 @@
       </div>
       신청일자 : {{ item.exchangeDate }}
       <div class="action-buttons" >
-          <input v-if="item.exchangeStatus=='처리대기' " class="cancel-btn" type="button" value="저장하기" @click="checkExchange">
-          <input class="cancel-btn" type="button" value="돌아가기" @click="showDetailPopup">
+          <input v-if="item.exchangeStatus=='처리대기' " class="ho-btn" type="button" value="저장하기" @click="checkExchange">
+          <input class="ho-btn" type="button" value="돌아가기" @click="showDetailPopup">
         </div>
       <br>
     </div>

@@ -116,10 +116,11 @@
     padding: 20px;
     border-radius: 30px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    width: 50%;
+    width: 55%;
     max-width: 2000px;
     height: 73%;
     overflow-y: auto;
+    overflow-x: hidden;
     max-height: 90vh;
   }
   

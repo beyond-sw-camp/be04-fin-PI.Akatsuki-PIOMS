@@ -141,10 +141,9 @@
                         </tbody>
                       </table>
                     </div>
-                    <div class="but-group">
-                      <button type="button" class="cancel-btn" @click="clickDeny">취소</button>
-                      &nbsp;&nbsp;&nbsp;
-                      <button type="submit" class="submit-btn">등록</button>
+                    <div class="action-buttons">
+                      <button type="submit" class="ho-btn">등록</button>
+                      <button type="button" class="ho-btn" @click="clickDeny">취소</button>
                     </div>
                   </form>
                 </div>
@@ -160,7 +159,7 @@
           발주일 : {{ item.orderDate }} &nbsp;&nbsp;&nbsp;&nbsp;
            주문코드 : {{ item.orderCode }}<br>
            <div style="float: right">
-             <button class="cancel-btn" @click="showDetailPopup" >돌아가기</button>
+             <button class="ho-btn" @click="showDetailPopup" >돌아가기</button>
            </div>
          </div>
          <br><br>
