@@ -103,6 +103,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
+import Swal from "sweetalert2";
 
 const store = useStore();
 const accessToken = store.state.accessToken;
@@ -119,6 +120,28 @@ const favoritesCurrentPage = ref(1);
 const lowStockCurrentPage = ref(1);
 const itemsPerPage = 6;
 const lowStockItemsPerPage = 3;
+let timerInterval;
+
+Swal.fire({
+  title: "대시보드를 불러오는 중입니다...",
+  timer: 1000,
+  timerProgressBar: true,
+  didOpen: () => {
+    Swal.showLoading();
+    const timer = Swal.getPopup().querySelector("b");
+    timerInterval = setInterval(() => {
+    }, 100);
+  },
+  willClose: () => {
+    clearInterval(timerInterval);
+  }
+}).then((result) => {
+  if (result.dismiss === Swal.DismissReason.timer) {
+    console.log("I was closed by the timer");
+  }
+});
+
+
 
 const fetchDashboardData = async () => {
   try {
