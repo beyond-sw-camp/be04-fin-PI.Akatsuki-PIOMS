@@ -165,13 +165,13 @@ const fetchCategories = async (level) => {
   let url = '';
   switch (level) {
     case 'first':
-      url = 'http://localhost:5000/admin/category/first';
+      url = 'http://api.pioms.shop/admin/category/first';
       break;
     case 'second':
-      url = `http://localhost:5000/admin/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`;
+      url = `http://api.pioms.shop/admin/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`;
       break;
     case 'third':
-      url = `http://localhost:5000/admin/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`;
+      url = `http://api.pioms.shop/admin/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`;
       break;
   }
 
@@ -231,7 +231,7 @@ const uploadImage = async () => {
   formData.append('file', file);
 
   try {
-    const response = await fetch(`http://localhost:5000/admin/product/image`, {
+    const response = await fetch(`http://api.pioms.shop/admin/product/image`, {
       method: 'POST',
       credentials: 'include',
       body: formData,
@@ -272,7 +272,7 @@ const saveProduct = async (imageUrl) => {
   console.log('Request Data:', requestData);
 
   try {
-    const response = await fetch('http://localhost:5000/admin/product/create?requesterAdminCode=1', {
+    const response = await fetch('http://api.pioms.shop/admin/product/create?requesterAdminCode=1', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -434,7 +434,7 @@ const uploadAndSaveProduct = async () => {
   formData.append('categoryThirdCode', selectedThirdCategory.value);
 
   try {
-    const response = await fetch('http://localhost:5000/admin/product/image', {
+    const response = await fetch('http://api.pioms.shop/admin/product/image', {
       method: 'POST',
       credentials: 'include',
       body: formData,

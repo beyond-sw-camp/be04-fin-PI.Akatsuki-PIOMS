@@ -74,7 +74,7 @@ const submitChanges = async () => {
 
     console.log(props.invoiceCode, selectedStatus.value);
 
-    const response = await fetch(`http://localhost:5000/driver/invoice/status/${invoiceCode}/delivery/${selectedStatus.value}`, {
+    const response = await fetch(`http://api.pioms.shop/driver/invoice/status/${invoiceCode}/delivery/${selectedStatus.value}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

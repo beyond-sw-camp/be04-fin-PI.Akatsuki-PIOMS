@@ -121,7 +121,7 @@ const products = ref([]);
 // Fetch products from the server
 const fetchProducts = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/franchise/warehouse/list/product`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/warehouse/list/product`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -173,7 +173,7 @@ const saveFavorites = async () => {
   const promises = selectedProducts.value.map(async (item) => {
     console.log('Item:', item);  // 추가된 로그
     try {
-      const response = await fetch(`http://localhost:5000/franchise/warehouse/toggleFavorite/${item.franchiseWarehouseCode}`, {
+      const response = await fetch(`http://api.pioms.shop/franchise/warehouse/toggleFavorite/${item.franchiseWarehouseCode}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${accessToken}`,

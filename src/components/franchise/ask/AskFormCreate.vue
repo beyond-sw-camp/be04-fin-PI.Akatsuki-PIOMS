@@ -52,7 +52,7 @@ const errorMessage = ref('');
 
 const fetchFranchiseOwnerData = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/franchise/owner`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/owner`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -81,7 +81,7 @@ const submitAsk = async () => {
   }
 
   try {
-    const response = await fetch(`http://localhost:5000/franchise/create`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/create`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`, // 인증 헤더 설정

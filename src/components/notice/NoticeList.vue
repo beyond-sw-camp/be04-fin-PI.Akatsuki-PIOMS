@@ -137,7 +137,7 @@ const itemsPerPage = 15;
 
 const getNotice = async () => {
   try {
-    const response = await fetch('http://localhost:5000/admin/notice/list', {
+    const response = await fetch('http://api.pioms.shop/admin/notice/list', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -252,8 +252,8 @@ const submitNotice = async (notice) => {
   try {
     const method = isEditFormVisible.value ? 'PUT' : 'POST';
     const url = isEditFormVisible.value
-        ? `http://localhost:5000/admin/notice/list/update/${notice.noticeCode}?requesterAdminCode=1`
-        : 'http://localhost:5000/admin/notice/list/register?requesterAdminCode=1';
+        ? `http://api.pioms.shop/admin/notice/list/update/${notice.noticeCode}?requesterAdminCode=1`
+        : 'http://api.pioms.shop/admin/notice/list/register?requesterAdminCode=1';
 
     const response = await fetch(url, {
       method: method,
@@ -281,7 +281,7 @@ const submitNotice = async (notice) => {
 const deleteNotice = async (noticeCode) => {
   try {
     if (confirm('해당 공지사항을 삭제하시겠습니까?')) {
-      const response = await fetch(`http://localhost:5000/admin/notice/list/delete/${noticeCode}?requesterAdminCode=1`, {
+      const response = await fetch(`http://api.pioms.shop/admin/notice/list/delete/${noticeCode}?requesterAdminCode=1`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${accessToken}`,

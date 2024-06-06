@@ -166,7 +166,7 @@ const closeStatusPopup = () => {
 
 const getCountBeforeDelivery = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/driver/${driverCode}/before-delivery/count`, {
+    const response = await fetch(`http://api.pioms.shop/driver/${driverCode}/before-delivery/count`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -194,7 +194,7 @@ const getCountBeforeDelivery = async () => {
 const ingDiv = ref();
 const getCountIngDelivery = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/driver/${driverCode}/ing-delivery/count`, {
+    const response = await fetch(`http://api.pioms.shop/driver/${driverCode}/ing-delivery/count`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -222,7 +222,7 @@ const getCountIngDelivery = async () => {
 const afterDiv = ref();
 const getCountAfterDelivery = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/driver/${driverCode}/complete-delivery/count`, {
+    const response = await fetch(`http://api.pioms.shop/driver/${driverCode}/complete-delivery/count`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -258,7 +258,7 @@ const showPopup = ref(false);
 const selectedNotice = ref({});
 const getNotice = async () => {
   try {
-    const response = await fetch('http://localhost:5000/driver/notice/list', {
+    const response = await fetch('http://api.pioms.shop/driver/notice/list', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -317,7 +317,7 @@ const resetFilter = () => {
 // 대쉬보드
 const getDriverDashBoard = async () => {
   try {
-    const response = await fetch('http://localhost:5000/driver/dashboard', {
+    const response = await fetch('http://api.pioms.shop/driver/dashboard', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

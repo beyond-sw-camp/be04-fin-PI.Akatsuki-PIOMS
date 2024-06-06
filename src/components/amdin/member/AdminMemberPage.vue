@@ -103,7 +103,7 @@ const resetFilters = () => {
 
 const getAdminMembers = async () => {
   try {
-    const response = await fetch('http://localhost:5000/admin/list', {
+    const response = await fetch('http://api.pioms.shop/admin/list', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -129,7 +129,7 @@ const getAdminMembers = async () => {
 };
 const downloadExcel = () => {
   axios({
-    url: 'http://localhost:5000/admin/exceldownload/admin-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
+    url: 'http://api.pioms.shop/admin/exceldownload/admin-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${accessToken}`,

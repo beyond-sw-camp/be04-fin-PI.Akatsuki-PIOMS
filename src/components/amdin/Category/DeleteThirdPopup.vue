@@ -42,7 +42,7 @@ const closeDeleteModal = () => {
 
 const deleteCategoryThird = async () => {
   try {
-    const productResponse = await fetch(`http://localhost:5000/admin/product/category/${props.currentThirdCode}`, {
+    const productResponse = await fetch(`http://api.pioms.shop/admin/product/category/${props.currentThirdCode}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -61,7 +61,7 @@ const deleteCategoryThird = async () => {
     }
 
 
-    const response = await fetch(`http://localhost:5000/admin/category/third/delete/${props.currentThirdCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/category/third/delete/${props.currentThirdCode}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

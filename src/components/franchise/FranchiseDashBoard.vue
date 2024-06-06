@@ -122,7 +122,7 @@ const lowStockItemsPerPage = 3;
 
 const fetchDashboardData = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/franchise/franchiseDashboard`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/franchiseDashboard`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -145,7 +145,7 @@ const fetchDashboardData = async () => {
 
 const fetchProducts = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/franchise/warehouse/list/product`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/warehouse/list/product`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
