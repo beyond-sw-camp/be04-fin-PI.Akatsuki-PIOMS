@@ -34,9 +34,8 @@ const store = createStore({
         }
     },
     actions: {
-        login({ commit }, { accessToken, refreshToken }) {
+        login({ commit }, { accessToken }) {
             commit('setAccessToken', accessToken);
-            commit('setRefreshToken', refreshToken);
 
             const decodedToken = jwtDecode(accessToken);
             const userRole = decodedToken.role;
@@ -47,7 +46,7 @@ const store = createStore({
         async reissueToken({ commit, state }) {
             try {
                 const response = await axiosInstance.post('/reissue');
-                const newAccessToken = response.headers['authorization'].split(' ')[1];
+                const newAccessToken = response.headers['Authorization'].split(' ')[1];
                 commit('setAccessToken', newAccessToken);
             } catch (error) {
                 console.error('토큰 재발급 실패:', error);
@@ -75,6 +74,12 @@ const store = createStore({
                 commit('setUserRole', userRole);
                 commit('setUsername', username);
             }
+
+            // 쿠키에서 refreshToken 가져오기
+            const refreshToken = getCookie('refreshToken');
+            if (refreshToken) {
+                commit('setRefreshToken', refreshToken);
+            }
         }
     },
     getters: {
@@ -84,5 +89,11 @@ const store = createStore({
     },
     plugins: [createPersistedState()],
 });
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
 
 export default store;
