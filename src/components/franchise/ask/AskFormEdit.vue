@@ -30,8 +30,8 @@
             </tr>
           </table>
           <div class="action-buttons">
-            <button @click="props.closeEdit" class="cancel-btn">취소</button>
             <button @click="submitUpdate" class="submit-btn">수정</button>
+            <button @click="props.closeEdit" class="cancel-btn">취소</button>
           </div>
         </div>
       </div>

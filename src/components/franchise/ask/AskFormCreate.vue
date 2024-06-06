@@ -21,8 +21,8 @@
           </table>
           <div v-show="errorMessage" class="error-message">{{ errorMessage }}</div>
           <div class="action-buttons">
-            <button @click="closeCreate" class="cancel-btn">취소</button>
             <button @click="submitAsk" class="submit-btn">등록</button>
+            <button @click="closeCreate" class="cancel-btn">취소</button>
           </div>
         </div>
       </div>
