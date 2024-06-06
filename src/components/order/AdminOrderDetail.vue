@@ -178,7 +178,8 @@
    import { useStore } from 'vuex'; // Vuex store 임포트
    import Swal from "sweetalert2";
    import AdminExchangePage from "@/components/exchange/AdminExchangePage.vue";
-   import FranchiseOrderPage from "@/components/order/FranchiseOrderPage.vue"; // Vuex store 임포트
+   import FranchiseOrderPage from "@/components/order/FranchiseOrderPage.vue";
+   import AdminOrderPage from "@/components/order/AdminOrderPage.vue"; // Vuex store 임포트
 
    const store = useStore(); // Vuex store 사용
 
@@ -275,6 +276,7 @@ const denyOrder = async () => {
         props.showDetailPopup();
         throw new Error('네트워크 오류 발생');
       }
+
       await Swal.fire({
         position: "center",
         icon: "success",
@@ -283,6 +285,7 @@ const denyOrder = async () => {
         timer: 1500
       });
       location.reload(AdminOrderPage);
+
     } catch (error) {
       await Swal.fire({
         position: "center",
@@ -291,7 +294,7 @@ const denyOrder = async () => {
         showConfirmButton: false,
         timer: 1500
       });
-      location.reload(FranchiseOrderPage);
+      location.reload(AdminOrderPage);
 
       props.showDetailPopup();
     }

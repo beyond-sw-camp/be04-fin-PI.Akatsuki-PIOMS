@@ -40,7 +40,7 @@
         <table class="table" style="">
             <thead>
               <tr class="header1">
-                <th>상품 코드</th><th>상품 이름</th><th>상품 가격</th><th>본사 수량</th><th>상품 상태</th><th>색상</th><th>상품 설명</th><th>카테고리(대)</th><th>카테고리(중)</th><th>카테고리(소)</th><th>성별</th>
+                <th>상품 코드</th><th>상품 이름</th><th>상품 가격</th><th>본사 수량</th><th>상품 상태</th><th>색상</th><th>상품 설명</th><th>카테고리(대)</th><th>카테고리(중)</th><th>카테고리(소)</th>
               </tr>
             </thead>
 
@@ -62,7 +62,6 @@
                 <td>{{ product.categoryFirstName }}</td>
                 <td>{{ product.categorySecondName }}</td>
                 <td>{{ product.categoryThirdName }}</td>
-                <td>{{ product.productGender }}</td>
               </tr>
             </tbody>
           </table>

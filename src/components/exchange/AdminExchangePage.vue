@@ -148,25 +148,7 @@ const filterInvoiceCode = ref('');
 const filterExchangeDate = ref('');
 
 const getExchangeList = async () => {
-  let timerInterval;
-  Swal.fire({
-    title: "반품신청서 불러오는 중입니다...",
-    timer: 1000,
-    timerProgressBar: true,
-    didOpen: () => {
-      Swal.showLoading();
-      const timer = Swal.getPopup().querySelector("b");
-      timerInterval = setInterval(() => {
-      }, 100);
-    },
-    willClose: () => {
-      clearInterval(timerInterval);
-    }
-  }).then((result) => {
-    if (result.dismiss === Swal.DismissReason.timer) {
-      console.log("I was closed by the timer");
-    }
-  });
+ 
   try {
     const accessToken = store.state.accessToken;
     if (!accessToken) {

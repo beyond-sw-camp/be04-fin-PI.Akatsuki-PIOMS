@@ -297,20 +297,22 @@ const products = ref([]);
 const isLoading = ref(false);
 
 const userRole = computed(() => store.getters.userRole);
-console.log(userRole);
+
 
 const getDash = async () => {
   let timerInterval;
   let url;
 
   console.log(userRole);
+  console.log(userRole==="ROLE_ADMIN");
+  
 
-  if(userRole === 'ROLE_ROOT') {
+  if(userRole === "ROLE_ROOT") {
     url= 'http://api.pioms.shop/admin/rootDashboard'
   }else{
     url= 'http://api.pioms.shop/admin/adminDashboard'
   }
-
+  console.log(url);
   Swal.fire({
     title: "대시보드를 불러오는 중입니다...",
     timer: 1000,
@@ -344,7 +346,6 @@ const getDash = async () => {
       credentials: 'include'
     });
     const data = await response.json();
-    console.log(data);
     asks.value = data.askList;
     company.value = data.companyVO;
     exchanges.value = data.exchangeList;
@@ -352,6 +353,9 @@ const getDash = async () => {
     notices.value = data.noticeList;
     orderStat.value = data.orderStat;
     products.value = data.products;
+    console.log(franchises.value);
+
+
 
     isLoading.value=true;
 
@@ -388,13 +392,13 @@ const prevPage = () => {
 
 const currentPage2 = ref(1);
 const paginatedLists2 = computed(() => {
-  const start = (currentPage2.value - 1) * 8;
-  const end = start + 8;
+  const start = (currentPage2.value - 1) * 5;
+  const end = start + 5;
   return franchises.value.slice(start, end);
 });
 
 const totalPages2 = computed(() => {
-  return Math.ceil(franchises.value.length / 8);
+  return Math.ceil(franchises.value.length / 5);
 });
 
 const nextPage2 = () => {
