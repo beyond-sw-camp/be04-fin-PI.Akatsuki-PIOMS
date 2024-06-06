@@ -15,6 +15,7 @@
           <td class="filter-input">
             <input type="text" v-model="filterAdminName" @keyup.enter="applyFilters" class="textInput" placeholder="관리자명을 입력하세요."/>
           </td>
+
         </tr>
       </table>
     </div>
@@ -37,12 +38,23 @@
       <table class="table">
         <thead>
         <tr class="header1">
-          <th v-for="(header, index) in headers" :key="index">{{header.label}}</th>
+          <th>관리자코드  </th>
+          <th>관리자이름  </th>
+          <th>ID  </th>
+          <th>이메일  </th>
+          <th>휴대전화  </th>
+          <th>역할  </th>
+          <th>활성상태  </th>
+          <th>로그인실패  </th>
+          <th>등록일  </th>
+          <th>수정일  </th>
+          <th>삭제일  </th>
+          <th>발급코드  </th>
         </tr>
         </thead>
         <tbody>
         <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost">
-          <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">
+          <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td" style="font-size: 8px;" >
                 {{ item[header.key] }}
           </td>
         </tr>
@@ -70,7 +82,7 @@ const headers = ref([
   { key: 'adminCode', label: '관리자 코드'},
   { key: 'adminName', label: '이름'},
   { key: 'adminId', label: 'ID'},
-  { key: 'adminPwd', label: 'PWD'},
+  // { key: 'adminPwd', label: 'PWD'},
   { key: 'adminEmail', label: '이메일'},
   { key: 'adminPhone', label: '휴대전화'},
   { key: 'adminRole', label: '역할'},
@@ -190,7 +202,7 @@ getAdminMembers();
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 10px;
-  width: 1250px;
+  width: 1300px;
 }
 
 .filter-table td {
@@ -266,8 +278,8 @@ getAdminMembers();
 }
 
 .table {
-  width: 1200px;
-  max-width: 1200px;
+  width: 1300px;
+  max-width: 1300px;
   border-collapse: collapse;
   background-color: #fff;
   border-radius: 10px;
@@ -300,7 +312,7 @@ getAdminMembers();
   background-color: #D9D9D9;
   font-weight: bold;
   height: 50px;
-  font-size: 12px;
+  font-size: 8px;
   text-align: center;
   width: 5%;
 }

@@ -170,13 +170,12 @@ const getOrderList = async () => {
       },
       credentials: 'include'
     });
-
-
+    isLoading.value=true;
     if (!response.ok) {
       throw new Error('네트워크 오류 발생');
     }
-
     const data = await response.json();
+
     if (data.length > 0) {
       lists.value = data.map(({ ...rest }) => rest);
       filteredLists.value = lists.value;
@@ -184,18 +183,7 @@ const getOrderList = async () => {
       lists.value = [];
       filteredLists.value = [];
     }
-    isLoading.value=true;
-
- 
-
   } catch (error) {
-    await Swal.fire({
-      position: "center",
-      icon: "success",
-      title: "발주 목록 불러오기 실패.",
-      showConfirmButton: false,
-      timer: 1500
-    });
     console.error('오류 발생:', error);
   }
 };
