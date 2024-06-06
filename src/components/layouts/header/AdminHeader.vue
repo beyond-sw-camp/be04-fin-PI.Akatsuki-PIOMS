@@ -1,19 +1,17 @@
 <template>
-  <!-- root 관리자 header -->
-  <header class="header">
-    <img class="logo" src="@/assets/icon/PIOMS_로고.png" alt="Logo" />
+  <div class="fb__header-info">
+    <img class="logo" src="@/assets/icon/PIOMS_로고.png" alt="Logo"/>
     <section class="header_info">
-      <div class="crown">
-        <img v-if="userRole === 'ROLE_ROOT'" class="crown_icon" src="@/assets/icon/Crown.png" alt="Crown Icon"/>
-        <img v-else-if="userRole === 'ROLE_ADMIN'" class="admin_icon" src="@/assets/icon/admin.png" alt="Admin Icon"/>
+      <div class="crown" style="cursor: pointer">
+        <img class="crown_icon" :src="userRoleIcon" alt="User Role Icon"/>
         <h5><u>{{ username }}</u>님 정보</h5>
       </div>
-      <div class="dictionary">
+      <div class="dictionary" style="cursor: pointer">
         <img class="dictionary_icon" src="@/assets/icon/Dictionary.png" alt="Dictionary"/>
-        <button @click="pdfDownload">관리자 매뉴얼</button>
+        <h5 @click="pdfDownload">관리자 매뉴얼</h5>
       </div>
       <div>
-        <button class="cta" @click="logout">
+        <button class="cta" @click="confirmLogout">
           <span>Logout</span>
           <svg width="15px" height="10px" viewBox="0 0 13 10">
             <path d="M1,5 L11,5"></path>
@@ -22,31 +20,27 @@
         </button>
       </div>
     </section>
-  </header>
+  </div>
 
-  <div class="navigation-wrapper">
-    <hr class="hr1"/>
-    <!-- 카테고리 -->
+  <div class="fb__header-btn">
     <nav class="header_rootAdmin">
       <ul class="nav_header">
-        <router-link to="/admin/home" style="align-items: center; display: flex">
-          <a href="#" class="dashboard">
-            <img src="@/assets/icon/dashboard.png"/>
-          </a>
-        </router-link>
+          <router-link to="/admin/home" class="flex items-center">
+              <img src="@/assets/icon/dashboard.png" alt="Dashboard" />
+          </router-link>
 
         <li>
-          <a href="#" class="label">가맹점 및 직원 관리</a>
+          <a href="admin/francise" class="label">가맹점 및 직원 관리</a>
           <div class="submenu_box">
             <ul class="submenu">
               <li>
-                <a href="#" class="depth1"><h4 id="depth1_title">가맹점 및 점주 관리</h4></a>
+                <a href="admin/franchise" class="depth1"><h4 id="depth1_title">가맹점 및 점주 관리</h4></a>
                 <ul class="submenu_sub">
                   <li><a href="#" class="depth2">가맹점 및 점주 전체조회</a></li>
-                  <li><a href="#" class="depth2">가맹점 관리</a></li>
-                  <li><a href="#" class="depth2">점주 관리</a></li>
+                  <li><a href="admin/franchise" class="depth2">가맹점 관리</a></li>
+                  <li><a href="admin/franchise/memers" class="depth2">점주 관리</a></li>
                 </ul>
-                <hr class="hr3">
+                <hr class="hr3" />
               </li>
               <li>
                 <a href="#" class="depth1"><h4 id="depth1_title">배송기사 관리</h4></a>
@@ -61,14 +55,14 @@
 
         <li>
           <a href="#" class="label">상품 및 상품 카테고리 관리</a>
-          <div class="submenu_box">
+          <div class="submenu_box" style="height: 240px">
             <ul class="submenu">
               <li>
                 <a href="#" class="depth1"><h4 id="depth1_title">상품 관리</h4></a>
                 <ul class="submenu_sub">
                   <li><router-link to="/admin/product/list" class="depth2">상품 전체조회 및 관리</router-link></li>
                 </ul>
-                <hr class="hr3">
+                <hr class="hr3" />
               </li>
               <li>
                 <a href="#" class="depth1"><h4 id="depth1_title">상품 카테고리 관리</h4></a>
@@ -83,19 +77,19 @@
 
         <li>
           <a href="#" class="label">배송 및 발주 관리</a>
-          <div class="submenu_box">
+          <div class="submenu_box" style="height: 200px">
             <ul class="submenu">
               <li>
                 <a href="#" class="depth1"><h4 id="depth1_title">배송 관리</h4></a>
                 <ul class="submenu_sub">
                   <li><a href="#" class="depth2">배송상태 조회 및 관리</a></li>
                 </ul>
-                <hr class="hr3">
+                <hr class="hr3" />
               </li>
               <li>
                 <a href="#" class="depth1"><h4 id="depth1_title">발주 관리</h4></a>
                 <ul class="submenu_sub">
-                  <li><router-link to="/admin/order/list" class="depth2">발주 목록 조회 및 승인</router-link></li>
+                  <li><router-link to="/admin/product/list" class="depth2">발주 목록 조회 및 승인</router-link></li>
                 </ul>
               </li>
             </ul>
@@ -104,34 +98,12 @@
 
         <li>
           <a href="#" class="label">반품 및 교환 관리</a>
-          <div class="submenu_box">
+          <div class="submenu_box" style="height: 100px">
             <ul class="submenu">
               <li>
                 <a href="#" class="depth1"><h4 id="depth1_title">반품 관리</h4></a>
                 <ul class="submenu_sub">
-                  <li><router-link to="/admin/exchange/list" class="depth2">반품 상품 조회</router-link></li>
-                </ul>
-                <hr class="hr3">
-              </li>
-            </ul>
-          </div>
-        </li>
-
-        <li>
-          <a href="#" class="label">공지 및 문의 관리</a>
-          <div class="submenu_box">
-            <ul class="submenu">
-              <li>
-                <a href="#" class="depth1"><h4 id="depth1_title">공지 관리</h4></a>
-                <ul class="submenu_sub">
-                  <li><router-link to="/admin/notice/list" class="depth2">공지사항 조회 및 관리</router-link></li>
-                </ul>
-                <hr class="hr3">
-              </li>
-              <li>
-                <a href="#" class="depth1"><h4 id="depth1_title">문의 관리</h4></a>
-                <ul class="submenu_sub">
-                  <li><router-link to="/admin/ask" class="depth2">문의사항 조회 및 관리</router-link></li>
+                  <li><a href="/admin/exchange/list" class="depth2">반품 상품 조회</a></li>
                 </ul>
               </li>
             </ul>
@@ -139,20 +111,41 @@
         </li>
 
         <li>
-          <a href="#" class="label">통계 및 이력 관리</a>
-          <div class="submenu_box">
+          <a href="/admin/notice/list" class="label">공지 및 문의 관리</a>
+          <div class="submenu_box" style="height: 200px">
             <ul class="submenu">
               <li>
-                <a href="#" class="depth1"><h4 id="depth1_title">통계 관리</h4></a>
+                <a style="cursor: default" class="depth1"><h4 id="depth1_title">공지 관리</h4></a>
+                <ul class="submenu_sub">
+                  <li><a href="/admin/notice/list" class="depth2">공지사항 조회 및 관리</a></li>
+                </ul>
+                <hr class="hr3" />
+              </li>
+              <li>
+                <a class="depth1" style="cursor: default"><h4 id="depth1_title">문의 관리</h4></a>
+                <ul class="submenu_sub">
+                  <li><a href="/admin/ask" class="depth2">문의사항 조회 및 관리</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </li>
+
+        <li>
+          <a href="/admin/logs" class="label">통계 및 이력 관리</a>
+          <div class="submenu_box" style="height: 200px">
+            <ul class="submenu">
+              <li>
+                <a class="depth1" style="cursor: default"><h4 id="depth1_title">통계 관리</h4></a>
                 <ul class="submenu_sub">
                   <li><a href="#" class="depth2">전체 통계 관리</a></li>
                 </ul>
-                <hr class="hr3">
+                <hr class="hr3" />
               </li>
               <li>
-                <a href="#" class="depth1"><h4 id="depth1_title">이력 관리</h4></a>
+                <a class="depth1" style="cursor: default"><h4 id="depth1_title">이력 관리</h4></a>
                 <ul class="submenu_sub">
-                  <li><a href="#" class="depth2">전체 이력 관리</a></li>
+                  <li><a href="/admin/logs" class="depth2">전체 이력 관리</a></li>
                 </ul>
               </li>
             </ul>
@@ -160,7 +153,6 @@
         </li>
       </ul>
     </nav>
-    <hr class="hr2"/>
   </div>
 </template>
 
@@ -169,10 +161,11 @@ import { onMounted, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { jwtDecode } from 'jwt-decode';
+import Swal from 'sweetalert2';
 
-const router = useRouter();
 const store = useStore();
 const accessToken = store.state.accessToken;
+const router = useRouter();
 const username = ref('');
 
 const fetchUsernameFromToken = () => {
@@ -182,6 +175,7 @@ const fetchUsernameFromToken = () => {
     username.value = decoded.username;
   }
 };
+
 const pdfDownload = async () => {
   try {
     const response = await fetch('http://api.pioms.shop/admin/pdfdownload/admin-pdf', {
@@ -209,6 +203,7 @@ const pdfDownload = async () => {
     console.error('There has been a problem with your fetch operation:', error);
   }
 };
+
 const logout = async () => {
   try {
     await store.dispatch('logout');
@@ -216,6 +211,20 @@ const logout = async () => {
   } catch (error) {
     console.error('로그아웃 오류:', error);
   }
+};
+
+const confirmLogout = async () => {
+  Swal.fire({
+    icon: 'warning',
+    title: '로그아웃 하시겠습니까?',
+    showCancelButton: true,
+    confirmButtonText: '예',
+    cancelButtonText: '아니오'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      logout();
+    }
+  });
 };
 
 onMounted(() => {
@@ -226,37 +235,166 @@ onMounted(() => {
 
   labels.forEach(label => {
     const submenu = label.nextElementSibling;
-    let hideTimeout;
 
     label.addEventListener('mouseenter', () => {
-      clearTimeout(hideTimeout);
-      if (submenu) submenu.style.display = 'block';
+      if (submenu) {
+        submenu.style.display = 'block';
+      }
     });
 
     label.addEventListener('mouseleave', () => {
-      hideTimeout = setTimeout(() => {
-        if (!submenu.matches(':hover')) submenu.style.display = 'none';
-      }, 80);
+      if (submenu) {
+        submenu.style.display = 'none';
+      }
     });
 
     if (submenu) {
       submenu.addEventListener('mouseenter', () => {
-        clearTimeout(hideTimeout);
+        submenu.style.display = 'block';
       });
 
       submenu.addEventListener('mouseleave', () => {
-        hideTimeout = setTimeout(() => {
-          submenu.style.display = 'none';
-        }, 300);
+        submenu.style.display = 'none';
       });
     }
   });
 });
 
-const userRole = computed(() => store.getters.userRole);
+const userRoleIcon = computed(() => {
+  if (store.getters.userRole === 'ROLE_ROOT') {
+    return '@/assets/icon/Crown.png';
+  } else if (store.getters.userRole === 'ROLE_ADMIN') {
+    return '@/assets/icon/admin.png';
+  }
+  return '';
+});
 </script>
 
+
 <style scoped>
+.fb__header-info{
+  position: relative;
+  z-index: 4;
+  height: 50px;
+  background: #FFFFFF;
+  border-bottom: solid black 1px;
+}
+
+.fb__header-logo{
+  display: inline-block;
+  width: 180px;
+  height: 30px;
+  vertical-align: middle;
+  background: url('@/assets/icon/PIOMS_로고.png') no-repeat 0 0 / 30% auto;
+  text-indent: -9999px;
+}
+.fb__header-title {
+  position: absolute;
+  top: 11px;
+  left: 26px;
+  margin: 0;
+  color: #fff;
+  font-size: 17px;
+}
+
+.fb__header__my-relation relation{
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.relation__name {
+  display: block;
+  float: left;
+  color: #fff;
+  font-size: 12px;
+  line-height: 50px;
+}
+
+.fb__header .relation__btn {
+  position: relative;
+  display: inline-block;
+  line-height: 50px;
+}
+.fb__header .relation__name, .fb__header .relation a {
+  display: block;
+  float: left;
+  color: #fff;
+  font-size: 12px;
+  line-height: 50px;
+}
+
+.fb__header .relation__search, .fb__header .relation__favorites {
+  float: left;
+  position: relative;
+}
+div {
+  display: block;
+  unicode-bidi: isolate;
+}
+.fb__header .relation__btn {
+  position: relative;
+  display: inline-block;
+  line-height: 50px;
+}
+.fb__header__my-relation {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+a {
+  color: #000;
+  text-decoration: none;
+}
+h1, h2, h3, h4 {
+  margin: 0;
+  font-size: 14px;
+}
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+div {
+  display: block;
+  unicode-bidi: isolate;
+}
+a {
+  background-color: transparent;
+}
+
+
+.fb__header .relation__name, .fb__header .relation a {
+  display: block;
+  float: left;
+  color: #fff;
+  font-size: 12px;
+  line-height: 50px;
+}
+
+.fb__header .relation__btn--log, .fb__header .relation__btn--mypage {
+  margin-left: 20px;
+}
+
+.relation__btn--log adm-manual{
+  display: block;
+  float: left;
+  color: #fff;
+  font-size: 12px;
+  line-height: 50px;
+}
+
+.fb__header .relation__name, .fb__header .relation a {
+  display: block;
+  float: left;
+  color: #fff;
+  font-size: 12px;
+  line-height: 50px;
+}
+
+
+
+
+
+
 header {
   display: flex;
   justify-content: space-between;
@@ -271,11 +409,43 @@ header {
   top: 0;
   right: 0;
 }
+.header_info {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 50px;
+  gap: 20px; /* 각 항목 사이의 간격을 일정하게 설정 */
+}
+
+.header_info .crown,
+.header_info .dictionary,
+.header_info > div:last-child {
+  display: flex;
+  align-items: center;
+}
+
+.header_info .crown_icon,
+.header_info .dictionary_icon {
+  margin-right: 10px;
+}
+
+.header_info .cta {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.header_info .cta svg {
+  margin-left: 5px;
+}
+
 .logo {
   width: 100px;
   height: 50px;
   position: relative;
-  bottom: 9px;
   left: 7px;
   cursor: pointer;
 }
@@ -395,14 +565,14 @@ hr.hr1, hr.hr2 {
   height: 25px;
   position: relative;
   left: 7px;
-  top: 0;
+  top: 100px;
 }
 
 .label {
-  width: 170px;
+  width: 180px;
   height: 9px;
   justify-content: center;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
   color: #444444;
   line-height: 10px;
@@ -429,7 +599,6 @@ hr.hr1, hr.hr2 {
   margin: 0;
   padding: 0;
   display: flex; /* 수평으로 맞추기 */
-  gap: 100px;
 }
 
 .nav_header > li {
@@ -437,7 +606,6 @@ hr.hr1, hr.hr2 {
 }
 .label:hover {
   position: relative;
-  top: -1px;
   background-color: #D9D9D9;
   border-radius: 10px;
 }
@@ -459,7 +627,7 @@ hr.hr1, hr.hr2 {
 .label {
 }
 .dashboard {
-  width: 20px;
+  width: 18px;
   height: 18px; /* 아이콘 크기 조정 */
   vertical-align: middle;
   position: relative;
@@ -482,7 +650,7 @@ hr.hr1, hr.hr2 {
 
 .submenu {
   position: relative;
-  top: 10px;
+  /*top: 10px;*/
   right: 25px;
   list-style-type: none;
   height: 20px;
@@ -522,9 +690,9 @@ hr.hr1, hr.hr2 {
 .submenu_box {
   display: none;
   position: relative;
-  top: 10px;
+  bottom: 3px;
   margin: 0;
-  border-radius: 15px;
+  border-radius: 7px;
   border: 1px solid #B9B9B9;
   background-color: #fff;
   width: 220px;
@@ -565,5 +733,29 @@ hr.hr1, hr.hr2 {
 /* .show 클래스가 추가되면 하위 메뉴 표시 */
 .show {
   display: block;
+}
+
+.fb__header-btn {
+  position: relative;
+  background: #FFFFFF;
+  height: 48px;
+  border-bottom: solid black 1px;
+}
+.fb__header .main-nav {
+  position: relative;
+}
+nav {
+  display: block;
+  unicode-bidi: isolate;
+}
+ul {
+  display: block;
+  list-style-type: disc;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  padding-inline-start: 40px;
+  unicode-bidi: isolate;
 }
 </style>
