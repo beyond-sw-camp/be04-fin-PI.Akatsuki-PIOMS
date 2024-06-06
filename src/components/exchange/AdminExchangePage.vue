@@ -169,13 +169,7 @@ const getExchangeList = async () => {
     }
     const data = await response.json();
     isLoading.value=true;
-    await Swal.fire({
-      position: "center",
-      icon: "success",
-      title: "반품서 불러오기 성공",
-      showConfirmButton: false,
-      timer: 1500
-    });
+    
     if (data.length > 0) {
       lists.value = data.map(({ ...rest }) => rest);
       filteredLists.value = lists.value;
