@@ -3,7 +3,7 @@
   <!-- 공지사항 상세 정보 팝업 -->
     <div class="notice-form">
       <div class="title" style="display: flex; justify-content: space-between; ">
-        <h2>공지사항 상세 정보</h2>
+        <h2 class="h2">공지사항 상세 정보</h2>
         <button class="close-btn" @click="$emit('close')">X</button>
       </div>
 
@@ -18,10 +18,10 @@
         </div>
       <div style="display: flex; gap: 30px;">
         <div>
-          <div class="label">등록일:  {{ notice.noticeEnrollDate }}</div>
+          <div class="label">등록일 |  {{ notice.noticeEnrollDate }}</div>
         </div>
         <div>
-          <div class="label">수정일: {{ notice.noticeUpdateDate }}</div>
+          <div class="label">수정일 | {{ notice.noticeUpdateDate }}</div>
         </div>
       </div>
 
@@ -59,41 +59,6 @@ const props = defineProps({
   align-items: center;
 }
 
-.notice-form {
-  background: #ffffff;
-  //padding: 0px 10px 10px 10px;
-  border-radius: 10px;
-  border-color: black;
-  border: 5px solid;
-  max-width: 500px;
-  width: 100%;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1001; /* 팝업 창이 가장 위에 오도록 z-index 조정 */
-}
-
-.close-btn {
-  background: #444444;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  width: 40px;
-  height: 40px;
-}
-
-.back {
-  margin-top: 10px;
-  padding: 10px;
-  background: #6c757d;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
 
 .close-btn {
   background: #d9d9d9;
@@ -105,28 +70,37 @@ const props = defineProps({
 }
 
 .input-title{
-  width: 100%;
-  border: 2px solid black;
+  width: 470px;
+  height: 30px;
+  margin-left: 10px;
+  background-color: #d9d9d9;
+  border-radius: 5px;
+  padding-left: 10px;
+  align-items: center;
+  display: flex;
+}
+
+.h2 {
+  display: flex;
+  align-items: center;
+  position: relative;
+  top: 5px
 }
 
 .title {
   background-color: #d9d9d9;
-  font-size: 20px;
-  font-weight: 500;
-  padding: 10px;
-  padding-left: 20px;
-  border-radius: 10px;
-}
-.register {
-  margin: 0;
+  font-size: 12px;
   margin-bottom: 10px;
-  font-size: 20px;
-
+  padding-left: 10px;
+  padding-bottom: 5px;
+  border-radius: 5px;
+  height: 40px;
 }
+
 .notice-form {
   background: #ffffff;
   //padding: 0px 10px 10px 10px;
-  border-radius: 10px;
+  border-radius: 5px;
   border-color: #d9d9d9;
   border: 5px;
   max-width: 500px;
@@ -145,20 +119,43 @@ const props = defineProps({
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
+  width: 15px;
+  height: 15px;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  margin-right: 10px;
 }
-.regist-btn {
-  background: #9a9a9a;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.text-area{
-  width: 100%;
-  height: 200px;
-  border: 2px solid black;
 
+
+.text-area {
+  width: 470px;
+  height: 160px;
+  margin-left: 10px;
+  background-color: #d9d9d9;
+  border-radius: 5px;
+  padding-left: 10px;
+  justify-content: flex-start;
+  display: flex;
+  padding-top: 8px;
+}
+
+.noticeTitle,
+.noticeContent,
+.label {
+  margin-left: 18px;
+  font-weight: bold;
+}
+
+.label {
+  margin-top: 10px;
+  margin-bottom: 8px;
+  position: relative;
+  left: 65px;
+  font-size: 12px;
+  color: #6c757d;
 }
 
 
