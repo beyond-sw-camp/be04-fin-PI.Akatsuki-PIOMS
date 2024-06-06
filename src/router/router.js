@@ -32,6 +32,8 @@ import FrWarehousePage from "@/components/franchise/warehouse/FrWarehousePage.vu
 import AdminDashBoard from "@/components/amdin/dashboard/AdminDashBoard.vue";
 
 
+import AdminInvoice from '@/components/amdin/invoice/AdminInvoice.vue';
+
 import AdminMembers from "@/components/amdin/member/AdminMemberPage.vue";
 import DriverMemberPage from "@/components/amdin/member/DriverMemberPage.vue";
 import FrOwnerMemberPage from "@/components/franchise/member/FrOwnerMemberPage.vue";
@@ -214,6 +216,11 @@ const routes = [
         path: '/admin/admins',
         name: 'AdminMemberList',
         component: AdminMembers
+    },
+    {
+        path: '/admin/invoices',
+        name: 'AdminInvoiceList',
+        component: AdminInvoice
     },
 ];
 

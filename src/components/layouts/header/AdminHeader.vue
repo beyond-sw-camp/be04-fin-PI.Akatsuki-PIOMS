@@ -88,7 +88,7 @@
               <li>
                 <a href="#" class="depth1"><h4 id="depth1_title">배송 관리</h4></a>
                 <ul class="submenu_sub">
-                  <li><a href="#" class="depth2">배송상태 조회 및 관리</a></li>
+                  <li><router-link to="/admin/invoices" class="depth2">배송상태 조회 및 관리</router-link></li>
                 </ul>
                 <hr class="hr3" />
               </li>
