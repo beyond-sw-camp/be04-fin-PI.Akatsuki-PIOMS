@@ -16,27 +16,23 @@
           <div class="radio-group">
             <div class="title"><label style="width:100px">상품상태</label></div>
 
-            <label>
-              전체 <input type="radio" value="" name="dateOrder" v-model="conditionFilter" @change="applyFilter" checked>
-            </label>
-            <label>
-              공급가능 <input type="radio" value="공급가능" name="dateOrder" v-model="conditionFilter" @change="applyFilter" >
-            </label>
-            <label>
-              일시제한 <input type="radio" value="일시제한" name="dateOrder" v-model="conditionFilter" @change="applyFilter" >
-            </label>
-            <label>
-              단종 <input type="radio" value="단종" name="dateOrder" v-model="conditionFilter" @change="applyFilter" >
-            </label>
-            <label>
-              품절 <input type="radio" value="품절" name="dateOrder" v-model="conditionFilter" @change="applyFilter">
-            </label>
+            <input type="radio" value="" name="dateOrder" v-model="conditionFilter" @change="applyFilter" checked>
+            <label> 전체 </label>
+            <input type="radio" value="공급가능" name="dateOrder" v-model="conditionFilter" @change="applyFilter" >
+            <label>공급가능</label>
+            <input type="radio" value="일시제한" name="dateOrder" v-model="conditionFilter" @change="applyFilter" >
+            <label>일시제한</label>
+            <input type="radio" value="단종" name="dateOrder" v-model="conditionFilter" @change="applyFilter" >
+            <label>단종</label>
+            <input type="radio" value="품절" name="dateOrder" v-model="conditionFilter" @change="applyFilter">
+            <label>품절</label>
+            
           </div>
       </div>
 
       <div class="divvv-title">상품 리스트</div>
 
-      <div class="table-container">
+      <div class="table-container" style="max-height: 100px; max-height: 400px; /* 원하는 최대 높이를 설정하세요 */overflow-y: auto; overflow-x: auto;  ">
         <table class="table" style="">
             <thead>
               <tr class="header1">
