@@ -599,7 +599,6 @@ hr.hr1, hr.hr2 {
   margin: 0;
   padding: 0;
   display: flex; /* 수평으로 맞추기 */
-  gap: 75px;
 }
 
 .nav_header > li {
