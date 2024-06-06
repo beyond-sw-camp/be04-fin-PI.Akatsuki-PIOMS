@@ -9,16 +9,11 @@
       <router-view />
     </article>
   </section>
-
-
-<!--    <footer class="footer24">-->
-<!--      <Footer />-->
-<!--    </footer>-->
 </template>
 
 <script setup>
-import {computed, onMounted} from 'vue';
-import {useStore} from 'vuex';
+import { computed, onMounted } from 'vue';
+import { useStore } from 'vuex';
 import Footer from "@/components/layouts/footer/Footer.vue";
 import AdminHeader from "@/components/layouts/header/AdminHeader.vue";
 import DriverHeader from "@/components/layouts/header/DriverHeader.vue";
@@ -36,13 +31,16 @@ onMounted(async () => {
   if (token) {
     localStorage.setItem('accessToken', token);
     await store.dispatch('initializeAuth');
+
+    const url = new URL(window.location);
+    url.searchParams.delete('token');
+    window.history.replaceState({}, document.title, url.toString());
   }
 });
 </script>
 
 <style scoped>
-
-.fb__wrap{
+.fb__wrap {
   position: absolute;
   top: 106px;
   right: 0;
@@ -52,14 +50,9 @@ onMounted(async () => {
   height: auto;
 }
 
-.fb__header{
+.fb__header {
   position: absolute;
   top: -106px;
   width: 100%;
 }
-
-
-
-
-
 </style>

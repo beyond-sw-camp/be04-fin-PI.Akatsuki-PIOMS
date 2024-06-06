@@ -206,7 +206,7 @@ const routes = [
         path: '/admin/home',
         name: 'AdminDashBoard',
         component: AdminDashBoard,
-        meta: { requiresAuth: true, preventBack: true, role: ['ROLE_ROOT', 'ROLE_ADMIN'] } // preventBack 추가
+        meta: { requiresAuth: true, preventBack: true, role: ['ROLE_ROOT', 'ROLE_ADMIN'] }
     },
     {
         path: '/admin/franchise/members',
