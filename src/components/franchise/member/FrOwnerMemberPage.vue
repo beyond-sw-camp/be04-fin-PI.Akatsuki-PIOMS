@@ -307,7 +307,13 @@ const closeEdit = () => {
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-spacing: 0 10px;
+  table-layout: fixed; /* 고정된 테이블 레이아웃 */
+}
+
+.table th, .table td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .table th {
@@ -315,21 +321,6 @@ const closeEdit = () => {
   color: #000;
   font-size: 16px;
   text-align: center;
-}
-
-.table th, td {
-  width: 50px;
-}
-
-.table th:nth-child(5), .table td:nth-child(5) {
-  width: 100px;
-}
-
-td.boardname {
-  text-decoration: none;
-  color: black;
-  cursor: pointer;
-  width: 150px;
 }
 
 .header1 {
@@ -340,26 +331,14 @@ td.boardname {
   text-align: center;
 }
 
-.header1 .num {
-  width: 5%;
-}
-
 .allpost {
   text-align: center;
   padding: 10px 0;
 }
 
-.allpost .num {
-  width: 5%;
-}
-
 .allpost td {
   border-right: 1px solid #ddd;
   font-size: 14px;
-}
-
-.allpost td:nth-child(11) {
-  width: 150px;
 }
 
 .editbutton {
