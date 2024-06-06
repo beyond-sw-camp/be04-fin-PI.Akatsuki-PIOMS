@@ -287,7 +287,7 @@ import { useStore } from 'vuex';
 import Swal from "sweetalert2"; // Vuex store 임포트
 const store = useStore(); // Vuex store 사용
 const asks = ref([]);
-const company = ref([]);
+const company = ref({});
 const exchanges = ref([]);
 const franchises = ref([]);
 const notices = ref([]);
@@ -346,7 +346,7 @@ const getDash = async () => {
     const data = await response.json();
     console.log(data);
     asks.value = data.askList;
-    company.value.push(data.companyVO);
+    company.value = data.companyVO;
     exchanges.value = data.exchangeList;
     franchises.value = data.franchiseList;
     notices.value = data.noticeList;
