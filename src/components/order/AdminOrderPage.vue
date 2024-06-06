@@ -204,13 +204,7 @@ const getOrderList = async () => {
     }
     isLoading.value=true;
 
-    await Swal.fire({
-      position: "center",
-      icon: "success",
-      title: "발주 목록 불러오기 성공.",
-      showConfirmButton: false,
-      timer: 1500
-    });
+ 
 
   } catch (error) {
     await Swal.fire({
