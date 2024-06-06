@@ -12,6 +12,7 @@
             <input type="text" v-model="filterInvoiceCode" />
           </td>
         </tr>
+      </table>
     </div>
     <div align="center">
       <div class="action-buttons">
