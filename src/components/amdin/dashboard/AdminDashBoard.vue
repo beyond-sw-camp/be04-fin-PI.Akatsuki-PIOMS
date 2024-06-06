@@ -94,17 +94,22 @@
           </div>
         </div>
 
-        <div  style="width:100%;height: 30%; border: 1px solid #9d9d9d; border-radius: 5px;">
-          
+
+        <div  style="width:100%;height: 29%; border: 1px solid #9d9d9d; border-radius: 5px;  margin-bottom: 4%">
+          <div  style="height: 100%;  padding: 1%;">
           <div  style="width:100%;height: 10%; display: block; ">
             <div style="float: left; font-size: 16px; ">
               <router-link to="/franchise/order/list" class="link-page">
-              <img src="@/assets/icon/List.png" style="width:16px;padding-top:5px "/>&nbsp;부족한 상품 재고
+                <img src="@/assets/icon/List.png" style="width:16px;padding-top:5px "/> &nbsp;부족한 상품 재고
               </router-link>
             </div>
           </div>
           <hr>
+
           <div  style="width:100%;height: 20%; ">
+            <div  style="display: flex; width: 100%; height: 100%">
+
+              <div  style="width:100%;height: 20%; ">
             <div  style=" width: 100%; height: 100%">
               <div style="min-height: 170px; width:100%">
                 <div class="exchange-list" >
@@ -122,6 +127,9 @@
                   <button @click="prevPage5" :disabled="currentPage5 === 1">이전</button>
                   <button @click="nextPage5" :disabled="currentPage5 === totalPages5">다음</button>
                 </div>
+            </div>
+          </div>
+            </div>
             </div>
           </div>
         </div>
