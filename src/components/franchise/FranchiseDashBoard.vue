@@ -3,11 +3,13 @@
     <div class="main-content">
       <div class="top-row">
         <div class="section order-status">
-            <router-link to="/franchise/order/list" class="order-link">내 발주 현황</router-link>
+          <router-link to="/franchise/order/list" class="order-link">
+            <img src="@/assets/icon/List.png" class="icon" alt="Order Icon">내 발주 현황
+          </router-link>
           <hr class="section-divider" />
           <div class="status-boxes">
             <div class="status-box">
-              <div class = labelbox>
+              <div class="labelbox">
                 <div class="status-label1 status-label-pending">승인 완료</div>
               </div>
               <div class="status-count-box">
@@ -15,7 +17,7 @@
               </div>
             </div>
             <div class="status-box">
-              <div class = labelbox>
+              <div class="labelbox">
                 <div class="status-label2 status-label-accepted">검수 대기</div>
               </div>
               <div class="status-count-box">
@@ -23,7 +25,7 @@
               </div>
             </div>
             <div class="status-box">
-              <div class = labelbox>
+              <div class="labelbox">
                 <div class="status-label3 status-label-denied">검수 완료</div>
               </div>
               <div class="status-count-box">
@@ -33,7 +35,9 @@
           </div>
         </div>
         <div class="section inventory-alert">
-          <router-link to="/franchise/warehouse" class="warehouse-link">재고 알림</router-link>
+          <router-link to="/franchise/warehouse" class="warehouse-link">
+            <img src="@/assets/icon/List.png" class="icon" alt="Warehouse Icon">재고 알림
+          </router-link>
           <hr class="section-divider" />
           <ul class="list">
             <li v-for="item in paginatedLowStockItems" :key="item.franchiseWarehouseCode" class="list-item">
@@ -52,7 +56,9 @@
       </div>
       <div class="bottom-row">
         <div class="section notice-list">
-          <router-link to="/franchise/notice/list" class="notice-link">공지사항 리스트</router-link>
+          <router-link to="/franchise/notice/list" class="notice-link">
+            <img src="@/assets/icon/List.png" class="icon" alt="Notice Icon">공지사항 리스트
+          </router-link>
           <ul class="list">
             <li v-for="item in paginatedNotices" :key="item.noticeCode" class="list-item">
               <div class="notice-title">{{ truncateTitle(item.noticeTitle) }}</div>
@@ -65,7 +71,9 @@
           </div>
         </div>
         <div class="section inquiry-list">
-          <router-link to="/franchise/ask" class="inquiry-link">문의사항 리스트</router-link>
+          <router-link to="/franchise/ask" class="inquiry-link">
+            <img src="@/assets/icon/List.png" class="icon" alt="Ask Icon">문의사항 리스트
+          </router-link>
           <ul class="list">
             <li v-for="item in paginatedAsks" :key="item.askCode" class="list-item">
               <div class="title">{{ truncateTitle(item.askTitle) }}</div>
@@ -83,7 +91,9 @@
           </div>
         </div>
         <div class="section favorite-products">
-          <router-link to="/franchise/favorite/list" class="favorite-link">즐겨찾기 상품 목록</router-link>
+          <router-link to="/franchise/favorite/list" class="favorite-link">
+            <img src="@/assets/icon/List.png" class="icon" alt="Favorite Icon">즐겨찾기 상품 목록
+          </router-link>
           <ul class="list">
             <li v-for="item in paginatedFavorites" :key="item.franchiseWarehouseCode" class="list-item">
               <div>{{ item.product.productName }}</div>
@@ -140,8 +150,6 @@ Swal.fire({
     console.log("I was closed by the timer");
   }
 });
-
-
 
 const fetchDashboardData = async () => {
   try {
@@ -388,7 +396,7 @@ body {
 
 .status-label1,
 .status-label2,
-.status-label3{
+.status-label3 {
   margin-top: 10px;
   font-size: 16px;
   font-weight: bold;
@@ -396,14 +404,14 @@ body {
   color: white;
 }
 
-.labelbox{
+.labelbox {
   display: flex;
   border: 11px solid white;
   align-items: baseline;
   justify-content: center;
 }
 
-.status-label1{
+.status-label1 {
   height: 32px;
   width: 100px;
   background-color: #394CA9;
@@ -411,7 +419,7 @@ body {
   align-items: center;
 }
 
-.status-label2{
+.status-label2 {
   height: 32px;
   width: 100px;
   background-color: #FC6F86;
@@ -419,7 +427,7 @@ body {
   align-items: center;
 }
 
-.status-label3{
+.status-label3 {
   height: 32px;
   width: 100px;
   background-color: #FFCD4B;
@@ -446,6 +454,7 @@ body {
 
 .notice-list .list-item {
   margin-bottom: 30px;
+  padding-bottom: 20px;
 }
 
 .notice-title {
@@ -462,7 +471,7 @@ body {
 .inquiry-link,
 .favorite-link,
 .order-link,
-.warehouse-link{
+.warehouse-link {
   display: block;
   font-size: 18px;
   font-weight: bold;
@@ -471,11 +480,16 @@ body {
   margin-bottom: 15px;
 }
 
+.notice-link{
+  margin-bottom: 26px;
+  //padding:10px;
+}
+
 .notice-link:hover,
 .inquiry-link:hover,
 .favorite-link:hover,
 .order-link:hover,
-warehouse-link:hover{
+.warehouse-link:hover {
   color: #000;
 }
 
