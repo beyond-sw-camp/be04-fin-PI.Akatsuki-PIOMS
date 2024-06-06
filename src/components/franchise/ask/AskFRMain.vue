@@ -1,8 +1,10 @@
 <template>
+  <div class="headerTitle" align="left" style="margin-left: 17%; margin-top: 1%">
+    <p class="product-title"><img src="@/assets/icon/List.png" style="width: 20px;height: 20px">공지 및 문의 관리 > 문의사항 관리 > 문의사항 조회 및 관리</p>
+  </div>
   <div class="container">
     <!-- Breadcrumb 컴포넌트 추가 -->
-    <Breadcrumb :crumbs="breadcrumbs" />
-
+<!--    <Breadcrumb :crumbs="breadcrumbs" />-->
     <div class="filter-section">
       <table class="filter-table">
         <tr>
@@ -246,7 +248,7 @@ const refreshData = () => {
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 10px;
-  width: 1300px;
+  width: 1250px;
 }
 
 .filter-table td {
@@ -278,7 +280,7 @@ const refreshData = () => {
 }
 
 .action-buttons {
-  max-width: 1300px;
+  max-width: 1250px;
   justify-content: center; /* 가운데 정렬 */
   //margin-bottom: 20px;
   align-items: center;
@@ -338,7 +340,7 @@ const refreshData = () => {
 }
 
 .table {
-  width: 1300px;
+  width: 1250px;
   max-width: 1300px;
   border-collapse: collapse;
   background-color: #fff;
@@ -438,6 +440,15 @@ td.boardname {
 
 .pagination span {
   margin: 0 10px;
+  font-weight: bold;
+}
+
+.headerTitle img {
+  width: 10px;
+  height: 10px;
+}
+.headerTitle p {
+  font-size: 20px;
   font-weight: bold;
 }
 </style>

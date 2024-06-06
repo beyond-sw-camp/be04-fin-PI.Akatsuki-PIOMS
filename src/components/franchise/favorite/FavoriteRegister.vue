@@ -44,8 +44,10 @@
           <td>이미지</td>
           <td>{{ item.franchiseWarehouseTotal }}</td>
           <td>{{ item.franchiseWarehouseEnable }}</td>
-          <td :class="{ 'status-temporary': item.product.productStatus === '일시제한', 'status-available': item.product.productStatus === '공급가능' }">
-            {{ item.product.productStatus }}
+          <td>
+            <div :class="getStatusClass(item.product.productStatus)" class="status-label">
+              {{ item.product.productStatus }}
+            </div>
           </td>
           <td>{{ item.product.productColor }}</td>
           <td>{{ item.product.productSize }}</td>
@@ -87,8 +89,10 @@
           <td>이미지</td>
           <td>{{ item.franchiseWarehouseTotal }}</td>
           <td>{{ item.franchiseWarehouseEnable }}</td>
-          <td :class="{ 'status-temporary': item.product.productStatus === '일시제한', 'status-available': item.product.productStatus === '공급가능' }">
-            {{ item.product.productStatus }}
+          <td>
+            <div :class="getStatusClass(item.product.productStatus)" class="status-label">
+              {{ item.product.productStatus }}
+            </div>
           </td>
           <td>{{ item.product.productColor }}</td>
           <td>{{ item.product.productSize }}</td>
@@ -171,7 +175,6 @@ const saveFavorites = async () => {
   let successfullyAddedProducts = [];
 
   const promises = selectedProducts.value.map(async (item) => {
-    console.log('Item:', item);  // 추가된 로그
     try {
       const response = await fetch(`http://api.pioms.shop/franchise/warehouse/toggleFavorite/${item.franchiseWarehouseCode}`, {
         method: 'PUT',
@@ -200,7 +203,6 @@ const saveFavorites = async () => {
 
   await Promise.all(promises);
 
-  let message = '';
   if (successfullyAddedProducts.length > 0) {
     await Swal.fire({
       icon: 'success',
@@ -215,6 +217,14 @@ const saveFavorites = async () => {
       text:  alreadyFavoriteProducts.join(', ') + ' 은(는) 이미 즐겨찾기에 추가된 상품입니다.',
     });
   }
+};
+
+const getStatusClass = (status) => {
+  if (status === '공급가능') return 'status-available';
+  if (status === '일시제한') return 'status-temporary';
+  if (status === '단종') return 'status-discontinued';
+  if (status === '품절') return 'status-soldout';
+  return '';
 };
 
 onMounted(() => {
@@ -271,12 +281,28 @@ onMounted(() => {
   background-color: #f0f0f0;
 }
 
-.status-temporary {
-  color: red;
+.status-label {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: bold;
 }
 
 .status-available {
-  color: blue;
+  background-color: #ffd700;
+}
+
+.status-temporary {
+  background-color: #ff6f61;
+}
+
+.status-discontinued {
+  background-color: #A9A9A9;
+}
+
+.status-soldout {
+  background-color: #808080;
 }
 
 .save-btn-container {

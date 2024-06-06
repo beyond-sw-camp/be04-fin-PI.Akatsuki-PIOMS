@@ -32,7 +32,7 @@
           <td>이미지</td>
           <td>{{ product.franchiseWarehouseTotal }}</td>
           <td>{{ product.franchiseWarehouseEnable }}</td>
-          <td :class="{'status-temporary': product.product.productStatus === '일시제한', 'status-available': product.product.productStatus === '공급가능'}">
+          <td :class="getStatusClass(product.product.productStatus)">
             {{ product.product.productStatus }}
           </td>
           <td>{{ product.product.productColor }}</td>
@@ -105,6 +105,14 @@ const navigateToAddProduct = () => {
   window.location.href = 'http://pioms.shop/franchise/favorite/register';
 };
 
+const getStatusClass = (status) => {
+  if (status === '공급가능') return 'status-available';
+  if (status === '일시제한') return 'status-temporary';
+  if (status === '단종') return 'status-discontinued';
+  if (status === '품절') return 'status-soldout';
+  return '';
+};
+
 fetchFavorites();
 </script>
 
@@ -138,12 +146,32 @@ fetchFavorites();
   background-color: #f0f0f0;
 }
 
-.status-temporary {
-  color: red;
+.status-available {
+  background-color: #4CAF50;
+  color: white;
+  padding: 5px;
+  border-radius: 4px;
 }
 
-.status-available {
-  color: blue;
+.status-temporary {
+  background-color: #FF9800;
+  color: white;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.status-discontinued {
+  background-color: #F44336;
+  color: white;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.status-soldout {
+  background-color: #9E9E9E;
+  color: white;
+  padding: 5px;
+  border-radius: 4px;
 }
 
 .button-as-text {

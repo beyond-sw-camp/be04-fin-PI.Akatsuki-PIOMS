@@ -528,7 +528,7 @@ hr.hr1, hr.hr2 {
   border: 1px solid #B9B9B9;
   background-color: #fff;
   width: 220px;
-  z-index: 10000;
+  z-index: 9999;
 }
 
 .submenu_box{

@@ -29,8 +29,8 @@
             <label for="answer">관리자 답변</label>
             <textarea id="answer" v-model="answer" placeholder="문의에 대한 답변을 작성해주세요."></textarea>
             <div class="action-buttons">
-              <button @click="closeEdit" class="cancel-btn">취소</button>
               <button @click="submitAnswer" class="submit-btn">수정</button>
+              <button @click="closeEdit" class="cancel-btn">취소</button>
             </div>
           </div>
         </div>
