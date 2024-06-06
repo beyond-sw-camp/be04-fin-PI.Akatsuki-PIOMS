@@ -9,14 +9,15 @@
         <tr>
           <td class="filter-label">이력조건</td>
           <td class="filter-input">
-            <div class="checkbox-group">
-              <label><input type="checkbox" value="Company" v-model="filterConditions" /> 본사 정보</label>
-              <label><input type="checkbox" value="Admin" v-model="filterConditions" /> 본사 관리자</label>
-              <label><input type="checkbox" value="Franchise" v-model="filterConditions" /> 가맹점</label>
-              <label><input type="checkbox" value="FranchiseOwner" v-model="filterConditions" /> 가맹점주</label>
-              <label><input type="checkbox" value="Product" v-model="filterConditions" /> 상품</label>
-              <label><input type="checkbox" value="Category" v-model="filterConditions" /> 상품 카테고리</label>
-              <label><input type="checkbox" value="Login" v-model="filterConditions" /> 로그인 정보</label>
+            <div class="radio-group">
+              <label><input type="radio" name="filterConditions" value="Company" v-model="filterCondition" /> 본사 정보</label>
+              <label><input type="radio" name="filterConditions" value="Admin" v-model="filterCondition" /> 본사 관리자</label>
+              <label><input type="radio" name="filterConditions" value="Franchise" v-model="filterCondition" /> 가맹점</label>
+              <label><input type="radio" name="filterConditions" value="FranchiseOwner" v-model="filterCondition" /> 가맹점주</label>
+              <label><input type="radio" name="filterConditions" value="Product" v-model="filterCondition" /> 상품</label>
+              <label><input type="radio" name="filterConditions" value="Category" v-model="filterCondition" /> 상품 카테고리</label>
+              <label><input type="radio" name="filterConditions" value="Login" v-model="filterCondition" /> 로그인 정보</label>
+              <label><input type="radio" name="filterConditions" value="" v-model="filterCondition" /> 전체</label>
             </div>
           </td>
         </tr>
@@ -114,7 +115,7 @@ const accessToken = store.state.accessToken;
 
 const histories = ref([]);
 const filteredHistories = ref([]);
-const filterConditions = ref([]);
+const filterCondition = ref('');
 const filterStatus = ref('전체');
 const startDate = ref('');
 const endDate = ref('');
@@ -169,10 +170,7 @@ const fetchHistories = async () => {
 
 const applyFilters = () => {
   filteredHistories.value = histories.value.filter(history => {
-    const matchesCondition = filterConditions.value.length === 0 ||
-        filterConditions.value.includes(history.logTarget) ||
-        (filterConditions.value.includes("Category") &&
-            (history.logTarget === "CategoryFirst" || history.logTarget === "CategorySecond" || history.logTarget === "CategoryThird"));
+    const matchesCondition = !filterCondition.value || history.logTarget === filterCondition.value || (filterCondition.value === "Category" && (history.logTarget === "CategoryFirst" || history.logTarget === "CategorySecond" || history.logTarget === "CategoryThird"));
     const matchesStatus = filterStatus.value === '전체' || history.logStatus === filterStatus.value;
     const historyDate = new Date(history.logDate[0], history.logDate[1] - 1, history.logDate[2]);
     const matchesStartDate = !startDate.value || historyDate >= new Date(startDate.value);
@@ -183,7 +181,7 @@ const applyFilters = () => {
 };
 
 const resetFilters = () => {
-  filterConditions.value = [];
+  filterCondition.value = '';
   filterStatus.value = '전체';
   startDate.value = '';
   endDate.value = '';
@@ -290,12 +288,12 @@ onMounted(() => {
   border: 1px solid lightgray;
 }
 
-.checkbox-group {
+.radio-group {
   display: flex;
   flex-wrap: wrap;
 }
 
-.checkbox-group label {
+.radio-group label {
   margin-right: 10px;
   white-space: nowrap;
 }
@@ -437,7 +435,7 @@ onMounted(() => {
   position: relative;
   top: 60px;
   align-content: center;
-  background-color: #f44336;
+  background-color: #FF6285;
   color: white;
   border: none;
   border-radius: 4px;
