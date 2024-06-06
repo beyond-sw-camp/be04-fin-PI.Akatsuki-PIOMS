@@ -241,6 +241,7 @@
       throw new Error("네트워크 오류 발생");
     }
     const result = await response.json();
+    
     await Swal.fire({
       position: "center",
       icon: "success",
@@ -248,9 +249,9 @@
       showConfirmButton: false,
       timer: 1500
     });
-    props.showDetailPopup();
     location.reload(FranchiseOrderPage);
     props.showPopup();
+
   } catch (error) {
     await Swal.fire({
       position: "center",
@@ -259,7 +260,7 @@
       showConfirmButton: false,
       timer: 1500
     });
-    props.showDetailPopup();
+    props.showPopup();
     location.reload(FranchiseOrderPage);
     console.error("주문 오류 발생:", error);
   }

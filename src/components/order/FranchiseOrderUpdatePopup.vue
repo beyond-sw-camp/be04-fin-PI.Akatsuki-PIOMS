@@ -236,11 +236,10 @@
         });
 
       if (!response.ok) {
-        console.log('error');
+      
         throw new Error("네트워크 오류 발생");
       }
 
-      const result = await response.json();
       await Swal.fire({
         position: "center",
         icon: "success",
@@ -252,6 +251,13 @@
 
 
     } catch (error) {
+      await Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "발주 수정 실패.",
+        showConfirmButton: false,
+        timer: 1500
+      });
       location.reload(FranchiseOrderPage);
     }
 
