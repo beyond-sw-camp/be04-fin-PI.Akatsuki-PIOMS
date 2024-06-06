@@ -23,15 +23,17 @@ import FranchiseExchangePage from '@/components/exchange/FranchiseExchangePage.v
 import PostCategory from "@/components/amdin/Category/PostCategory.vue";
 import FavoriteRegister from "@/components/franchise/favorite/FavoriteRegister.vue";
 import FavoriteList from "@/components/franchise/favorite/FavoriteList.vue";
-import AdminMembers from "@/components/amdin/member/AdminMemberPage.vue";
 import Log from "@/components/log/Log.vue";
 import NoticeList from "@/components/notice/NoticeList.vue";
 import FranchiseDashBoard from "@/components/franchise/FranchiseDashBoard.vue";
 import DriverDashBoard from "@/components/driver/DriverDashBoard.vue";
 import NoticeListFrOwner from "@/components/notice/NoticeListFrOwner.vue";
-import DriverMemberPage from "@/components/amdin/member/DriverMemberPage.vue";
 import FrWarehousePage from "@/components/franchise/warehouse/FrWarehousePage.vue";
 import AdminDashBoard from "@/components/amdin/dashboard/AdminDashBoard.vue";
+
+
+import AdminMembers from "@/components/amdin/member/AdminMemberPage.vue";
+import DriverMemberPage from "@/components/amdin/member/DriverMemberPage.vue";
 import FrOwnerMemberPage from "@/components/franchise/member/FrOwnerMemberPage.vue";
 
 const routes = [
@@ -170,11 +172,6 @@ const routes = [
         meta: { requiresAuth: true, role: 'ROLE_OWNER' }
     },
     {
-        path: '/admin/list',
-        name: 'AdminMemberList',
-        component: AdminMembers
-    },
-    {
         path: '/admin/drivers',
         name: 'DriverMemberList',
         component: DriverMemberPage
@@ -209,9 +206,14 @@ const routes = [
         meta: { requiresAuth: true, preventBack: true, role: ['ROLE_ROOT', 'ROLE_ADMIN'] }
     },
     {
-        path: '/admin/franchise/members',
+        path: '/admin/owners',
         name: 'FrOwnerMemberPage',
         component: FrOwnerMemberPage
+    },
+    {
+        path: '/admin/admins',
+        name: 'AdminMemberList',
+        component: AdminMembers
     },
 ];
 

@@ -9,7 +9,9 @@
           <div  style="height: 100%;  padding: 1%;">
           <div  style="width:100%;height: 10%; display: block; ">
             <div style="float: left; font-size: 16px; ">
-              <img src="@/assets/icon/List.png" style="width:16px;padding-top:5px "/> &nbsp;발주 현황
+              <router-link to="/admin/order/list" class="link-page">
+                <img src="@/assets/icon/List.png" style="width:16px;padding-top:5px "/> &nbsp;발주 현황
+              </router-link>
             </div>
             <div style="font-size: 10px; float:right; padding-top: 18px;"> (단위: 주)</div>
           </div>
@@ -54,7 +56,9 @@
           <div  style="height: 100%;  padding: 1%;">
           <div  style="width:100%;height: 10%; display: block; ">
             <div style="float: left; font-size: 16px; ">
-              <img src="@/assets/icon/List.png" style="width:16px;padding-top:5px "/> &nbsp;반품 및 교환 현황
+              <router-link to="/franchise/exchange/list" class="link-page">
+                <img src="@/assets/icon/List.png" style="width:16px;padding-top:5px "/> &nbsp;반품 및 교환 현황
+              </router-link>
             </div>
             <div style="font-size: 10px; float:right; padding-top: 18px;"> (단위: 주)</div>
           </div>
@@ -94,7 +98,9 @@
           
           <div  style="width:100%;height: 10%; display: block; ">
             <div style="float: left; font-size: 16px; ">
+              <router-link to="/franchise/order/list" class="link-page">
               <img src="@/assets/icon/List.png" style="width:16px;padding-top:5px "/>&nbsp;부족한 상품 재고
+              </router-link>
             </div>
           </div>
           <hr>
@@ -128,7 +134,7 @@
             <div style="padding: 1%;border: 1px solid #9d9d9d; border-radius: 5px; margin-bottom: 4%; height: 28%;">
             <div style="width: 100%;  ">
               <div style="width: 100%; height: 10%; display: block; ">
-                <div style="float: left; font-size: 16px;">
+                <div style="float: left; font-size: 18px; font-weight:bold ">
                   <img src="@/assets/icon/List.png" style="width: 16px; padding-top: 5px" /> &nbsp;회사 정보
                 </div>
               </div>
@@ -168,11 +174,13 @@
             <div style="width: 100%;  ">
               <div style="width: 100%; height: 10%; display: block; ">
                 <div style="float: left; font-size: 16px; ">
-                  <img src="@/assets/icon/List.png" style="width: 16px; padding-top: 5px;" /> &nbsp;가맹점 정보
+                  <router-link to="/admin/franchise/list" class="link-page">
+                    <img src="@/assets/icon/List.png" style="width: 16px; padding-top: 5px;" /> &nbsp;가맹점 정보
+                  </router-link>
                 </div>
               </div>
               <br>
-              <div style="height: 2px;"/>
+              <div style="height: 18px;"/>
                <hr>
                <br>
             <div  style="width:100%;height: 20%; ">
@@ -215,11 +223,9 @@
                   <div class="exchange-list">
                     <div style="min-height: 160px; ">
                       <div class="" v-for="(notice, rowIndex) in paginatedLists3" style="padding-bottom: 2px;  font-size: 1px; " >
-                        <div style="float: left;font-size: 11px;">{{ notice.noticeTitle }} </div>
-                        <div style="float: right;font-size: 10px;"><br> {{notice.noticeEnrollDate}} </div>
-                        <div>
-                          <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-                          <hr>
+                        <div style="height:30px;display:block; border-bottom: 1px solid black; " >
+                          <div style="float: left; font-size: 11px;">{{ notice.noticeTitle }} </div>
+                          <div style=" float: right;font-size: 10px;"><br> {{notice.noticeEnrollDate}} </div>
                         </div>
                       </div>
 
@@ -442,13 +448,13 @@ const prevPage3 = () => {
 
 const currentPage4 = ref(1);
 const paginatedLists4 = computed(() => {
-  const start = (currentPage4.value - 1) * 5;
-  const end = start + 5;
+  const start = (currentPage4.value - 1) * 4;
+  const end = start + 4;
   return asks.value.slice(start, end);
 });
 
 const totalPages4 = computed(() => {
-  return Math.ceil(asks.value.length / 5);
+  return Math.ceil(asks.value.length / 4);
 });
 
 const nextPage4 = () => {
@@ -462,6 +468,7 @@ const prevPage4 = () => {
     currentPage4.value--;
   }
 };
+
 
 
 const currentPage5 = ref(1);
@@ -603,4 +610,11 @@ function truncateText(text, maxLength) {
     font-size: 14px;
     width: 100%;
   }
+
+  .link-page{
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
+}
 </style>
