@@ -153,8 +153,8 @@
 
           </div>
           <div class="action-buttons" v-if="item.orderCondition == '승인대기'">
-              <input class="cancel-btn" type="button" value="발주승인" @click="accpetOrder">
-              <input class="cancel-btn" type="button" value="발주반려" @click="clickDeny">
+              <input class="ho-btn" type="button" value="발주승인" @click="accpetOrder">
+              <input class="ho-btn" type="button" value="발주반려" @click="clickDeny">
             </div>
          <div>
           발주일 : {{ item.orderDate }} &nbsp;&nbsp;&nbsp;&nbsp;

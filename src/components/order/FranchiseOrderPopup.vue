@@ -78,9 +78,9 @@
             </tr>
           </thead>
           <tr v-for="(selectedProduct, index) in selectedProducts" :key="index"
-            class="allpost"
+            class="allpost" 
           >
-            <td>{{ selectedProduct.productCode }}</td>
+            <td >{{ selectedProduct.productCode }}</td>
             <td>{{ selectedProduct.productName }}</td>
             <td>{{ selectedProduct.productCount }}</td>
             <td><input type="number" v-model="selectedProduct.quantity" min="1" @change="calculateTotalPrice" /></td>
@@ -89,9 +89,9 @@
         </table>
       </div >
         <p v-if="totalPrice > 0">총 가격: {{ totalPrice }}원</p>
-        <div style="display: flex; justify-content: right; gap:10px;">
-        <button style="float: right" class="cancel-btn" @click="exportOrder">발주신청하기</button>
-        <button style="float: right" class="cancel-btn" @click="showPopup" >돌아가기</button>
+      <div style="display: flex; justify-content: right; gap:10px;">
+        <button style="float: right" class="ho-btn" @click="exportOrder">발주신청하기</button>
+        <button style="float: right" class="ho-btn" @click="showPopup" >돌아가기</button>
       </div>
     </div>
   </div>
@@ -265,4 +265,6 @@
 <style scoped>
   @import "../../assets/css/popup.css" ;
   @import "../../assets/css/order.css" ;
+
+  
 </style>

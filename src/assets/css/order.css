@@ -101,7 +101,6 @@
 .action-buttons {
   max-width: 1300px;
   justify-content: center; /* 가운데 정렬 */
-//margin-bottom: 20px;
   align-items: center;
 }
 .reset-btn{

@@ -130,9 +130,9 @@
           발주일자 : {{ item.orderDate }}
            <br>
            주문코드 : {{ item.orderCode }}<br>
-          <button style="float: right" class="cancel-btn" @click="showDetailPopup" >돌아가기</button>
-          <button style="float: right" class="cancel-btn" @click="clickUpdate" v-if="item.orderCondition=='승인대기' || item.orderCondition=='승인거부'">수정하기</button>
-          <button style="float: right" class="cancel-btn" @click="gumsoo" v-if="item.orderCondition == '검수대기'">검수하기</button>
+          <button style="float: right" class="ho-btn" @click="showDetailPopup" >돌아가기</button>
+          <button style="float: right" class="ho-btn" @click="clickUpdate" v-if="item.orderCondition=='승인대기' || item.orderCondition=='승인거부'">수정하기</button>
+          <button style="float: right" class="ho-btn" @click="gumsoo" v-if="item.orderCondition == '검수대기'">검수하기</button>
        </div>
 
     <FranchiseOrderUpdatePopup
