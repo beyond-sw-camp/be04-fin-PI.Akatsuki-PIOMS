@@ -114,8 +114,10 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost">
-          <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">
+        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost"
+            :id=" 'row-' + rowIndex">
+          <td class="table-td">{{ rowIndex + 1 }}</td>
+          <td v-for="(header, colIndex) in headers.slice(1)" :key="colIndex" class="table-td">
             <template v-if="header.key === 'productName'">
               <button class="button-as-text" @click="showModifyPopup(item.productCode,item.productName,item.productCount,item.productPrice,item.productStatus,item.productColor,item.productSize,item.categoryFirstCode,item.categorySecondCode,item.categoryThirdCode,item.productContent)">
                 {{ item[header.key] }}
@@ -179,7 +181,7 @@ const accessToken = store.state.accessToken;
 
 const lists = ref([]);
 const headers = ref([
-  { key: 'productCode', label: '상품 코드'},
+  { key: 'index', label: '번호'},
   { key: 'productName', label: '상품명'},
   { key: 'imgUrl', label: '상품 이미지'},
   { key: 'productCount', label: '본사 보유량'},
@@ -189,9 +191,9 @@ const headers = ref([
   { key: 'productExposureStatus', label: '상품 노출 상태'},
   { key: 'productColor', label: '색상'},
   { key: 'productSize', label: '사이즈'},
-  { key: 'categoryFirstName', label: '카테고리 코드'},
-  { key: 'categorySecondName', label: '카테고리 코드'},
-  { key: 'categoryThirdName', label: '카테고리 코드'},
+  { key: 'categoryFirstName', label: '카테고리 대분류'},
+  { key: 'categorySecondName', label: '카테고리 중분류'},
+  { key: 'categoryThirdName', label: '카테고리 소분류'},
 ]);
 
 const filteredLists = ref([]);
@@ -260,7 +262,7 @@ const getProductImageUrl = (productCode) => {
 };
 const fetchProductImages = async () => {
   try {
-    const response = await fetch(`http://api.pioms.shop/admin/product/productImage`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/product/productImage`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
