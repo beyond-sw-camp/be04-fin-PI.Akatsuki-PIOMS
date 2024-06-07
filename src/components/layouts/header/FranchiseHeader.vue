@@ -55,7 +55,7 @@
               <a href="#" class="depth1"><h4 id="depth1_title">상품 관리</h4></a>
               <ul class="submenu_sub">
                 <li><router-link to="/franchise/product/list" class="depth2">상품 등록 및 관리</router-link></li>
-                <li><router-link to="/franchise/product/favorites" class="depth2">즐겨찾기 상품 관리</router-link></li>
+                <li><router-link to="/franchise/favorite/list" class="depth2">즐겨찾기 상품 관리</router-link></li>
               </ul>
               <hr class="hr3">
             </li>
