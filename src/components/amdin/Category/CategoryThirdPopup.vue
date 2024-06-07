@@ -5,12 +5,13 @@
       <p>카테고리 코드: {{ currentThirdCode }}</p>
       <p>카테고리 이름: {{ currentThirdName}}</p>
       <input type="text" v-bind:value="currentThirdName" v-on:input="updateThirdName= $event.target.value">
-      <button @click="closePopup" class="close-button">X</button>
-      <button @click="saveCategoryThird">수정</button>
+      <div class="button-container">
+        <button @click="saveCategoryThird" class="update-button">수정</button>
+        <button @click="closePopup" class="close-button">취소</button>
+      </div>
     </div>
   </div>
 </template>
-
 <script setup>
 import { defineProps, defineEmits, ref } from 'vue';
 import { useStore } from 'vuex';
@@ -73,7 +74,6 @@ const closePopup = () => {
   emits('close');
 };
 </script>
-
 <style scoped>
 .modal {
   position: fixed;
@@ -92,17 +92,42 @@ const closePopup = () => {
   background-color: white;
   padding: 20px;
   border-radius: 8px;
-  min-width: 500px;
-  min-height: 300px;
+  min-width: 300px;
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.confirmation-modal p {
+  margin-bottom: 10px;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 4%;
+}
+
+.update-button,
+.close-button {
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 3px;
+  margin-right: 10px;
+}
+
+.update-button {
+  background-color: #344DAF;
+  border: none;
+  color: white;
 }
 
 .close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: transparent;
+  background-color: #FF6285;
   border: none;
-  font-size: 24px;
-  cursor: pointer;
+  color: white;
 }
 </style>
+
