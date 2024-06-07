@@ -33,20 +33,20 @@
           <a href="admin/francise" class="label">가맹점 및 직원 관리</a>
           <div class="submenu_box">
             <ul class="submenu">
-              <li>
-                <a href="admin/franchise" class="depth1"><h4 id="depth1_title">가맹점 및 점주 관리</h4></a>
-                <ul class="submenu_sub">
-                  <li><a href="#" class="depth2">가맹점 및 점주 전체조회</a></li>
-                  <li><a href="franchises" class="depth2">가맹점 관리</a></li>
-                  <li><a href="owners" class="depth2">점주 관리</a></li>
-                </ul>
-                <hr class="hr3" />
-              </li>
+<!--              <li>-->
+<!--                <a href="admin/franchise" class="depth1"><h4 id="depth1_title">가맹점 및 점주 관리</h4></a>-->
+<!--                <ul class="submenu_sub">-->
+<!--                  <li><a href="#" class="depth2">가맹점 및 점주 전체조회</a></li>-->
+<!--                  <li><a href="franchises" class="depth2">가맹점 관리</a></li>-->
+<!--                  <li><a href="owners" class="depth2">점주 관리</a></li>-->
+<!--                </ul>-->
+<!--                <hr class="hr3" />-->
+<!--              </li>-->
               <li>
                 <a href="#" class="depth1"><h4 id="depth1_title">배송기사 관리</h4></a>
                 <ul class="submenu_sub">
                   <li><a href="drivers" class="depth2">배송기사 전체조회</a></li>
-                  <li><a href="#" class="depth2">배송기사 관리</a></li>
+<!--                  <li><a href="#" class="depth2">배송기사 관리</a></li>-->
                 </ul>
               </li>
               <li>
