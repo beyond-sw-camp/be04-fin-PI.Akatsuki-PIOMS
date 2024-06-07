@@ -113,6 +113,8 @@ import NoticeResisterPopup from '@/components/notice/NoticeResisterPopup.vue';
 import NoticeDetailsPopup from '@/components/notice/NoticeDetailsPopup.vue';
 import NoticeEditPopup from '@/components/notice/NoticeEditPopup.vue';
 import { useStore } from 'vuex';
+import Swal from "sweetalert2";
+
 
 const highlightRow = (index) => {
   document.querySelector(`#row-${index}`).classList.add('highlighted');
@@ -269,7 +271,20 @@ const submitNotice = async (notice) => {
       throw new Error(isEditFormVisible.value ? '공지사항 수정 실패' : '공지사항 등록 실패');
     }
 
-    alert(isEditFormVisible.value ? '공지사항이 수정되었습니다.' : '공지사항이 등록되었습니다.');
+    if (isEditFormVisible.value) {
+      await Swal.fire({
+        icon: 'success',
+        title: '수정 성공',
+        text: '공지사항이 수정되었습니다.',
+      });
+    } else {
+      await Swal.fire({
+        icon: 'success',
+        title: '등록 성공',
+        text: '공지사항이 등록되었습니다.',
+      });
+    }
+
     location.reload();
     toggleRegisterForm();
     toggleEditForm();

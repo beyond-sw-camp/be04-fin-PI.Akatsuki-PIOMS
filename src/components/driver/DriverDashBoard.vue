@@ -374,7 +374,7 @@ onMounted(() => {
   display: flex;
   position: absolute;
   top: -30px;
-  right: 80px;
+  right: 240px;
   overflow-y: auto;
 }
 
@@ -439,13 +439,14 @@ onMounted(() => {
 .after {
   display: flex;
   position: relative;
+  left: 4px;
   top: -45px;
   color: #444444;
 }
 .before-div,
 .ing-div,
 .after-div {
-  background-color: #d3d3d3;
+  background-color: #d9d9d9;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -677,8 +678,8 @@ hr.hr2 {
 
  .invoice-close-btn {
    position: fixed !important;
-   top: 100px !important;
-   right: 450px !important;
+   top: 150px !important;
+   right: 550px !important;
    cursor: pointer !important;
    font-size: 20px;
    color: #444444;
