@@ -4,10 +4,17 @@
       <AdminHeader v-if="userRole === 'ROLE_ROOT' || userRole === 'ROLE_ADMIN'" />
       <FranchiseHeader v-else-if="userRole === 'ROLE_OWNER'" />
       <DriverHeader v-else-if="userRole === 'ROLE_DRIVER'" />
+
     </header>
-    <article>
+    <article class="fb__content">
       <router-view />
+
+    <footer class="fb__footer">
+      <Footer/>
+    </footer>
+
     </article>
+
   </section>
 </template>
 
@@ -54,5 +61,29 @@ onMounted(async () => {
   position: absolute;
   top: -106px;
   width: 100%;
+}
+
+.fb__content {
+  position: relative;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  min-height: 100%;
+}
+
+.fb__footer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  padding-right: 20px;
+  color: #666666;
+  background: #fff;
+  font-size: 11px;
+  text-align: right;
+  line-height: 52px;
+  border-top: 1px solid #d7d7d7;
+  box-sizing: border-box;
 }
 </style>

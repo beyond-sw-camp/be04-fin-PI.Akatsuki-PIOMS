@@ -36,7 +36,6 @@ const changeRouter = (route) => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 90vh;
 }
 
 .logo {
