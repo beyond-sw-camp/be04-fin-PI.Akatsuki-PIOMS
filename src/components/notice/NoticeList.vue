@@ -4,7 +4,7 @@
 <br/>
 <div align="center">
   <table class="read-filter">
-    <tr>
+    <tr class="tr1">
       <td class="filter-label">공지 조회 조건</td>
       <td class="filter1">
         <select class="filter-section" v-model="filterType">
@@ -16,7 +16,8 @@
         <input type="text" class="filter-input" placeholder="검색어를 입력해주세요." v-model="filterText" />
       </td>
     </tr>
-    <tr>
+
+    <tr class="tr2">
       <td class="filter-label">등록일</td>
       <td colspan="3" class="filter-date">
         <input type="date" id="startDate" v-model="startDate" placeholder="시작 날짜 선택" title="시작 날짜 선택" />
@@ -82,9 +83,9 @@
         class="allpost"
     >
       <td class="num">{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
-      <td style="width: 20%" @click="showDetailsNoticePopup(item)">{{ item.noticeTitle }}</td>
-      <td style="width: 50%">{{ item.noticeContent }}</td>
-      <td>{{ item.noticeEnrollDate }}</td>
+      <td class="title" style="width: 20%" @click="showDetailsNoticePopup(item)">{{ item.noticeTitle }}</td>
+      <td style="width: 40%">{{ item.noticeContent }}</td>
+      <td class="date">{{ item.noticeEnrollDate }}</td>
       <td style="">
         <button class="modify" @click="showEditForm(item)">수정</button>
         <button class="delete" @click="deleteNotice(item.noticeCode)">삭제</button>
@@ -326,17 +327,23 @@ onMounted(() => {
 <style scoped>
 @import "../../assets/css/order.css" ;
 
+.date {
+  width: 100px;
+}
+
 .modify,
 .delete {
   color: #ffffff;
   font-weight: bold;
-  border-radius: 5px;
+  border-radius: 8px;
   border: 0;
-  width: 50px;
+  height: 25px;
+  width: 45px;
 }
 
 .modify {
   background-color: #999999;
+  margin-right: 10px;
 }
 .delete {
   background-color: #FC6F86;
@@ -345,46 +352,19 @@ onMounted(() => {
   border: none;
   background-color: #ffffff;
 }
-/* 공통 스타일 */
-.container {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  max-width: 800px;
-  margin-left: 5px;
-  padding: 20px;
-  position: relative;
-  top: 10px;
-}
-
-.F-title {
-  margin-right: 10px;
-  font-weight: bold;
-  font-size: 20px;
-  position: relative;
-  top: 2px;
-}
-
-.notice {
-  margin-right: 10px;
-}
 
 .read-filter {
   margin-bottom: 20px;
   background-color: #ffffff;
-  border: 1px solid #D9D9D9;
   border-radius: 5px;
-  padding: 10px;
   width: 1300px;
-}
-
-.read-filter td {
-  border: none;
+  border: 1px solid #d9d9d9;
 }
 
 .filter-label,
 .filter1,
-.filter-date {
+.filter-date,
+.tr1 {
   cursor: default;
 }
 
@@ -396,6 +376,7 @@ onMounted(() => {
   font-weight: bold;
   background-color: #D9D9D9;
   color: #444444;
+  border: none;
 }
 
 .filter-section {
@@ -432,7 +413,6 @@ onMounted(() => {
 }
 
 .filter-date {
-  border-top: 1px solid #D9D9D9 !important;
   border-color: #d9d9d9;
 }
 
@@ -443,11 +423,9 @@ onMounted(() => {
   justify-content: center;
 }
 
-
-
-
-.notice-list {
-  width: 1600px;
+.title {
+  cursor: pointer;
+  text-decoration: underline #444444;
 }
 .notice-list tr td {
   text-align: center;
