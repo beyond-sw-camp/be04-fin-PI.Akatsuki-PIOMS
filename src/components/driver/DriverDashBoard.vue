@@ -132,6 +132,7 @@ import { computed, onMounted, ref } from "vue";
 import { useStore } from 'vuex';
 import Invoice from "@/components/driver/Invoice.vue";
 import DriverDashboardStatusPopup from "@/components/driver/DriverDashboardStatusPopup.vue";
+import Swal from "sweetalert2";
 
 const store = useStore();
 const accessToken = store.state.accessToken;
@@ -143,7 +144,7 @@ const selectedInvoice = ref('');
 const deliveryStatus = ref('');
 
 const beforeDiv = ref();
-const driverCode = 8;
+const driverCode = 1;
 
 const openInvoicePopup = (order) => {
   selectedInvoice.value = order;
@@ -173,6 +174,7 @@ const getCountBeforeDelivery = async () => {
         'Authorization': `Bearer ${accessToken}`,
       },
     });
+
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -351,9 +353,9 @@ onMounted(() => {
 <style scoped>
  /* 큰 박스 단위들 */
 .delivery-list-box {
-  margin-top: 42px !important;
+  margin-top: -30px !important;
   width: 500px;
-  height: 300px;
+  height: 270px;
 }
 
 .notice-list {
@@ -371,7 +373,7 @@ onMounted(() => {
   height: 870px;
   display: flex;
   position: absolute;
-  top: 100px;
+  top: -30px;
   right: 80px;
   overflow-y: auto;
 }
@@ -435,6 +437,7 @@ onMounted(() => {
 .before,
 .ing,
 .after {
+  display: flex;
   position: relative;
   top: -45px;
   color: #444444;
@@ -442,13 +445,13 @@ onMounted(() => {
 .before-div,
 .ing-div,
 .after-div {
+  background-color: #d3d3d3;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 5px;
-  border: 2px solid #d9d9d9;
   padding: 20px;
-  width: 60px;
+  width: 70px;
   height: 60px;
 }
 
@@ -612,8 +615,7 @@ hr.hr2 {
  }
 
  /* 리셋, 검색 버튼 */
- .btn-reset,
- .btn-search {
+ .btn-reset {
    border: none;
    background-color: #ffffff;
    cursor: pointer;
@@ -623,8 +625,7 @@ hr.hr2 {
    justify-content: center;
    padding-top: 40px;
  }
- .reset-icon,
- .search-icon {
+ .reset-icon {
    width: 30px !important;
    height: 30px !important;
  }
