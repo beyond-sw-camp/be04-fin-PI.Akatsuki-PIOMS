@@ -1,7 +1,7 @@
 <template xmlns="http://www.w3.org/1999/html">
     <div class="headerTitle" align="left" style="margin-left: 17%; margin-top: 1%">
-        <p class="product-title"><img src="@/assets/icon/Cloth.png" style="width: 20px;height: 20px">상품 및 상품 카테고리 관리 > 상품 관리 > 상품 전체 조회 및 관리</p>
-    <h6 class="product-sub-title" style="margin-top: 1%; margin-bottom: 1%">조회할 상품의 조건을 선택 후
+        <p class="product-title"><img class="Cloth" src="@/assets/icon/Cloth.png" style="width: 20px;height: 20px">상품 및 상품 카테고리 관리 > 상품 관리 > 상품 전체 조회 및 관리</p>
+    <h6 class="product-sub-title" style="margin-top: 1%; margin-bottom: 3px"> * 조회할 상품의 조건을 선택 후
       <img src="@/assets/icon/reset.png">초기화 또는 <img src="@/assets/icon/search.png">검색을 눌러주세요.
     </h6>
     </div>
@@ -482,6 +482,11 @@ fetchThirdCategories();
 </script>
 
 <style scoped>
+.Cloth {
+  margin-right: 5px;
+  position: relative;
+  top: 2px
+}
 .product-img {
   width: 30px;
   height: 30px;
@@ -569,8 +574,8 @@ fetchThirdCategories();
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: absolute;
-  left: 16.5%;
+  position: relative;
+  left: 220px;
   width: 1265px;
 }
 
@@ -580,7 +585,7 @@ fetchThirdCategories();
 
 .table-container {
   width: 100%;
-  margin-top: 40px;
+  margin-top: 20px;
   margin-bottom: 20px;
   display: flex;
   justify-content: center;
@@ -662,9 +667,19 @@ fetchThirdCategories();
 .categories {
   border: 1px solid rgba(217, 217, 217, 0.7);
 }
+.product-title {
+  position: relative;
+  left: -60px;
+}
 .product-sub-title img {
   width: 20px;
   height: 20px;
+}
+.product-sub-title {
+  font-size: 12px;
+  position: relative;
+  left: -55px;
+  margin: 0;
 }
 .headerTitle img {
   width: 10px;
@@ -684,18 +699,21 @@ fetchThirdCategories();
   width: 75px;
 }
 .status-available {
+  align-content: center;
   background-color: #FFCD4B;
   border-radius: 8px;
   color: #FFFFFF;
   font-weight: bold;
-  height: 20px;
-
+  height: 25px;
+  font-size: 14px;
 }
 .status-unavailable {
+  align-content: center;
   background-color: #FF6285;
   border-radius: 8px;
   color: #FFFFFF;
   font-weight: bold;
-  height: 20px;
+  height: 25px;
+  font-size: 14px;
 }
 </style>
