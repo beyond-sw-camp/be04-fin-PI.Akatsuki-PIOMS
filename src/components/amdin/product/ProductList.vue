@@ -119,7 +119,7 @@
           <td class="table-td">{{ rowIndex + 1 }}</td>
           <td v-for="(header, colIndex) in headers.slice(1)" :key="colIndex" class="table-td">
             <template v-if="header.key === 'productName'">
-              <button class="button-as-text" @click="showModifyPopup(item.productCode,item.productName,item.productCount,item.productPrice,item.productStatus,item.productColor,item.productSize,item.categoryFirstCode,item.categorySecondCode,item.categoryThirdCode,item.productContent)">
+              <button class="button-as-text" @click="showModifyPopup(item.productCode,item.productName,item.productCount,item.productPrice,item.productStatus,item.productColor,item.productSize,item.categoryFirstCode,item.categorySecondCode,item.categoryThirdCode,item.productContent, item.imgUrl)">
                 {{ item[header.key] }}
               </button>
             </template>
@@ -160,6 +160,7 @@
                                          :currentCategorySecondCode="currentCategorySecondCode"
                                          :currentCategoryThirdCode="currentCategoryThirdCode"
                                          :currentProductContent="currentProductContent"
+                                         :currentProductImgUrl="currentProductImgUrl"
                                          :closeEdit="closeEdit"/>
     <ProductDeletePopup v-if="deletePopup" :currentProductCode="currentProductCode"
                                            :currentProductName="currentProductName"
@@ -224,6 +225,7 @@ const currentCategoryFirstCode = ref('');
 const currentCategorySecondCode = ref('');
 const currentCategoryThirdCode = ref('');
 const currentProductContent = ref('');
+const currentProductImgUrl = ref('');
 const productImages = ref({});
 
 const showPostPopup = ref(false);
@@ -231,7 +233,7 @@ const editPopup = ref(false);
 const deletePopup = ref(false);
 
 const showModifyPopup = (productCode, productName, productCount, productPrice, productStatus, productColor, productSize,
-                          categoryFirstCode, categorySecondCode, categoryThirdCode, productContent) => {
+                          categoryFirstCode, categorySecondCode, categoryThirdCode, productContent, imgUrl) => {
   editPopup.value = !editPopup.value;
   setCurrentProductCode(productCode);
   setCurrentProductName(productName);
@@ -244,6 +246,7 @@ const showModifyPopup = (productCode, productName, productCount, productPrice, p
   setCurrentCategorySecondCode(categorySecondCode);
   setCurrentCategoryThirdCode(categoryThirdCode);
   setCurrentProductContent(productContent);
+  setCurrentProductImgUrl(imgUrl);
 }
 const showDeletePopup = (productCode, productName, productExposureStatus) => {
   deletePopup.value = !deletePopup.value;
@@ -413,6 +416,9 @@ const setCurrentCategorySecondCode = (categorySecondCode) => {
 }
 const setCurrentCategoryThirdCode = (categoryThirdCode) => {
   currentCategoryThirdCode.value = categoryThirdCode;
+}
+const setCurrentProductImgUrl = (imgUrl) => {
+  currentProductImgUrl.value = imgUrl;
 }
 const getMemberId = async () => {
   try {

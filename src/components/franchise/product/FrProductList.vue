@@ -253,7 +253,7 @@ const getProductImageUrl = (productCode) => {
 const fetchProductImages = async () => {
   try {
 
-    const response = await fetch(`http://localhost:5000/franchise/product/productImage`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/product/productImage`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -277,7 +277,7 @@ const fetchProductImages = async () => {
 };
 const fetchFirstCategories = async () => {
   try {
-    const response = await fetch('http://localhost:5000/franchise/category/first', {
+    const response = await fetch('http://api.pioms.shop/franchise/category/first', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -298,7 +298,7 @@ const fetchSecondCategories = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://localhost:5000/franchise/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -321,7 +321,7 @@ const fetchThirdCategories = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://localhost:5000/franchise/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
