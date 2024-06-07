@@ -601,6 +601,7 @@ hr.hr1, hr.hr2 {
   text-decoration: none;
 }
 .nav_header {
+  gap: 80px;
   list-style-type: none;
   margin: 0;
   padding: 0;

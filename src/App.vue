@@ -66,6 +66,7 @@ onMounted(async () => {
 .fb__content {
   position: relative;
   top: 0;
+  padding-bottom: 100px; /* 나중에 지우고 대시보드 수정해야함 대시보드쪽 다 고정 px들어가있음*/
   right: 0;
   bottom: 0;
   left: 0;
