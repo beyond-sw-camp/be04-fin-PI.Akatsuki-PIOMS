@@ -31,10 +31,10 @@
         <thead>
           <tr class="header1">
             <th>발주코드</th>
+            <th>발주코드</th>
+            <th>상품리스트</th>
             <th>발주예정일</th>
             <th>발주상태</th>
-            <th>상품리스트</th>
-            <th>발주코드</th>
           </tr>
         </thead>
         <tbody>
@@ -46,13 +46,13 @@
               class="allpost"
           >
             <td class="num">{{ item.invoiceCode }}</td>
-            <td>{{ item.invoiceDate }}</td>
             <td>{{ item.orderCode }}</td>
-            <td style="width: 60%;"> 
-              <div v-for="(products, rowIndex) in item.orderProductVOList">
-                  {{ products.productName}}, 
-              </div>
+            <td style="width: 60%;">
+              <a v-for="(products, rowIndex) in item.orderProductVOList">
+                  {{ products.productName}},
+              </a>
             </td>
+            <td>{{ item.invoiceDate }}</td>
             <td v-if="item.deliveryStatus=='배송전'" style="width: 5%; padding:5px;" > <div style=" background-color: green; border-radius: 5px; ;color: aliceblue; font-weight: bold;"> {{ item.deliveryStatus }} </div></td>
             <td v-if="item.deliveryStatus=='배송중'" style="width: 5%; padding:5px;"><div style=" background-color: pink; border-radius: 5px; ;color: aliceblue; font-weight: bold;"> {{ item.deliveryStatus }} </div></td>
             <td v-if="item.deliveryStatus=='배송완료'" style="width: 5%; padding:5px;"><div style=" background-color: hotpink; border-radius: 5px; ;color: aliceblue; font-weight: bold;"> {{ item.deliveryStatus }} </div></td>

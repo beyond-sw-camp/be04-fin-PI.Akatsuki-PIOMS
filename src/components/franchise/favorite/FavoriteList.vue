@@ -32,9 +32,7 @@
           <td>이미지</td>
           <td>{{ product.franchiseWarehouseTotal }}</td>
           <td>{{ product.franchiseWarehouseEnable }}</td>
-          <td :class="getStatusClass(product.product.productStatus)">
-            {{ product.product.productStatus }}
-          </td>
+          <td>{{ product.product.productStatus }}</td>
           <td>{{ product.product.productColor }}</td>
           <td>{{ product.product.productSize }}</td>
           <td>{{ product.product.categoryThird.categorySecond.categoryFirst.categoryFirstName }}</td>
@@ -64,7 +62,7 @@ const favoriteProducts = ref([]);
 // Fetch favorite products
 const fetchFavorites = async () => {
   try {
-    const response = await fetch('http://api.pioms.shop/franchise/warehouse/favorites', {
+    const response = await fetch('http://api.pioms.shop/franchise/warehouse/favorite/list', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
