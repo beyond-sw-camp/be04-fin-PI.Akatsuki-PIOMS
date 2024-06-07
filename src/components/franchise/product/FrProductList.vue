@@ -1,10 +1,10 @@
 <template>
-  <div>
-    <div class="headerTitle">
-        <h3 class="product-title"><img src="@/assets/icon/Cloth.png">상품 및 재고 관리 > 재고 관리 > 재고 알림 관리 </h3>
-    <h6 class="product-sub-title" style="margin-top: 1%; margin-bottom: 1%">조회할 상품의 조건을 선택 후
-      <img src="@/assets/icon/reset.png">초기화 또는 <img src="@/assets/icon/search.png">검색을 눌러주세요.
-    </h6>
+  <div align="center" >
+    <div class="headerTitle" align="left" style="width: 1260px;  margin-top: 1%">
+      <p class="product-title"><img class="Cloth" src="@/assets/icon/Cloth.png" style="width: 20px;height: 20px">상품 및 상품 카테고리 관리 > 상품 관리 > 상품 전체 조회 및 관리</p>
+      <h6 class="product-sub-title" style="margin-top: 1%; margin-bottom: 3px"> * 조회할 상품의 조건을 선택 후
+        <img src="@/assets/icon/reset.png">초기화 또는 <img src="@/assets/icon/search.png">검색을 눌러주세요.
+      </h6>
     </div>
     <div class="filter-section">
       <div>
@@ -53,7 +53,7 @@
           </td>
         </tr>
         <tr>
-          <td class="filter-label">카테고리 구분</td>
+          <td class="filter-label">카테고리<br>구분</td>
           <td class="filter-input">
             <select id="firstCategory" v-model="selectedFirstCategory" @change="fetchSecondCategories" class="categories">
               <option value="">대분류</option>
@@ -86,7 +86,9 @@
       </button>
     </div>
     <div class="post-btn" id="app">
-      <button @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
+      <button @click="downloadExcel" class="excelBtn">
+        <img src="@/assets/icon/excel.png" alt="excel">
+      </button>
     </div>
     <div class="table-container">
       <table class="table">
@@ -96,12 +98,21 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost" :id="'row-' + rowIndex"
-            @click="showDetailPopup(item.productCode,item.productName,item.productCount,item.productPrice,item.productStatus,item.productColor,item.productSize,item.categoryFirstName,item.categorySecondName,item.categoryThirdName,item.productContent)">
-          <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">
-              {{ item[header.key] }}
+<!--          @click="showDetailPopup(item.productCode,item.productName,item.productCount,item.productPrice,item.productStatus,item.productColor,item.productSize,item.categoryFirstName,item.categorySecondName,item.categoryThirdName,item.productContent)"-->
+        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost"
+            :id="'row-' + rowIndex">
+          <td class="table-td">{{ rowIndex + 1 }}</td>
+          <td v-for="(header, colIndex) in headers.slice(1)" :key="colIndex" class="table-td">
             <template v-if="header.key === 'imgUrl'">
               <img :src="getProductImageUrl(item.productCode)" class="product-img"/>
+            </template>
+            <template v-else-if="header.key === 'productStatus'">
+              <div :class="{'status-available': item.productStatus === '공급가능', 'status-unavailable': item.productStatus !== '공급가능'}">
+                {{ item.productStatus }}
+              </div>
+            </template>
+            <template v-else>
+              {{ item[header.key] }}
             </template>
           </td>
         </tr>
@@ -116,32 +127,32 @@
       <span> {{currentPage}} / {{totalPages}} </span>
       <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
     </div>
-    <ProductDetailPopup v-if="detailPopup" :currentProductCode="currentProductCode"
-                        :currentProductName="currentProductName"
-                        :currentProductCount="currentProductCount"
-                        :currentProductPrice="currentProductPrice"
-                        :currentProductStatus="currentProductStatus"
-                        :currentProductColor="currentProductColor"
-                        :currentProductSize="currentProductSize"
-                        :currentCategoryFirstName="currentCategoryFirstName"
-                        :currentCategorySecondName="currentCategorySecondName"
-                        :currentCategoryThirdName="currentCategoryThirdName"
-                        :currentProductContent="currentProductContent"
-                        :closeEdit="closePopup"/>
+<!--    <ProductDetailPopup v-if="detailPopup" :currentProductCode="currentProductCode"-->
+<!--                        :currentProductName="currentProductName"-->
+<!--                        :currentProductCount="currentProductCount"-->
+<!--                        :currentProductPrice="currentProductPrice"-->
+<!--                        :currentProductStatus="currentProductStatus"-->
+<!--                        :currentProductColor="currentProductColor"-->
+<!--                        :currentProductSize="currentProductSize"-->
+<!--                        :currentCategoryFirstName="currentCategoryFirstName"-->
+<!--                        :currentCategorySecondName="currentCategorySecondName"-->
+<!--                        :currentCategoryThirdName="currentCategoryThirdName"-->
+<!--                        :currentProductContent="currentProductContent"-->
+<!--                        :closeEdit="closePopup"/>-->
   </div>
 </template>
 
 <script setup>
-import {ref, computed, onMounted, watchEffect} from 'vue';
+import {ref, computed} from 'vue';
 import axios from "axios";
 import { useStore } from 'vuex';
-import ProductDetailPopup from "@/components/franchise/product/ProductDetailPopup.vue";
+// import ProductDetailPopup from "@/components/franchise/product/ProductDetailPopup.vue";
 const store = useStore();
 const accessToken = store.state.accessToken;
 
 const lists = ref([]);
 const headers = ref([
-  { key: 'productCode', label: '상품 코드'},
+  { key: 'index', label: '번호'},
   { key: 'productName', label: '상품명'},
   { key: 'imgUrl', label: '상품 이미지'},
   { key: 'franchiseWarehouseCount', label: '보유량'},
@@ -150,19 +161,18 @@ const headers = ref([
   { key: 'productStatus', label: '상품 상태'},
   { key: 'productColor', label: '색상'},
   { key: 'productSize', label: '사이즈'},
-  { key: 'categoryFirstName', label: '카테고리 코드'},
-  { key: 'categorySecondName', label: '카테고리 코드'},
-  { key: 'categoryThirdName', label: '카테고리 코드'},
+  { key: 'categoryFirstName', label: '카테고리 대분류'},
+  { key: 'categorySecondName', label: '카테고리 중분류'},
+  { key: 'categoryThirdName', label: '카테고리 소분류'},
 ]);
 
 const filteredLists = ref([]);
 const currentPage = ref(1);
 const itemsPerPage = 15;
-const selectedExposureStatus = ref('전체');
+const filterProductName = ref('');
 const filterStatus = ref('');
 const filterColor = ref('');
 const filterSize = ref('');
-const filterProductName = ref('');
 
 const firstCategories = ref([]);
 const secondCategories = ref([]);
@@ -243,7 +253,7 @@ const getProductImageUrl = (productCode) => {
 const fetchProductImages = async () => {
   try {
 
-    const response = await fetch(`http://api.pioms.shop/admin/product/productImage`, {
+    const response = await fetch(`http://localhost:5000/franchise/product/productImage`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -267,7 +277,7 @@ const fetchProductImages = async () => {
 };
 const fetchFirstCategories = async () => {
   try {
-    const response = await fetch('http://api.pioms.shop/admin/category/first', {
+    const response = await fetch('http://localhost:5000/franchise/category/first', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -288,7 +298,7 @@ const fetchSecondCategories = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://api.pioms.shop/admin/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`, {
+    const response = await fetch(`http://localhost:5000/franchise/category/second/list/detail/categoryfirst/${selectedFirstCategory.value}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -311,7 +321,7 @@ const fetchThirdCategories = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://api.pioms.shop/admin/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`, {
+    const response = await fetch(`http://localhost:5000/franchise/category/third/list/detail/categorysecond/${selectedSecondCategory.value}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -328,18 +338,26 @@ const fetchThirdCategories = async () => {
 };
 const applyFilters = () => {
   filteredLists.value = lists.value.filter(list => {
-    const matchesExposureStatus = selectedExposureStatus.value === '전체' || list.productExposureStatus === (selectedExposureStatus.value === '노출');
     const matchesProductName = !filterProductName.value || list.productName.includes(filterProductName.value);
     const matchesStatus = !filterStatus.value || list.productStatus === filterStatus.value;
     const matchesColor = !filterColor.value || list.productColor === filterColor.value;
     const matchesSize = !filterSize.value || list.productSize === parseInt(filterSize.value, 10);
-    const matchesCategory = !selectedThirdCategory.value || list.categoryThirdCode === selectedThirdCategory.value;
 
-    return matchesExposureStatus && matchesProductName && matchesStatus && matchesColor && matchesSize && matchesCategory;
+    let matchesCategory = true;
+    if (selectedFirstCategory.value) {
+      matchesCategory = list.categoryFirstName === selectedFirstCategory.value;
+      if (matchesCategory && selectedSecondCategory.value) {
+        matchesCategory = list.categorySecondName === selectedSecondCategory.value;
+        if (matchesCategory && selectedThirdCategory.value) {
+          matchesCategory = list.categoryThirdName === selectedThirdCategory.value;
+        }
+      }
+    }
+
+    return matchesProductName && matchesStatus && matchesColor && matchesSize && matchesCategory;
   });
 };
 const resetFilters = () => {
-  selectedExposureStatus.value = '전체';
   filterProductName.value = '';
   filterStatus.value = '';
   filterColor.value = '';
@@ -451,6 +469,29 @@ fetchThirdCategories();
 </script>
 
 <style scoped>
+.pagination button {
+  border: none;
+  border-radius: 10px;
+  width: 75px;
+}
+.status-available {
+  align-content: center;
+  background-color: #FFCD4B;
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-weight: bold;
+  height: 25px;
+  font-size: 14px;
+}
+.status-unavailable {
+  align-content: center;
+  background-color: #FF6285;
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-weight: bold;
+  height: 25px;
+  font-size: 14px;
+}
 .product-img {
   width: 30px;
   height: 30px;
@@ -620,25 +661,26 @@ fetchThirdCategories();
 .product-title {
   margin-left: 18%;
 }
-.headerTitle {
-  text-align: left;
-  margin-left: 16.2%;
-  margin-bottom: 0.5%;
-}
 
 .product-sub-title {
-  margin-left: 18%;
+  margin: 0;
+  font-size: 12px;
+
 }
 .product-sub-title img {
   width: 20px;
   height: 20px;
 }
-.headerTitle h6 {
-  margin-bottom: 5%;
+.headerTitle img {
+  width: 10px;
+  height: 10px;
+}
+.headerTitle p {
+  font-size: 20px;
+  font-weight: bold;
 }
 .headerTitle h3,
 .headerTitle h6 {
   margin: 0
 }
-
 </style>
