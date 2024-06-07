@@ -410,9 +410,9 @@ const getMemberId = async () => {
         productStatus: product.productStatus,
         productColor: product.productColor,
         productSize: product.productSize,
-        categoryFirstName: product.categoryFirstName,
-        categorySecondName: product.categorySecondName,
-        categoryThirdName: product.categoryThirdName,
+        categoryFirstName: product.categoryFirstCode,
+        categorySecondName: product.categorySecondCode,
+        categoryThirdName: product.categoryThirdCode,
       };
     });
 
@@ -467,7 +467,6 @@ fetchFirstCategories();
 fetchSecondCategories();
 fetchThirdCategories();
 </script>
-
 <style scoped>
 .pagination button {
   border: none;
