@@ -153,7 +153,7 @@ const routes = [
         path: '/admin/notice/list',
         name: 'NoticeList',
         component: NoticeList,
-        meta: { requiresAuth: true, role: ['ROLE_ROOT'] }
+        meta: { requiresAuth: true, role: ['ROLE_ROOT','ROLE_ADMIN'] }
     },
     {
         path: '/franchise/notice/list',
