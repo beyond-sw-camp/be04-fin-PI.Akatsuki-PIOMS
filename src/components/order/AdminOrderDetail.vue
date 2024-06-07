@@ -141,10 +141,9 @@
                         </tbody>
                       </table>
                     </div>
-                    <div class="but-group">
-                      <button type="button" class="cancel-btn" @click="clickDeny">취소</button>
-                      &nbsp;&nbsp;&nbsp;
-                      <button type="submit" class="submit-btn">등록</button>
+                    <div class="action-buttons">
+                      <button type="submit" class="ho-btn">등록</button>
+                      <button type="button" class="ho-btn" @click="clickDeny">취소</button>
                     </div>
                   </form>
                 </div>
@@ -153,14 +152,14 @@
 
           </div>
           <div class="action-buttons" v-if="item.orderCondition == '승인대기'">
-              <input class="cancel-btn" type="button" value="발주승인" @click="accpetOrder">
-              <input class="cancel-btn" type="button" value="발주반려" @click="clickDeny">
+              <input class="ho-btn" type="button" value="발주승인" @click="accpetOrder">
+              <input class="ho-btn" type="button" value="발주반려" @click="clickDeny">
             </div>
          <div>
           발주일 : {{ item.orderDate }} &nbsp;&nbsp;&nbsp;&nbsp;
            주문코드 : {{ item.orderCode }}<br>
            <div style="float: right">
-             <button class="cancel-btn" @click="showDetailPopup" >돌아가기</button>
+             <button class="ho-btn" @click="showDetailPopup" >돌아가기</button>
            </div>
          </div>
          <br><br>
@@ -178,7 +177,8 @@
    import { useStore } from 'vuex'; // Vuex store 임포트
    import Swal from "sweetalert2";
    import AdminExchangePage from "@/components/exchange/AdminExchangePage.vue";
-   import FranchiseOrderPage from "@/components/order/FranchiseOrderPage.vue"; // Vuex store 임포트
+   import FranchiseOrderPage from "@/components/order/FranchiseOrderPage.vue";
+   import AdminOrderPage from "@/components/order/AdminOrderPage.vue"; // Vuex store 임포트
 
    const store = useStore(); // Vuex store 사용
 
@@ -275,6 +275,7 @@ const denyOrder = async () => {
         props.showDetailPopup();
         throw new Error('네트워크 오류 발생');
       }
+
       await Swal.fire({
         position: "center",
         icon: "success",
@@ -283,6 +284,7 @@ const denyOrder = async () => {
         timer: 1500
       });
       location.reload(AdminOrderPage);
+
     } catch (error) {
       await Swal.fire({
         position: "center",
@@ -291,7 +293,7 @@ const denyOrder = async () => {
         showConfirmButton: false,
         timer: 1500
       });
-      location.reload(FranchiseOrderPage);
+      location.reload(AdminOrderPage);
 
       props.showDetailPopup();
     }

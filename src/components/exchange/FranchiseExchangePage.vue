@@ -41,7 +41,7 @@
           <img src="@/assets/icon/search.png" alt="Search" />
         </button>
         <br>
-        <input class="create-btn"  type="button" value="발주하기" @click="showPopup" style="cursor: pointer; float: right">
+        <input class="create-btn"  type="button" value="반품신청하기" @click="showPopup" style="cursor: pointer; float: right">
         <br><br><br>
       </div>
     </div>

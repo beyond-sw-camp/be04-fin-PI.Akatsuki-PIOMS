@@ -20,24 +20,14 @@
           </td>
         </tr>
         <tr>
-          <td class="filter-label">가맹점명</td>
-          <td class="filter-input">
-            <input type="text" v-model="filterFranchiseName" />
-          </td>
-          <td class="filter-label">배송(송장)번호</td>
-          <td class="filter-input">
-            <input type="text" v-model="filterInvoiceCode" />
-          </td>
-        </tr>
-
-        <tr>
-          <td class="filter-label">점주명</td>
-          <td class="filter-input">
-            <input type="text" v-model="filterFranchiseOwnerName" />
-          </td>
           <td class="filter-label">주문(발주)일</td>
           <td class="filter-input">
             <input type="date" v-model="filterOrderDate" />
+          </td>
+          
+          <td class="filter-label">배송(송장)번호</td>
+          <td class="filter-input">
+            <input type="text" v-model="filterInvoiceCode" />
           </td>
         </tr>
 
@@ -192,7 +182,6 @@ const getOrderList = async () => {
       credentials: 'include'
     });
     if(response.status == 204){
-      alert("발주 내역이 없습니다.")
       return;
     }
 

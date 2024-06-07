@@ -3,7 +3,8 @@
     <header class="fb__header">
       <AdminHeader v-if="userRole === 'ROLE_ROOT' || userRole === 'ROLE_ADMIN'" />
       <FranchiseHeader v-else-if="userRole === 'ROLE_OWNER'" />
-      <DriverHeader v-else-if="userRole === 'ROLE_DRIVER'" />
+      <DriverHeader v-else />
+<!--                    -if="userRole === 'ROLE_DRIVER'" />-->
     </header>
     <article>
       <router-view />

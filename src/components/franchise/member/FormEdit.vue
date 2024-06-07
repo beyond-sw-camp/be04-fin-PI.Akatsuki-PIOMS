@@ -147,7 +147,7 @@ const deleteOwner = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://localhost:5000/admin/franchise/owner/delete/${franchiseOwnerCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/franchise/owner/delete/${franchiseOwnerCode}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

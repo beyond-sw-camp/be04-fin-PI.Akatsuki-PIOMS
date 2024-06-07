@@ -116,10 +116,11 @@
     padding: 20px;
     border-radius: 30px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    width: 50%;
+    width: 55%;
     max-width: 2000px;
     height: 73%;
     overflow-y: auto;
+    overflow-x: hidden;
     max-height: 90vh;
   }
   
@@ -145,15 +146,7 @@
     resize: none;
     height: auto;
   }
-  
-  .popup-content button {
-    padding: 10px 20px;
-    background-color: #9d9d9d;
-    color: black;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+
 
 
 
@@ -252,4 +245,20 @@
     min-width: 120px;
     max-width: 100px;
 
+  }
+
+
+  .ho-btn {
+    background-color: #D9D9D9;
+    color: black;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  .ho-btn:hover {
+    background-color: gray; 
   }
