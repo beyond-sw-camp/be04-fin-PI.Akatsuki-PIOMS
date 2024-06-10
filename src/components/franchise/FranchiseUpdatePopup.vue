@@ -1,38 +1,44 @@
 <template>
-  <div class="popup-overlay" @click.self="showPostPopup">
+  <div class="popup-overlay">
     <div class="popup-content">
       <div class="container">
-        <div class="form-wrapper">
+        <div v-if="franchiseData" class="form-wrapper">
           <table class="detail-table">
             <tr>
               <td class="label">가맹점명</td>
-              <td><input type="text" v-model="insertName" /></td>
+              <td><input type="text" v-model="franchiseData.franchiseName" /></td>
               <td class="label">가맹점 주소</td>
-              <td><input type="text" v-model="insertAddress" /></td>
+              <td><input type="text" v-model="franchiseData.franchiseAddress" /></td>
             </tr>
             <tr>
               <td class="label">전화번호</td>
-              <td><input type="text" v-model="insertCall" /></td>
+              <td><input type="text" v-model="franchiseData.franchiseCall" /></td>
               <td class="label">사업자등록번호</td>
-              <td><input type="text" v-model="insertBusinessNum" /></td>
+              <td><input type="text" v-model="franchiseData.franchiseBusinessNum" /></td>
             </tr>
             <tr>
               <td class="label">배송 요일</td>
-              <td><input type="text" v-model="insertDeliveryDate" /></td>
-              <td class="label">점주코드</td>
-              <td><input type="number" v-model="insertFrOwnerCode" /></td>
+              <td><input type="text" v-model="franchiseData.franchiseDeliveryDate" /></td>
+              <td class="label">관리자 코드</td>
+              <td><input type="number" value="1" readonly /></td>
             </tr>
             <tr>
-              <td class="label">관리자 코드</td>
-              <td><input type="number" v-model="insertAdmin" value="1" readonly /></td>
+              <td class="label">등록일</td>
+              <td>{{ formatDate(franchiseData.franchiseEnrollDate) }}</td>
+              <td class="label">수정일</td>
+              <td>{{ formatDate(franchiseData.franchiseUpdateDate) }}</td>
+            </tr>
+            <tr>
+              <td class="label">점주코드</td>
+              <td><input type="number" v-model="franchiseData.franchiseOwnerCode" /></td>
               <td class="label">배송기사 코드</td>
-              <td><input type="number" v-model="insertDeliveryMan" /></td>
+              <td><input type="number" v-model="franchiseData.deliveryManCode" /></td>
             </tr>
           </table>
           <div class="answer-section">
             <div class="action-buttons">
-              <button @click="saveFranchise" class="delete-btn">등록</button>
-              <button @click="closePopup" class="cancel-btn">취소</button>
+              <button @click="updateFranchise" class="delete-btn">수정</button>
+              <button @click="closeUpdate" class="cancel-btn">취소</button>
             </div>
           </div>
         </div>
@@ -42,75 +48,103 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { defineEmits } from 'vue';
 import { useStore } from 'vuex';
 import Swal from "sweetalert2";
 
 const store = useStore();
 const accessToken = store.state.accessToken;
+const franchiseData = ref(null);
+const emit = defineEmits(['refreshData']);
+const props = defineProps({
+  franchiseCode: Number,
+  closeUpdate: Function
+})
 
-const emit = defineEmits(['close']);
-const insertName = ref('');
-const insertAddress = ref('');
-const insertCall = ref('');
-const insertBusinessNum = ref('');
-const insertDeliveryDate = ref('');
-const insertFrOwnerCode = ref('');
-const insertAdmin = ref(1);
-const insertDeliveryMan = ref('');
-
-const showPostPopup = () => {
-  emit('close');
-}
-const closePopup = () => {
-  emit('close');
-}
-const saveFranchise = async () => {
-  const requestData = {
-    franchiseName: insertName.value,
-    franchiseAddress: insertAddress.value,
-    franchiseCall: insertCall.value,
-    franchiseBusinessNum: insertBusinessNum.value,
-    franchiseDeliveryDate: insertDeliveryDate.value,
-    franchiseOwner: {
-      franchiseOwnerCode: insertFrOwnerCode.value
-    },
-    adminCode: insertAdmin.value,
-    deliveryDriver: {
-      deliveryManCode: insertDeliveryMan.value,
-    }
+const fetchFranchiseData = async () => {
+  const franchiseCode = props.franchiseCode;
+  if (!franchiseCode) {
+    console.error('franchiseCode is not defined');
+    return;
   }
 
-  console.log("Request Data:", requestData);
-
   try {
-    const response = await fetch("http://localhost:5000/admin/franchise/register", {
-      method: 'POST',
+    const response = await fetch(`http://localhost:5000/admin/franchise/detail/${franchiseCode}`, {
+      method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(requestData)
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch franchise data: ${response.statusText}`);
+    }
+    const data = await response.json();
+    franchiseData.value = data;
+  } catch (error) {
+    console.error('Failed to fetch franchise data:', error);
+  }
+}
+
+const formatDate = (dateString) => {
+  if (!dateString) return '-';
+  const date = new Date(dateString);
+  if (isNaN(date)) return 'Invalid Date';
+  return date.toLocaleString('ko-KR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  });
+};
+
+const updateFranchise = async () => {
+  const franchiseCode = props.franchiseCode;
+  if(!franchiseCode) {
+    console.error('그런거 없다.')
+    return;
+  }
+  try {
+    const response = await fetch(`http://localhost:5000/admin/franchise/update/${franchiseCode}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        franchiseName: franchiseData.value.franchiseName,
+        franchiseAddress: franchiseData.value.franchiseAddress,
+        franchiseCall: franchiseData.value.franchiseCall,
+        franchiseBusinessNum: franchiseData.value.franchiseBusinessNum,
+        franchiseDeliveryDate: franchiseData.value.franchiseDeliveryDate,
+        franchiseOwnerCode: franchiseData.value.franchiseOwnerCode,
+        deliveryManCode: franchiseData.value.deliveryManCode,
+      }),
     });
 
     if(!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`가맹점 등록에 실패했습니다. 상태 코드: ${response.status}, 메시지: ${errorText}`);
+      throw new Error(`Failed to submit edit: ${response.statusText}`);
     }
 
     await Swal.fire({
       icon: 'success',
-      title: '가맹점 등록 성공!',
-      text: '가맹점 등록에 성공하였습니다.',
+      title: '수정 성공',
+      text: '수정이 완료되었습니다.',
     });
-    emit('close');
+    emit('refreshData');
+    props.closeUpdate();
   } catch (error) {
-    console.error('error:', error);
+    console.error('Failed to submit edit:', error);
   }
 }
-</script>
 
+onMounted(fetchFranchiseData);
+</script>
 
 <style scoped>
 .container {
