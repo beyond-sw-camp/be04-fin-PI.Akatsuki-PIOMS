@@ -449,7 +449,11 @@ const uploadAndSaveProduct = async () => {
     }
 
     const data = await response.json();
-    console.log('상품이 성공적으로 등록되었습니다:', data);
+    await Swal.fire({
+      icon: 'success',
+      title: '상품 등록 성공!',
+      text: '상품 등록에 성공하였습니다.',
+    });
     location.reload(ProductList);
     emit('close');
   } catch (error) {
@@ -457,7 +461,6 @@ const uploadAndSaveProduct = async () => {
   }
 };
 </script>
-
 <style scoped>
 .popup-overlay {
   position: fixed;

@@ -1,10 +1,12 @@
 <template>
   <div>
-    <div class="headerTitle">
-      <h3 class="product-title"><img src="@/assets/icon/Cloth.png">상품 및 상품 카테고리 관리 > 상품 관리 > 상품 전체 조회 및 관리</h3>
-      <h6 class="product-sub-title" style="margin-top: 1%; margin-bottom: 1%">조회할 상품의 조건을 선택 후
-        <img src="@/assets/icon/reset.png">초기화 또는 <img src="@/assets/icon/search.png">검색을 눌러주세요.
-      </h6>
+    <div align="center">
+      <div class="headerTitle" style="width: 1200px;">
+        <h3 class="product-title"><img src="@/assets/icon/Cloth.png">상품 및 상품 카테고리 관리 > 상품 관리 > 상품 전체 조회 및 관리</h3>
+        <h6 class="product-sub-title" style="margin-top: 1%; margin-bottom: 1%">조회할 상품의 조건을 선택 후
+          <img src="@/assets/icon/reset.png">초기화 또는 <img src="@/assets/icon/search.png">검색을 눌러주세요.
+        </h6>
+      </div>
     </div>
     <div class="filter-section">
       <div>
@@ -26,12 +28,15 @@
         <img src="@/assets/icon/search.png" alt="Search" />
       </button>
     </div>
-    <div class="post-btn" id="app">
-      <button @click="showPostPopup = true" class="postBtn">
-        <img src="@/assets/icon/new%20Item.png" alt="postProduct">
-      </button>
-      <DriverPostPopup v-if="showPostPopup" @close="showPostPopup = false"/>
-      <button @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
+
+    <div align="center">
+      <div class="post-btn" id="app">
+        <button @click="showPostPopup = true" class="postBtn">
+          <img src="@/assets/icon/new%20Item.png" alt="postProduct">
+        </button>
+        <DriverPostPopup v-if="showPostPopup" @close="showPostPopup = false"/>
+        <button @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
+      </div>
     </div>
     <div class="table-container">
       <table class="table">
@@ -207,7 +212,7 @@ getDriverMembers();
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 10px;
-  width: 1250px;
+  width: 1200px;
 }
 
 .filter-table td {
@@ -263,11 +268,11 @@ getDriverMembers();
 }
 .post-btn {
   display: flex;
-  justify-content: space-between; /* 양 끝에 정렬 */
-  align-items: center; /* 수직 가운데 정렬 */
-  position: absolute; /* 절대 위치 설정 */
-  left: 14%; /* 좌측 정렬 */
-  width: 1270px;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+
+  width: 1200px;
 }
 
 .reset-btn:hover, .search-btn:hover {
@@ -364,7 +369,7 @@ getDriverMembers();
 }
 .headerTitle {
   text-align: left;
-  margin-left: 16.2%;
+  //margin-left: 16.2%;
 }
 
 .product-sub-title {

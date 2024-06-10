@@ -1,10 +1,12 @@
 <template xmlns="http://www.w3.org/1999/html">
-    <div class="headerTitle" align="left" style="margin-left: 17%; margin-top: 1%">
+  <div align="center" >
+    <div class="headerTitle" align="left" style="width: 1260px;  margin-top: 1%">
         <p class="product-title"><img class="Cloth" src="@/assets/icon/Cloth.png" style="width: 20px;height: 20px">상품 및 상품 카테고리 관리 > 상품 관리 > 상품 전체 조회 및 관리</p>
     <h6 class="product-sub-title" style="margin-top: 1%; margin-bottom: 3px"> * 조회할 상품의 조건을 선택 후
       <img src="@/assets/icon/reset.png">초기화 또는 <img src="@/assets/icon/search.png">검색을 눌러주세요.
     </h6>
     </div>
+  </div>
   <div>
     <div class="filter-section">
       <div>
@@ -95,12 +97,14 @@
         <img src="@/assets/icon/search.png" alt="Search" />
       </button>
     </div>
-    <div class="post-btn" id="app">
-      <button @click="showPostPopup = true" class="postBtn">
-        <img src="@/assets/icon/new%20Item.png" alt="postProduct">
-      </button>
-      <ProductPostPopup v-if="showPostPopup" @close="showPostPopup = false" />
-      <button @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
+    <div align="center" >
+      <div class="post-btn" id="app">
+        <button @click="showPostPopup = true" class="postBtn">
+          <img src="@/assets/icon/new%20Item.png" alt="postProduct">
+        </button>
+        <ProductPostPopup v-if="showPostPopup" @close="showPostPopup = false" />
+        <button @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
+      </div>
     </div>
     <div class="table-container">
       <table class="table">
@@ -110,8 +114,10 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost">
-          <td v-for="(header, colIndex) in headers" :key="colIndex" class="table-td">
+        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost"
+            :id=" 'row-' + rowIndex">
+          <td class="table-td">{{ rowIndex + 1 }}</td>
+          <td v-for="(header, colIndex) in headers.slice(1)" :key="colIndex" class="table-td">
             <template v-if="header.key === 'productName'">
               <button class="button-as-text" @click="showModifyPopup(item.productCode,item.productName,item.productCount,item.productPrice,item.productStatus,item.productColor,item.productSize,item.categoryFirstCode,item.categorySecondCode,item.categoryThirdCode,item.productContent)">
                 {{ item[header.key] }}
@@ -175,7 +181,7 @@ const accessToken = store.state.accessToken;
 
 const lists = ref([]);
 const headers = ref([
-  { key: 'productCode', label: '상품 코드'},
+  { key: 'index', label: '번호'},
   { key: 'productName', label: '상품명'},
   { key: 'imgUrl', label: '상품 이미지'},
   { key: 'productCount', label: '본사 보유량'},
@@ -185,9 +191,9 @@ const headers = ref([
   { key: 'productExposureStatus', label: '상품 노출 상태'},
   { key: 'productColor', label: '색상'},
   { key: 'productSize', label: '사이즈'},
-  { key: 'categoryFirstName', label: '카테고리 코드'},
-  { key: 'categorySecondName', label: '카테고리 코드'},
-  { key: 'categoryThirdName', label: '카테고리 코드'},
+  { key: 'categoryFirstName', label: '카테고리 대분류'},
+  { key: 'categorySecondName', label: '카테고리 중분류'},
+  { key: 'categoryThirdName', label: '카테고리 소분류'},
 ]);
 
 const filteredLists = ref([]);
@@ -256,7 +262,7 @@ const getProductImageUrl = (productCode) => {
 };
 const fetchProductImages = async () => {
   try {
-    const response = await fetch(`http://api.pioms.shop/admin/product/productImage`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/product/productImage`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -575,7 +581,7 @@ fetchThirdCategories();
   justify-content: space-between;
   align-items: center;
   position: relative;
-  left: 220px;
+
   width: 1265px;
 }
 
@@ -668,8 +674,8 @@ fetchThirdCategories();
   border: 1px solid rgba(217, 217, 217, 0.7);
 }
 .product-title {
-  position: relative;
-  left: -60px;
+  /* position: relative; */
+  /* left: -60px; */
 }
 .product-sub-title img {
   width: 20px;
@@ -677,8 +683,8 @@ fetchThirdCategories();
 }
 .product-sub-title {
   font-size: 12px;
-  position: relative;
-  left: -55px;
+  /* position: relative; */
+  /* left: -55px; */
   margin: 0;
 }
 .headerTitle img {

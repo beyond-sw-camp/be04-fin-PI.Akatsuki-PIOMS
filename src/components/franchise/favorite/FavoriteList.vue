@@ -36,7 +36,6 @@
           <td>{{ product.product.productColor }}</td>
           <td>{{ product.product.productSize }}</td>
           <td>{{ product.product.categoryFirstName }}</td>
-          <!--          <td>{{ product.product.categoryThird.categorySecond.categoryFirst.categoryFirstName }}</td>-->
           <td>{{ product.product.categorySecondName }}</td>
           <td>{{ product.product.categoryThirdName }}</td>
           <td><button @click="removeFavorite(product.franchiseWarehouseCode)">삭제</button></td>
@@ -64,6 +63,7 @@ const favoriteProducts = ref([]);
 const fetchFavorites = async () => {
   try {
     const response = await fetch('http://api.pioms.shop/franchise/warehouse/favorites/by-owner', {
+
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

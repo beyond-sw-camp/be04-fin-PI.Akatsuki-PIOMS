@@ -1,15 +1,12 @@
 <template>
-  <div class="modal" @click.self="closePopup">
+  <div class="modal">
     <div class="modal-content">
-      <button @click="closePopup" class="close-button">x</button>
       <h3>대분류 카테고리 삭제</h3>
       <p>카테고리 코드: {{ currentFirstCode }}</p>
       <p>카테고리 이름: {{ currentFirstName}}</p>
-      <button @click="showDeleteModal">삭제</button>
-      <div v-if="DeleteModalVisible" class="confirmation-modal">
-        <p>삭제하시겠습니까?</p>
-        <button @click="deleteCategoryFirst" class="confirm-button">예</button>
-        <button @click="closeDeleteModal" class="cancel-button">아니오</button>
+      <div class="button-container">
+        <button @click="deleteCategoryFirst" class="confirm-button">삭제</button>
+        <button @click="closePopup" class="cancel-button">취소</button>
       </div>
     </div>
   </div>
@@ -105,30 +102,21 @@ const closePopup = () => {
   background-color: white;
   padding: 20px;
   border-radius: 8px;
-  min-width: 500px;
-  min-height: 300px;
-}
-
-.close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: transparent;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-}
-
-.confirmation-modal {
-  background-color: white;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  margin-top: 10px;
+  min-width: 300px;
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .confirmation-modal p {
   margin-bottom: 10px;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 .confirm-button,
@@ -141,8 +129,8 @@ const closePopup = () => {
 
 .confirm-button {
   background-color: #344DAF;
-  color: white;
   border: none;
+  color: white;
 }
 
 .cancel-button {

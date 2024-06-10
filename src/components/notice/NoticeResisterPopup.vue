@@ -69,7 +69,6 @@ import { ref, defineEmits } from 'vue';
 }
 .notice-form {
   background: #ffffff;
-  //padding: 0px 10px 10px 10px;
   border-radius: 10px;
   border-color: #d9d9d9;
   border: 5px;
