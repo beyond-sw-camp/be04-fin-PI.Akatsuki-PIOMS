@@ -97,7 +97,7 @@ import { ref, computed, onMounted } from 'vue';
 import Create from './AskFormCreate.vue';
 import Edit from './AskFormEdit.vue';
 import View from './AskFormView.vue';
-import Breadcrumb from '@/components/amdin/ask/Breadcrumb.vue';
+import Breadcrumb from '@/components/admin/ask/Breadcrumb.vue';
 import { useStore } from 'vuex';
 
 const store = useStore();
@@ -117,7 +117,7 @@ const breadcrumbs = [
 
 const fetchAsks = async () => {
   try {
-    const response = await fetch(`http://api.pioms.shop/franchise/asklist`, {
+    const response = await fetch(`http://localhost:5000/franchise/asklist`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

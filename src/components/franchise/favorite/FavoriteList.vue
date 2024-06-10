@@ -62,7 +62,7 @@ const favoriteProducts = ref([]);
 // Fetch favorite products
 const fetchFavorites = async () => {
   try {
-    const response = await fetch('http://api.pioms.shop/franchise/warehouse/favorite/list', {
+    const response = await fetch('http://localhost:5000/franchise/warehouse/favorite/list', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -82,7 +82,7 @@ const fetchFavorites = async () => {
 
 const removeFavorite = async (productId) => {
   try {
-    const response = await fetch(`http://api.pioms.shop/franchise/warehouse/removeFavorite/${productId}`, {
+    const response = await fetch(`http://localhost:5000/franchise/warehouse/removeFavorite/${productId}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

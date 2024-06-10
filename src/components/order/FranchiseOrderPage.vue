@@ -24,7 +24,7 @@
           <td class="filter-input">
             <input type="date" v-model="filterOrderDate" />
           </td>
-          
+
           <td class="filter-label">배송(송장)번호</td>
           <td class="filter-input">
             <input type="text" v-model="filterInvoiceCode" />
@@ -145,7 +145,7 @@ const filterOrderDate = ref('');
 
 const downloadExcel = () => {
   axios({
-    url: 'http://api.pioms.shop/franchise/exceldownload/order-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
+    url: 'http://localhost:5000/franchise/exceldownload/order-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${accessToken}`,
@@ -172,8 +172,8 @@ const getOrderList = async () => {
       throw new Error('No access token found');
     }
 
-    const response = await fetch(`http://api.pioms.shop/franchise/order/list`, {
-    //const response = await fetch(`http://api.pioms.shop/franchise/order/list`, {
+    const response = await fetch(`http://localhost:5000/franchise/order/list`, {
+    //const response = await fetch(`http://localhost:5000/franchise/order/list`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
