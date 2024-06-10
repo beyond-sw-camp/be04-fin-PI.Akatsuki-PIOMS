@@ -214,7 +214,7 @@ const accpetOrder = async () => {
         if (!accessToken) {
           throw new Error('No access token found');
       }
-      const response = await fetch(`http://api.pioms.shop/admin/order/${item.orderCode}/accept`, {
+      const response = await fetch(`http://localhost:5000/admin/order/${item.orderCode}/accept`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -263,7 +263,7 @@ const denyOrder = async () => {
         throw new Error('No access token found');
       }
 
-      const response = await fetch(`http://api.pioms.shop/admin/order/${item.orderCode}/deny?denyMessage=${reason.value}`, {
+      const response = await fetch(`http://localhost:5000/admin/order/${item.orderCode}/deny?denyMessage=${reason.value}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${accessToken}`,

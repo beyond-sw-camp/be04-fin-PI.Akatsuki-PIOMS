@@ -26,7 +26,7 @@
             <label>단종</label>
             <input type="radio" value="품절" name="dateOrder" v-model="conditionFilter" @change="applyFilter">
             <label>품절</label>
-            
+
           </div>
       </div>
 
@@ -78,7 +78,7 @@
             </tr>
           </thead>
           <tr v-for="(selectedProduct, index) in selectedProducts" :key="index"
-            class="allpost" 
+            class="allpost"
           >
             <td >{{ selectedProduct.productCode }}</td>
             <td>{{ selectedProduct.productName }}</td>
@@ -151,8 +151,8 @@
     if (!accessToken) {
       throw new Error('No access token found');
     }
-      // const response = await fetch("http://api.pioms.shop/franchise/product", {
-      const response = await fetch("http://api.pioms.shop/franchise/product", {
+      // const response = await fetch("http://localhost:5000/franchise/product", {
+      const response = await fetch("http://localhost:5000/franchise/product", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -221,8 +221,8 @@
     if (!accessToken) {
       throw new Error('No access token found');
     }
-    // const response = await fetch(`http://api.pioms.shop/franchise/order`, {
-    const response = await fetch(`http://api.pioms.shop/franchise/order`, {
+    // const response = await fetch(`http://localhost:5000/franchise/order`, {
+    const response = await fetch(`http://localhost:5000/franchise/order`, {
         method: "POST",
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -236,7 +236,7 @@
       throw new Error("네트워크 오류 발생");
     }
     const result = await response.json();
-    
+
     await Swal.fire({
       position: "center",
       icon: "success",
@@ -266,5 +266,5 @@
   @import "../../assets/css/popup.css" ;
   @import "../../assets/css/order.css" ;
 
-  
+
 </style>

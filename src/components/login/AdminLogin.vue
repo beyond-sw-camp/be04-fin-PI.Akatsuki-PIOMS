@@ -40,7 +40,7 @@ const login = async () => {
   try {
     console.log('로그인 시도:', { username: username.value, password: password.value, accessNumber: accessNumber.value });
 
-    const response = await fetch('http://api.pioms.shop/admin/login', {
+    const response = await fetch('http://localhost:5000/admin/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
