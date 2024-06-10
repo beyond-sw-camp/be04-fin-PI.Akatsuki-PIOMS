@@ -177,6 +177,8 @@ const fetchHistories = async () => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
+    // 변경일 기준으로 최신순 정렬
+    data.sort((a, b) => new Date(b.logDate) - new Date(a.logDate));
     histories.value = data || [];
     histories.value.sort((a, b) => new Date(b.logDate) - new Date(a.logDate)); // 날짜 최신순 정렬
     filteredHistories.value = histories.value;
