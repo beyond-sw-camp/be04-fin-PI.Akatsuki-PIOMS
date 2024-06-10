@@ -1,6 +1,10 @@
 <template>
   <div class="fb__header-info">
-    <a href="admin/home"><img class="logo" src="@/assets/icon/PIOMS_로고.png" alt="Logo" /></a>
+    
+    <router-link to="/admin/home" class="link-page">
+      <a href="admin/home" ><img class="logo" src="@/assets/icon/PIOMS_로고.png" alt="Logo" /></a>
+    </router-link>
+
     <section class="header_info">
       <div class="crown" style="cursor: pointer" @click="openModal">
         <img class="crown_icon" src="@/assets/icon/어드민.png" alt="User Role Icon" />
@@ -34,7 +38,7 @@
           </a>
         </li> -->
         <li>
-          <a href="/admin/franchise/list" class="label">가맹점 및 직원 관리</a>
+          <a class="label">가맹점 및 직원 관리</a>
           <div class="submenu_box" style="height: 340px">
             <ul class="submenu">
               <li>
@@ -61,7 +65,7 @@
           </div>
         </li>
         <li>
-          <a href="#" class="label">상품 및 상품 카테고리 관리</a>
+          <a  class="label">상품 및 상품 카테고리 관리</a>
           <div class="submenu_box" style="height: 240px">
             <ul class="submenu">
               <li>
@@ -82,7 +86,7 @@
           </div>
         </li>
         <li>
-          <a href="#" class="label">배송 및 발주 관리</a>
+          <a  class="label">배송 및 발주 관리</a>
           <div class="submenu_box" style="height: 200px">
             <ul class="submenu">
               <li>
@@ -102,7 +106,7 @@
           </div>
         </li>
         <li>
-          <a href="#" class="label">반품 및 교환 관리</a>
+          <a  class="label">반품 및 교환 관리</a>
           <div class="submenu_box" style="height: 100px">
             <ul class="submenu">
               <li>
@@ -115,7 +119,7 @@
           </div>
         </li>
         <li>
-          <a href="#" class="label">공지 및 문의 관리</a>
+          <a  class="label">공지 및 문의 관리</a>
           <div class="submenu_box" style="height: 200px">
             <ul class="submenu">
               <li>
@@ -134,7 +138,7 @@
             </ul>
           </div>
         </li>
-        <li>
+        <li v-if="logView==true">
           <a href="/admin/log/list" class="label">이력 관리</a>
           <div class="submenu_box" style="height: 100px">
             <ul class="submenu">
@@ -165,18 +169,25 @@ const accessToken = store.state.accessToken;
 const router = useRouter();
 const username = ref('');
 const isModalOpen = ref(false);
+const role = ref('');
+const logView = ref(false);
 
 const fetchUsernameFromToken = () => {
   const token = store.state.accessToken;
   if (token) {
     const decoded = jwtDecode(token);
+    // console.log(decoded);
     username.value = decoded.username;
+    role.value = decoded.role;
+    if(role.value=="ROLE_ROOT")
+      logView.value = true;
+    console.log(role);
   }
 };
 
 const pdfDownload = async () => {
   try {
-    const response = await fetch('http://api.pioms.shop/admin/pdfdownload/admin-pdf', {
+    const response = await fetch('http://localhost:5000/admin/pdfdownload/admin-pdf', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

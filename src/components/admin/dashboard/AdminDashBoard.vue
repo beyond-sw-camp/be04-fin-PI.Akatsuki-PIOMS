@@ -52,7 +52,7 @@
         <div class="card">
           <div class="card-content">
             <div class="card-header">
-              <router-link to="/admin/order/list" class="link-page">
+              <router-link to="/admin/product/list" class="link-page">
                 <img src="@/assets/icon/부족한재고.png" class="icon" /> &nbsp;부족한 상품 재고
               </router-link>
             </div>
@@ -77,7 +77,9 @@
           <div class="card-content">
             <div class="card-header">
               <div class="card-header-title">
+                <router-link to="/admin/notice/list" class="link-page">
                 <img src="@/assets/icon/공지사항.png" class="icon" /> &nbsp;공지사항
+                </router-link>
               </div>
               <div class="card-header-info">(단위: 주)</div>
             </div>
@@ -162,7 +164,9 @@
           <div class="card-content">
             <div class="card-header">
               <div class="card-header-title">
-                <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/d594943691f3735f640773a83fa9edefab6c26a4713004ba1b081a62d929f681?apiKey=79a2b7eb54dd4ed5b8fcf22467729821&" /> &nbsp;문의사항 리스트
+                <router-link to="/admin/ask/list" class="link-page">
+                  <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/d594943691f3735f640773a83fa9edefab6c26a4713004ba1b081a62d929f681?apiKey=79a2b7eb54dd4ed5b8fcf22467729821&" /> &nbsp;문의사항 리스트
+                </router-link>
               </div>
               <div class="card-header-info">(단위: 주)</div>
             </div>
@@ -212,13 +216,8 @@ const userRole = computed(() => store.getters.userRole);
 
 const getDash = async () => {
   let timerInterval;
-  let url;
-
-  if (userRole.value === "ROLE_ROOT") {
-    url = 'http://localhost:5000/admin/rootDashboard';
-  } else {
-    url = 'http://localhost:5000/admin/adminDashboard';
-  }
+  let url= 'http://localhost:5000/admin/adminDashboard';
+  
 
   Swal.fire({
     title: "대시보드를 불러오는 중입니다...",
