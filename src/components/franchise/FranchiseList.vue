@@ -52,7 +52,7 @@
         <button @click="showPostPopup = true" class="postBtn">
           <img src="@/assets/icon/new%20Item.png" alt="postProduct">
         </button>
-        <ProductPostPopup v-if="showPostPopup" @close="showPostPopup = false"/>
+        <FranchisePostPopup v-if="showPostPopup" @close="showPostPopup = false"/>
         <button @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
       </div>
     </div>
@@ -108,6 +108,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import ProductPostPopup from "@/components/admin/product/ProductPostPopup.vue";
+import FranchisePostPopup from "@/components/franchise/FranchisePostPopup.vue";
 
 const store = useStore();
 const franchises = ref([]);
@@ -118,6 +119,8 @@ const status = ref('all');
 
 const currentPage = ref(1);
 const itemsPerPage = 15;
+
+const showPostPopup = ref(false);
 
 const fetchFranchises = async () => {
   try {
