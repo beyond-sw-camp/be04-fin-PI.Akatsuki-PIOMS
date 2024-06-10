@@ -2,9 +2,9 @@
   <div class="popup-overlay" >
        <div class="popup-content">
            <br>          <br>
-                <h1 align="center">발주서</h1>
 
            <div class="info">
+                <h1 align="center">발주서</h1>
                 <div style="display:flex;" align="center">
                   <div class="divvv-title">
                     수신처
@@ -151,13 +151,13 @@
             </div>
 
           </div>
+         발주일 : {{ item.orderDate }} &nbsp;&nbsp;&nbsp;&nbsp;
+         주문코드 : {{ item.orderCode }}<br>
           <div class="action-buttons" v-if="item.orderCondition == '승인대기'">
               <input class="ho-btn" type="button" value="발주승인" @click="accpetOrder">
               <input class="ho-btn" type="button" value="발주반려" @click="clickDeny">
             </div>
          <div>
-          발주일 : {{ item.orderDate }} &nbsp;&nbsp;&nbsp;&nbsp;
-           주문코드 : {{ item.orderCode }}<br>
            <div style="float: right">
              <button class="ho-btn" @click="showDetailPopup" >돌아가기</button>
            </div>
@@ -214,7 +214,7 @@ const accpetOrder = async () => {
         if (!accessToken) {
           throw new Error('No access token found');
       }
-      const response = await fetch(`http://api.pioms.shop/admin/order/${item.orderCode}/accept`, {
+      const response = await fetch(`http://localhost:5000/admin/order/${item.orderCode}/accept`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -263,7 +263,7 @@ const denyOrder = async () => {
         throw new Error('No access token found');
       }
 
-      const response = await fetch(`http://api.pioms.shop/admin/order/${item.orderCode}/deny?denyMessage=${reason.value}`, {
+      const response = await fetch(`http://localhost:5000/admin/order/${item.orderCode}/deny?denyMessage=${reason.value}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${accessToken}`,

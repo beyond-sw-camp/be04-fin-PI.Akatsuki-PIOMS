@@ -369,7 +369,7 @@ const resetFilters = () => {
 };
 const getMemberId = async () => {
   try {
-    const productResponse = await fetch('http://api.pioms.shop/franchise/product', {
+    const productResponse = await fetch('http://localhost:5000/franchise/product', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -383,7 +383,7 @@ const getMemberId = async () => {
 
     const productData = await productResponse.json();
 
-    const franchiseWarehouseResponse = await fetch('http://api.pioms.shop/franchise/warehouse', {
+    const franchiseWarehouseResponse = await fetch('http://localhost:5000/franchise/warehouse', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -423,7 +423,7 @@ const getMemberId = async () => {
 };
 const downloadExcel = () => {
   axios({
-    url: 'http://api.pioms.shop/franchise/exceldownload/product-excel',
+    url: 'http://localhost:5000/franchise/exceldownload/product-excel',
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${accessToken}`,

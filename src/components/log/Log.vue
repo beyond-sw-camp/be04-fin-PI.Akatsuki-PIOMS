@@ -1,7 +1,15 @@
 <template>
   <div class="container">
+    <div align="center" data-v-61061423="">
+      <div class="headerTitle" align="left" style="width:1260px;margin-top:1%;" data-v-61061423=""><p
+          class="product-title" data-v-61061423=""><img class="Cloth" src="/src/assets/icon/Cloth.png"
+                                                        style="width:20px;height:20px;" data-v-61061423="">상품 및 상품 카테고리
+        관리 &gt; 상품 관리 &gt; 상품 전체 조회 및 관리</p><h6 class="product-sub-title" style="margin-top:1%;margin-bottom:3px;"
+                                                data-v-61061423=""> * 조회할 상품의 조건을 선택 후 <img
+          src="/src/assets/icon/reset.png" data-v-61061423="">초기화 또는 <img src="/src/assets/icon/search.png"
+                                                                          data-v-61061423="">검색을 눌러주세요. </h6></div>
+    </div>
     <!-- 상단 네비게이션 -->
-    <Breadcrumb :crumbs="breadcrumbs" />
 
     <!-- 필터 섹션 -->
     <div class="filter-section">
@@ -10,14 +18,19 @@
           <td class="filter-label">이력조건</td>
           <td class="filter-input">
             <div class="radio-group">
-              <label><input type="radio" name="filterConditions" value="Company" v-model="filterCondition" /> 본사 정보</label>
-              <label><input type="radio" name="filterConditions" value="Admin" v-model="filterCondition" /> 본사 관리자</label>
-              <label><input type="radio" name="filterConditions" value="Franchise" v-model="filterCondition" /> 가맹점</label>
-              <label><input type="radio" name="filterConditions" value="FranchiseOwner" v-model="filterCondition" /> 가맹점주</label>
-              <label><input type="radio" name="filterConditions" value="Product" v-model="filterCondition" /> 상품</label>
-              <label><input type="radio" name="filterConditions" value="Category" v-model="filterCondition" /> 상품 카테고리</label>
-              <label><input type="radio" name="filterConditions" value="Login" v-model="filterCondition" /> 로그인 정보</label>
-              <label><input type="radio" name="filterConditions" value="" v-model="filterCondition" /> 전체</label>
+              <label><input type="radio" name="filterConditions" value="" v-model="filterCondition"/> 전체</label>
+              <label><input type="radio" name="filterConditions" value="Company" v-model="filterCondition"/> 본사
+                정보</label>
+              <label><input type="radio" name="filterConditions" value="Admin" v-model="filterCondition"/> 본사
+                관리자</label>
+              <label><input type="radio" name="filterConditions" value="Franchise" v-model="filterCondition"/>
+                가맹점</label>
+              <label><input type="radio" name="filterConditions" value="FranchiseOwner" v-model="filterCondition"/> 가맹점주</label>
+              <label><input type="radio" name="filterConditions" value="Product" v-model="filterCondition"/> 상품</label>
+              <label><input type="radio" name="filterConditions" value="Category" v-model="filterCondition"/> 상품
+                카테고리</label>
+              <label><input type="radio" name="filterConditions" value="Login" v-model="filterCondition"/> 로그인
+                정보</label>
             </div>
           </td>
         </tr>
@@ -29,6 +42,7 @@
               <option value="등록">등록</option>
               <option value="수정">수정</option>
               <option value="삭제">삭제</option>
+              <option value="로그인">로그인</option>
             </select>
           </td>
         </tr>
@@ -47,16 +61,16 @@
     <div align="center">
       <div class="action-buttons">
         <button @click="resetFilters" class="reset-btn">
-          <img src="@/assets/icon/reset.png" alt="Reset" />
+          <img src="@/assets/icon/reset.png" alt="Reset"/>
         </button>
         <button @click="applyFilters" class="search-btn">
-          <img src="@/assets/icon/search.png" alt="Search" />
+          <img src="@/assets/icon/search.png" alt="Search"/>
         </button>
         <br>
         <div>
-          <button style="float:right;" @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
+          <button style="float:right;" @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png"
+                                                                                    alt="excel"></button>
         </div>
-
       </div>
     </div>
     <div class="post-btn">
@@ -106,10 +120,11 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import Breadcrumb from '@/components/amdin/ask/Breadcrumb.vue'; // Breadcrumb 컴포넌트 임포트
-import { useStore } from 'vuex';
+import {ref, computed, onMounted} from 'vue';
+import Breadcrumb from '@/components/admin/ask/Breadcrumb.vue'; // Breadcrumb 컴포넌트 임포트
+import {useStore} from 'vuex';
 import axios from "axios";
+
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -127,9 +142,10 @@ const breadcrumbs = [
   {label: '통계 및 이력 관리', link: null},
   {label: '이력 관리', link: null},
 ];
+
 const downloadExcel = () => {
   axios({
-    url: 'http://api.pioms.shop/admin/exceldownload/log-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
+    url: 'http://localhost:5000/admin/exceldownload/log-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${accessToken}`,
@@ -137,19 +153,20 @@ const downloadExcel = () => {
     },
     responseType: 'blob', // 서버에서 반환되는 데이터의 형식을 명시
   }).then((response) => {
-    const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }));
+    const url = window.URL.createObjectURL(new Blob([response.data], {type: response.headers['content-type']}));
     const link = document.createElement('a');
     link.href = url;
     link.setAttribute('download', 'LogList.xlsx'); // 원하는 파일 이름 설정
     document.body.appendChild(link);
     link.click();
   }).catch((error) => {
-    console.error('EBad request:', error);
+    console.error('Bad request:', error);
   });
 };
+
 const fetchHistories = async () => {
   try {
-    const response = await fetch('http://api.pioms.shop/admin/log', {
+    const response = await fetch('http://localhost:5000/admin/log', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -160,7 +177,10 @@ const fetchHistories = async () => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
+    // 변경일 기준으로 최신순 정렬
+    data.sort((a, b) => new Date(b.logDate) - new Date(a.logDate));
     histories.value = data || [];
+    histories.value.sort((a, b) => new Date(b.logDate) - new Date(a.logDate)); // 날짜 최신순 정렬
     filteredHistories.value = histories.value;
     applyFilters();
   } catch (error) {
@@ -172,7 +192,7 @@ const applyFilters = () => {
   filteredHistories.value = histories.value.filter(history => {
     const matchesCondition = !filterCondition.value || history.logTarget === filterCondition.value || (filterCondition.value === "Category" && (history.logTarget === "CategoryFirst" || history.logTarget === "CategorySecond" || history.logTarget === "CategoryThird"));
     const matchesStatus = filterStatus.value === '전체' || history.logStatus === filterStatus.value;
-    const historyDate = new Date(history.logDate[0], history.logDate[1] - 1, history.logDate[2]);
+    const historyDate = new Date(history.logDate);
     const matchesStartDate = !startDate.value || historyDate >= new Date(startDate.value);
     const matchesEndDate = !endDate.value || historyDate <= new Date(endDate.value);
 
@@ -253,6 +273,7 @@ onMounted(() => {
   padding-left: initial;
   cursor: pointer;
 }
+
 .container {
   padding: 20px;
 }
@@ -311,17 +332,13 @@ onMounted(() => {
 
 .reset-btn, .search-btn {
   background-color: #fff;
-  color: black;
+  color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   padding: 8px 8px;
   font-size: 14px;
   margin: 0 5px;
-}
-
-.reset-btn:hover, .search-btn:hover {
-  background-color: #f0f0f0;
 }
 
 .table-container {
@@ -423,7 +440,6 @@ onMounted(() => {
   text-align: center;
   padding-top: 10px;
 }
-
 
 .popup-text {
   font-size: 20px;

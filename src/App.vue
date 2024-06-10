@@ -1,7 +1,8 @@
 <template>
   <section class="fb__wrap">
     <header class="fb__header">
-      <AdminHeader v-if="userRole === 'ROLE_ROOT' || userRole === 'ROLE_ADMIN'" />
+      <RootHeader v-if="userRole === 'ROLE_ROOT'" />
+      <AdminHeader v-else-if="userRole === 'ROLE_ADMIN'" />
       <FranchiseHeader v-else-if="userRole === 'ROLE_OWNER'" />
       <DriverHeader v-else-if="userRole === 'ROLE_DRIVER'" />
 
@@ -22,9 +23,11 @@
 import { computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import Footer from "@/components/layouts/footer/Footer.vue";
+import RootHeader from "@/components/layouts/header/RootHeader.vue";
 import AdminHeader from "@/components/layouts/header/AdminHeader.vue";
-import DriverHeader from "@/components/layouts/header/DriverHeader.vue";
 import FranchiseHeader from "@/components/layouts/header/FranchiseHeader.vue";
+import DriverHeader from "@/components/layouts/header/DriverHeader.vue";
+
 
 const store = useStore();
 const userRole = computed(() => store.getters.userRole);

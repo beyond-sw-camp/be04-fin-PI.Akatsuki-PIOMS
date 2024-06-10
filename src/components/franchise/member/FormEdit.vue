@@ -69,7 +69,7 @@ const fetchFranchiseOwnerData = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://api.pioms.shop/admin/franchise/owner/detail/${franchiseOwnerCode}`, {
+    const response = await fetch(`http://localhost:5000/admin/franchise/owner/detail/${franchiseOwnerCode}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -110,7 +110,7 @@ const submitEdit = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://api.pioms.shop/admin/franchise/owner/update/${franchiseOwnerCode}`, {
+    const response = await fetch(`http://localhost:5000/admin/franchise/owner/update/${franchiseOwnerCode}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -147,7 +147,7 @@ const deleteOwner = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://api.pioms.shop/admin/franchise/owner/delete/${franchiseOwnerCode}`, {
+    const response = await fetch(`http://localhost:5000/admin/franchise/owner/delete/${franchiseOwnerCode}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -178,7 +178,7 @@ const resetPassword = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://api.pioms.shop/admin/franchise/owner/reset-password/${franchiseOwnerCode}`, {
+    const response = await fetch(`http://localhost:5000/admin/franchise/owner/reset-password/${franchiseOwnerCode}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

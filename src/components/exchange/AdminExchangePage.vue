@@ -148,15 +148,15 @@ const filterInvoiceCode = ref('');
 const filterExchangeDate = ref('');
 
 const getExchangeList = async () => {
- 
+
   try {
     const accessToken = store.state.accessToken;
     if (!accessToken) {
       throw new Error('No access token found');
     }
     // const response = await fetch(`/api/admin/exchanges`, {
-    // const response = await fetch(`http:///api.pioms.shop/admin/exchanges`, {
-    const response = await fetch(`http://api.pioms.shop/admin/exchange/list`, {
+    // const response = await fetch(`http:///localhost:5000/admin/exchanges`, {
+    const response = await fetch(`http://localhost:5000/admin/exchange/list`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -169,7 +169,7 @@ const getExchangeList = async () => {
     }
     const data = await response.json();
     isLoading.value=true;
-    
+
     if (data.length > 0) {
       lists.value = data.map(({ ...rest }) => rest);
       filteredLists.value = lists.value;
