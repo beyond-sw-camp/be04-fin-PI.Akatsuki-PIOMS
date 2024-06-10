@@ -27,7 +27,7 @@
         <div class="card">
           <div class="card-content">
             <div class="card-header">
-              <router-link to="/franchise/exchange/list" class="link-page">
+              <router-link to="/admin/exchange/list" class="link-page">
                 <img src="@/assets/icon/반품및교환.png" class="icon" /> &nbsp;반품 및 교환 현황
               </router-link>
               <div class="card-header-info">(단위: 주)</div>
@@ -52,7 +52,7 @@
         <div class="card">
           <div class="card-content">
             <div class="card-header">
-              <router-link to="/franchise/order/list" class="link-page">
+              <router-link to="/admin/order/list" class="link-page">
                 <img src="@/assets/icon/부족한재고.png" class="icon" /> &nbsp;부족한 상품 재고
               </router-link>
             </div>
