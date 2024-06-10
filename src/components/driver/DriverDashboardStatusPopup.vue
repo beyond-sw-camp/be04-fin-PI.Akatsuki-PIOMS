@@ -82,6 +82,8 @@ const submitChanges = async () => {
       },
     });
 
+
+
     if (!response.ok) {
       const errorMessage = await response.text();
       console.error('수정 실패:', errorMessage);
@@ -96,6 +98,7 @@ const submitChanges = async () => {
 </script>
 
 <style scoped>
+
 .popup-overlay {
   position: fixed;
   top: 0;

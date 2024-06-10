@@ -91,13 +91,13 @@
             <th class="owner">점주명</th>
           </tr>
           </thead>
-          <tbody>
+          <tbody class="invoiceList">
           <tr v-for="(order, index) in filteredOrders" :key="order.orderCode">
             <td>{{ index + 1 }}</td>
             <td>{{ order.orderCode }}</td>
             <td class="invoice" @click="openInvoicePopup(order)">{{ order.invoiceCode }}</td>
             <td>{{ order.franchiseAddress }}</td>
-            <td style="cursor: pointer" @click="openStatusPopup(order)">{{ order.deliveryStatus }}</td>
+            <td :class="getStatusClass(order.deliveryStatus)" style="cursor: pointer" @click="handleStatusClick(order)">{{ order.deliveryStatus }}</td>
             <td>{{ order.franchiseOwnerName }}</td>
           </tr>
           </tbody>
@@ -106,13 +106,9 @@
     </div>
 
     <!-- 송장 팝업 -->
-    <Invoice v-if="showInvoicePopup" :invoice="selectedInvoice" @close="closeInvoicePopup" />
-
+<!--    <Invoice v-if="showInvoicePopup" :invoice="selectedInvoice" @click.self="closeInvoicePopup" />-->
     <div v-if="showInvoicePopup" class="popup">
-      <div>
-        <span class="invoice-close-btn" @click="closeInvoicePopup">x</span>
-        <Invoice :invoice="selectedInvoice" />
-      </div>
+        <Invoice :invoice="selectedInvoice" @close="closeInvoicePopup"/>
     </div>
 
 
@@ -140,11 +136,23 @@ const accessToken = store.state.accessToken;
 const lists = ref([]);
 const showStatusPopup = ref(false);
 const showInvoicePopup = ref(false);
-const selectedInvoice = ref('');
+const selectedInvoice = ref(null);
 const deliveryStatus = ref('');
 
 const beforeDiv = ref();
 const driverCode = 1;
+
+const handleStatusClick = async (order) => {
+  if (order.deliveryStatus === '배송완료') {
+    await Swal.fire({
+      icon: 'error',
+      title: '상태 수정 불가',
+      text: '이미 배송완료된 항목입니다.',
+    });
+  } else {
+    openStatusPopup(order);
+  }
+}
 
 const openInvoicePopup = (order) => {
   selectedInvoice.value = order;
@@ -335,6 +343,17 @@ const getDriverDashBoard = async () => {
   } catch (error) {
     console.error('오류 발생:', error);
   }
+}
+
+const getStatusClass = (status) => {
+  if (status === '배송전') {
+    return 'status-before';
+  } else if (status === '배송중') {
+    return 'status-in-progress';
+  } else if (status === '배송완료') {
+    return 'status-complete';
+  }
+  return '';
 };
 
 const currentPage = ref(1);
@@ -351,7 +370,42 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.getStatusClass {
+  height: 10px;
+}
+
+.delivery-table .status-before {
+  background-color: #FFCD4B; /* 배송 전 */
+}
+
+.delivery-table .status-in-progress {
+  background-color: #344DAF; /* 배송 중 */
+}
+
+.delivery-table .status-complete {
+  background-color: #B9B9B9; /* 배송 완료 */
+}
+
+.status-complete,
+.status-in-progress,
+.status-before {
+  margin: 5px;
+  width: 50px;
+  border-radius: 10px;
+  color: #FFFFFF;
+}
+
+.invoiceList {
+  height: 30px;
+}
+
+
  /* 큰 박스 단위들 */
+.delivery {
+  position: relative;
+  top:-40px;
+}
+
 .delivery-list-box {
   margin-top: -30px !important;
   width: 500px;
@@ -368,12 +422,12 @@ onMounted(() => {
 
 .my-delivery-list {
   border: 1px solid #d9d9d9;
-  margin-top: 0 !important;
+  margin-top: 10px !important;
   width: 750px;
   height: 870px;
   display: flex;
   position: absolute;
-  top: -30px;
+  top: -10px;
   right: 240px;
   overflow-y: auto;
 }
@@ -422,7 +476,8 @@ onMounted(() => {
   margin: 0;
   position: relative;
   bottom: 10px;
-  color: #d9d9d9;
+  color: #8f8f8f;
+  font-size: 14px;
 }
 
 .delivery-count {
@@ -649,7 +704,7 @@ hr.hr2 {
  }
  .delivery-table td {
    text-align: center;
-   height: 40px;
+   height: 30px;
  }
 
  .no {
