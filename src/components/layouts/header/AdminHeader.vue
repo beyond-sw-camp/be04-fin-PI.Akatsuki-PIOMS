@@ -55,7 +55,7 @@
                   <li><a href="/admin/driver/list" class="depth2">배송기사 전체조회</a></li>
                 </ul>
               </li>
-              <li>
+              <li v-if="isRoot==true">
                 <a class="depth1" style="cursor: default"><h4 id="depth1_title">관리자 관리</h4></a>
                 <ul class="submenu_sub">
                   <li><a href="/admin/admin/list" class="depth2">관리자 전체조회</a></li>
@@ -138,7 +138,7 @@
             </ul>
           </div>
         </li>
-        <li v-if="logView==true">
+        <li v-if="isRoot==true">
           <a href="/admin/log/list" class="label">이력 관리</a>
           <div class="submenu_box" style="height: 100px">
             <ul class="submenu">
@@ -170,7 +170,7 @@ const router = useRouter();
 const username = ref('');
 const isModalOpen = ref(false);
 const role = ref('');
-const logView = ref(false);
+const isRoot = ref(false);
 
 const fetchUsernameFromToken = () => {
   const token = store.state.accessToken;
@@ -180,7 +180,7 @@ const fetchUsernameFromToken = () => {
     username.value = decoded.username;
     role.value = decoded.role;
     if(role.value=="ROLE_ROOT")
-      logView.value = true;
+      isRoot.value = true;
     console.log(role);
   }
 };
