@@ -106,7 +106,7 @@ const itemsPerPage = 15;
 
 const getNotice = async () => {
   try {
-    const response = await fetch('http://api.pioms.shop/franchise/notice/list', {
+    const response = await fetch('http://localhost:5000/franchise/notice/list', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

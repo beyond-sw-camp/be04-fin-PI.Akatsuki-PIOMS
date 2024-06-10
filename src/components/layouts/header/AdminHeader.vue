@@ -1,13 +1,13 @@
 <template>
   <div class="fb__header-info">
-    <img class="logo" src="@/assets/icon/PIOMS_로고.png" alt="Logo"/>
+    <a href="admin/home"><img class="logo" src="@/assets/icon/PIOMS_로고.png" alt="Logo" /></a>
     <section class="header_info">
-      <div class="crown" style="cursor: pointer">
-        <img class="crown_icon" :src="userRoleIcon" alt="User Role Icon"/>
-        <h5><u>{{ username }}</u>님 정보</h5>
+      <div class="crown" style="cursor: pointer" @click="openModal">
+        <img class="crown_icon" src="@/assets/icon/어드민.png" alt="User Role Icon" />
+        <h5><u>{{ username }}</u>&nbsp;님</h5>
       </div>
       <div class="dictionary" style="cursor: pointer">
-        <img class="dictionary_icon" src="@/assets/icon/Dictionary.png" alt="Dictionary"/>
+        <img class="dictionary_icon" src="@/assets/icon/Dictionary.png" alt="Dictionary" />
         <h5 @click="pdfDownload">관리자 매뉴얼</h5>
       </div>
       <div>
@@ -22,78 +22,78 @@
     </section>
   </div>
 
+  <AdminInfoPopup v-if="isModalOpen" @close="closeModal" />
+
   <div class="fb__header-btn">
     <nav class="header_rootAdmin">
       <ul class="nav_header">
+        <!-- 아이콘 문제있어서 일단 보류 -->
+        <!-- <li>
           <a href="/admin/home" class="flex items-center">
-              <img src="@/assets/icon/dashboard.png" alt="Dashboard" />
+            <img src="@/assets/icon/dashboard.png" alt="Dashboard" />
           </a>
-
+        </li> -->
         <li>
-          <a href="admin/francise" class="label">가맹점 및 직원 관리</a>
-          <div class="submenu_box">
+          <a href="/admin/franchise/list" class="label">가맹점 및 직원 관리</a>
+          <div class="submenu_box" style="height: 340px">
             <ul class="submenu">
-<!--              <li>-->
-<!--                <a href="admin/franchise" class="depth1"><h4 id="depth1_title">가맹점 및 점주 관리</h4></a>-->
-<!--                <ul class="submenu_sub">-->
-<!--                  <li><a href="#" class="depth2">가맹점 및 점주 전체조회</a></li>-->
-<!--                  <li><a href="franchises" class="depth2">가맹점 관리</a></li>-->
-<!--                  <li><a href="owners" class="depth2">점주 관리</a></li>-->
-<!--                </ul>-->
-<!--                <hr class="hr3" />-->
-<!--              </li>-->
               <li>
-                <a href="#" class="depth1"><h4 id="depth1_title">배송기사 관리</h4></a>
+                <a class="depth1" style="cursor: default"><h4 id="depth1_title">가맹점 및 점주 관리</h4></a>
                 <ul class="submenu_sub">
-                  <li><a href="drivers" class="depth2">배송기사 전체조회</a></li>
-<!--                  <li><a href="#" class="depth2">배송기사 관리</a></li>-->
+                  <li><a href="/admin/franchise/list" class="depth2">가맹점 관리</a></li>
+                  <li><a href="/admin/owner/list" class="depth2">점주 관리</a></li>
+                </ul>
+                <hr class="hr3" />
+              </li>
+              <li>
+                <a class="depth1" style="cursor: default"><h4 id="depth1_title">배송기사 관리</h4></a>
+                <ul class="submenu_sub">
+                  <li><a href="/admin/driver/list" class="depth2">배송기사 전체조회</a></li>
                 </ul>
               </li>
               <li>
-                <a href="#" class="depth1"><h4 id="depth1_title">관리자 관리</h4></a>
+                <a class="depth1" style="cursor: default"><h4 id="depth1_title">관리자 관리</h4></a>
                 <ul class="submenu_sub">
-                  <li><a href="admins" class="depth2">관리자 전체조회</a></li>
+                  <li><a href="/admin/admin/list" class="depth2">관리자 전체조회</a></li>
                 </ul>
               </li>
             </ul>
           </div>
         </li>
-
         <li>
           <a href="#" class="label">상품 및 상품 카테고리 관리</a>
           <div class="submenu_box" style="height: 240px">
             <ul class="submenu">
               <li>
-                <a href="#" class="depth1"><h4 id="depth1_title">상품 관리</h4></a>
+                <a class="depth1" style="cursor: default"><h4 id="depth1_title">상품 관리</h4></a>
                 <ul class="submenu_sub">
-                  <li><router-link to="/admin/product/list" class="depth2">상품 전체조회 및 관리</router-link></li>
+                  <li><a href="/admin/product/list" class="depth2">상품 전체조회 및 관리</a></li>
                 </ul>
                 <hr class="hr3" />
               </li>
               <li>
-                <a href="#" class="depth1"><h4 id="depth1_title">상품 카테고리 관리</h4></a>
+                <a class="depth1" style="cursor: default"><h4 id="depth1_title">상품 카테고리 관리</h4></a>
                 <ul class="submenu_sub">
-                  <li><router-link to="/admin/category/list" class="depth2">상품 카테고리 전체조회</router-link></li>
-                  <li><router-link to="/admin/category/post" class="depth2">상품 카테고리 등록 관리</router-link></li>
+                  <li><a href="/admin/category/list" class="depth2">상품 카테고리 전체조회</a></li>
+                  <li><a href="/admin/category/registration" class="depth2">상품 카테고리 등록 관리</a></li>
                 </ul>
               </li>
             </ul>
           </div>
         </li>
-
         <li>
           <a href="#" class="label">배송 및 발주 관리</a>
           <div class="submenu_box" style="height: 200px">
             <ul class="submenu">
               <li>
-                <a href="#" class="depth1"><h4 id="depth1_title">배송 관리</h4></a>
+                <a class="depth1" style="cursor: default"><h4 id="depth1_title">배송 관리</h4></a>
                 <ul class="submenu_sub">
-                  <li><router-link to="/admin/invoices" class="depth2">배송상태 조회 및 관리</router-link></li>
+                  <li><a href="/admin/invoices/list" class="depth2">배송상태 조회 및 관리</a></li>
                 </ul>
                 <hr class="hr3" />
               </li>
               <li>
-                <a href="#" class="depth1"><h4 id="depth1_title">발주 관리</h4></a>
+                <a class="depth1" style="cursor: default"><h4 id="depth1_title">발주 관리</h4></a>
                 <ul class="submenu_sub">
                   <li><a href="/admin/order/list" class="depth2">발주 목록 조회 및 승인</a></li>
                 </ul>
@@ -101,13 +101,12 @@
             </ul>
           </div>
         </li>
-
         <li>
           <a href="#" class="label">반품 및 교환 관리</a>
           <div class="submenu_box" style="height: 100px">
             <ul class="submenu">
               <li>
-                <a href="#" class="depth1"><h4 id="depth1_title">반품 관리</h4></a>
+                <a class="depth1" style="cursor: default"><h4 id="depth1_title">반품 관리</h4></a>
                 <ul class="submenu_sub">
                   <li><a href="/admin/exchange/list" class="depth2">반품 상품 조회</a></li>
                 </ul>
@@ -115,13 +114,12 @@
             </ul>
           </div>
         </li>
-
         <li>
-          <a href="/admin/notice/list" class="label">공지 및 문의 관리</a>
+          <a href="#" class="label">공지 및 문의 관리</a>
           <div class="submenu_box" style="height: 200px">
             <ul class="submenu">
               <li>
-                <a style="cursor: default" class="depth1"><h4 id="depth1_title">공지 관리</h4></a>
+                <a class="depth1" style="cursor: default"><h4 id="depth1_title">공지 관리</h4></a>
                 <ul class="submenu_sub">
                   <li><a href="/admin/notice/list" class="depth2">공지사항 조회 및 관리</a></li>
                 </ul>
@@ -130,28 +128,20 @@
               <li>
                 <a class="depth1" style="cursor: default"><h4 id="depth1_title">문의 관리</h4></a>
                 <ul class="submenu_sub">
-                  <li><a href="/admin/ask" class="depth2">문의사항 조회 및 관리</a></li>
+                  <li><a href="/admin/ask/list" class="depth2">문의사항 조회 및 관리</a></li>
                 </ul>
               </li>
             </ul>
           </div>
         </li>
-
         <li>
-          <a href="/admin/logs" class="label">통계 및 이력 관리</a>
-          <div class="submenu_box" style="height: 200px">
+          <a href="/admin/log/list" class="label">이력 관리</a>
+          <div class="submenu_box" style="height: 100px">
             <ul class="submenu">
-              <li>
-                <a class="depth1" style="cursor: default"><h4 id="depth1_title">통계 관리</h4></a>
-                <ul class="submenu_sub">
-                  <li><a href="#" class="depth2">전체 통계 관리</a></li>
-                </ul>
-                <hr class="hr3" />
-              </li>
               <li>
                 <a class="depth1" style="cursor: default"><h4 id="depth1_title">이력 관리</h4></a>
                 <ul class="submenu_sub">
-                  <li><a href="/admin/logs" class="depth2">전체 이력 관리</a></li>
+                  <li><a href="/admin/log/list" class="depth2">전체 이력 관리</a></li>
                 </ul>
               </li>
             </ul>
@@ -163,16 +153,18 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { jwtDecode } from 'jwt-decode';
 import Swal from 'sweetalert2';
+import AdminInfoPopup from "@/components/admin/info/AdminInfoPopup.vue";
 
 const store = useStore();
 const accessToken = store.state.accessToken;
 const router = useRouter();
 const username = ref('');
+const isModalOpen = ref(false);
 
 const fetchUsernameFromToken = () => {
   const token = store.state.accessToken;
@@ -213,7 +205,13 @@ const pdfDownload = async () => {
 const logout = async () => {
   try {
     await store.dispatch('logout');
-    await router.push('/');
+    Swal.fire({
+      icon: 'success',
+      title: '로그아웃이 정상적으로 완료되었습니다.',
+      confirmButtonText: '확인'
+    }).then(() => {
+      router.push('/');
+    });
   } catch (error) {
     console.error('로그아웃 오류:', error);
   }
@@ -232,6 +230,18 @@ const confirmLogout = async () => {
     }
   });
 };
+
+const openModal = () => {
+  store.commit('setModalOpen', true); // 모달 열기 상태를 Vuex에 저장
+};
+
+const closeModal = () => {
+  store.commit('setModalOpen', false); // 모달 닫기 상태를 Vuex에 저장
+};
+
+watch(() => store.state.isModalOpen, (newValue) => {
+  isModalOpen.value = newValue;
+});
 
 onMounted(() => {
   store.dispatch('initializeAuth');
@@ -266,16 +276,7 @@ onMounted(() => {
   });
 });
 
-const userRoleIcon = computed(() => {
-  if (store.getters.userRole === 'ROLE_ROOT') {
-    return '@/assets/icon/Crown.png';
-  } else if (store.getters.userRole === 'ROLE_ADMIN') {
-    return '@/assets/icon/admin.png';
-  }
-  return '';
-});
 </script>
-
 
 <style scoped>
 .fb__header-info{
@@ -395,12 +396,6 @@ a {
   font-size: 12px;
   line-height: 50px;
 }
-
-
-
-
-
-
 header {
   display: flex;
   justify-content: space-between;
@@ -420,7 +415,6 @@ header {
   justify-content: flex-end;
   align-items: center;
   height: 50px;
-  gap: 20px; /* 각 항목 사이의 간격을 일정하게 설정 */
 }
 
 .header_info .crown,
@@ -430,9 +424,8 @@ header {
   align-items: center;
 }
 
-.header_info .crown_icon,
 .header_info .dictionary_icon {
-  margin-right: 10px;
+  margin-right: 5px;
 }
 
 .header_info .cta {
@@ -497,8 +490,7 @@ header {
 .cta:before {
   content: "";
   position: absolute;
-  top: 18%;
-  left: 0;
+  left: -5px;
   display: block;
   border-radius: 50px;
   background: #B9B9B9;
@@ -747,6 +739,7 @@ hr.hr1, hr.hr2 {
   background: #FFFFFF;
   height: 48px;
   border-bottom: solid black 1px;
+
 }
 .fb__header .main-nav {
   position: relative;
