@@ -32,14 +32,13 @@
           <td>이미지</td>
           <td>{{ product.franchiseWarehouseTotal }}</td>
           <td>{{ product.franchiseWarehouseEnable }}</td>
-          <td :class="getStatusClass(product.product.productStatus)">
-            {{ product.product.productStatus }}
-          </td>
+          <td>{{ product.product.productStatus }}</td>
           <td>{{ product.product.productColor }}</td>
           <td>{{ product.product.productSize }}</td>
-          <td>{{ product.product.categoryThird.categorySecond.categoryFirst.categoryFirstName }}</td>
-          <td>{{ product.product.categoryThird.categorySecond.categorySecondName }}</td>
-          <td>{{ product.product.categoryThird.categoryThirdName }}</td>
+          <td>{{ product.product.categoryFirstName }}</td>
+          <!--          <td>{{ product.product.categoryThird.categorySecond.categoryFirst.categoryFirstName }}</td>-->
+          <td>{{ product.product.categorySecondName }}</td>
+          <td>{{ product.product.categoryThirdName }}</td>
           <td><button @click="removeFavorite(product.franchiseWarehouseCode)">삭제</button></td>
         </tr>
         </tbody>
@@ -64,7 +63,7 @@ const favoriteProducts = ref([]);
 // Fetch favorite products
 const fetchFavorites = async () => {
   try {
-    const response = await fetch('http://api.pioms.shop/franchise/warehouse/favorites', {
+    const response = await fetch('http://api.pioms.shop/franchise/warehouse/favorites/by-owner', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
