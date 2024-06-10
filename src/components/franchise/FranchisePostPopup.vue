@@ -24,7 +24,7 @@
             </tr>
             <tr>
               <td class="label">관리자 코드</td>
-              <td><input type="number" v-model="insertAdmin" /></td>
+              <td><input type="number" v-model="insertAdmin" value="1" readonly /></td>
               <td class="label">배송기사 코드</td>
               <td><input type="number" v-model="insertDeliveryMan" /></td>
             </tr>
@@ -57,7 +57,7 @@ const insertCall = ref('');
 const insertBusinessNum = ref('');
 const insertDeliveryDate = ref('');
 const insertFrOwnerCode = ref('');
-const insertAdmin = ref('');
+const insertAdmin = ref(1);
 const insertDeliveryMan = ref('');
 
 const showPostPopup = () => {
@@ -97,7 +97,11 @@ const saveFranchise = async () => {
       throw new Error(`가맹점 등록에 실패했습니다. 상태 코드: ${response.status}, 메시지: ${errorText}`);
     }
 
-    console.log('success');
+    await Swal.fire({
+      icon: 'success',
+      title: '가맹점 등록 성공!',
+      text: '가맹점 등록에 성공하였습니다.',
+    });
     emit('close');
   } catch (error) {
     console.error('error:', error);
