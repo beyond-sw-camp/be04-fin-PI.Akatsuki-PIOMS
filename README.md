@@ -1,4 +1,9 @@
 <div align="center">
+	
+<h2>✨ 공급망관리를 위한 주문관리 시스템 ✨</h2>
+</div>
+
+<div align="center">
   
 ![PIOMS_로고](https://github.com/PI-Akatsuki/PIOMS.BE/assets/149561287/c0713139-cfce-460a-b1f1-2de9b46452c1)
 </div>
@@ -8,42 +13,57 @@
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fbeyond-sw-camp%2Fbe04-4th-PI-MoodHolic.git&count_bg=%23006EFF&title_bg=%23767676&icon=keybase.svg&icon_color=%23E7E7E7&title=Today&edge_flat=false)](https://hits.seeyoufarm.com)
 </div>
 
-<h1 align="left">👤 Members</h1>
+<h2 align="left">👤 Members</h1>
 
 <h4 align="left">
 	
-[<img src="https://img.shields.io/badge/Github-Link-FFD930?logo=Github">](https://github.com/jaehyeon-SMU) **김재현** &nbsp;&nbsp; [<img src="https://img.shields.io/badge/Github-Link-305AFF?logo=Github">](https://github.com/Virtue14) **박경덕** &nbsp;&nbsp; [<img src="https://img.shields.io/badge/Github-Link-FFD930?logo=Github">](https://github.com/letsplaycoding) **신동호** &nbsp;&nbsp; [<img src="https://img.shields.io/badge/Github-Link-305AFF?logo=Github">](https://github.com/Bodrami) **이드보라** &nbsp;&nbsp; [<img src="https://img.shields.io/badge/Github-Link-FFD930?logo=Github">](https://github.com/daersh) **이현우**
+🙋🏻‍♂️ 김재현 &nbsp;&nbsp;|&nbsp;&nbsp;[<img src="https://img.shields.io/badge/Github-Link-FFFFFF?logo=Github">](https://github.com/jaehyeon-SMU)
+
+🙋🏻‍♂️ 박경덕 &nbsp;&nbsp;|&nbsp;&nbsp; [<img src="https://img.shields.io/badge/Github-Link-FFFFFF?logo=Github">](https://github.com/Virtue14)
+
+🙋🏻‍♂️ 신동호 &nbsp;&nbsp;|&nbsp;&nbsp; [<img src="https://img.shields.io/badge/Github-Link-FFFFFF?logo=Github">](https://github.com/letsplaycoding)
+
+🙋🏻‍♀️ 이드보라 &nbsp;&nbsp;|&nbsp;&nbsp; [<img src="https://img.shields.io/badge/Github-Link-FFFFFF?logo=Github">](https://github.com/Bodrami)
+
+🙋🏻‍♂️ 이현우 &nbsp;&nbsp;|&nbsp;&nbsp; [<img src="https://img.shields.io/badge/Github-Link-FFFFFF?logo=Github">](https://github.com/daersh)
 
 </h4>
 
 </br>
-<h1 align="left">🛠️ Technology Stack</h1>
+<h2 align="left">🛠️ Technology Stack</h1>
 
 <div align="left">
 
-### ⚙️ Framework
+### ⚙️ Tools
+<img src="https://img.shields.io/badge/grafana-F46800?style=for-thebadge&logo=grafana&logoColor=white" />&nbsp;&nbsp; <img src="https://img.shields.io/badge/prometheus-E6522C?style=for-thebadge&logo=prometheus&logoColor=white" />
 
+### ⚙️ Library
+<img src="https://img.shields.io/badge/microsoftexcel-217346?style=for-thebadge&logo=microsoftexcel&logoColor=white" />&nbsp;&nbsp; <img src="https://img.shields.io/badge/apache-D22128?style=for-thebadge&logo=apache&logoColor=white" />
+
+### ⚙️ Framework
 <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-thebadge&logo=Spring Boot&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/Vue.js-4FC08D?style=for-thebadge&logo=Vue.js&logoColor=white" />
  
 ### ⚙️ Front-End
-
-<img src="https://img.shields.io/badge/CSS-1572B6?style=for-thebadge&logo=CSS&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/HTML-E34F26?style=for-thebadge&logo=HTML&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-thebadge&logo=JavaScript&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/React Native-61DAFB?style=for-thebadge&logo=React Native&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/Vue.js-4FC08D?style=for-thebadge&logo=Vue.js&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/Vuex-B7178C?style=for-thebadge&logo=Vuex&logoColor=white" />
+<img src="https://img.shields.io/badge/CSS-1572B6?style=for-thebadge&logo=CSS&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/HTML-E34F26?style=for-thebadge&logo=HTML&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-thebadge&logo=JavaScript&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/Vue.js-4FC08D?style=for-thebadge&logo=Vue.js&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/Vuex-B7178C?style=for-thebadge&logo=Vuex&logoColor=white" /> 
 
 ### ⚙️ Back-End
-
-<img src="https://img.shields.io/badge/JWT-FBBA00?style=for-thebadge&logo=JWT&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-thebadge&logo=MySQL&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/OAuth 2.0-EB5424?style=for-thebadge&logo=OAuth 2.0t&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/Redis-DC382D?style=for-thebadge&logo=Redis&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-thebadge&logo=Spring Boot&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/Spring JPA Data-6DB33F?style=for-thebadge&logo=Spring JPA Data&logoColor=white" />  &nbsp;&nbsp; <img src="https://img.shields.io/badge/Spring Security-6DB33F?style=for-thebadge&logo=Spring Security&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/Swagger-85EA2D?style=for-thebadge&logo=Swagger&logoColor=white" />
+<img src="https://img.shields.io/badge/JWT-FBBA00?style=for-thebadge&logo=JWT&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/MariaDB-003545?style=for-thebadge&logo=mariaDB&logoColor=white"/> &nbsp;&nbsp; <img src="https://img.shields.io/badge/Redis-DC382D?style=for-thebadge&logo=Redis&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-thebadge&logo=Spring Boot&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/Spring JPA Data-6DB33F?style=for-thebadge&logo=Spring JPA Data&logoColor=white" />  &nbsp;&nbsp; <img src="https://img.shields.io/badge/Spring Security-6DB33F?style=for-thebadge&logo=Spring Security&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/Swagger-85EA2D?style=for-thebadge&logo=Swagger&logoColor=white" />
 
 ### ⚙️ CI/CD
+<img src="https://img.shields.io/badge/githubactions-2088FF?style=for-thebadge&logo=githubactions&logoColor=white"/>
 
-<img src="https://img.shields.io/badge/Docker-2496ED?style=for-thebadge&logo=Docker&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/Jenkins-D24939?style=for-thebadge&logo=Jenkins&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/kubernetes-326CE5?style=for-thebadge&logo=kubernetes&logoColor=white" />
+### ⚙️ AWS (Deploy)
+<img src="https://img.shields.io/badge/Amazon AWS-232F3E?style=for-thebadge&logo=amazonaws&logoColor=white"/>&nbsp;&nbsp; <img src="https://img.shields.io/badge/amazons3-569A31?style=for-thebadge&logo=amazons3&logoColor=white"/>&nbsp;&nbsp; <img src="https://img.shields.io/badge/amazonec2-FF9900?style=for-thebadge&logo=amazonec2&logoColor=white"/>&nbsp;&nbsp; <img src="https://img.shields.io/badge/amazonrds-FF9900?style=for-thebadge&logo=amazonrds&logoColor=white"/>
+&nbsp;&nbsp; <img src="https://img.shields.io/badge/amazonroute53-8C4FFF?style=for-thebadge&logo=amazonroute53&logoColor=white"/>
 
 ### ⚙️ Production
-
-<img src="https://img.shields.io/badge/Apache Tomcat-F8DC75?style=for-thebadge&logo=Apache Tomcat&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/Google Cloud-4285F4?style=for-thebadge&logo=Google Cloud&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/OpenAI API-412991?style=for-thebadge&logo=OpenAI API&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/OpenWeatherMap API-4285F4?style=for-thebadge&logo=OpenWeatherMap API&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/NPM-CB3837?style=for-thebadge&logo=NPM&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/SSL-721412?style=for-thebadge&logo=SSL&logoColor=white" /> &nbsp;&nbsp;  <img src="https://img.shields.io/badge/Ubuntu-E95420?style=for-thebadge&logo=Ubuntu&logoColor=white" />
+<img src="https://img.shields.io/badge/Apache Tomcat-F8DC75?style=for-thebadge&logo=Apache Tomcat&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/NPM-CB3837?style=for-thebadge&logo=NPM&logoColor=white" /> &nbsp;&nbsp;  <img src="https://img.shields.io/badge/Ubuntu-E95420?style=for-thebadge&logo=Ubuntu&logoColor=white" />
 </div></br>
 
 ## 🌅 안배운 기술 목록
-* 
+* 엑셀 다운로드 기능 구현
+* PDF 파일 다운로드 기능 구현
+* window로 영역 인쇄 기능 구현
 
 </br></br>
 
