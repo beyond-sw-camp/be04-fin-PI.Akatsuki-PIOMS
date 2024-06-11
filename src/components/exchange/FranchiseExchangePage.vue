@@ -7,12 +7,12 @@
           <td class="filter-label">반품상태</td>
           <td class="filter-input">
             <div class="radio-group">
-              <label> 반송신청 <input type="radio" value="반송신청" name="ConditionOrder" v-model="conditionFilter" ></label>
-              <label> 반송중 <input type="radio" value="반송중" name="ConditionOrder" v-model="conditionFilter" ></label>
-              <label> 처리완료 <input type="radio" value="처리완료" name="ConditionOrder" v-model="conditionFilter" ></label>
-              <label> 반환대기 <input type="radio" value="반환대기" name="ConditionOrder" v-model="conditionFilter" ></label>
-              <label> 반환중 <input type="radio" value="반환중" name="ConditionOrder" v-model="conditionFilter" ></label>
-              <label> 반환완료 <input type="radio" value="반환완료" name="ConditionOrder" v-model="conditionFilter" ></label>
+              <label><input type="radio" value="반송신청" name="ConditionOrder" v-model="conditionFilter" >반송신청  </label>
+              <label><input type="radio" value="반송중" name="ConditionOrder" v-model="conditionFilter" >반송중  </label>
+              <label><input type="radio" value="처리완료" name="ConditionOrder" v-model="conditionFilter" >처리완료  </label>
+              <label><input type="radio" value="반환대기" name="ConditionOrder" v-model="conditionFilter" >반환대기  </label>
+              <label><input type="radio" value="반환중" name="ConditionOrder" v-model="conditionFilter" >반환중  </label>
+              <label><input type="radio" value="반환완료" name="ConditionOrder" v-model="conditionFilter" >반환완료  </label>
             </div>
           </td>
         </tr>
