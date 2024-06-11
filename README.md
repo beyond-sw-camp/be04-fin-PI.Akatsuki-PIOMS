@@ -15,19 +15,9 @@
 
 <h1 align="left">👥 Members</h1>
 
-<h3 align="left">
-	
-🙋🏻‍♂️ 김재현 &nbsp;&nbsp;|&nbsp;&nbsp;[<img src="https://img.shields.io/badge/Github-Link-FFFFFF?logo=Github">](https://github.com/jaehyeon-SMU)
-
-🙋🏻‍♂️ 박경덕 &nbsp;&nbsp;|&nbsp;&nbsp; [<img src="https://img.shields.io/badge/Github-Link-FFFFFF?logo=Github">](https://github.com/Virtue14)
-
-🙋🏻‍♂️ 신동호 &nbsp;&nbsp;|&nbsp;&nbsp; [<img src="https://img.shields.io/badge/Github-Link-FFFFFF?logo=Github">](https://github.com/letsplaycoding)
-
-🙋🏻‍♀️ 이드보라 &nbsp;&nbsp;|&nbsp;&nbsp; [<img src="https://img.shields.io/badge/Github-Link-FFFFFF?logo=Github">](https://github.com/Bodrami)
-
-🙋🏻‍♂️ 이현우 &nbsp;&nbsp;|&nbsp;&nbsp; [<img src="https://img.shields.io/badge/Github-Link-FFFFFF?logo=Github">](https://github.com/daersh)
-
-</h4>
+|<img src="https://avatars.githubusercontent.com/u/81796274?v=4" width="170" height="160"/>|<img src="https://avatars.githubusercontent.com/u/122339395?v=4" width="170" height="160"/>|<img src="https://avatars.githubusercontent.com/u/101622086?v=4" width="170" height="160"/>|<img src="https://avatars.githubusercontent.com/u/149561287?v=4" width="170" height="160"/>|<img src="https://avatars.githubusercontent.com/u/22255663?v=4" width="170" height="160"/>|
+|:-:|:-:|:-:|:-:|:-:|
+|[@jaehyeon-SMU](https://github.com/jaehyeon-SMU)|악덕<br/>[@Virtue14](https://github.com/Virtue14)|신동호<br/>[@letsplaycoding](https://github.com/letsplaycoding)|[@Bodrami](https://github.com/Bodrami)|hyunwoo<br/>[@daersh](https://github.com/daersh)|
 
 </br>
 <h1 align="left">🛠️ Technology Stack</h1>
