@@ -112,7 +112,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
-import ProductPostPopup from "@/components/admin/product/ProductPostPopup.vue";
 import FranchisePostPopup from "@/components/franchise/FranchisePostPopup.vue";
 import FranchiseUpdatePopup from "@/components/franchise/FranchiseUpdatePopup.vue";
 
