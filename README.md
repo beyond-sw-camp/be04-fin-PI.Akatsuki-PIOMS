@@ -417,17 +417,8 @@ CREATE TABLE `log` (
 ## 🌅 API 명세서
 
 <details>
-<summary><h2>PIOMS API 명세서</h2></summary>
-	
-![image](https://github.com/Bodrami/Practice_Template/assets/149561287/55505a91-a533-427d-bd90-8ec3700420ed)
-![image](https://github.com/Bodrami/Practice_Template/assets/149561287/de8d83ff-5a5f-4db5-8286-9c26fa03362e)
-![image](https://github.com/Bodrami/Practice_Template/assets/149561287/4237f314-89e5-4201-bf3d-01f13fb19147)
-![image](https://github.com/Bodrami/Practice_Template/assets/149561287/69fef2a4-61bb-4a05-a689-42a162c85b11)
-![image](https://github.com/Bodrami/Practice_Template/assets/149561287/e5775913-aea7-4c08-b470-af949459292b)
-![image](https://github.com/Bodrami/Practice_Template/assets/149561287/ba14361e-9af2-4852-84d7-47815867f00e)
-![image](https://github.com/Bodrami/Practice_Template/assets/149561287/414158fa-67f8-48a6-bad2-54a5589f6182)
-![image](https://github.com/Bodrami/Practice_Template/assets/149561287/1eea62c5-0e4a-4163-8105-cefc9040179a)
-![image](https://github.com/Bodrami/Practice_Template/assets/149561287/165bb337-6681-4594-8738-4842d89bf8ac)
+<summary><h3>PIOMS API 명세서</h3></summary>
+
 
 </details>
 </br>
