@@ -52,7 +52,7 @@
         <button @click="showPostPopup = true" class="postBtn">
           <img src="@/assets/icon/new%20Item.png" alt="postProduct">
         </button>
-        <ProductPostPopup v-if="showPostPopup" @close="showPostPopup = false"/>
+        <FranchisePostPopup v-if="showPostPopup" @close="showPostPopup = false"/>
         <button @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
       </div>
     </div>
@@ -74,6 +74,7 @@
           <th>배송일</th>
           <th>배송기사</th>
           <th>상태</th>
+          <th>관리</th>
         </tr>
         </thead>
         <tbody>
@@ -91,6 +92,9 @@
           <td>{{ franchise.franchiseDeliveryDate }}</td>
           <td>{{ franchise.deliveryDriverName }}</td>
           <td>{{ franchise.franchiseDeleteDate ? '비활성화' : '활성화' }}</td>
+          <td>
+            <button @click="showUpdate(franchise)" class="editbutton">조회</button>
+          </td>
         </tr>
         </tbody>
       </table>
@@ -101,6 +105,7 @@
       <span>{{ currentPage }} / {{ totalPages }}</span>
       <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
     </div>
+    <FranchiseUpdatePopup v-if="updatePopup" :franchiseCode="franchiseCode" :closeUpdate="closeUpdate" @refreshData="fetchFranchises"/>
   </div>
 </template>
 
@@ -108,6 +113,8 @@
 import { ref, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import ProductPostPopup from "@/components/admin/product/ProductPostPopup.vue";
+import FranchisePostPopup from "@/components/franchise/FranchisePostPopup.vue";
+import FranchiseUpdatePopup from "@/components/franchise/FranchiseUpdatePopup.vue";
 
 const store = useStore();
 const franchises = ref([]);
@@ -119,6 +126,17 @@ const status = ref('all');
 const currentPage = ref(1);
 const itemsPerPage = 15;
 
+const updatePopup = ref(false);
+const franchiseCode = ref(null);
+
+const showPostPopup = ref(false);
+const showUpdate = (franchise) => {
+  updatePopup.value = true;
+  franchiseCode.value = franchise.franchiseCode;
+}
+const closeUpdate = () => {
+  updatePopup.value = false;
+}
 const fetchFranchises = async () => {
   try {
     const accessToken = store.state.accessToken;

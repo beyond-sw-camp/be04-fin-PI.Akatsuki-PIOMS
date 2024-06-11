@@ -1,190 +1,171 @@
 <template xmlns="http://www.w3.org/1999/html">
-  <div class="container">
-    <div class="header">
-      <img src="@/assets/icon/Cloth.png" style="width: 18px"/>&nbsp;
-      <span class="breadcrumb">상품 및 상품 카테고리 관리 > 상품 관리 > 상품 전체 조회 및 관리</span>
+  <div align="center" >
+    <div class="headerTitle" align="left" style="width: 1260px;  margin-top: 1%">
+        <p class="product-title"><img class="Cloth" src="@/assets/icon/Cloth.png" style="width: 20px;height: 20px">상품 및 상품 카테고리 관리 > 상품 관리 > 상품 전체 조회 및 관리</p>
+    <h6 class="product-sub-title" style="margin-top: 1%; margin-bottom: 3px"> * 조회할 상품의 조건을 선택 후
+      <img src="@/assets/icon/reset.png">초기화 또는 <img src="@/assets/icon/search.png">검색을 눌러주세요.
+    </h6>
     </div>
-      <!--    <h6 class="product-sub-title" style="margin-top: 1%; margin-bottom: 3px"> * 조회할 상품의 조건을 선택 후-->
-      <!--      <img src="@/assets/icon/reset.png">초기화 또는 <img src="@/assets/icon/search.png">검색을 눌러주세요.-->
-      <!--    </h6>-->
-
-    <div>
-      <div class="filter-section">
-        <table class="filter-table">
-          <tr>
-            <td class="filter-label">상품명</td>
-            <td class="filter-input">
-              <input type="text" v-model="filterProductName" @keyup.enter="applyFilters" class="textInput"
-                     placeholder="상품명을 입력하세요."/>
-            </td>
-            <td class="filter-label">상품노출상태</td>
-            <td class="filter-input">
-              <select id="selectedExposureStatus" v-model="selectedExposureStatus" class="textInput">
-                <option hidden="hidden" value="전체">전체</option>
-                <option value="노출">노출</option>
-                <option value="미노출">미노출</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td class="filter-label">상품상태</td>
-            <td class="filter-input">
-              <select id="filterStatus" v-model="filterStatus" class="textInput">
-                <option hidden="hidden" value="">전체</option>
-                <option value="공급가능">공급가능</option>
-                <option value="일시제한">일시제한</option>
-                <option value="단종">단종</option>
-                <option value="품절">품절</option>
-              </select>
-            </td>
-            <td class="filter-label">사이즈</td>
-            <td class="filter-input">
-              <select id="filterSize" v-model="filterSize" class="textInput">
-                <option hidden="hidden" value="">전체</option>
-                <option value="90">90</option>
-                <option value="95">95</option>
-                <option value="100">100</option>
-                <option value="105">105</option>
-                <option value="110">110</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td class="filter-label">색상</td>
-            <td class="filter-input" colspan="3">
-              <select id="filterColor" v-model="filterColor" class="textInput">
-                <option hidden="hidden" value="">전체</option>
-                <option value="빨간색">빨간색</option>
-                <option value="주황색">주황색</option>
-                <option value="노란색">노란색</option>
-                <option value="초록색">초록색</option>
-                <option value="파란색">파란색</option>
-                <option value="남색">남색</option>
-                <option value="보라색">보라색</option>
-              </select>
-            </td>
-
-          </tr>
-          <tr>
-            <td class="filter-label">카테고리&nbsp;구분</td>
-            <td class="filter-input" colspan="3">
-              <select id="firstCategory" v-model="selectedFirstCategory" @change="fetchSecondCategories"
-                      class="categories">
-                <option value="">대분류</option>
-                <option v-for="category in firstCategories" :key="category.categoryFirstCode"
-                        :value="category.categoryFirstCode">
-                  {{ category.categoryFirstName }}
-                </option>
-              </select>
-              &nbsp;
-              <select class="categories" id="secondCategory" v-model="selectedSecondCategory"
-                      @change="fetchThirdCategories">
-                <option value="">중분류</option>
-                <option v-for="category in secondCategories" :key="category.categorySecondCode"
-                        :value="category.categorySecondCode">
-                  {{ category.categorySecondName }}
-                </option>
-              </select>
-              &nbsp;
-              <select class="categories" id="thirdCategory" v-model="selectedThirdCategory">
-                <option value="">소분류</option>
-                <option v-for="category in thirdCategories" :key="category.categoryThirdCode"
-                        :value="category.categoryThirdCode">
-                  {{ category.categoryThirdName }}
-                </option>
-              </select>
-            </td>
-          </tr>
-        </table>
+  </div>
+  <div>
+    <div class="filter-section">
+      <div>
       </div>
-
-
-      <div class="action-buttons">
-        <button @click="resetFilters" class="reset-btn">
-          <img src="@/assets/icon/reset.png" alt="Reset"/>
+      <table class="filter-table">
+        <tr>
+          <td class="filter-label">상품명</td>
+          <td class="filter-input">
+            <input type="text" v-model="filterProductName" @keyup.enter="applyFilters" class="textInput" placeholder="상품명을 입력하세요."/>
+          </td>
+        </tr>
+        <tr>
+          <td class="filter-label">상품상태</td>
+          <td class="filter-input">
+            <select id="filterStatus" v-model="filterStatus" class="textInput">
+              <option hidden="hidden" value="">전체</option>
+              <option value="공급가능">공급가능</option>
+              <option value="일시제한">일시제한</option>
+              <option value="단종">단종</option>
+              <option value="품절">품절</option>
+            </select>
+          </td>
+          <td class="filter-label">상품노출상태</td>
+          <td class="filter-input">
+            <select id="selectedExposureStatus" v-model="selectedExposureStatus" class="textInput">
+              <option hidden="hidden" value="전체">전체</option>
+              <option value="노출">노출</option>
+              <option value="미노출">미노출</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td class="filter-label">색상</td>
+          <td class="filter-input">
+            <select id="filterColor" v-model="filterColor" class="textInput">
+              <option hidden="hidden" value="">전체</option>
+              <option value="빨간색">빨간색</option>
+              <option value="주황색">주황색</option>
+              <option value="노란색">노란색</option>
+              <option value="초록색">초록색</option>
+              <option value="파란색">파란색</option>
+              <option value="남색">남색</option>
+              <option value="보라색">보라색</option>
+            </select>
+          </td>
+          <td class="filter-label">사이즈</td>
+          <td class="filter-input">
+            <select id="filterSize" v-model="filterSize" class="textInput">
+              <option hidden="hidden" value="">전체</option>
+              <option value="90">90</option>
+              <option value="95">95</option>
+              <option value="100">100</option>
+              <option value="105">105</option>
+              <option value="110">110</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td class="filter-label">카테고리<br>구분</td>
+          <td class="filter-input">
+            <select id="firstCategory" v-model="selectedFirstCategory" @change="fetchSecondCategories" class="categories">
+              <option value="">대분류</option>
+              <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">
+                {{ category.categoryFirstName }}
+              </option>
+            </select>
+            <select class="categories" id="secondCategory" v-model="selectedSecondCategory" @change="fetchThirdCategories">
+              <option value="">중분류</option>
+              <option v-for="category in secondCategories" :key="category.categorySecondCode" :value="category.categorySecondCode">
+                {{ category.categorySecondName }}
+              </option>
+            </select>
+            <select class="categories" id="thirdCategory" v-model="selectedThirdCategory">
+              <option value="">소분류</option>
+              <option v-for="category in thirdCategories" :key="category.categoryThirdCode" :value="category.categoryThirdCode">
+                {{ category.categoryThirdName }}
+              </option>
+            </select>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="action-buttons">
+      <button @click="resetFilters" class="reset-btn">
+        <img src="@/assets/icon/reset.png" alt="Reset" />
+      </button>
+      <button @click="applyFilters" class="search-btn">
+        <img src="@/assets/icon/search.png" alt="Search" />
+      </button>
+    </div>
+    <div align="center" >
+      <div class="post-btn" id="app">
+        <button @click="showPostPopup = true" class="postBtn">
+          <img src="@/assets/icon/new%20Item.png" alt="postProduct">
         </button>
-        <button @click="applyFilters" class="search-btn">
-          <img src="@/assets/icon/search.png" alt="Search"/>
-        </button>
+        <ProductPostPopup v-if="showPostPopup" @close="showPostPopup = false" />
+        <button @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
       </div>
-
-
-      <div class="ExNregi">
-        <div class="post-btn" id="app">
-          <button @click="showPostPopup = true" class="postBtn">
-            <img src="@/assets/icon/new%20Item.png" alt="postProduct">
-          </button>
-          <ProductPostPopup v-if="showPostPopup" @close="showPostPopup = false"/>
-          <button @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
-        </div>
-      </div>
-
-
-      <div class="table-container">
-        <table class="table">
-          <thead>
-          <tr class="header1">
-            <th v-for="(header, index) in headers" :key="index">{{ header.label }}</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost"
-              :id=" 'row-' + rowIndex">
-            <td class="table-td">{{ rowIndex + 1 }}</td>
-            <td v-for="(header, colIndex) in headers.slice(1)" :key="colIndex" class="table-td">
-              <template v-if="header.key === 'productName'">
-                <button class="button-as-text"
-                        @click="showModifyPopup(item.productCode,item.productName,item.productCount,item.productPrice,item.productStatus,item.productColor,item.productSize,item.categoryFirstCode,item.categorySecondCode,item.categoryThirdCode,item.productContent)">
-                  {{ item[header.key] }}
-                </button>
-              </template>
-              <template v-else-if="header.key === 'productExposureStatus'">
-                <button class="button-as-text"
-                        @click="showDeletePopup(item.productCode, item.productName, item.productExposureStatus)">
-                  {{ item.productExposureStatus ? '노출' : '미노출' }}
-                </button>
-              </template>
-              <template v-else-if="header.key === 'productStatus'">
-                <div
-                    :class="{'status-available': item.productStatus === '공급가능', 'status-unavailable': item.productStatus !== '공급가능'}">
-                  {{ item.productStatus }}
-                </div>
-              </template>
-              <template v-else>
+    </div>
+    <div class="table-container">
+      <table class="table">
+        <thead>
+        <tr class="header1">
+          <th v-for="(header, index) in headers" :key="index">{{header.label}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost"
+            :id=" 'row-' + rowIndex">
+          <td class="table-td">{{ rowIndex + 1 }}</td>
+          <td v-for="(header, colIndex) in headers.slice(1)" :key="colIndex" class="table-td">
+            <template v-if="header.key === 'productName'">
+              <button class="button-as-text" @click="showModifyPopup(item.productCode,item.productName,item.productCount,item.productPrice,item.productStatus,item.productColor,item.productSize,item.categoryFirstCode,item.categorySecondCode,item.categoryThirdCode,item.productContent, item.imgUrl)">
                 {{ item[header.key] }}
-              </template>
-              <template v-if="header.key === 'imgUrl'">
-                <img :src="getProductImageUrl(item.productCode)" class="product-img"/>
-              </template>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-
-
-      </div>
-      <div class="pagination">
-        <button @click="prevPage" :disabled="currentPage === 1">이전</button>
-        <span> {{ currentPage }} / {{ totalPages }} </span>
-        <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
-      </div>
-      <ProductUpdatePopup v-if="editPopup" :currentProductCode="currentProductCode"
-                          :currentProductName="currentProductName"
-                          :currentProductCount="currentProductCount"
-                          :currentProductPrice="currentProductPrice"
-                          :currentProductStatus="currentProductStatus"
-                          :currentProductColor="currentProductColor"
-                          :currentProductSize="currentProductSize"
-                          :currentCategoryFirstCode="currentCategoryFirstCode"
-                          :currentCategorySecondCode="currentCategorySecondCode"
-                          :currentCategoryThirdCode="currentCategoryThirdCode"
-                          :currentProductContent="currentProductContent"
-                          :closeEdit="closeEdit"/>
-      <ProductDeletePopup v-if="deletePopup" :currentProductCode="currentProductCode"
-                          :currentProductName="currentProductName"
-                          :currentProductExposureStatus="currentProductExposureStatus"
-                          :closeDeletePopup="closeDeletePopup"/>
+              </button>
+            </template>
+            <template v-else-if="header.key === 'productExposureStatus'">
+              <button class="button-as-text" @click="showDeletePopup(item.productCode, item.productName, item.productExposureStatus)">
+                {{ item.productExposureStatus ? '노출' : '미노출' }}
+              </button>
+            </template>
+            <template v-else-if="header.key === 'productStatus'">
+              <div :class="{'status-available': item.productStatus === '공급가능', 'status-unavailable': item.productStatus !== '공급가능'}">
+                {{ item.productStatus }}
+              </div>
+            </template>
+            <template v-else>
+              {{ item[header.key] }}
+            </template>
+            <template v-if="header.key === 'imgUrl'">
+              <img :src="getProductImageUrl(item.productCode)" class="product-img" />
+            </template>
+          </td>
+        </tr>
+        </tbody>
+      </table>
     </div>
+    <div class="pagination">
+      <button @click="prevPage" :disabled="currentPage === 1">이전</button>
+      <span> {{currentPage}} / {{totalPages}} </span>
+      <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
+    </div>
+    <ProductUpdatePopup v-if="editPopup" :currentProductCode="currentProductCode"
+                                         :currentProductName="currentProductName"
+                                         :currentProductCount="currentProductCount"
+                                         :currentProductPrice="currentProductPrice"
+                                         :currentProductStatus="currentProductStatus"
+                                         :currentProductColor="currentProductColor"
+                                         :currentProductSize="currentProductSize"
+                                         :currentCategoryFirstCode="currentCategoryFirstCode"
+                                         :currentCategorySecondCode="currentCategorySecondCode"
+                                         :currentCategoryThirdCode="currentCategoryThirdCode"
+                                         :currentProductContent="currentProductContent"
+                                         :currentProductImgUrl="currentProductImgUrl"
+                                         :closeEdit="closeEdit"/>
+    <ProductDeletePopup v-if="deletePopup" :currentProductCode="currentProductCode"
+                                           :currentProductName="currentProductName"
+                                           :currentProductExposureStatus="currentProductExposureStatus"
+                                           :closeDeletePopup="closeDeletePopup"/>
   </div>
 </template>
 
@@ -201,19 +182,19 @@ const accessToken = store.state.accessToken;
 
 const lists = ref([]);
 const headers = ref([
-  {key: 'index', label: '번호'},
-  {key: 'productName', label: '상품명'},
-  {key: 'imgUrl', label: '상품 이미지'},
-  {key: 'productCount', label: '본사 보유량'},
-  {key: 'productDiscount', label: '본사 폐기량'},
-  {key: 'productNoticeCount', label: '알림 기준 수량'},
-  {key: 'productStatus', label: '상품 상태'},
-  {key: 'productExposureStatus', label: '상품 노출 상태'},
-  {key: 'productColor', label: '색상'},
-  {key: 'productSize', label: '사이즈'},
-  {key: 'categoryFirstName', label: '카테고리 대분류'},
-  {key: 'categorySecondName', label: '카테고리 중분류'},
-  {key: 'categoryThirdName', label: '카테고리 소분류'},
+  { key: 'index', label: '번호'},
+  { key: 'productName', label: '상품명'},
+  { key: 'imgUrl', label: '상품 이미지'},
+  { key: 'productCount', label: '본사 보유량'},
+  { key: 'productDiscount', label: '본사 폐기량'},
+  { key: 'productNoticeCount', label: '알림 기준 수량'},
+  { key: 'productStatus', label: '상품 상태'},
+  { key: 'productExposureStatus', label: '상품 노출 상태'},
+  { key: 'productColor', label: '색상'},
+  { key: 'productSize', label: '사이즈'},
+  { key: 'categoryFirstName', label: '카테고리 대분류'},
+  { key: 'categorySecondName', label: '카테고리 중분류'},
+  { key: 'categoryThirdName', label: '카테고리 소분류'},
 ]);
 
 const filteredLists = ref([]);
@@ -289,7 +270,7 @@ const fetchProductImages = async () => {
         'Content-Type': 'application/json',
       },
     });
-    if (!response.ok) {
+    if(!response.ok) {
       throw new Error('Bad request');
     }
     const productImagesData = await response.json();
@@ -450,7 +431,7 @@ const getMemberId = async () => {
 
     const data = await response.json();
     if (data.length > 0) {
-      lists.value = data.map(({product, ...rest}) => rest);
+      lists.value = data.map(({ product, ...rest }) => rest);
       filteredLists.value = lists.value;
     } else {
       lists.value = [];
@@ -470,7 +451,7 @@ const downloadExcel = () => {
     },
     responseType: 'blob',
   }).then((response) => {
-    const url = window.URL.createObjectURL(new Blob([response.data], {type: response.headers['content-type']}));
+    const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }));
     const link = document.createElement('a');
     link.href = url;
     link.setAttribute('download', 'ProductList.xlsx');
@@ -523,8 +504,6 @@ fetchThirdCategories();
 .product-img:hover {
   transform: scale(3.3);
 }
-
-
 
 .filter-section {
   display: flex;
