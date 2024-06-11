@@ -2,7 +2,7 @@
   <div class="container">
     <div class="header">
       <img src="@/assets/icon/가맹점.png" style="width: 18px"/>&nbsp;
-      <span class="breadcrumb">가맹점 및 직원 관리 > 가맹점 및 점주 관리 > 가맹점 및 점주 전체조회</span>
+      <span class="breadcrumb">가맹점 및 직원 관리 > 가맹점 및 점주 관리 > 가맹점 관리</span>
     </div>
 
     <div class="filter-section">
@@ -47,13 +47,14 @@
       </div>
     </div>
 
-    <div align="center" style="padding-bottom: 10px;">
+    <div class="filter-buttons">
       <div class="post-btn" id="app">
-        <button @click="showPostPopup = true" class="postBtn">
-          <img src="@/assets/icon/new%20Item.png" alt="postProduct">
+        <button @click="showPostPopup=true" class="postBtn">
+          <img src="@/assets/icon/가맹점등록.png" alt="postProduct">
         </button>
-        <FranchisePostPopup v-if="showPostPopup" @close="showPostPopup = false"/>
-        <button @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
+        <button @click="downloadExcel" class="excelBtn">
+          <img src="@/assets/icon/excel.png" alt="excel">
+        </button>
       </div>
     </div>
 
@@ -105,6 +106,7 @@
       <span>{{ currentPage }} / {{ totalPages }}</span>
       <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
     </div>
+    <FranchisePostPopup v-if="showPostPopup" @close="showPostPopup = false"/>
     <FranchiseUpdatePopup v-if="updatePopup" :franchiseCode="franchiseCode" :closeUpdate="closeUpdate" @refreshData="fetchFranchises"/>
   </div>
 </template>
@@ -115,6 +117,7 @@ import { useStore } from 'vuex';
 import FranchisePostPopup from "@/components/franchise/FranchisePostPopup.vue";
 import FranchiseUpdatePopup from "@/components/franchise/FranchiseUpdatePopup.vue";
 import axios from "axios";
+import AdminPostPopup from "@/components/admin/info/AdminPostPopup.vue";
 
 const store = useStore();
 const accessToken = store.state.accessToken;
@@ -258,8 +261,11 @@ onMounted(() => {
 }
 
 .header {
+  display: flex;
+  padding-left: 210px;
+  align-items: center;
   margin-bottom: 20px;
-  margin-left: 215px;
+  justify-content: flex-start;
 }
 
 .breadcrumb {
@@ -387,10 +393,6 @@ onMounted(() => {
   font-weight: bold;
 }
 
-.ExNregi {
-  margin-bottom: 20px;
-  margin-left: 205px;
-}
 .post-btn {
   display: flex;
   justify-content: space-between;
@@ -398,19 +400,16 @@ onMounted(() => {
   position: relative;
   width: 1440px;
 }
+
 .postBtn {
-  width: 100px;
-  height: 26px;
   border: none;
   background-color: white;
   cursor: pointer;
 }
+
 .excelBtn {
-  width: 100px;
-  height: 26px;
   border: none;
   background-color: white;
   cursor: pointer;
-  margin-right: 0.5%;
 }
 </style>
