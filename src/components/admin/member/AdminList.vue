@@ -40,7 +40,7 @@
       </button>
     </div>
 
-    <div class="ExNregi">
+    <div align="center" style="padding-bottom: 10px;">
       <div class="post-btn" id="app">
         <button @click="openPostPopup" class="postBtn">
           <img src="@/assets/icon/관리자등록.png" alt="postProduct">

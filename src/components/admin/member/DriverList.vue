@@ -41,7 +41,7 @@
       </button>
     </div>
 
-    <div class="ExNregi">
+    <div align="center" style="padding-bottom: 10px;">
       <div class="post-btn" id="app">
         <button @click="showPostPopup = true" class="postBtn">
           <img src="@/assets/icon/new%20Item.png" alt="postProduct">
