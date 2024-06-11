@@ -1,6 +1,6 @@
 <div align="center">
 	
-<h2>✨ 공급망관리를 위한 주문관리 시스템 ✨</h2>
+<h2>📋 공급망관리를 위한 주문관리 시스템 📋</h2>
 </div>
 
 <div align="center">
@@ -13,9 +13,9 @@
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fbeyond-sw-camp%2Fbe04-4th-PI-MoodHolic.git&count_bg=%23006EFF&title_bg=%23767676&icon=keybase.svg&icon_color=%23E7E7E7&title=Today&edge_flat=false)](https://hits.seeyoufarm.com)
 </div>
 
-<h2 align="left">👤 Members</h1>
+<h1 align="left"> Members</h1>
 
-<h4 align="left">
+<h3 align="left">
 	
 🙋🏻‍♂️ 김재현 &nbsp;&nbsp;|&nbsp;&nbsp;[<img src="https://img.shields.io/badge/Github-Link-FFFFFF?logo=Github">](https://github.com/jaehyeon-SMU)
 
@@ -30,9 +30,10 @@
 </h4>
 
 </br>
-<h2 align="left">🛠️ Technology Stack</h1>
-
+<h1 align="left">🛠️ Technology Stack</h1>
 <div align="left">
+<details>
+<summary><h3>기술 스택</h3></summary>
 
 ### ⚙️ Tools
 <img src="https://img.shields.io/badge/grafana-F46800?style=for-thebadge&logo=grafana&logoColor=white" />&nbsp;&nbsp; <img src="https://img.shields.io/badge/prometheus-E6522C?style=for-thebadge&logo=prometheus&logoColor=white" />
@@ -58,7 +59,9 @@
 
 ### ⚙️ Production
 <img src="https://img.shields.io/badge/Apache Tomcat-F8DC75?style=for-thebadge&logo=Apache Tomcat&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/NPM-CB3837?style=for-thebadge&logo=NPM&logoColor=white" /> &nbsp;&nbsp;  <img src="https://img.shields.io/badge/Ubuntu-E95420?style=for-thebadge&logo=Ubuntu&logoColor=white" />
+</details>
 </div></br>
+
 
 ## 🌅 안배운 기술 목록
 * 엑셀 다운로드 기능 구현
@@ -69,7 +72,7 @@
 
 ## 🌅 추진 계획
 
-### 🗓️ Table: 추진체계
+### 🗓️ Table 추진체계
 
 | 구분 | 조직 | 주요 역할 |
 | --- | --- | --- |
