@@ -48,14 +48,9 @@
         <div class="info-row">
           <label class="info-label" for="adminFranchises">가맹점 추가</label>
           <div class="info-value">
-            <input type="text" v-model="franchiseSearchText" placeholder="가맹점 검색" />
-            <button @click="searchFranchise">검색</button>
-            <ul v-if="searchResults.length">
-              <li v-for="(result, index) in searchResults" :key="index">
-                {{ result.franchiseName }}
-                <button @click="addFranchise(result)">등록</button>
-              </li>
-            </ul>
+            <input type="text" v-model="franchiseSearchText" placeholder="가맹점 코드 또는 이름" />
+            &nbsp;
+            <button @click="searchAndAddFranchise">추가</button>
           </div>
         </div>
         <hr class="separator" />
@@ -64,8 +59,8 @@
           <div class="info-value">
             <ul>
               <li v-for="(franchise, index) in adminInfo.franchises" :key="index">
-                {{ franchise.franchiseName }}
-                <button @click="removeFranchise(index)">제거</button>
+                {{ franchise.franchiseCode }}: {{ franchise.franchiseName }}
+                <button @click="removeFranchise(franchise.franchiseCode)">제거</button>
               </li>
             </ul>
           </div>
@@ -89,9 +84,11 @@ const props = defineProps({
 });
 
 const store = useStore();
-const adminInfo = ref({});
+const adminInfo = ref({
+  franchises: [], // 초기값을 빈 배열로 설정
+});
 const franchiseSearchText = ref('');
-const searchResults = ref([]);
+const franchises = ref([]);
 const isPopupOpen = ref(props.isOpen);
 
 const fetchAdminInfo = async () => {
@@ -108,9 +105,131 @@ const fetchAdminInfo = async () => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    adminInfo.value = data;
+    console.log('Admin info fetched:', data);
+
+    // 프랜차이즈 이름 목록을 프랜차이즈 객체 목록으로 변환
+    const franchiseObjects = data.franchiseNames.map((name, index) => {
+      const franchise = franchises.value.find(fr => fr.franchiseName === name);
+      return {
+        franchiseCode: franchise ? franchise.franchiseCode : index + 1,
+        franchiseName: name,
+      };
+    });
+
+    adminInfo.value = {
+      ...data,
+      franchises: franchiseObjects || [], // 실제 프랜차이즈 목록을 그대로 사용
+    };
+
+    console.log('Updated adminInfo:', adminInfo.value);
+    fetchFranchises();
   } catch (error) {
     console.error('Error fetching admin info:', error);
+  }
+};
+
+const fetchFranchises = async () => {
+  try {
+    const accessToken = store.state.accessToken;
+    const response = await fetch(`http://localhost:5000/admin/franchise/list`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log('Franchises fetched:', data);
+    franchises.value = data.map(franchise => ({
+      franchiseCode: franchise.franchiseCode,
+      franchiseName: franchise.franchiseName,
+    }));
+  } catch (error) {
+    console.error('Fetch error:', error);
+  }
+};
+
+const searchAndAddFranchise = async () => {
+  const query = franchiseSearchText.value.toLowerCase();
+  const foundFranchise = franchises.value.find(franchise =>
+      franchise.franchiseCode.toString() === query || franchise.franchiseName.toLowerCase() === query
+  );
+  if (foundFranchise) {
+    console.log('Adding franchise:', foundFranchise);
+    await addFranchise(foundFranchise);
+  } else {
+    Swal.fire({
+      icon: 'error',
+      title: '검색 실패',
+      text: '일치하는 가맹점이 없습니다.',
+    });
+  }
+  franchiseSearchText.value = '';
+};
+
+const addFranchise = async (franchise) => {
+  try {
+    const accessToken = store.state.accessToken;
+    const response = await fetch(`http://localhost:5000/admin/add-franchise/${adminInfo.value.adminCode}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ franchiseCode: franchise.franchiseCode }),
+    });
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(text);
+    }
+    await fetchAdminInfo(); // 추가 후 최신 데이터를 불러오기 위해 fetchAdminInfo 호출
+    Swal.fire({
+      icon: 'success',
+      title: '가맹점 추가 완료',
+      text: '가맹점이 성공적으로 추가되었습니다.',
+    });
+  } catch (error) {
+    console.error('Error adding franchise:', error);
+    Swal.fire({
+      icon: 'error',
+      title: '추가 실패',
+      text: error.message || '가맹점 추가에 실패했습니다. 다시 시도하세요.',
+    });
+  }
+};
+
+const removeFranchise = async (franchiseCode) => {
+  try {
+    console.log('Removing franchise code:', franchiseCode);
+    const accessToken = store.state.accessToken;
+    const response = await fetch(`http://localhost:5000/admin/remove-franchise/${adminInfo.value.adminCode}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ franchiseCode: franchiseCode }), // franchiseCode를 전달
+    });
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(text);
+    }
+    await fetchAdminInfo(); // 제거 후 최신 데이터를 불러오기 위해 fetchAdminInfo 호출
+    Swal.fire({
+      icon: 'success',
+      title: '가맹점 제거 완료',
+      text: '가맹점이 성공적으로 제거되었습니다.',
+    });
+  } catch (error) {
+    console.error('Error removing franchise:', error);
+    Swal.fire({
+      icon: 'error',
+      title: '제거 실패',
+      text: error.message || '가맹점 제거에 실패했습니다. 다시 시도하세요.',
+    });
   }
 };
 
@@ -125,8 +244,8 @@ const updateAdminInfo = async () => {
       },
       body: JSON.stringify(adminInfo.value),
     });
-    const text = await response.text();
     if (!response.ok) {
+      const text = await response.text();
       throw new Error(text);
     }
     Swal.fire({
@@ -149,13 +268,17 @@ const updateAdminInfo = async () => {
 const resetPassword = async (adminCode) => {
   try {
     const accessToken = store.state.accessToken;
-    await fetch(`http://localhost:5000/admin/reset-password/${adminCode}`, {
+    const response = await fetch(`http://localhost:5000/admin/reset-password/${adminCode}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     });
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(text);
+    }
     Swal.fire({
       icon: 'success',
       title: '비밀번호 재설정 완료',
@@ -171,57 +294,22 @@ const resetPassword = async (adminCode) => {
   }
 };
 
-const searchFranchise = async () => {
-  try {
-    const accessToken = store.state.accessToken;
-    const response = await fetch(`http://localhost:5000/admin/franchise/search?query=${franchiseSearchText.value}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-    });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    searchResults.value = data.map(franchise => ({
-      franchiseCode: franchise.franchiseCode,
-      franchiseName: franchise.franchiseName
-    }));
-  } catch (error) {
-    console.error('Error searching franchises:', error);
-  }
-};
-
-const addFranchise = (franchise) => {
-  if (!adminInfo.value.franchises) {
-    adminInfo.value.franchises = [];
-  }
-  adminInfo.value.franchises.push(franchise);
-  searchResults.value = [];
+const closePopup = () => {
+  emit('close');
   franchiseSearchText.value = '';
 };
 
-const removeFranchise = (index) => {
-  adminInfo.value.franchises.splice(index, 1);
-};
-
-const closePopup = () => {
-  emit('close');
-  isPopupOpen.value = false; // 팝업 닫기
-};
-
 watch(() => props.isOpen, (newValue) => {
-  isPopupOpen.value = newValue;
   if (newValue) {
-    fetchAdminInfo(); // 팝업 열리면 관리자 정보 가져오기
+    fetchAdminInfo();
+  } else {
+    franchiseSearchText.value = '';
   }
 });
 
 onMounted(() => {
   if (props.isOpen) {
-    fetchAdminInfo(); // 컴포넌트가 마운트될 때 팝업을 열고 정보 가져오기
+    fetchAdminInfo();
   }
 });
 </script>
@@ -247,6 +335,8 @@ onMounted(() => {
   flex-direction: column;
   max-width: 600px;
   padding: 20px 30px;
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
 .header {
@@ -254,7 +344,6 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   font-weight: 700;
-  gap: 20px;
 }
 
 .logo-section {
@@ -263,12 +352,6 @@ onMounted(() => {
   font-size: 15px;
   color: #444;
   align-items: center;
-}
-
-.company-logo {
-  width: 30px;
-  aspect-ratio: 1.3;
-  object-fit: cover;
 }
 
 .admin-title {
