@@ -96,22 +96,22 @@
 ### ⏰ Plan Sprint Kanban
 <details>
 <summary><h3>PIOMS 기획(WBS)</h3></summary>
-
-
+	
+![스크린샷 2024-06-11 오후 4 31 24](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/ea8d2483-2bf9-46bf-8fb1-e7bd557acf15)
 </details>
 
 ### ⏰ Back-end Sprint Kanban
 <details>
 <summary><h3>1주차 - 6주차</h3></summary>
-	
 
+![스크린샷 2024-06-11 오후 4 33 57](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/ba8f9ffe-74aa-4f3c-89c1-27fa7af63b28)
 </details>
 
 ### ⏰ Front-end Sprint Kanban
 <details>
 <summary><h3>1주차 - 4주차</h3></summary>
 
-
+![스크린샷 2024-06-11 오후 4 34 39](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/6351f643-c66a-4c05-b1d5-107e93b77a5f)
 </details>
 </br>
 
@@ -132,16 +132,44 @@
 </details>
 </br>
 
-## 🌅 Story Board 
+## 🌅 Wire Frame
+<details>
+<summary><h3>PIOMS Wire Frame</h3></summary>
+
+![스크린샷 2024-06-11 오후 4 18 58](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/ec84c390-3974-49a2-8a02-9872f5874fd7)
+</details>
+</br>
+
+## 🌅 PIOMS Story Board 
 
 <details>
-<summary><h3>PIOMS Story Board</h3></summary>
-<div markdown="1">
+<summary><h3>root 대시보드</h3></summary>
 	
 ![스크린샷 2024-06-11 오후 2 44 21](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/997637de-8c50-4646-b7ff-7afa07575776)
+</details>
 
+<details>
+<summary><h3>통합 로그인</h3></summary>
+	
+![스크린샷 2024-06-11 오후 4 03 10](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/3b1cc565-f8d9-4e90-9f11-769470defc3f)
+</details>
 
-</div>
+<details>
+<summary><h3>가맹점 관리</h3></summary>
+
+![스크린샷 2024-06-11 오후 4 08 28](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/49d58e64-5aa5-47b3-b151-d2d87bf2ce9b)
+</details>
+
+<details>
+<summary><h3>상품 관리</h3></summary>
+
+![스크린샷 2024-06-11 오후 4 10 45](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/4fe413fe-bbd7-4967-a1b2-ffb4b2cff668)
+</details>
+
+<details>
+<summary><h3>상품 카테고리 관리</h3></summary>
+	
+![스크린샷 2024-06-11 오후 4 15 51](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/d92e5408-801b-448a-8f97-c625f25263a4)
 </details>
 </br>
 
@@ -151,10 +179,10 @@
 <summary><h3>PIOMS DB 모델링</h3></summary>
 <h3><a href="https://www.erdcloud.com/d/Q3aGbnzvroEFB6MfR"/>🗂️ PIOMS ERD 설계</h3>
 
- 
-<summary><h3>🗂️ DDL</h3></summary>
+<h3>🗂️ DDL</h3>
 <details>
-	
+<summary>PIOMS DDL 구문</summary>
+
 ```sql
 CREATE TABLE `product` (
 	`product_code`	INT	NOT NULL,
@@ -370,7 +398,7 @@ CREATE TABLE `log` (
 
 ## 🌅 논리 & 물리 Modeling
 <details>
-<summary><h2>논리 Modeling</h2></summary>
+<summary><h3>논리 Modeling</h3></summary>
 
 ![image](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/8655c8f2-2a69-4082-aba2-d4c563536f41)
 
@@ -378,19 +406,10 @@ CREATE TABLE `log` (
 </details>
 
 <details>
-<summary><h2>물리 Modeling</h2></summary>
+<summary><h3>물리 Modeling</h3></summary>
 
 ![image](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/824ef096-05f8-48a6-ac6e-2e6edfde07ce)
 
-
-</details>
-</br>
-
-## 🌅 Wire Frame
-<details>
-<summary><h2>PIOMS Wire Frame</h2></summary>
-
-![wireframe](https://github.com/Bodrami/Practice_Template/assets/149561287/663043e3-76de-451b-9e0a-443f577d39c4)
 
 </details>
 </br>
