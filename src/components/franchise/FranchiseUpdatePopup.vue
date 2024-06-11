@@ -105,7 +105,7 @@ const formatDate = (dateString) => {
 
 const updateFranchise = async () => {
   const franchiseCode = props.franchiseCode;
-  if(!franchiseCode) {
+  if (!franchiseCode) {
     console.error('그런거 없다.')
     return;
   }
@@ -127,7 +127,7 @@ const updateFranchise = async () => {
       }),
     });
 
-    if(!response.ok) {
+    if (!response.ok) {
       throw new Error(`Failed to submit edit: ${response.statusText}`);
     }
 
