@@ -114,8 +114,12 @@ import { ref, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import FranchisePostPopup from "@/components/franchise/FranchisePostPopup.vue";
 import FranchiseUpdatePopup from "@/components/franchise/FranchiseUpdatePopup.vue";
+import axios from "axios";
 
 const store = useStore();
+const accessToken = store.state.accessToken;
+
+
 const franchises = ref([]);
 const filteredFranchises = ref([]);
 const keyword = ref('franchiseName');
@@ -136,6 +140,27 @@ const showUpdate = (franchise) => {
 const closeUpdate = () => {
   updatePopup.value = false;
 }
+
+const downloadExcel = () => {
+  axios({
+    url: 'http://localhost:5000/admin/exceldownload/franchise-excel',
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    responseType: 'blob',
+  }).then((response) => {
+    const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'FranchiseList.xlsx');
+    document.body.appendChild(link);
+    link.click();
+  }).catch((error) => {
+    console.error('EBad request:', error);
+  });
+};
 const fetchFranchises = async () => {
   try {
     const accessToken = store.state.accessToken;
@@ -169,7 +194,6 @@ const fetchFranchises = async () => {
     console.error('Fetch error:', error);
   }
 };
-
 const formatDate = (dateString) => {
   if (!dateString) return '-';
   const date = new Date(dateString);
