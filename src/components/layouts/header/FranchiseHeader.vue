@@ -9,7 +9,7 @@
       </div>
       <div class="dictionary">
         <img class="dictionary_icon" src="@/assets/icon/Dictionary.png" alt="Dictionary"/>
-        <button @click="pdfDownload">점주 매뉴얼</button>
+        <button class="pdfDownload" @click="pdfDownload">점주 매뉴얼</button>
       </div>
       <div>
         <button class="cta" @click="logout">
@@ -28,8 +28,8 @@
   <nav class="header_rootAdmin">
     <ul class="nav_header">
       <router-link to="/franchise/home" style="align-items: center; display: flex">
-        <a  class="dashboard" >
-          <img src="@/assets/icon/dashboard.png"/>
+        <a class="dashboard" >
+          <img class="dashboard-icon" src="@/assets/icon/dashboard.png"/>
         </a>
       </router-link>
 
@@ -207,6 +207,15 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.dashboard-icon {
+  position: relative;
+  top: 12px;
+}
+.pdfDownload {
+  border: none;
+  background-color: #FFFFFF;
+  font-weight: bold;
+}
 header {
   display: flex;
   justify-content: space-between;
@@ -225,7 +234,6 @@ header {
   width: 100px;
   height: 50px;
   position: relative;
-  bottom: 9px;
   left: 7px;
 }
 .smile {
@@ -311,6 +319,7 @@ header {
 }
 
 hr.hr1 {
+  top: 6px;
   padding: 0;
   width: 2100px;
   border: 0;
