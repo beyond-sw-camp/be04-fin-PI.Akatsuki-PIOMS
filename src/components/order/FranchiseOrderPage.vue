@@ -42,7 +42,9 @@
         <img src="@/assets/icon/search.png" alt="Search" />
       </button>
       <br>
-      <button class="create-btn" style="float: right" @click="showPopup" >발주하기</button>
+      <img src="@/assets/icon/excel.png" alt="excel" @click="downloadExcel" style="float:right;">
+
+      <button class="create-btn" style="float: left" @click="showPopup" >발주하기</button>
     </div>
       <br><br><br>
     </div>
@@ -142,6 +144,8 @@ const filterFranchiseName = ref('');
 const filterFranchiseOwnerName = ref('');
 const filterInvoiceCode = ref('');
 const filterOrderDate = ref('');
+
+
 
 const downloadExcel = () => {
   axios({
