@@ -33,19 +33,19 @@
         </a>
       </router-link>
 
-      <li>
-        <a  class="label">가맹점 관리</a>
-        <div class="submenu_box">
-          <ul class="submenu">
-            <li>
-              <a  class="depth1"><h4 id="depth1_title">가맹점 관리</h4></a>
-              <ul class="submenu_sub">
-                <li><router-link to="/franchise/store/list" class="depth2">가맹점 정보 관리</router-link></li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-      </li>
+<!--      <li>-->
+<!--        <a  class="label">가맹점 관리</a>-->
+<!--        <div class="submenu_box">-->
+<!--          <ul class="submenu">-->
+<!--            <li>-->
+<!--              <a  class="depth1"><h4 id="depth1_title">가맹점 관리</h4></a>-->
+<!--              <ul class="submenu_sub">-->
+<!--                <li><router-link to="/franchise/myInfo" class="depth2">가맹점 정보 관리</router-link></li>-->
+<!--              </ul>-->
+<!--            </li>-->
+<!--          </ul>-->
+<!--        </div>-->
+<!--      </li>-->
 
       <li>
         <a  class="label">창고 조회 및 재고 관리</a>

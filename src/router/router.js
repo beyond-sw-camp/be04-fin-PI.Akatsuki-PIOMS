@@ -30,6 +30,7 @@ import AdminMembers from "@/components/admin/member/AdminList.vue";
 import DriverMemberPage from "@/components/admin/member/DriverList.vue";
 import FrOwnerMemberPage from "@/components/franchise/member/FranchiseOwnerList.vue";
 import FranchiseList from "@/components/franchise/FranchiseList.vue";
+import FranchiseInfo from "@/components/franchise/mypage/FranchiseInfo.vue";
 
 const routes = [
     {
@@ -196,6 +197,13 @@ const routes = [
         component: AdminInvoice,
         meta: { requiresAuth: true, role: ['ROLE_ADMIN', 'ROLE_ROOT'] }
     },
+    {
+        path: '/franchise/myInfo',
+        name: '점주의가맹점정보조회',
+        component: FranchiseInfo,
+        meta: { requiresAuth: true, role: ['ROLE_OWNER', 'ROLE_ROOT'] }
+    },
+
 ];
 
 const router = createRouter({
