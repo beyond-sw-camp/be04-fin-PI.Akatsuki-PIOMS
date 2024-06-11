@@ -252,8 +252,11 @@ onMounted(() => {
 }
 
 .header {
+  display: flex;
+  padding-left: 210px;
+  align-items: center;
   margin-bottom: 20px;
-  margin-left: 215px;
+  justify-content: flex-start;
 }
 
 .breadcrumb {
@@ -382,8 +385,10 @@ onMounted(() => {
 }
 
 .ExNregi {
-  margin-bottom: 20px;
-  margin-left: 205px;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .post-btn {
