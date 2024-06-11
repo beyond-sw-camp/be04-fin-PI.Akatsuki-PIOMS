@@ -145,18 +145,15 @@
 </details>
 </br>
 
-## 🌅 DB Modeling (ERD, DDD, DDL)
+## 🌅 DB Modeling (ERD, DDL)
 
 <details>
 <summary><h3>PIOMS DB 모델링</h3></summary>
 <h3><a href="https://www.erdcloud.com/d/Q3aGbnzvroEFB6MfR"/>🗂️ PIOMS ERD 설계</h3>
 
-<h3>🗂️ DDD</h3>
+ 
+<summary><h3>🗂️ DDL</h3></summary>
 <details>
-
-<h3>🗂️ DDL</h3>
-<details>
-<summary>DDL 구문</summary>
 	
 ```sql
 CREATE TABLE `product` (
@@ -368,7 +365,6 @@ CREATE TABLE `log` (
 
 ```
 </details>
-
 </details>
 </br>
 
@@ -386,15 +382,6 @@ CREATE TABLE `log` (
 
 ![image](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/824ef096-05f8-48a6-ac6e-2e6edfde07ce)
 
-
-</details>
-</br>
-
-## 🌅 Menu 구조도
-<details>
-<summary><h2>PIOMS Menu 구조도</h2></summary>
-
-![image](https://github.com/beyond-sw-camp/be04-4th-PI-MoodHolic/assets/149561287/be7b1c1d-8c00-48de-b97a-8efded48fa66)
 
 </details>
 </br>
