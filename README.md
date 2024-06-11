@@ -62,14 +62,6 @@
 </details>
 </div></br>
 
-
-## 🌅 안배운 기술 목록
-* 엑셀 다운로드 기능 구현
-* PDF 파일 다운로드 기능 구현
-* window로 영역 인쇄 기능 구현
-
-</br>
-
 ## 🌅 추진 계획
 
 ### 🗓 Table 추진체계
@@ -84,6 +76,13 @@
 - 작업 수행공간: 서울 동작구 보라매로 87 SFC빌딩 3F 1강의실, 원격 소통(Discord 및 slack)
 
 <br/>
+
+## 🌅 안배운 기술 목록
+* 엑셀 다운로드 기능 구현
+* PDF 파일 다운로드 기능 구현
+* window로 영역 인쇄 기능 구현
+
+</br>
 
 ## 🌅 PIOMS System Architecture
 
@@ -116,16 +115,27 @@
 </details>
 </br>
 
-## 🌅 요구사항 정의서
+## 🌅 PIOMS 기획 문서
 
-(https://docs.google.com/spreadsheets/d/1P_TPNzrnce8OEkxFjxr9hyelmVbRY5yJ/edit?usp=sharing&ouid=104324075889250636464&rtpof=true&sd=true)
+<details>
+<summary><h3>문서화 모음</h3></summary>
+<h3><a href="https://docs.google.com/spreadsheets/d/1P_TPNzrnce8OEkxFjxr9hyelmVbRY5yJ/edit?usp=sharing&ouid=104324075889250636464&rtpof=true&sd=true"/>📁 PIOMS 요구사항 정의서</h3>
 
+<h3><a href="https://docs.google.com/spreadsheets/d/1P_TPNzrnce8OEkxFjxr9hyelmVbRY5yJ/edit?usp=sharing&ouid=104324075889250636464&rtpof=true&sd=true"/>📁 PIOMS 기능 정의서</h3>
+
+<h3><a href="https://docs.google.com/spreadsheets/d/1P_TPNzrnce8OEkxFjxr9hyelmVbRY5yJ/edit?usp=sharing&ouid=104324075889250636464&rtpof=true&sd=true"/>📁 PIOMS 테의블 정의서</h3>
+
+<h3><a href="https://docs.google.com/spreadsheets/d/1P_TPNzrnce8OEkxFjxr9hyelmVbRY5yJ/edit?usp=sharing&ouid=104324075889250636464&rtpof=true&sd=true"/>📁 PIOMS I.A 구조도</h3>
+
+<h3><a href="https://docs.google.com/spreadsheets/d/1P_TPNzrnce8OEkxFjxr9hyelmVbRY5yJ/edit?usp=sharing&ouid=104324075889250636464&rtpof=true&sd=true"/>📁 PIOMS 단위 테스트</h3>
+ 
+</details>
 </br>
 
 ## 🌅 Story Board 
 
 <details>
-<summary><h2>PIOMS Story Board</h2></summary>
+<summary><h3>PIOMS Story Board</h3></summary>
 <div markdown="1">
 	
 ![스크린샷 2024-06-11 오후 2 44 21](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/997637de-8c50-4646-b7ff-7afa07575776)
@@ -137,18 +147,12 @@
 
 ## 🌅 DB Modeling (ERD, DDD, DDL)
 
-<h3>🗂️ ERD</h3>
 <details>
-<summary>ERD Cloud</summary>
-[PIOMS ERD 설계](https://www.erdcloud.com/d/Q3aGbnzvroEFB6MfR)
-</details>
+<summary><h3>PIOMS DB 모델링</h3></summary>
+<h3><a href="https://www.erdcloud.com/d/Q3aGbnzvroEFB6MfR"/>🗂️ PIOMS ERD 설계</h3>
 
 <h3>🗂️ DDD</h3>
 <details>
-<summary>DDD 설계</summary>
-
-![image](https://github.com/Bodrami/Practice_Template/assets/149561287/1058f95c-04fc-4181-ad25-a2f4adb7a7e0)
-</details>
 
 <h3>🗂️ DDL</h3>
 <details>
@@ -363,6 +367,8 @@ CREATE TABLE `log` (
 );
 
 ```
+</details>
+
 </details>
 </br>
 
