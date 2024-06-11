@@ -123,8 +123,12 @@ const updateFranchise = async () => {
         franchiseCall: franchiseData.value.franchiseCall,
         franchiseBusinessNum: franchiseData.value.franchiseBusinessNum,
         franchiseDeliveryDate: franchiseData.value.franchiseDeliveryDate,
-        franchiseOwnerCode: franchiseData.value.franchiseOwnerCode,
-        deliveryManCode: franchiseData.value.deliveryManCode,
+        franchiseOwner: {
+          franchiseOwnerCode: franchiseData.value.franchiseOwnerCode,
+        },
+        deliveryDriver: {
+          driverCode: franchiseData.value.deliveryManCode, // 변경된 부분
+        }
       }),
     });
 
