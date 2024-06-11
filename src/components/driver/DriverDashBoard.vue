@@ -417,13 +417,13 @@ onMounted(() => {
 
 .delivery-list-box {
   width: 500px;
-  height: 30%;
+  height: 23%;
 }
 
 .notice-list {
   //margin-top: 28px !important;
   width: 500px;
-  height: 40%;
+  height: 47%;
   //max-height: 700px;
   overflow-y: auto;
 }
