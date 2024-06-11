@@ -6,11 +6,11 @@
           <td class="filter-label">승인상태</td>
           <td class="filter-input">
             <div class="radio-group">
-              <label> 승인대기 <input type="radio" value="승인대기" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
-              <label> 발주승인 <input type="radio" value="승인완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
-              <label> 발주반려 <input type="radio" value="승인거부" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
-              <label> 검수대기 <input type="radio" value="검수대기" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
-              <label> 검수완료 <input type="radio" value="검수완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
+              <label><input type="radio" value="승인대기" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter">승인대기 </label>
+              <label><input type="radio" value="승인완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter">발주승인 </label>
+              <label><input type="radio" value="승인거부" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter">발주반려 </label>
+              <label><input type="radio" value="검수대기" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter">검수대기 </label>
+              <label><input type="radio" value="검수완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter">검수완료 </label>
             </div>
           </td>
 
@@ -42,7 +42,9 @@
         <img src="@/assets/icon/search.png" alt="Search" />
       </button>
       <br>
-      <button class="create-btn" style="float: right" @click="showPopup" >발주하기</button>
+      <img src="@/assets/icon/excel.png" alt="excel" @click="downloadExcel" style="float:right;">
+
+      <button class="create-btn" style="float: left" @click="showPopup" >발주하기</button>
     </div>
       <br><br><br>
     </div>
@@ -142,6 +144,8 @@ const filterFranchiseName = ref('');
 const filterFranchiseOwnerName = ref('');
 const filterInvoiceCode = ref('');
 const filterOrderDate = ref('');
+
+
 
 const downloadExcel = () => {
   axios({

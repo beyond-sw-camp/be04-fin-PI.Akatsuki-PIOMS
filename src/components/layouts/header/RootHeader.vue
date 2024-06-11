@@ -1,6 +1,8 @@
 <template>
   <div class="fb__header-info">
-    <a href="admin/home"><img class="logo" src="@/assets/icon/PIOMS_로고.png" alt="Logo" /></a>
+    <router-link to="/admin/home" class="link-page">
+      <a ><img class="logo" src="@/assets/icon/PIOMS_로고.png" alt="Logo" /></a>
+    </router-link>
     <section class="header_info">
       <div class="crown" style="cursor: pointer" @click="openModal">
         <img class="crown_icon" src="@/assets/icon/Crown.png" alt="User Role Icon" />

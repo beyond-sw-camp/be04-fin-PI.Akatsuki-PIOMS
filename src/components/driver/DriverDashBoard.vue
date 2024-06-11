@@ -1,53 +1,50 @@
 <template>
- <div class = "delivery-list-box">
-     <div class="delivery-count">
-       <img class = "list" src="@/assets/icon/List.png"/>
-        배송 현황
-     </div>
-     <p class="week">(단위: 금일)</p>
-   <hr class="hr1"/>
-    <div class="delivery-status">
-       <div class="before">
-         배송전
+  <div style="justify-content: center; align-items: center;
+   display: flex;">
+  <div style=" display: flex;" >
+   <div >
+    <div class = "delivery-list-box">
+       <div class="delivery-count">
+         <img class = "list" src="@/assets/icon/List.png"/>
+          배송 현황
        </div>
-       <div class="ing">
-         배송중
-       </div>
-       <div class="after">
-         배송완료
-       </div>
-    </div>
-      <div class="delivery-status-box">
-        <div class="before-div">{{ beforeDiv }}</div>
-        <div class="ing-div">{{ ingDiv }}</div>
-        <div class="after-div">{{afterDiv}}</div>
+       <p class="week">(단위: 금일)</p>
+     <hr class="hr1"/>
+      <div class="delivery-status">
+         <div class="before">
+           배송전
+         </div>
+         <div class="ing">
+           배송중
+         </div>
+         <div class="after">
+           배송완료
+         </div>
       </div>
- </div>
+        <div class="delivery-status-box">
+          <div class="before-div">{{ beforeDiv }}</div>
+          <div class="ing-div">{{ ingDiv }}</div>
+          <div class="after-div">{{afterDiv}}</div>
+        </div>
+   </div>
 
 
-  <div class = "notice-list">
-    <div>
-        <img class = "notice" src="@/assets/icon/speaker.png"/>
-        공지사항 리스트
-        <hr class="hr1-1"/>
-      <ul class="data-table">
-          <li v-for="(notice, index) in sortedNotices" :key="index" class="notice-item" @click="openPopup(notice)">
-            <span class="title">{{ notice.noticeTitle }}</span>
-            <span class="date">{{ notice.noticeEnrollDate }}</span>
-            <hr class ="hr3"/>
-          </li>
-      </ul>
+    <div class = "notice-list">
+      <div>
+          <img class = "notice" src="@/assets/icon/speaker.png"/>
+          공지사항 리스트
+          <hr class="hr1-1"/>
+        <ul class="data-table">
+            <li v-for="(notice, index) in sortedNotices" :key="index" class="notice-item" @click="openPopup(notice)">
+              <span class="title">{{ notice.noticeTitle }}</span>
+              <span class="date">{{ notice.noticeEnrollDate }}</span>
+              <hr class ="hr3"/>
+            </li>
+        </ul>
+      </div>
     </div>
-  </div>
+   </div>
 
-  <!-- 공지사항 항목 팝업 -->
-  <div v-if="showPopup" class="popup">
-    <div class="popup-content">
-      <span class="close-btn" @click="closePopup">x</span>
-      <h2>{{ selectedNotice.noticeTitle }}</h2>
-      <p>{{ selectedNotice.noticeContent }}</p>
-    </div>
-  </div>
 
 <!-- 여기서부터 배송 항목 조회 -->
   <div class="my-delivery-list">
@@ -104,9 +101,21 @@
         </table>
       </div>
     </div>
+  </div>
+  </div>
+  </div>
 
+    <!-- 공지사항 항목 팝업 -->
+    <div v-if="showPopup" class="popup">
+      <div class="popup-content">
+        <span class="close-btn" @click="closePopup">x</span>
+        <h2>{{ selectedNotice.noticeTitle }}</h2>
+        <p>{{ selectedNotice.noticeContent }}</p>
+      </div>
+    </div>
     <!-- 송장 팝업 -->
 <!--    <Invoice v-if="showInvoicePopup" :invoice="selectedInvoice" @click.self="closeInvoicePopup" />-->
+
     <div v-if="showInvoicePopup" class="popup">
         <Invoice :invoice="selectedInvoice" @close="closeInvoicePopup"/>
     </div>
@@ -120,7 +129,7 @@
         @close="closeStatusPopup"
     />
 
-  </div>
+
 </template>
 
 <script setup>
@@ -407,34 +416,32 @@ onMounted(() => {
 }
 
 .delivery-list-box {
-  margin-top: -30px !important;
   width: 500px;
-  height: 270px;
+  height: 23%;
 }
 
 .notice-list {
-  margin-top: 28px !important;
+  //margin-top: 28px !important;
   width: 500px;
-  height: 530px;
-  max-height: 500px;
+  height: 47%;
+  //max-height: 700px;
   overflow-y: auto;
 }
 
 .my-delivery-list {
   border: 1px solid #d9d9d9;
-  margin-top: 10px !important;
   width: 750px;
-  height: 870px;
-  display: flex;
-  position: absolute;
-  top: -10px;
-  right: 240px;
+
+  //max-height: 50%;
+  //min-height: 50%;
+  height: 820px;
   overflow-y: auto;
+  //padding-bottom: 150px;
 }
 
 .delivery-list-box,
 .notice-list {
-  margin-left: 250px !important;
+  //margin-left: 250px !important;
 }
 
  .delivery-list-box,
