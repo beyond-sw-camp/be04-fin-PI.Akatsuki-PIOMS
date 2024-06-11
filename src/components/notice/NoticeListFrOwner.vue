@@ -321,6 +321,7 @@ onMounted(() => {
 .table-container {
   width: 100%;
   margin-bottom: 10px;
+
   display: flex;
   justify-content: center;
 }
@@ -491,5 +492,9 @@ notice-form {
 .headerTitle p {
   font-size: 20px;
   font-weight: bold;
+}
+
+.pagination{
+  padding-bottom: 150px;
 }
 </style>

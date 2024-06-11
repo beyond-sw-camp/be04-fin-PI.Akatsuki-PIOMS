@@ -35,7 +35,7 @@
           </div>
         </div>
         <div class="section inventory-alert">
-          <router-link to="/franchise/warehouse" class="warehouse-link">
+          <router-link to="/franchise/warehouse/list" class="warehouse-link">
             <img src="@/assets/icon/List.png" class="icon" alt="Warehouse Icon">재고 알림
           </router-link>
           <hr class="section-divider" />
@@ -71,7 +71,7 @@
           </div>
         </div>
         <div class="section inquiry-list">
-          <router-link to="/franchise/ask" class="inquiry-link">
+          <router-link to="/franchise/ask/list" class="inquiry-link">
             <img src="@/assets/icon/List.png" class="icon" alt="Ask Icon">문의사항 리스트
           </router-link>
           <ul class="list">
@@ -326,6 +326,7 @@ body {
   width: 100%;
   padding: 20px;
   box-sizing: border-box;
+  padding-bottom: 150px;
 }
 
 .main-content {
