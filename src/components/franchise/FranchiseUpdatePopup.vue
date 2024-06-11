@@ -38,6 +38,7 @@
           <div class="answer-section">
             <div class="action-buttons">
               <button @click="updateFranchise" class="delete-btn">수정</button>
+              <button @click="deleteFranchise" class="delete-btn">삭제</button>
               <button @click="closeUpdate" class="cancel-btn">취소</button>
             </div>
           </div>
@@ -143,6 +144,37 @@ const updateFranchise = async () => {
   }
 }
 
+const deleteFranchise = async () => {
+  const franchiseCode = props.franchiseCode;
+  if(!franchiseCode) {
+    console.error('그런거 없다');
+    return;
+  }
+
+  try {
+    const response = await fetch(`http://localhost:5000/admin/franchise/delete/${franchiseCode}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if(!response.ok) {
+      throw new Error(`Failed to delete franchise: ${response.statusText}`);
+    }
+
+    await Swal.fire({
+      icon: 'success',
+      title: '삭제 성공',
+      text: '삭제가 완료되었습니다.',
+    });
+    emit('refreshData');
+    props.closeUpdate();
+  } catch (error) {
+    console.error('Failed to delete franchise:', error);
+  }
+}
 onMounted(fetchFranchiseData);
 </script>
 
