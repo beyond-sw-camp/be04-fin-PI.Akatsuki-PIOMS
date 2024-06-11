@@ -1,8 +1,12 @@
 <template>
   <div class="container">
-    <div class="header">
-      <img src="@/assets/icon/어드민.png" style="width: 18px"/>&nbsp;
-      <span class="breadcrumb">관리자 관리 > 관리자 전체 조회 및 관리</span>
+    <div align="center"  style="padding-bottom: 30px;">
+      <div style="  max-width: 1440px;justify-content: center;align-items: center;"  >
+        <br>
+        <div style="float: left" ><img src="@/assets/icon/어드민.png" style="width: 18px"/>&nbsp;
+          <span class="breadcrumb">관리자 관리 > 관리자 전체 조회 및 관리</span>
+        </div>
+      </div>
     </div>
 
     <div class="filter-section">

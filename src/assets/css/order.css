@@ -63,7 +63,7 @@
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
-    padding-top: 3%;
+    /*padding-top: 3%;*/
   }
 
   .filter-table {
@@ -294,3 +294,9 @@
   .breadcrumbs a:hover {
     text-decoration: underline;
   }
+
+.breadcrumb {
+  font-size: 16px;
+  color: #555;
+  font-weight: bold;
+}

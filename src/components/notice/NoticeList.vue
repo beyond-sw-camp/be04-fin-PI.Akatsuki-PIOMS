@@ -1,6 +1,13 @@
 <template>
 <div class = "main">
-
+  <div align="center"  style="padding-bottom: 30px;">
+    <div style="  max-width: 1300px;justify-content: center;align-items: center;"  >
+      <br>
+      <div style="float: left" ><img src="@/assets/icon/smile.png" style="width: 18px"/>&nbsp;
+        <span class="breadcrumb">공지 및 문의 관리 > 공지 관리 > 공지사항 조회 및 관리</span>
+      </div>
+    </div>
+  </div>
 <br/>
 <div align="center">
   <table class="read-filter">

@@ -1,11 +1,9 @@
 <template>
-  <div class="header">
-    <img src="@/assets/icon/Cloth.png" style="width: 18px"/>&nbsp;
-    <span class="breadcrumb">상품 및 상품 카테고리 관리 > 상품 카테고리 관리 > 상품 카테고리 등록</span>
+  <div align="center" >
+    <div class="headerTitle" align="left" style="width: 1440px;  margin-top: 1%">
+      <p class="product-title"><img class="Cloth" src="@/assets/icon/Cloth.png" style="width: 20px;height: 20px">상품 및 상품 카테고리 관리 > 상품 카테고리 관리 > 상품 카테고리 등록 관리</p>
+    </div>
   </div>
-<!--  <div class="headerTitle" align="left" style="margin-left: 17%; margin-top: 1%">-->
-<!--    <p class="product-title"><img src="@/assets/icon/Cloth.png" style="width: 20px;height: 20px">상품 및 상품 카테고리 관리 > 상품 카테고리 관리 > 상품 카테고리 등록</p>-->
-<!--  </div>-->
 
   <div class="category-container">
     <div class="category-select">

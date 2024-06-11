@@ -1,6 +1,6 @@
 <template xmlns="http://www.w3.org/1999/html">
   <div align="center" >
-    <div class="headerTitle" align="left" style="width: 1260px;  margin-top: 1%">
+    <div class="headerTitle" align="left" style="width: 1440px;  margin-top: 1%">
         <p class="product-title"><img class="Cloth" src="@/assets/icon/Cloth.png" style="width: 20px;height: 20px">상품 및 상품 카테고리 관리 > 상품 관리 > 상품 전체 조회 및 관리</p>
     <h6 class="product-sub-title" style="margin-top: 1%; margin-bottom: 3px"> * 조회할 상품의 조건을 선택 후
       <img src="@/assets/icon/reset.png">초기화 또는 <img src="@/assets/icon/search.png">검색을 눌러주세요.

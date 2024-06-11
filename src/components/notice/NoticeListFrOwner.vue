@@ -1,10 +1,15 @@
 <template>
   <div class = "main">
-
-    <br/>
-    <div class="headerTitle" align="left" style="margin-left: 17%; margin-top: 1%">
-      <p class="product-title"><img src="@/assets/icon/List.png" style="width: 20px;height: 20px">공지 및 문의 관리 > 공지사항 관리 > 공지사항 조회</p>
+    <div align="center"  style="padding-bottom: 30px;">
+      <div style="  max-width: 1250px;justify-content: center;align-items: center;"  >
+        <br>
+        <div style="float: left" ><img src="@/assets/icon/smile.png" style="width: 18px"/>&nbsp;
+          <span class="breadcrumb">공지 및 문의 관리 > 공지 관리 > 공지사항 조회 및 관리</span>
+        </div>
+      </div>
     </div>
+    <br/>
+\
     <div align="center">
       <table class="read-filter">
         <tr>

@@ -1,8 +1,13 @@
 <template>
   <div class="container">
-    <div class="header">
-      <img src="@/assets/icon/smile.png" style="width: 18px"/>&nbsp;
-      <span class="breadcrumb">가맹점 및 직원 관리 > 가맹점 및 점주 관리 > 점주 전체 조회</span>
+
+    <div align="center"  style="padding-bottom: 30px;">
+      <div style="  max-width: 1440px;justify-content: center;align-items: center;"  >
+        <br>
+        <div style="float: left" ><img src="@/assets/icon/smile.png" style="width: 18px"/>&nbsp;
+          <span class="breadcrumb">가맹점 및 직원 관리 > 가맹점 및 점주 관리 > 점주 전체 조회</span>
+        </div>
+      </div>
     </div>
 
     <div class="filter-section">
