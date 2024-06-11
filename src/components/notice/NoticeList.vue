@@ -41,7 +41,7 @@
 <!-- 공지사항 등록 버튼 -->
 <div class="notice-btn-container " align="center">
   <div align="center" style="width: 1300px">
-    <button style="float: right" class="btn-saveNotice"  @click="showRegisterForm">공지사항 등록</button>
+    <button style="float: right" class="btn-saveNotice"  @click="showRegisterForm" v-if="isRoot">공지사항 등록</button>
   </div>
 </div>
 <!-- 공지사항 등록 팝업 -->
@@ -93,7 +93,7 @@
     </tr>
     </tbody>
   </table>
-</div>
+</div> 
 
 <!-- 공지사항 상세 정보 팝업 -->
 <NoticeDetailsPopup v-if="viewPopup && selectedNotice" :notice="selectedNotice" @close="closeDetailsPopup" />
@@ -113,9 +113,28 @@ import NoticeResisterPopup from '@/components/notice/NoticeResisterPopup.vue';
 import NoticeDetailsPopup from '@/components/notice/NoticeDetailsPopup.vue';
 import NoticeEditPopup from '@/components/notice/NoticeEditPopup.vue';
 import { useStore } from 'vuex';
+import { jwtDecode } from 'jwt-decode';
 import Swal from "sweetalert2";
 
+const store = useStore();
+const username = ref('');
+const role = ref('');
+const isRoot = ref(false);
 
+const fetchUsernameFromToken = () => {
+  const token = store.state.accessToken;
+  if (token) {
+    const decoded = jwtDecode(token);
+    console.log(decoded);
+    username.value = decoded.username;
+    role.value = decoded.role;
+    console.log(role);
+    if(role.value=="ROLE_ROOT")
+      isRoot.value = true;
+    console.log(role);
+  }
+};
+fetchUsernameFromToken();
 const highlightRow = (index) => {
   document.querySelector(`#row-${index}`).classList.add('highlighted');
 };
@@ -123,7 +142,6 @@ const resetRowColor = (index) => {
   document.querySelector(`#row-${index}`).classList.remove('highlighted');
 };
 
-const store = useStore();
 const accessToken = store.state.accessToken;
 const lists = ref([]);
 const headers = ref([
