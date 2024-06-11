@@ -77,8 +77,8 @@ const saveFranchise = async () => {
       franchiseOwnerCode: insertFrOwnerCode.value
     },
     adminCode: insertAdmin.value,
-    deliveryDriver: {
-      deliveryManCode: insertDeliveryMan.value,
+    deliveryDriver: { // 수정된 부분
+      driverCode: insertDeliveryMan.value,
     }
   }
 
