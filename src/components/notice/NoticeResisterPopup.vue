@@ -1,6 +1,5 @@
 <template>
   <div class="notice-form">
-
       <div class="title">
         공지사항 등록
       </div>
@@ -8,15 +7,15 @@
       <form @submit.prevent="submitForm">
         <div >
           <label class="noticeTitle" for="noticeTitle">제목</label><br><br>
-          <input class="input-title" type="text"  placeholder="공지사항 제목을 입력해주세요." v-model="noticeTitle" required/>
+          <input class="input-title" type="text" style="border: 1px solid" placeholder="공지사항 제목을 입력해주세요." v-model="noticeTitle" required/>
         </div>
         <br>
         <div>
-          <label for="noticeContent">내용</label><br><br>
-          <textarea class="text-area" v-model="noticeContent" placeholder="공지사항 내용을 입력해주세요." required></textarea>
+          <label class="noticeContent" for="noticeContent">내용</label><br><br>
+          <textarea class="text-area" style="resize: none; border: 1px solid" v-model="noticeContent" placeholder="공지사항 내용을 입력해주세요." required></textarea>
         </div>
         <br>
-        <div style="  float: right;" >
+        <div style="float: right;" >
           <button class="regist-btn" type="submit">등록</button>
           <button class="close-btn" @click="closeForm">취소</button>
         </div>
@@ -56,29 +55,22 @@ import { ref, defineEmits } from 'vue';
 .title {
   background-color: #d9d9d9;
   font-size: 20px;
-  font-weight: 500;
+  font-weight: bold;
   padding: 10px;
   padding-left: 20px;
   border-radius: 10px;
 }
-.register {
-  margin: 0;
-  margin-bottom: 10px;
-  font-size: 20px;
-
-}
 .notice-form {
   background: #ffffff;
   border-radius: 10px;
-  border-color: #d9d9d9;
-  border: 5px;
+  border: 1px solid #d9d9d9;
   max-width: 500px;
   width: 100%;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 1001; /* 팝업 창이 가장 위에 오도록 z-index 조정 */
+  z-index: 1001;
 }
 
 .close-btn {
@@ -96,11 +88,15 @@ import { ref, defineEmits } from 'vue';
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
+  margin-right: 10px;
 }
 .text-area{
   width: 100%;
   height: 200px;
   border: 2px solid black;
-
+}
+.noticeTitle ,
+.noticeContent {
+  font-weight: bold;
 }
 </style>
