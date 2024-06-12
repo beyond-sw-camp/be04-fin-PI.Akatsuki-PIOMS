@@ -1,8 +1,12 @@
 <template>
   <div class="container">
-    <div class="header">
-      <img src="@/assets/icon/Delivery.png" style="width: 18px" />&nbsp;
-      <span class="breadcrumb">배송 기사 관리 > 배송 기사 전체 조회 및 관리</span>
+    <div class="header" align="center"  style="padding-bottom: 30px;">
+      <div style="max-width: 1440px;justify-content: center;align-items: center;"  >
+        <br>
+        <div style="float: left" ><img src="@/assets/icon/Delivery.png" style="width: 18px"/>&nbsp;
+          <span class="breadcrumb">가맹점 및 직원 관리 > 배송기사 관리 > 배송기사 전체조회</span>
+        </div>
+      </div>
     </div>
 
     <div class="product-sub-title"> * 조회할 상품의 조건을 선택 후
@@ -45,34 +49,37 @@
       </button>
     </div>
 
-    <div align="center" style="padding-bottom: 10px;">
+    <div class="filter-buttons">
       <div class="post-btn" id="app">
         <button @click="openPostPopup" class="postBtn">
-          <img src="@/assets/icon/배송기사등록.png" alt="postProduct">
+          <img src="@/assets/icon/점주등록.png" alt="postProduct">
         </button>
-        <button @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
+        <button @click="downloadExcel" class="excelBtn">
+          <button @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
+        </button>
       </div>
     </div>
+
 
     <div class="table-container">
       <table class="table">
         <thead>
         <tr class="header1">
-          <th>No</th>
-          <th>이름</th>
-          <th>아이디</th>
+          <th width="4%">No</th>
+          <th width="4%">이름</th>
+          <th width="5%">아이디</th>
           <th>전화번호</th>
           <th>등록일</th>
           <th>수정일</th>
           <th>삭제일</th>
-          <th>로그인 실패횟수</th>
-          <th>상태</th>
-          <th>가맹점</th>
-          <th>관리</th>
+          <th width="6.2%">로그인 실패횟수</th>
+          <th width="4%">상태</th>
+          <th width="25%">가맹점</th>
+          <th width="3%">관리</th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(driver, index) in paginatedLists" :key="driver.driverCode">
+        <tr class="tr__bd" v-for="(driver, index) in paginatedLists" :key="driver.driverCode">
           <td>{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
           <td>{{ driver.driverName }}</td>
           <td>{{ driver.driverId }}</td>
@@ -261,11 +268,25 @@ onMounted(() => {
 <style scoped>
 .container {
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .header {
-  margin-bottom: 20px;
-  margin-left: 215px;
+  width: 100%;
+  max-width: 1440px;
+  text-align: center;
+  padding-bottom: 30px;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+}
+
+.header-icon {
+  width: 18px;
 }
 
 .breadcrumb {
@@ -274,11 +295,24 @@ onMounted(() => {
   font-weight: bold;
 }
 
+.product-sub-title {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 20px;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 1440px;
+  padding-left: 10px;
+}
+
 .filter-section {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 20px;
+  width: 100%;
+  max-width: 1440px;
 }
 
 .filter-table {
@@ -288,7 +322,6 @@ onMounted(() => {
   border-radius: 5px;
   padding: 10px;
   width: 100%;
-  max-width: 1440px;
 }
 
 .filter-table td {
@@ -300,7 +333,7 @@ onMounted(() => {
   text-align: center;
   border: solid 1px #747474;
   width: 120px;
-  background-color: #D9D9D9;
+  background-color: #d9d9d9;
 }
 
 .filter-input {
@@ -314,9 +347,12 @@ onMounted(() => {
   justify-content: center;
   margin-top: 10px;
   margin-bottom: 10px;
+  width: 100%;
+  max-width: 1440px;
 }
 
-.reset-btn, .search-btn {
+.reset-btn,
+.search-btn {
   background-color: #fff;
   color: black;
   border: none;
@@ -325,23 +361,6 @@ onMounted(() => {
   padding: 8px 16px;
   font-size: 14px;
   margin: 0 5px;
-}
-
-.table-container {
-  width: 100%;
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: center;
-}
-
-.table {
-  width: 100%;
-  max-width: 1440px;
-  border-collapse: collapse;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-spacing: 0 10px;
 }
 
 .table th {
@@ -357,7 +376,7 @@ onMounted(() => {
 }
 
 .header1 {
-  background-color: #D9D9D9;
+  background-color: #d9d9d9;
   font-weight: bold;
   height: 50px;
   font-size: 14px;
@@ -397,33 +416,58 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: relative;
-  width: 1440px;
+  width: 100%;
+  max-width: 1440px;
 }
 
 .postBtn {
-  width: 100px;
-  height: 26px;
   border: none;
   background-color: white;
   cursor: pointer;
 }
 
 .excelBtn {
-  width: 100px;
-  height: 26px;
   border: none;
   background-color: white;
   cursor: pointer;
-  margin-right: 0.5%;
 }
 
-.product-sub-title {
-  display: flex;
-  padding-left: 210px;
-  align-items: center;
-  gap: 5px;
+.tr__bd:hover {
+  background-color: #f2f2f2;
+}
+
+.tr__bd td {
+  border-bottom: 1px solid #ddd;
+  font-size: 12px;
+}
+
+.tr__bd:last-child td {
+  border-bottom: none;
+}
+
+.table-container {
+  width: 100%;
   margin-bottom: 20px;
-  justify-content: flex-start;
+  display: flex;
+  justify-content: center;
+}
+
+.table {
+  width: 100%;
+  max-width: 1440px;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-spacing: 0 10px;
+  table-layout: fixed; /* 고정된 레이아웃을 사용하여 셀 너비를 고정 */
+}
+
+.table th, .table td {
+  padding: 10px;
+  text-align: center;
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  overflow: hidden;
+  text-overflow: ellipsis; /* 내용이 넘칠 때 "..." 표시 */
 }
 </style>
