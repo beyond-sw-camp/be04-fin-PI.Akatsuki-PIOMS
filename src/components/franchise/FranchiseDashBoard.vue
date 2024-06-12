@@ -36,7 +36,7 @@
         </div>
         <div class="section inventory-alert">
           <router-link to="/franchise/warehouse/list" class="warehouse-link">
-            <img src="@/assets/icon/List.png" class="icon" alt="Warehouse Icon">재고 알림
+            <img src="@/assets/icon/부족한재고.png" class="icon" alt="Warehouse Icon">재고 알림
           </router-link>
           <hr class="section-divider" />
           <ul class="list">
@@ -57,12 +57,12 @@
       <div class="bottom-row">
         <div class="section notice-list">
           <router-link to="/franchise/notice/list" class="notice-link">
-            <img src="@/assets/icon/List.png" class="icon" alt="Notice Icon">공지사항 리스트
+            <img src="@/assets/icon/공지사항.png" class="icon" alt="Notice Icon">공지사항 리스트
           </router-link>
           <ul class="list">
             <li v-for="item in paginatedNotices" :key="item.noticeCode" class="list-item">
               <div class="notice-title">{{ truncateTitle(item.noticeTitle) }}</div>
-              <div>{{ formatNoticeDate(item.noticeEnrollDate) }}</div>
+              <div class="notice-date">{{ formatNoticeDate(item.noticeEnrollDate) }}</div>
             </li>
           </ul>
           <div class="pagination">
@@ -72,7 +72,7 @@
         </div>
         <div class="section inquiry-list">
           <router-link to="/franchise/ask/list" class="inquiry-link">
-            <img src="@/assets/icon/List.png" class="icon" alt="Ask Icon">문의사항 리스트
+            <img src="@/assets/icon/문의사항.png" class="ask-icon" alt="Ask Icon">문의사항 리스트
           </router-link>
           <ul class="list">
             <li v-for="item in paginatedAsks" :key="item.askCode" class="list-item">
@@ -316,6 +316,12 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.ask-icon {
+  position: relative;
+  top: 2px;
+  width: 28px;
+  height: 23px;
+}
 body {
   overflow-x: hidden;
 }
@@ -364,6 +370,11 @@ body {
   flex: 1;
   max-width: 20%;
 }
+.notice-date {
+  position: relative;
+  top: 20px;
+  padding-top: 5px;
+}
 
 .status-boxes {
   display: flex;
@@ -376,6 +387,8 @@ body {
   flex: 1;
   border: 11px solid white;
   border-radius: 10px;
+  position: relative;
+  bottom: 10px;
 }
 
 .status-count-box {
@@ -389,7 +402,8 @@ body {
   font-size: 24px;
   font-weight: bold;
   background-color: #F3F3F3;
-  height: 70px;
+  height: 120px;
+  width: 140px;
   justify-content: center;
   align-items: center;
   border-radius: 10px;
@@ -446,7 +460,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 9px;
   border-bottom: 1px solid #ddd;
   padding-bottom: 10px;
   overflow: hidden;
@@ -454,8 +468,8 @@ body {
 }
 
 .notice-list .list-item {
-  margin-bottom: 30px;
-  padding-bottom: 20px;
+  margin-bottom: 16px;
+  padding-bottom: 23px;
 }
 
 .notice-title {
@@ -469,7 +483,6 @@ body {
 }
 
 .notice-link,
-.inquiry-link,
 .favorite-link,
 .order-link,
 .warehouse-link {
@@ -481,8 +494,17 @@ body {
   margin-bottom: 15px;
 }
 
+.inquiry-link {
+  display: flex;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
+  margin-bottom: 11px;
+}
+
 .notice-link{
-  margin-bottom: 26px;
+  margin-bottom: 20px;
   //padding:10px;
 }
 
@@ -495,11 +517,16 @@ body {
 }
 
 .title {
+  color: #444444;
+  font-weight: bold;
+  font-size: 15px;
   flex: 1;
   margin-right: 10px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  position: relative;
+  top: -5px;
 }
 
 .status-container {
@@ -509,12 +536,15 @@ body {
 }
 
 .status {
+  position: relative;
+  right: -30px;
   background-color: #f8d7da;
-  color: #721c24;
+  color: #FFFFFF;
   padding: 3px 10px;
   border-radius: 5px;
   font-size: 12px;
   margin-bottom: 5px;
+  font-weight: bold;
 }
 
 .status-pending {
@@ -528,6 +558,8 @@ body {
 .date {
   font-size: 12px;
   color: #666;
+  position: relative;
+  top: 8px;
 }
 
 .pagination {

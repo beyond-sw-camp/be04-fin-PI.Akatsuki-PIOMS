@@ -11,6 +11,16 @@
     </div>
 
   <div v-if="isLoading">
+
+    <div align="center"  style="padding-bottom: 30px;">
+      <div class="action-buttons"  >
+        <br>
+        <div style="float: left" ><img src="@/assets/icon/어드민.png" style="width: 18px"/>&nbsp;
+          <span class="breadcrumb">배송 및 발주 관리 > 배송 관리 > 배송 상태 조회 및 조회 관리</span>
+        </div>
+      </div>
+    </div>
+
     <div class="filter-section">
       <table class="filter-table">
         <tr>

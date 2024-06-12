@@ -1,11 +1,15 @@
 <template>
   <div align="center" >
-    <div class="headerTitle" align="left" style="width: 1260px;  margin-top: 1%">
-      <p class="product-title"><img class="Cloth" src="@/assets/icon/Cloth.png" style="width: 20px;height: 20px">상품 및 상품 카테고리 관리 > 상품 관리 > 상품 전체 조회 및 관리</p>
+    <div class="headerTitle" align="left" style="width: 1200px;  margin-top: 1%">
+      <p class="product-title">
+        <img class="Cloth" src="@/assets/icon/Cloth.png" style="width: 20px;height: 20px">창고 조회 및 재고 관리 > 창고 조회 > 본사 창고 조회
+      </p>
       <h6 class="product-sub-title" style="margin-top: 1%; margin-bottom: 3px"> * 조회할 상품의 조건을 선택 후
         <img src="@/assets/icon/reset.png">초기화 또는 <img src="@/assets/icon/search.png">검색을 눌러주세요.
       </h6>
     </div>
+  </div>
+  <div align="center" >
     <div class="filter-section">
       <div>
       </div>
@@ -658,7 +662,7 @@ fetchThirdCategories();
   border: 1px solid rgba(217, 217, 217, 0.7);
 }
 .product-title {
-  margin-left: 18%;
+  //margin-left: 18%;
 }
 
 .product-sub-title {

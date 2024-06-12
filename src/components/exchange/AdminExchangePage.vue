@@ -9,6 +9,14 @@
       <img src="@/assets/icon/reset.png">초기화 또는<img src="@/assets/icon/search.png">검색을 눌러주세요.
     </div>
   <div v-if="isLoading">
+    <div align="center"  style="padding-bottom: 30px;">
+      <div class="action-buttons"  >
+        <br>
+        <div style="float: left" ><img src="@/assets/icon/어드민.png" style="width: 18px"/>&nbsp;
+          <span class="breadcrumb">반품 및 교환 관리 > 반품 관리 > 반품 상품 조회</span>
+        </div>
+      </div>
+    </div>
     <div class="filter-section">
       <table class="filter-table">
         <tr>

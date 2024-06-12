@@ -178,7 +178,7 @@ const fetchUsernameFromToken = () => {
 
 const pdfDownload = async () => {
   try {
-    const response = await fetch('http://api.pioms.shop/admin/pdfdownload/admin-pdf', {
+    const response = await fetch('http://api.pioms.shop/admin/pdfdownload/root-pdf', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -194,7 +194,7 @@ const pdfDownload = async () => {
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'AdminManual.pdf';
+    link.download = 'ROOTManual.pdf';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
