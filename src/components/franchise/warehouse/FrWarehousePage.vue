@@ -97,7 +97,7 @@
           <td>{{ item.franchiseWarehouseTotal }}</td>
           <td>{{ item.franchiseWarehouseCount }}</td>
           <td>{{ item.franchiseWarehouseEnable }}</td>
-          <td>{{ item.product.categoryFirstName }} > {{ item.product.categoryFirstName }} > {{ item.product.categoryFirstName }}</td>
+          <td>{{ item.product.categoryFirstName }} > {{ item.product.categorySecondName }} > {{ item.product.categoryThirdName }}</td>
 
           <td v-if="item.franchiseWarehouseFavorite==true">O</td>
           <td v-else>X</td>
@@ -107,11 +107,11 @@
         </tbody>
       </table>
     </div>
-    <div class="pagination">
-      <button @click="prevPage" :disabled="currentPage === 1">이전</button>
-      <span> {{currentPage}} / {{totalPages}} </span>
-      <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
-    </div>
+  </div>
+  <div class="pagination">
+    <button @click="prevPage" :disabled="currentPage === 1">이전</button>
+    <span> {{currentPage}} / {{totalPages}} </span>
+    <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
   </div>
 </template>
 
@@ -309,11 +309,11 @@ getMemberId();
 }
 
 .pagination {
-  margin-top: 10px;
-  margin-bottom: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 10px;
+  padding-bottom: 150px;
 }
 
 .pagination button {

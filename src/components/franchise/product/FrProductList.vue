@@ -414,9 +414,9 @@ const getMemberId = async () => {
         productStatus: product.productStatus,
         productColor: product.productColor,
         productSize: product.productSize,
-        categoryFirstName: product.categoryFirstCode,
-        categorySecondName: product.categorySecondCode,
-        categoryThirdName: product.categoryThirdCode,
+        categoryFirstName: product.categoryFirstName,
+        categorySecondName: product.categorySecondName,
+        categoryThirdName: product.categoryThirdName,
       };
     });
 
@@ -511,6 +511,7 @@ fetchThirdCategories();
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-bottom: 150px;
 }
 
 .pagination button {
