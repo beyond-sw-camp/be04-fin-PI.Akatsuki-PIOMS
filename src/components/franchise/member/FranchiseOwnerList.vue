@@ -5,6 +5,10 @@
       <span class="breadcrumb">가맹점 및 직원 관리 > 가맹점 및 점주 관리 > 점주 관리</span>
     </div>
 
+    <div class="product-sub-title"> * 조회할 상품의 조건을 선택 후
+      <img src="@/assets/icon/reset.png">초기화 또는<img src="@/assets/icon/search.png">검색을 눌러주세요.
+    </div>
+
     <div class="filter-section">
       <table class="filter-table">
         <tr>
@@ -402,5 +406,13 @@ onMounted(() => {
   border: none;
   background-color: white;
   cursor: pointer;
+}
+.product-sub-title {
+  display: flex;
+  padding-left: 210px;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 20px;
+  justify-content: flex-start;
 }
 </style>

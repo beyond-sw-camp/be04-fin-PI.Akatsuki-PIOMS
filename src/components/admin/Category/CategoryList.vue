@@ -1,12 +1,11 @@
 <template>
+  <div class="container">
 
   <div class="header">
     <img src="@/assets/icon/Cloth.png" style="width: 18px"/>&nbsp;
     <span class="breadcrumb">상품 및 상품 카테고리 관리 > 상품 관리 > 상품 전체 조회 및 관리</span>
   </div>
-<!--  <div class="headerTitle" align="left" style="margin-left: 17%; margin-top: 1%">-->
-<!--    <p class="product-title"><img src="@/assets/icon/Cloth.png" style="width: 20px;height: 20px">상품 및 상품 카테고리 관리 > 상품 카테고리 관리 > 상품 카테고리 전체 조회 및 수정/삭제</p>-->
-<!--  </div>-->
+
   <div class="category-container">
     <div class="category-select">
       <div class="category-section">
@@ -68,6 +67,7 @@
     <DeleteFirstPopup v-if="deleteCategoryFirstVisible" :currentFirstCode="currentFirstCode" :currentFirstName="currentFirstName" @close="deleteCategoryFirstVisible = false"/>
     <DeleteSecondPopup v-if="deleteCategorySecondVisible" :currentSecondCode="currentSecondCode" :currentSecondName="currentSecondName" @close="deleteCategorySecondVisible = false"/>
     <DeleteThirdPopup v-if="deleteCategoryThirdVisible" :currentThirdCode="currentThirdCode" :currentThirdName="currentThirdName" @close="deleteCategoryThirdVisible = false"/>
+  </div>
   </div>
 </template>
 
@@ -388,9 +388,14 @@ ul {
   background-color: #FF6285;
 }
 .header {
-  margin-bottom: 30px;
-  margin-left: 215px;
-  margin-top: 20px;
+  display: flex;
+  padding-left: 210px;
+  align-items: center;
+  margin-bottom: 20px;
+  justify-content: flex-start;
+}
+.container {
+  padding: 20px;
 }
 </style>
 

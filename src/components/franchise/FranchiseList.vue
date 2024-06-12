@@ -1,9 +1,13 @@
 <template>
   <div class="container">
     <div class="header">
-      <img src="@/assets/icon/가맹점.png" style="width: 18px"/>&nbsp;
+      <img src="@/assets/icon/Cloth.png" style="width: 18px"/>&nbsp;
       <span class="breadcrumb">가맹점 및 직원 관리 > 가맹점 및 점주 관리 > 가맹점 관리</span>
     </div>
+
+      <div class="product-sub-title"> * 조회할 상품의 조건을 선택 후
+        <img src="@/assets/icon/reset.png">초기화 또는<img src="@/assets/icon/search.png">검색을 눌러주세요.
+      </div>
 
     <div class="filter-section">
       <table class="filter-table">
@@ -101,7 +105,7 @@
       </table>
     </div>
 
-    <div class="pagination" style="margin-bottom: 100px">
+    <div class="pagination">
       <button @click="prevPage" :disabled="currentPage === 1">이전</button>
       <span>{{ currentPage }} / {{ totalPages }}</span>
       <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
@@ -370,6 +374,7 @@ onMounted(() => {
   justify-content: center;
   align-items: center;
   margin-top: 10px;
+  margin-bottom: 100px;
 }
 
 .pagination button {
@@ -411,5 +416,14 @@ onMounted(() => {
   border: none;
   background-color: white;
   cursor: pointer;
+}
+
+.product-sub-title {
+  display: flex;
+  padding-left: 210px;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 20px;
+  justify-content: flex-start;
 }
 </style>

@@ -1,49 +1,55 @@
 <template>
-<div class = "main">
+  <div class="container">
+    <div class="header">
+      <img src="@/assets/icon/공지사항.png" style="width: 18px"/>&nbsp;
+      <span class="breadcrumb">공지 및 문의 관리 > 공지 관리 > 공지사항 조회 및 관리</span>
+    </div>
 
-<br/>
-<div align="center">
-  <table class="read-filter">
-    <tr class="tr1">
-      <td class="filter-label">공지 조회 조건</td>
-      <td class="filter1">
-        <select class="filter-section" v-model="filterType">
-          <option value="all">전체</option>
-          <option value="content">내용</option>
-          <option value="title">제목</option>
-        </select>
+    <div class="product-sub-title"> * 조회할 상품의 조건을 선택 후
+      <img src="@/assets/icon/reset.png">초기화 또는<img src="@/assets/icon/search.png">검색을 눌러주세요.
+    </div>
 
-        <input type="text" class="filter-input" placeholder="검색어를 입력해주세요." v-model="filterText" />
-      </td>
-    </tr>
+    <div class="filter-section">
+      <table class="filter-table">
+        <tr>
+          <td class="filter-label">공지 조회 조건</td>
+          <td class="filter-input">
+          <select class="filter-section" v-model="filterType"  style="width: 100px">
+              <option disabled value="">선택</option>
+              <option value="all" aria-checked="true">전체</option>
+              <option value="content">내용</option>
+              <option value="title">제목</option>
+            </select>
+            <input type="text" class="filter-input" placeholder="검색어를 입력해주세요." style="width: 300px" v-model="filterText" />
+          </td>
+        </tr>
+        <tr>
+          <td class="filter-label">등록일</td>
+          <td colspan="3" class="filter-date">
+            <input type="date" id="startDate" v-model="startDate" placeholder="시작 날짜 선택" title="시작 날짜 선택" />
+            &nbsp;&nbsp;<span>~</span>&nbsp;
+            <input type="date" id="endDate" v-model="endDate" placeholder="종료 날짜 선택" title="종료 날짜 선택" />
+          </td>
+        </tr>
+      </table>
 
-    <tr class="tr2">
-      <td class="filter-label">등록일</td>
-      <td colspan="3" class="filter-date">
-        <input type="date" id="startDate" v-model="startDate" placeholder="시작 날짜 선택" title="시작 날짜 선택" />
-        &nbsp;&nbsp;<span>~</span>&nbsp;
-        <input type="date" id="endDate" v-model="endDate" placeholder="종료 날짜 선택" title="종료 날짜 선택" />
-      </td>
-    </tr>
-  </table>
-</div>
+      <div class="filter-buttons">
+        <button @click="resetFilters" class="reset-btn">
+          <img src="@/assets/icon/reset.png" alt="Reset" />
+        </button>
+        <button @click="applyFilters" class="search-btn">
+          <img src="@/assets/icon/search.png" alt="Search" />
+        </button>
+      </div>
 
-<!-- 리셋, 검색 버튼 -->
-<div class="button-container">
-  <button type="button" class="btn-reset" @click="resetFilters">
-    <img class="reset" src="@/assets/icon/reset.png" />
-  </button>
-  <button type="button" class="btn-search" @click="applyFilters">
-    <img class="search" src="@/assets/icon/search.png" />
-  </button>
-</div>
+    </div>
 
-<!-- 공지사항 등록 버튼 -->
-<div class="notice-btn-container " align="center">
-  <div align="center" style="width: 1300px">
-    <button style="float: right" class="btn-saveNotice"  @click="showRegisterForm" v-if="isRoot">공지사항 등록</button>
-  </div>
-</div>
+
+    <div class="filter-buttons">
+      <div class="post-btn" id="app">
+        <button style="float: right" class="btn-saveNotice"  @click="showRegisterForm" v-if="isRoot">공지사항 등록</button>
+      </div>
+    </div>
 <!-- 공지사항 등록 팝업 -->
 <NoticeResisterPopup
     v-if="isRegisterFormVisible"
@@ -93,18 +99,19 @@
     </tr>
     </tbody>
   </table>
-</div> 
+</div>
 
 <!-- 공지사항 상세 정보 팝업 -->
 <NoticeDetailsPopup v-if="viewPopup && selectedNotice" :notice="selectedNotice" @close="closeDetailsPopup" />
 
 <!-- 페이지네이션 -->
-<div class="pagination">
-  <button @click="prevPage" :disabled="currentPage === 1">이전</button>
-  <span>{{ currentPage }} / {{ totalPages }}</span>
-  <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
+  <div class="pagination">
+    <button @click="prevPage" :disabled="currentPage === 1">이전</button>
+    <span>{{ currentPage }} / {{ totalPages }}</span>
+    <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
+  </div>
 </div>
-</div>
+
 </template>
 
 <script setup>
@@ -358,10 +365,172 @@ onMounted(() => {
 </script>
 
 <style scoped>
-@import "../../assets/css/order.css" ;
 
-.date {
-  width: 100px;
+.container {
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  padding-left: 210px;
+  align-items: center;
+  margin-bottom: 20px;
+  justify-content: flex-start;
+}
+
+.breadcrumb {
+  font-size: 16px;
+  color: #555;
+  font-weight: bold;
+}
+
+.filter-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.filter-table {
+  border-collapse: collapse;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  width: 100%;
+  max-width: 1440px;
+}
+
+.filter-table td {
+  padding: 5px 10px;
+}
+
+.filter-label {
+  font-weight: bold;
+  text-align: center;
+  border: solid 1px #747474;
+  width: 120px;
+  background-color: #D9D9D9;
+}
+
+.filter-input {
+  text-align: left;
+  border: solid 1px #747474;
+  padding: 5px;
+}
+
+.filter-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+}
+.reset-btn, .search-btn {
+  background-color: #fff;
+  color: black;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 8px 16px;
+  font-size: 14px;
+  margin: 0 5px;
+}
+
+.table-container {
+  width: 100%;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.table {
+  width: 100%;
+  max-width: 1440px;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-spacing: 0 10px;
+}
+
+.table th {
+
+  font-weight: bold;
+  color: #000;
+  text-align: center;
+}
+
+.table th,
+.table td {
+  padding: 10px;
+  text-align: center;
+}
+
+.header1 {
+  background-color: #D9D9D9;
+  font-weight: bold;
+  height: 40px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 100px;
+}
+
+.pagination button {
+  background-color: #fff;
+  color: black;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 8px 16px;
+  font-size: 14px;
+  margin: 0 5px;
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pagination span {
+  margin: 0 10px;
+  font-weight: bold;
+}
+
+.post-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  width: 1440px;
+}
+
+.postBtn {
+  border: none;
+  background-color: white;
+  cursor: pointer;
+}
+
+.excelBtn {
+  border: none;
+  background-color: white;
+  cursor: pointer;
+}
+
+.product-sub-title {
+  display: flex;
+  padding-left: 210px;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 20px;
+  justify-content: flex-start;
 }
 
 .modify,
@@ -381,107 +550,14 @@ onMounted(() => {
 .delete {
   background-color: #FC6F86;
 }
-.table-td button {
-  border: none;
-  background-color: #ffffff;
-}
 
-.read-filter {
-  margin-bottom: 20px;
-  background-color: #ffffff;
-  border-radius: 5px;
-  width: 1300px;
-  border: 1px solid #d9d9d9;
-}
 
-.filter-label,
-.filter1,
-.filter-date,
-.tr1 {
-  cursor: default;
-}
 
-.filter-label {
-  font-size: 16px;
-  text-align: center;
-  width: 120px;
-  height: 60px;
-  font-weight: bold;
-  background-color: #D9D9D9;
-  color: #444444;
-  border: none;
-}
 
-.filter-section {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100px;
-  height: 52px;
-  font-size: 14px;
-  margin-bottom: 0;
-  border-color: #d9d9d9;
-}
 
-.filter-input {
-  width: 400px;
-  height: 30px;
-  padding: 10px;
-  margin-left: 20px;
-  border-right: 1px solid #d9d9d9;
-}
-
-.filter1 {
-  font-size: 14px;
-  display: flex;
-  justify-content: flex-start;
-  margin-left: 10px;
-  position: relative;
-  top: 4px
-}
-
-.filter-input,
-.filter-section {
-  font-size: 16px;
-}
-
-.filter-date {
-  border-color: #d9d9d9;
-}
-
-.table-container {
-  width: 100%;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: center;
-}
 
 .title {
   cursor: pointer;
-  text-decoration: underline #444444;
-}
-.notice-list tr td {
-  text-align: center;
-}
-.notice-list thead tr td {
-  background-color: #d9d9d9;
-  font-weight: bold;
-}
-
-.notice-table th,
-.notice-table td {
-  padding: 10px;
-  font-size: 14px;
-  color: #444444;
-}
-
-.notice-table th {
-  background-color: #d9d9d9;
-}
-
-.notice-table td {
-  position: relative;
-  top:5px;
 }
 
 /* 팝업 */
@@ -491,7 +567,6 @@ onMounted(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -540,24 +615,15 @@ notice-form {
   cursor: not-allowed;
 }
 
-#startDate,
-#endDate {
-  width: 170px;
-  height: 30px;
-  font-size: 16px;
-  padding: 10px;
-  margin-left: 10px;
-  border: 1px solid #d9d9d9;
-  color: #444444;
-}
-
 .button-container {
   display: flex;
   justify-content: center; /* 버튼을 왼쪽에 정렬 */
   align-items: center; /* 버튼을 수직 가운데에 정렬 */
   gap: 10px; /* 버튼 사이의 간격을 설정 */
 }
+
 .notice-btn-container{
+
   display: flex;
   justify-content: center; /* 버튼을 왼쪽에 정렬 */
   align-items: center; /* 버튼을 수직 가운데에 정렬 */
@@ -584,24 +650,8 @@ notice-form {
 
 }
 
-.btn-saveNotice:hover {
-  background-color: #9a9a9a;
-  color: #ffffff;
-}
 
-.btn-reset,
-.btn-search {
-  border: none;
-  background-color: #ffffff;
-}
 
-.reset,
-.search {
-  width: 40px;
-  height: 40px;
-  justify-content: center;
-  border: none;
-  background-color: #ffffff;
-}
+
 
 </style>

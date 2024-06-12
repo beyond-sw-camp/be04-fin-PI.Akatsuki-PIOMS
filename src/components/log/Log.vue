@@ -1,17 +1,14 @@
 <template>
   <div class="container">
-    <div align="center" data-v-61061423="">
-      <div class="headerTitle" align="left" style="width:1260px;margin-top:1%;" data-v-61061423=""><p
-          class="product-title" data-v-61061423=""><img class="Cloth" src="/src/assets/icon/Cloth.png"
-                                                        style="width:20px;height:20px;" data-v-61061423="">상품 및 상품 카테고리
-        관리 &gt; 상품 관리 &gt; 상품 전체 조회 및 관리</p><h6 class="product-sub-title" style="margin-top:1%;margin-bottom:3px;"
-                                                data-v-61061423=""> * 조회할 상품의 조건을 선택 후 <img
-          src="/src/assets/icon/reset.png" data-v-61061423="">초기화 또는 <img src="/src/assets/icon/search.png"
-                                                                          data-v-61061423="">검색을 눌러주세요. </h6></div>
+    <div class="header">
+      <img src="@/assets/icon/이력관리.png" style="width: 18px"/>&nbsp;
+      <span class="breadcrumb">이력 관리 > 전체 이력 관리</span>
     </div>
-    <!-- 상단 네비게이션 -->
 
-    <!-- 필터 섹션 -->
+    <div class="product-sub-title"> * 조회할 상품의 조건을 선택 후
+      <img src="@/assets/icon/reset.png">초기화 또는<img src="@/assets/icon/search.png">검색을 눌러주세요.
+    </div>
+
     <div class="filter-section">
       <table class="filter-table">
         <tr>
@@ -55,26 +52,26 @@
           </td>
         </tr>
       </table>
-    </div>
-
-    <!-- 액션 버튼 섹션 -->
-    <div align="center">
-      <div class="action-buttons">
+      <div class="filter-buttons">
         <button @click="resetFilters" class="reset-btn">
-          <img src="@/assets/icon/reset.png" alt="Reset"/>
+          <img src="@/assets/icon/reset.png" alt="Reset" />
         </button>
         <button @click="applyFilters" class="search-btn">
-          <img src="@/assets/icon/search.png" alt="Search"/>
+          <img src="@/assets/icon/search.png" alt="Search" />
         </button>
-        <br>
-        <div>
-          <button style="float:right;" @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png"
-                                                                                    alt="excel"></button>
-        </div>
       </div>
     </div>
-    <div class="post-btn">
+
+    <div class="filter-buttons">
+      <div class="post-btn" id="app">
+        <button class="postBtn">
+        </button>
+        <button @click="downloadExcel" class="excelBtn">
+          <img src="@/assets/icon/excel.png" alt="excel">
+        </button>
+      </div>
     </div>
+
     <!-- 이력 조회 결과 -->
     <div class="table-container">
       <table class="table">
@@ -264,23 +261,28 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.excelBtn {
-  width: 100px;
-  height: 26px;
-  border: none;
-  background-color: white;
-  padding-bottom: 36px;
-  padding-left: initial;
-  cursor: pointer;
-}
-
 .container {
   padding: 20px;
 }
 
+.header {
+  display: flex;
+  padding-left: 210px;
+  align-items: center;
+  margin-bottom: 20px;
+  justify-content: flex-start;
+}
+
+.breadcrumb {
+  font-size: 16px;
+  color: #555;
+  font-weight: bold;
+}
+
 .filter-section {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   margin-bottom: 20px;
 }
 
@@ -290,7 +292,8 @@ onMounted(() => {
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 10px;
-  width: 1300px;
+  width: 100%;
+  max-width: 1440px;
 }
 
 .filter-table td {
@@ -300,43 +303,31 @@ onMounted(() => {
 .filter-label {
   font-weight: bold;
   text-align: center;
-  width: 100px;
+  border: solid 1px #747474;
+  width: 120px;
   background-color: #D9D9D9;
 }
 
 .filter-input {
   text-align: left;
-  border: 1px solid lightgray;
+  border: solid 1px #747474;
+  padding: 5px;
 }
 
-.radio-group {
+.filter-buttons {
   display: flex;
-  flex-wrap: wrap;
-}
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
 
-.radio-group label {
-  margin-right: 10px;
-  white-space: nowrap;
 }
-
-.date-range span {
-  margin: 0 5px;
-}
-
-.action-buttons {
-  max-width: 1300px;
-  justify-content: center; /* 가운데 정렬 */
-  //margin-bottom: 20px;
-  align-items: center;
-}
-
 .reset-btn, .search-btn {
   background-color: #fff;
-  color: white;
+  color: black;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  padding: 8px 8px;
+  padding: 8px 16px;
   font-size: 14px;
   margin: 0 5px;
 }
@@ -349,16 +340,17 @@ onMounted(() => {
 }
 
 .table {
-  width: 1300px;
-  max-width: 1300px;
+  width: 100%;
+  max-width: 1440px;
   border-collapse: collapse;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-spacing: 0 10px;
+  border-spacing: 0 10px
 }
 
 .table th {
+
   font-weight: bold;
   color: #000;
   text-align: center;
@@ -366,25 +358,16 @@ onMounted(() => {
 
 .table th,
 .table td {
-  width: 150px; /* 모든 열의 기본 크기를 고정 */
-}
-
-.table .historyContent {
-  cursor: pointer;
-  width: 200px; /* 이력내용 칸의 크기를 고정 */
+  padding: 10px;
+  text-align: center;
 }
 
 .header1 {
   background-color: #D9D9D9;
   font-weight: bold;
-  height: 50px;
-  font-size: 12px;
+  height: 40px;
+  font-size: 14px;
   text-align: center;
-}
-
-.allpost {
-  text-align: center;
-  padding: 10px 0;
 }
 
 .pagination {
@@ -392,6 +375,7 @@ onMounted(() => {
   justify-content: center;
   align-items: center;
   margin-top: 10px;
+  margin-bottom: 100px;
 }
 
 .pagination button {
@@ -415,60 +399,32 @@ onMounted(() => {
   font-weight: bold;
 }
 
-/* 팝업 스타일 */
-.popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+.post-btn {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  z-index: 999;
-}
-
-.popup-content {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 40%;
-  height: 28%;
-  overflow-y: auto;
-  text-align: center;
-  padding-top: 10px;
-}
-
-.popup-text {
-  font-size: 20px;
-  white-space: pre-wrap;
-  padding-top: 30px;
-}
-
-.popup-content button {
   position: relative;
-  top: 60px;
-  align-content: center;
-  background-color: #FF6285;
-  color: white;
+  width: 1440px;
+}
+
+.postBtn {
   border: none;
-  border-radius: 4px;
+  background-color: white;
   cursor: pointer;
-  padding: 15px;
 }
 
-.table td {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-width: 19ch;
-  max-width: 19ch; /* 최대 25글자까지 표시 */
-  cursor: default;
+.excelBtn {
+  border: none;
+  background-color: white;
+  cursor: pointer;
 }
 
-.table .historyContent {
-  cursor: pointer;
+.product-sub-title {
+  display: flex;
+  padding-left: 210px;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 20px;
+  justify-content: flex-start;
 }
 </style>

@@ -111,7 +111,6 @@ const closeForm = () => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 1001; /* 팝업 창이 가장 위에 오도록 z-index 조정 */
 }
 
 .close-btn {

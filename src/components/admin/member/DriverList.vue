@@ -5,6 +5,11 @@
       <span class="breadcrumb">배송 기사 관리 > 배송 기사 전체 조회 및 관리</span>
     </div>
 
+    <div class="product-sub-title"> * 조회할 상품의 조건을 선택 후
+      <img src="@/assets/icon/reset.png">초기화 또는<img src="@/assets/icon/search.png">검색을 눌러주세요.
+    </div>
+
+
     <div class="filter-section">
       <table class="filter-table">
         <tr>
@@ -358,5 +363,13 @@ onMounted(() => {
   background-color: white;
   cursor: pointer;
   margin-right: 0.5%;
+}
+.product-sub-title {
+  display: flex;
+  padding-left: 210px;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 20px;
+  justify-content: flex-start;
 }
 </style>
