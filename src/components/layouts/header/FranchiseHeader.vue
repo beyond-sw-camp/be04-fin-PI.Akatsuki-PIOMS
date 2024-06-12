@@ -119,7 +119,7 @@ const fetchUsernameFromToken = () => {
 
 const pdfDownload = async () => {
   try {
-    const response = await fetch('http://api.pioms.shop/franchise/pdfdownload/fraowner-pdf', {
+    const response = await fetch('http://api.pioms.shop/franchise/pdfdownload/frowner-pdf', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
