@@ -98,7 +98,7 @@ const closePopup = () => {
 
 const getDetailInvoice = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/driver/${driverCode}/${props.invoice.invoiceCode}/details`, {
+    const response = await fetch(`http://api.pioms.shop/driver/${driverCode}/${props.invoice.invoiceCode}/details`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

@@ -56,7 +56,7 @@
               <ul class="submenu_sub">
                 <li><router-link to="/franchise/product/list" class="depth2">본사 창고 조회</router-link></li>
                 <li><router-link to="/franchise/warehouse/list" class="depth2">가맹 창고 조회</router-link></li>
-                
+
               </ul>
               <hr class="hr3">
             </li>
@@ -137,7 +137,7 @@ const fetchUsernameFromToken = () => {
 };
 const pdfDownload = async () => {
   try {
-    const response = await fetch('http://localhost:5000/franchise/pdfdownload/fraowner-pdf', {
+    const response = await fetch('http://api.pioms.shop/franchise/pdfdownload/fraowner-pdf', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

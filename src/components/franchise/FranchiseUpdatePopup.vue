@@ -71,7 +71,7 @@ const fetchFranchiseData = async () => {
   }
 
   try {
-    const response = await fetch(`http://localhost:5000/admin/franchise/detail/${franchiseCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/franchise/detail/${franchiseCode}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -111,7 +111,7 @@ const updateFranchise = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://localhost:5000/admin/franchise/update/${franchiseCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/franchise/update/${franchiseCode}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -156,7 +156,7 @@ const deleteFranchise = async () => {
   }
 
   try {
-    const response = await fetch(`http://localhost:5000/admin/franchise/delete/${franchiseCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/franchise/delete/${franchiseCode}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

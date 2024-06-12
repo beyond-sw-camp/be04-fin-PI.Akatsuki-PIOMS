@@ -85,7 +85,7 @@ const saveFranchise = async () => {
   console.log("Request Data:", requestData);
 
   try {
-    const response = await fetch("http://localhost:5000/admin/franchise/register", {
+    const response = await fetch("http://api.pioms.shop/admin/franchise/register", {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

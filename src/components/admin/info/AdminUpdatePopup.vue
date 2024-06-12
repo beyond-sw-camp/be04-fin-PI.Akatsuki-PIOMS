@@ -94,7 +94,7 @@ const isPopupOpen = ref(props.isOpen);
 const fetchAdminInfo = async () => {
   try {
     const accessToken = store.state.accessToken;
-    const response = await fetch(`http://localhost:5000/admin/list/detail/${props.adminCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/list/detail/${props.adminCode}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -131,7 +131,7 @@ const fetchAdminInfo = async () => {
 const fetchFranchises = async () => {
   try {
     const accessToken = store.state.accessToken;
-    const response = await fetch(`http://localhost:5000/admin/franchise/list`, {
+    const response = await fetch(`http://api.pioms.shop/admin/franchise/list`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -173,7 +173,7 @@ const searchAndAddFranchise = async () => {
 const addFranchise = async (franchise) => {
   try {
     const accessToken = store.state.accessToken;
-    const response = await fetch(`http://localhost:5000/admin/add-franchise/${adminInfo.value.adminCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/add-franchise/${adminInfo.value.adminCode}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -205,7 +205,7 @@ const removeFranchise = async (franchiseCode) => {
   try {
     console.log('Removing franchise code:', franchiseCode);
     const accessToken = store.state.accessToken;
-    const response = await fetch(`http://localhost:5000/admin/remove-franchise/${adminInfo.value.adminCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/remove-franchise/${adminInfo.value.adminCode}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -236,7 +236,7 @@ const removeFranchise = async (franchiseCode) => {
 const updateAdminInfo = async () => {
   try {
     const accessToken = store.state.accessToken;
-    const response = await fetch(`http://localhost:5000/admin/update/${adminInfo.value.adminCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/update/${adminInfo.value.adminCode}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -268,7 +268,7 @@ const updateAdminInfo = async () => {
 const resetPassword = async (adminCode) => {
   try {
     const accessToken = store.state.accessToken;
-    const response = await fetch(`http://localhost:5000/admin/reset-password/${adminCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/reset-password/${adminCode}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

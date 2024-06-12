@@ -130,7 +130,7 @@ const itemsPerPage = 15;
 const fetchAdmins = async () => {
   try {
     console.log('Fetching admins...');
-    const response = await fetch('http://localhost:5000/admin/list', {
+    const response = await fetch('http://api.pioms.shop/admin/list', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

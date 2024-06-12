@@ -74,7 +74,7 @@ const ownerInfo = ref({
 const fetchOwnerInfo = async () => {
   try {
     const accessToken = store.state.accessToken;
-    const response = await fetch(`http://localhost:5000/admin/franchise/owner/detail/${props.franchiseOwnerCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/franchise/owner/detail/${props.franchiseOwnerCode}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -96,7 +96,7 @@ const updateOwnerInfo = async () => {
   try {
     const accessToken = store.state.accessToken;
     console.log('Sending owner info:', ownerInfo.value);
-    const response = await fetch(`http://localhost:5000/admin/franchise/owner/update/${props.franchiseOwnerCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/franchise/owner/update/${props.franchiseOwnerCode}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -128,7 +128,7 @@ const updateOwnerInfo = async () => {
 const resetPassword = async (franchiseOwnerCode) => {
   try {
     const accessToken = store.state.accessToken;
-    const response = await fetch(`http://localhost:5000/admin/franchise/owner/reset-password/${franchiseOwnerCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/franchise/owner/reset-password/${franchiseOwnerCode}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

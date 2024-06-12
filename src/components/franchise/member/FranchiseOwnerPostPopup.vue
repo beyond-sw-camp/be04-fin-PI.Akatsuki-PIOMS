@@ -69,7 +69,7 @@ const ownerInfo = ref({
 const registerOwner = async () => {
   try {
     const accessToken = store.state.accessToken;
-    const response = await fetch('http://localhost:5000/admin/franchise/owner/register', {
+    const response = await fetch('http://api.pioms.shop/admin/franchise/owner/register', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

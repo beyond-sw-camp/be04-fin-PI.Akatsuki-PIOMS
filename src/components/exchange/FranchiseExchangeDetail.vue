@@ -105,7 +105,7 @@ const deleteExchange = async () => {
     if (!accessToken) {
       throw new Error('No access token found');
     }
-    const response = await fetch(`http://localhost:5000/franchise/exchange/${item.exchangeCode}`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/exchange/${item.exchangeCode}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

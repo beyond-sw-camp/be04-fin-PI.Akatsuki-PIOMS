@@ -88,7 +88,7 @@ const getMyFranchise = async () => {
     const userRole = store.state.userRole;
     const userId = store.state.userCode;
 
-    const response = await fetch(`http://localhost:5000/franchise/myInfo`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/myInfo`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

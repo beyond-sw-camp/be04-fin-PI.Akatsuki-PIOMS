@@ -1,6 +1,6 @@
 <template>
   <div class="fb__header-info">
-    
+
     <router-link to="/admin/home" class="link-page">
       <a href="admin/home" ><img class="logo" src="@/assets/icon/PIOMS_로고.png" alt="Logo" /></a>
     </router-link>
@@ -187,7 +187,7 @@ const fetchUsernameFromToken = () => {
 
 const pdfDownload = async () => {
     try {
-      const response = await fetch('http://localhost:5000/admin/pdfdownload/admin-pdf', {
+      const response = await fetch('http://api.pioms.shop/admin/pdfdownload/admin-pdf', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${accessToken}`,

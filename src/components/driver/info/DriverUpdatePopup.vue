@@ -68,7 +68,7 @@ const driverInfo = ref({
 const fetchDriverInfo = async () => {
   try {
     const accessToken = store.state.accessToken;
-    const response = await fetch(`http://localhost:5000/admin/driver/list/detail/${props.driverCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/driver/list/detail/${props.driverCode}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -88,7 +88,7 @@ const fetchDriverInfo = async () => {
 const updateDriverInfo = async () => {
   try {
     const accessToken = store.state.accessToken;
-    const response = await fetch(`http://localhost:5000/admin/driver/update/${props.driverCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/driver/update/${props.driverCode}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -120,7 +120,7 @@ const updateDriverInfo = async () => {
 const resetPassword = async (driverCode) => {
   try {
     const accessToken = store.state.accessToken;
-    const response = await fetch(`http://localhost:5000/admin/driver/reset-password/${driverCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/driver/reset-password/${driverCode}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

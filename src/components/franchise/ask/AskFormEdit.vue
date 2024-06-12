@@ -58,7 +58,7 @@ const fetchAskData = async () => {
   }
 
   try {
-    const response = await fetch(`http://localhost:5000/franchise/ask/${props.askCode}`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/ask/${props.askCode}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -107,7 +107,7 @@ const submitUpdate = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://localhost:5000/franchise/update/ask/${askCode}`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/update/ask/${askCode}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

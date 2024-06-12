@@ -124,7 +124,7 @@ const breadcrumbs = [
 
 const fetchAsks = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/franchise/asklist`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/asklist`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

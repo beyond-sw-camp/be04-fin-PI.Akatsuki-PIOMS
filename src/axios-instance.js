@@ -3,7 +3,7 @@ import store from '@/store/store.js';
 import { jwtDecode } from 'jwt-decode';
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:5000',
+    baseURL: 'http://api.pioms.shop',
     withCredentials: true,
 });
 

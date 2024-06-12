@@ -129,7 +129,7 @@ const itemsPerPage = 15;
 const fetchDrivers = async () => {
   try {
     console.log('Fetching drivers...');
-    const response = await fetch('http://localhost:5000/admin/driver/list', {
+    const response = await fetch('http://api.pioms.shop/admin/driver/list', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

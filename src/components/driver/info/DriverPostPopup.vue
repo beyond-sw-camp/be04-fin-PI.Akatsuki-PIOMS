@@ -66,7 +66,7 @@ const driverInfo = ref({
 const registerDriver = async () => {
   try {
     const accessToken = store.state.accessToken;
-    const response = await fetch('http://localhost:5000/admin/driver/register', {
+    const response = await fetch('http://api.pioms.shop/admin/driver/register', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
