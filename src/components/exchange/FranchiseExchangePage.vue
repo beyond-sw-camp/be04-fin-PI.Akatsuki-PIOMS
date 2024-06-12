@@ -49,7 +49,8 @@
           <img src="@/assets/icon/search.png" alt="Search" />
         </button>
         <br>
-        <input class="create-btn"  type="button" value="반품신청하기" @click="showPopup" style="cursor: pointer; float: right">
+        <input class="create-btn"  type="button" value="반품신청하기" @click="showPopup" style="cursor: pointer; float: left">
+        <button @click="downloadExcel" class="excelBtn" style="cursor: pointer; float: right"><img src="@/assets/icon/excel.png" alt="excel"></button>
         <br><br><br>
       </div>
     </div>
@@ -124,10 +125,11 @@
 import { ref, computed } from 'vue';
 import exchangePopup from './exchangePopup.vue';
 import ExchangeDetail from './FranchiseExchangeDetail.vue';
-import { useStore } from 'vuex'; // Vuex store 임포트
+import { useStore } from 'vuex';
+import axios from "axios"; // Vuex store 임포트
 const store = useStore(); // Vuex store 사용
 
-
+const accessToken = store.state.accessToken;
 const lists = ref([]);
 const startDate = ref('');
 const endDate = ref('');
@@ -177,7 +179,26 @@ const getExchangeList = async () => {
     console.error('오류 발생:', error);
   }
 };
-
+const downloadExcel = () => {
+  axios({
+    url: 'http://api.pioms.shop/franchise/exceldownload/exchange-excel',
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    responseType: 'blob',
+  }).then((response) => {
+    const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'ProductList.xlsx');
+    document.body.appendChild(link);
+    link.click();
+  }).catch((error) => {
+    console.error('EBad request:', error);
+  });
+};
 const resetFilters = () => {
   conditionFilter.value = "";
   filterExchangeCode.value = "";
