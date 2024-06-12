@@ -92,7 +92,7 @@
         </div>
         <div class="section favorite-products">
           <router-link to="/franchise/favorite/list" class="favorite-link">
-            <img src="@/assets/icon/List.png" class="icon" alt="Favorite Icon">즐겨찾기 상품 목록
+            <img src="@/assets/icon/즐겨찾기.png" class="icon" alt="Favorite Icon">즐겨찾기 상품 목록
           </router-link>
           <ul class="list">
             <li v-for="item in paginatedFavorites" :key="item.franchiseWarehouseCode" class="list-item">
@@ -322,6 +322,7 @@ onMounted(() => {
   width: 28px;
   height: 23px;
 }
+
 body {
   overflow-x: hidden;
 }
@@ -606,8 +607,11 @@ body {
 }
 
 .icon {
-  width: 16px;
+  width: 18px;
   margin-right: 5px;
+  position: relative;
+  top: 2px;
+  height: 18px;
 }
 
 .unit {
