@@ -27,8 +27,6 @@
           <div class="after-div">{{afterDiv}}</div>
         </div>
    </div>
-
-
     <div class = "notice-list">
       <div>
           <img class = "notice" src="@/assets/icon/speaker.png"/>
@@ -44,8 +42,6 @@
       </div>
     </div>
    </div>
-
-
 <!-- 여기서부터 배송 항목 조회 -->
   <div class="my-delivery-list">
     <div>
@@ -73,8 +69,6 @@
           <img class="reset-icon" src="@/assets/icon/reset.png" />
         </button>
       </div>
-
-
       <br/>
       <div v-if="filteredOrders.length">
         <table class="delivery-table">
@@ -104,7 +98,6 @@
   </div>
   </div>
   </div>
-
     <!-- 공지사항 항목 팝업 -->
     <div v-if="showPopup" class="popup">
       <div class="popup-content">
@@ -115,9 +108,8 @@
     </div>
     <!-- 송장 팝업 -->
 <!--    <Invoice v-if="showInvoicePopup" :invoice="selectedInvoice" @click.self="closeInvoicePopup" />-->
-
     <div v-if="showInvoicePopup" class="popup">
-        <Invoice :invoice="selectedInvoice" @close="closeInvoicePopup"/>
+        <Invoice v-if="showInvoicePopup" :invoice="selectedInvoice" @close="closeInvoicePopup"/>
     </div>
 
 
