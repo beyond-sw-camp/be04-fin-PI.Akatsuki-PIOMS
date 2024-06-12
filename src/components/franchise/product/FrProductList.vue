@@ -420,9 +420,9 @@ const getMemberId = async () => {
         productStatus: product.productStatus,
         productColor: product.productColor,
         productSize: product.productSize,
-        categoryFirstName: product.categoryFirstCode,
-        categorySecondName: product.categorySecondCode,
-        categoryThirdName: product.categoryThirdCode,
+        categoryFirstName: product.categoryFirstName,
+        categorySecondName: product.categorySecondName,
+        categoryThirdName: product.categoryThirdName,
       };
     });
 
@@ -494,6 +494,20 @@ fetchThirdCategories();
   transform: scale(3.3);
 }
 
+.pagination {
+  margin-top: 10px;
+  margin-bottom: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 150px;
+}
+
+.pagination button {
+  border: none;
+  border-radius: 10px;
+  width: 75px;
+}
 .filter-section {
   display: flex;
   flex-direction: column;

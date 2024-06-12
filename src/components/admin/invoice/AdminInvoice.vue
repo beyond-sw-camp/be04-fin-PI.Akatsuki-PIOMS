@@ -16,14 +16,15 @@
     <div class="filter-section">
       <table class="filter-table">
         <tr>
-          <td class="filter-label">주문(발주)번호</td>
-          <td class="filter-input">
-            <input type="text" v-model="filterOrderCode" />
-          </td>
           <td class="filter-label">배송(송장)번호</td>
           <td class="filter-input">
             <input type="text" v-model="filterInvoiceCode" />
           </td>
+          <td class="filter-label">주문(발주)번호</td>
+          <td class="filter-input">
+            <input type="text" v-model="filterOrderCode" />
+          </td>
+
         </tr>
       </table>
       <div class="filter-buttons">
