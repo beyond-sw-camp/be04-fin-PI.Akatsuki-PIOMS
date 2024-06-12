@@ -149,7 +149,7 @@ const closeUpdate = () => {
 
 const downloadExcel = () => {
   axios({
-    url: 'http://localhost:5000/admin/exceldownload/franchise-excel',
+    url: 'http://api.pioms.shop/admin/exceldownload/franchise-excel',
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${accessToken}`,
@@ -173,7 +173,7 @@ const fetchFranchises = async () => {
     const userRole = store.state.userRole;
     const userId = store.state.userCode;
 
-    const response = await fetch(`http://localhost:5000/admin/franchise/list?role=${userRole}&userId=${userId}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/franchise/list?role=${userRole}&userId=${userId}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

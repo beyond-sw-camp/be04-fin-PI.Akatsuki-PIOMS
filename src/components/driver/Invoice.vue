@@ -98,7 +98,7 @@ const closePopup = () => {
 
 const getDetailInvoice = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/driver/${driverCode}/${props.invoice.invoiceCode}/details`, {
+    const response = await fetch(`http://api.pioms.shop/driver/${driverCode}/${props.invoice.invoiceCode}/details`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -317,7 +317,7 @@ hr {
 #customer-orderCode,
 #customer-invoiceCode {
   display: inline-block;
-  margin-left: 10px; /* 텍스트 사이의 간격을 설정합니다 */
+  margin-left: 10px;
   text-align: center;
 }
 

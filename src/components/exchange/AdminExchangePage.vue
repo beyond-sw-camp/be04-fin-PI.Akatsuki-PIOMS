@@ -169,8 +169,8 @@ const getExchangeList = async () => {
       throw new Error('No access token found');
     }
     // const response = await fetch(`/api/admin/exchanges`, {
-    // const response = await fetch(`http:///localhost:5000/admin/exchanges`, {
-    const response = await fetch(`http://localhost:5000/admin/exchange/list`, {
+    // const response = await fetch(`http:///api.pioms.shop/admin/exchanges`, {
+    const response = await fetch(`http://api.pioms.shop/admin/exchange/list`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

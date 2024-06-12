@@ -216,8 +216,8 @@ const userRole = computed(() => store.getters.userRole);
 
 const getDash = async () => {
   let timerInterval;
-  let url= 'http://localhost:5000/admin/adminDashboard';
-  
+  let url= 'http://api.pioms.shop/admin/adminDashboard';
+
 
   Swal.fire({
     title: "대시보드를 불러오는 중입니다...",

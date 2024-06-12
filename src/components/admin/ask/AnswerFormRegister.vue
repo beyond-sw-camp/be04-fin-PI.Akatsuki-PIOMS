@@ -65,7 +65,7 @@ const fetchAskData = async () => {
   }
 
   try {
-    const response = await fetch(`http://localhost:5000/admin/ask/${askCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/ask/${askCode}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -115,7 +115,7 @@ const submitAnswer = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://localhost:5000/admin/ask/answer/${askCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/ask/answer/${askCode}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

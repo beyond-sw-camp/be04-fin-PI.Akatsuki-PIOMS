@@ -64,7 +64,7 @@ const fetchAdminInfo = async () => {
   try {
     const accessToken = store.state.accessToken;
     const userCode = store.state.userCode; // userCode 가져오기
-    const response = await fetch(`http://localhost:5000/admin/list/detail/${userCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/list/detail/${userCode}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -84,7 +84,7 @@ const fetchAdminInfo = async () => {
 const updateAdminInfo = async () => {
   try {
     const accessToken = store.state.accessToken;
-    const response = await fetch(`http://localhost:5000/admin/update/${adminInfo.value.adminCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/update/${adminInfo.value.adminCode}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -115,7 +115,7 @@ const updateAdminInfo = async () => {
 const resetPassword = async (adminCode) => {
   try {
     const accessToken = store.state.accessToken;
-    await fetch(`http://localhost:5000/admin/reset-password/${adminCode}`, {
+    await fetch(`http://api.pioms.shop/admin/reset-password/${adminCode}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

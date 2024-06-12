@@ -1,43 +1,50 @@
 <template>
   <div v-if="isOpen" class="popup-overlay">
-    <section class="driver-info">
+    <section class="owner-info">
       <header class="header">
         <div class="logo-section">
-          <h1 class="driver-title">배송 기사 정보 수정</h1>
+          <h1 class="owner-title">점주 정보 수정</h1>
         </div>
         <div class="controls">
-          <button class="btn cancel-btn" @click="closePopup">취소</button>
-          <button class="btn confirm-btn" @click="updateDriverInfo">수정완료</button>
+          <button class="btn cancel-btn" @click="closePopup" style="cursor: pointer">취소</button>
+          <button class="btn confirm-btn" @click="updateOwnerInfo" style="cursor: pointer">수정완료</button>
         </div>
       </header>
       <section class="info-section">
         <div class="info-row">
-          <label class="info-label">배송기사명</label>
-          <p class="info-value">{{ driverInfo.driverName }}</p>
+          <label class="info-label" for="ownerName">점주명</label>
+          <p class="info-value" id="ownerName">{{ ownerInfo.franchiseOwnerName }}</p>
         </div>
         <hr class="separator" />
         <div class="info-row">
-          <label class="info-label">ID</label>
-          <p class="info-value">{{ driverInfo.driverId }}</p>
+          <label class="info-label" for="ownerId">ID</label>
+          <p class="info-value" id="ownerId">{{ ownerInfo.franchiseOwnerId }}</p>
         </div>
         <hr class="separator" />
         <div class="info-row">
-          <label class="info-label" for="driverPwd">PWD</label>
-          <input type="password" v-model="driverInfo.driverPwd" id="driverPwd" class="info-value input-field" />
-          <button class="btn reset-btn" @click="resetPassword(driverInfo.driverCode)">비밀번호 재설정</button>
+          <label class="info-label" for="ownerPwd">PWD</label>
+          <input type="password" v-model="ownerInfo.franchiseOwnerPwd" id="ownerPwd" class="info-value input-field" />
+          <button class="btn reset-btn" @click="resetPassword(ownerInfo.franchiseOwnerCode)" style="cursor: pointer">비밀번호 재설정</button>
         </div>
         <hr class="separator" />
         <div class="info-row">
-          <label class="info-label" for="driverPhone">전화번호</label>
-          <input type="text" v-model="driverInfo.driverPhone" id="driverPhone" class="info-value input-field" />
+          <label class="info-label" for="ownerPhone">전화번호</label>
+          <input type="text" v-model="ownerInfo.franchiseOwnerPhone" id="ownerPhone" class="info-value input-field" />
         </div>
         <hr class="separator" />
         <div class="info-row">
-          <label class="info-label" for="driverStatus">상태</label>
-          <select v-model="driverInfo.driverStatus" id="driverStatus" class="info-value input-field">
-            <option :value="true">활성화</option>
-            <option :value="false">비활성화</option>
-          </select>
+          <label class="info-label" for="ownerEmail">이메일</label>
+          <input type="email" v-model="ownerInfo.franchiseOwnerEmail" id="ownerEmail" class="info-value input-field" />
+        </div>
+        <hr class="separator" />
+        <div class="info-row">
+          <label class="info-label" for="ownerEnrollDate">등록일</label>
+          <p class="info-value" id="ownerEnrollDate">{{ ownerInfo.franchiseOwnerEnrollDate }}</p>
+        </div>
+        <hr class="separator" />
+        <div class="info-row">
+          <label class="info-label" for="ownerStatus">점주 상태</label>
+          <p class="info-value" id="ownerStatus">{{ ownerInfo.franchiseOwnerStatus ? '활성화' : '비활성화' }}</p>
         </div>
       </section>
     </section>
@@ -49,26 +56,15 @@ import { ref, onMounted, watch } from 'vue';
 import { useStore } from 'vuex';
 import Swal from 'sweetalert2';
 
-const props = defineProps({
-  isOpen: Boolean,
-  driverCode: [String, Number],
-});
-
-const emit = defineEmits(['close', 'refresh']);
-
 const store = useStore();
-const driverInfo = ref({
-  driverName: '',
-  driverId: '',
-  driverPwd: '',
-  driverPhone: '',
-  driverStatus: true,
-});
+const ownerInfo = ref({});
+const isOpen = ref(false); // 팝업 열림 상태
 
-const fetchDriverInfo = async () => {
+const fetchOwnerInfo = async () => {
   try {
     const accessToken = store.state.accessToken;
-    const response = await fetch(`http://api.pioms.shop/admin/driver/list/detail/${props.driverCode}`, {
+    const userCode = store.state.userCode; // userCode 가져오기
+    const response = await fetch(`http://api.pioms.shop/franchise/mypage/info/${userCode}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -79,22 +75,22 @@ const fetchDriverInfo = async () => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    driverInfo.value = {...data, driverStatus: data.driverStatus};
+    ownerInfo.value = data;
   } catch (error) {
-    console.error('Error fetching driver info:', error);
+    console.error('Error fetching owner info:', error);
   }
 };
 
-const updateDriverInfo = async () => {
+const updateOwnerInfo = async () => {
   try {
     const accessToken = store.state.accessToken;
-    const response = await fetch(`http://api.pioms.shop/admin/driver/update/${props.driverCode}`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/mypage/update/${ownerInfo.value.franchiseOwnerCode}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(driverInfo.value),
+      body: JSON.stringify(ownerInfo.value),
     });
     const text = await response.text();
     if (!response.ok) {
@@ -103,34 +99,29 @@ const updateDriverInfo = async () => {
     Swal.fire({
       icon: 'success',
       title: '수정 완료',
-      text: '배송 기사 정보가 성공적으로 수정되었습니다.',
+      text: '점주 정보가 성공적으로 수정되었습니다.',
     });
-    emit('refresh');
     closePopup();
   } catch (error) {
-    console.error('Error updating driver info:', error);
+    console.error('Error updating owner info:', error);
     Swal.fire({
       icon: 'error',
       title: '수정 실패',
-      text: error.message || '배송 기사 정보 수정에 실패했습니다. 다시 시도하세요.',
+      text: error.message || '점주 정보 수정에 실패했습니다. 다시 시도하세요.',
     });
   }
 };
 
-const resetPassword = async (driverCode) => {
+const resetPassword = async (ownerCode) => {
   try {
     const accessToken = store.state.accessToken;
-    const response = await fetch(`http://api.pioms.shop/admin/driver/reset-password/${driverCode}`, {
+    await fetch(`http://api.pioms.shop/franchise/mypage/reset-password/${ownerCode}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     });
-    if (!response.ok) {
-      const text = await response.text();
-      throw new Error(text);
-    }
     Swal.fire({
       icon: 'success',
       title: '비밀번호 재설정 완료',
@@ -147,18 +138,26 @@ const resetPassword = async (driverCode) => {
 };
 
 const closePopup = () => {
-  emit('close');
+  store.commit('setModalOpen', false);
+  isOpen.value = false; // 팝업 닫기
 };
 
-watch(() => props.isOpen, (newValue) => {
+const openPopup = () => {
+  isOpen.value = true; // 팝업 열기
+  fetchOwnerInfo(); // 점주 정보 가져오기
+};
+
+watch(() => store.state.isModalOpen, (newValue) => {
   if (newValue) {
-    fetchDriverInfo();
+    openPopup();
+  } else {
+    isOpen.value = false;
   }
 });
 
 onMounted(() => {
-  if (props.isOpen) {
-    fetchDriverInfo();
+  if (store.state.isModalOpen) {
+    openPopup(); // 컴포넌트가 마운트될 때 팝업을 열고 정보 가져오기
   }
 });
 </script>
@@ -177,7 +176,7 @@ onMounted(() => {
   z-index: 999;
 }
 
-.driver-info {
+.owner-info {
   border-radius: 15px;
   background-color: #d9d9d9;
   display: flex;
@@ -191,6 +190,7 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   font-weight: 700;
+  gap: 20px;
 }
 
 .logo-section {
@@ -201,7 +201,13 @@ onMounted(() => {
   align-items: center;
 }
 
-.driver-title {
+.company-logo {
+  width: 30px;
+  aspect-ratio: 1.3;
+  object-fit: cover;
+}
+
+.owner-title {
   font-family: Inter, sans-serif;
   flex-grow: 1;
 }
@@ -241,10 +247,10 @@ onMounted(() => {
 .info-row {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: center; /* 중앙 정렬 추가 */
   gap: 20px;
   font-size: 14px;
-  height: 50px;
+  height: 50px; /* 행의 높이를 고정 */
 }
 
 .info-label {
@@ -266,6 +272,6 @@ onMounted(() => {
 .separator {
   border: 1px solid rgba(217, 217, 217, 1);
   background-color: #d9d9d9;
-  margin: 0;
+  margin: 0; /* hr 태그의 기본 margin 제거 */
 }
 </style>

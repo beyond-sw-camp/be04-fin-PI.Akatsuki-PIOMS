@@ -29,7 +29,7 @@ const emits = defineEmits(['close', 'update:currentThirdName']);
 
 const deleteCategoryThird = async () => {
   try {
-    const productResponse = await fetch(`http://localhost:5000/admin/product/category/${props.currentThirdCode}`, {
+    const productResponse = await fetch(`http:///admin/product/category/${props.currentThirdCode}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -48,7 +48,7 @@ const deleteCategoryThird = async () => {
     }
 
 
-    const response = await fetch(`http://localhost:5000/admin/category/third/delete/${props.currentThirdCode}`, {
+    const response = await fetch(`http:///admin/category/third/delete/${props.currentThirdCode}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

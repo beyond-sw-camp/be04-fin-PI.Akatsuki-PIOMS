@@ -11,7 +11,7 @@
     </div>
 
   <div v-if="isLoading">
-    
+
 
     <div class="filter-section">
       <table class="filter-table">
@@ -107,7 +107,7 @@ const getOrderList = async () => {
     if (!accessToken) {
       throw new Error('No access token found');
     }
-    const response = await fetch(`http://localhost:5000/admin/invoice/list`, {
+    const response = await fetch(`http://api.pioms.shop/admin/invoice/list`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

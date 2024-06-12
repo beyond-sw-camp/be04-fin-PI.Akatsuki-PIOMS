@@ -1,8 +1,13 @@
 <template>
+
   <div class="container">
-    <!-- 상단 네비게이션 -->
-    <div class="navigation">
-      <img src="@/assets/icon/즐겨찾기.png" style="width: 20px; height: 20px; position: relative; top: 3px; margin-right: 10px;"><span>상품 및 재고 관리 &gt; 상품 관리 &gt; 즐겨찾기 상품 관리</span>
+    <div class="header">
+      <img src="@/assets/icon/즐겨찾기.png" style="width: 18px" />&nbsp;
+      <span class="breadcrumb">상품 및 재고 관리 &gt; 상품 관리 &gt; 즐겨찾기 상품 관리</span>
+    </div>
+
+    <div class="product-sub-title"> * 조회할 상품의 조건을 선택 후
+      <img src="@/assets/icon/reset.png">초기화 또는<img src="@/assets/icon/search.png">검색을 눌러주세요.
     </div>
 
     <!-- 상품 조회 결과 -->
@@ -41,13 +46,24 @@
         </tr>
         </tbody>
       </table>
+
     </div>
 
+
+    <div class="filter-buttons">
+      <div class="post-btn" id="app">
+        <button class="postBtn">
+        </button>
+        <button @click="navigateToAddProduct" class="add-product-btn">상품 추가</button>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+
+    </div>
     <!-- 액션 버튼 섹션 -->
   </div>
-    <div class="action-buttons">
-      <button @click="navigateToAddProduct" class="add-product-btn">상품 추가</button>
-    </div>
+
 </template>
 
 <script setup>
@@ -81,7 +97,7 @@ const fetchFavorites = async () => {
 
 const removeFavorite = async (productId) => {
   try {
-    const response = await fetch(`http://localhost:5000/franchise/warehouse/removeFavorite/${productId}`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/warehouse/removeFavorite/${productId}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -115,91 +131,168 @@ fetchFavorites();
 
 <style scoped>
 .container {
-  width: 1440px;
   padding: 20px;
 }
 
-.navigation {
-  margin-bottom: 20px;
-  font-weight: bold;
-  font-size: 20px;
+.header {
   display: flex;
+  padding-left: 210px;
+  align-items: center;
+  margin-bottom: 20px;
   justify-content: flex-start;
-  margin-left: 330px;
-  position: relative;
-  top: 2px;
+}
+
+.breadcrumb {
+  font-size: 16px;
+  color: #555;
+  font-weight: bold;
+}
+
+.filter-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.filter-table {
+  border-collapse: collapse;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  width: 100%;
+  max-width: 1440px;
+}
+
+.filter-table td {
+  padding: 5px 10px;
+}
+
+.filter-label {
+  font-weight: bold;
+  text-align: center;
+  border: solid 1px #747474;
+  width: 120px;
+  background-color: #D9D9D9;
+}
+
+.filter-input {
+  text-align: left;
+  border: solid 1px #747474;
+  padding: 5px;
+}
+
+.filter-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.reset-btn, .search-btn {
+  background-color: #fff;
+  color: black;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 8px 16px;
+  font-size: 14px;
+  margin: 0 5px;
 }
 
 .table-container {
-  position: relative;
-  top: 20px;
-  left: 320px;
-  margin-bottom: 40px;
-  width: 1240px;
+  width: 100%;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
 }
 
 .table {
   width: 100%;
+  max-width: 1440px;
   border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-spacing: 0 10px;
+}
+
+.table th {
+  font-weight: bold;
+  color: #000;
+  text-align: center;
 }
 
 .table th,
 .table td {
-  border: 1px solid #ccc;
   padding: 10px;
   text-align: center;
 }
 
 .header1 {
-  background-color: #f0f0f0;
+  background-color: #D9D9D9;
+  font-weight: bold;
+  height: 50px;
+  font-size: 14px;
+  text-align: center;
 }
 
-.status-available {
-  background-color: #4CAF50;
-  color: white;
-  padding: 5px;
-  border-radius: 4px;
-}
-
-.status-temporary {
-  background-color: #FF9800;
-  color: white;
-  padding: 5px;
-  border-radius: 4px;
-}
-
-.status-discontinued {
-  background-color: #F44336;
-  color: white;
-  padding: 5px;
-  border-radius: 4px;
-}
-
-.status-soldout {
-  background-color: #9E9E9E;
-  color: white;
-  padding: 5px;
-  border-radius: 4px;
-}
-
-.button-as-text {
-  background: none;
-  border: none;
-  padding: 0;
-  margin: 0;
-  color: inherit;
-  font: inherit;
-  cursor: pointer;
-  outline: inherit;
-  text-align: left;
-}
-
-.action-buttons {
+.pagination {
   display: flex;
-  justify-content: flex-end;
-  margin-top: 20px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
 }
 
+.pagination button {
+  background-color: #fff;
+  color: black;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 8px 16px;
+  font-size: 14px;
+  margin: 0 5px;
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pagination span {
+  margin: 0 10px;
+  font-weight: bold;
+}
+
+.post-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  width: 1440px;
+}
+
+.postBtn {
+  border: none;
+  background-color: white;
+  cursor: pointer;
+}
+
+.excelBtn {
+  border: none;
+  background-color: white;
+  cursor: pointer;
+}
+.product-sub-title {
+  display: flex;
+  padding-left: 210px;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 20px;
+  justify-content: flex-start;
+}
 .add-product-btn {
   padding: 10px 20px;
   background-color: #ff6f61;
@@ -207,13 +300,11 @@ fetchFavorites();
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  position: absolute;
   display: flex;
-  margin-right: 16.8%;
-  bottom: 580px;
 }
 
 .add-product-btn:hover {
   background-color: #ff3b2f;
 }
+
 </style>

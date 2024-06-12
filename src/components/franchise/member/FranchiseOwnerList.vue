@@ -145,7 +145,7 @@ const closePostPopup = () => {
 
 const downloadExcel = () => {
   axios({
-    url: 'http://localhost:5000/admin/exceldownload/frowner-excel',
+    url: 'http://api.pioms.shop/admin/exceldownload/frowner-excel',
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${store.state.accessToken}`,
@@ -166,7 +166,7 @@ const downloadExcel = () => {
 
 const fetchFranchiseOwners = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/admin/franchise/owner/list?adminCode=${store.state.userCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/franchise/owner/list?adminCode=${store.state.userCode}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${store.state.accessToken}`,
