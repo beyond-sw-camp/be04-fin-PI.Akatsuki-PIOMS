@@ -2,7 +2,7 @@
   <div align="center" >
     <div class="headerTitle" align="left" style="width: 1200px;  margin-top: 1%">
       <p class="product-title">
-        <img class="Cloth" src="@/assets/icon/Cloth.png" style="width: 20px;height: 20px">창고 조회 및 재고 관리 > 창고 조회 > 가맹 창고 조회
+        <img class="Cloth" src="@/assets/icon/Cloth.png">창고 조회 및 재고 관리 > 창고 조회 > 가맹 창고 조회
       </p>
       <h6 class="product-sub-title" style="margin-top: 1%; margin-bottom: 3px"> * 조회할 상품의 조건을 선택 후
         <img src="@/assets/icon/reset.png">초기화 또는 <img src="@/assets/icon/search.png">검색을 눌러주세요.
@@ -298,6 +298,7 @@ getMemberId();
 </script>
 
 <style scoped>
+
 .product-img {
   width: 30px;
   height: 30px;
@@ -479,8 +480,11 @@ getMemberId();
   //margin-left: 18%;
 }
 .headerTitle img {
-  width: 10px;
-  height: 10px;
+  width: 22px;
+  height: 22px;
+  position: relative;
+  top: 2px;
+  margin-right: 10px;
 }
 .headerTitle p {
   font-size: 20px;
@@ -492,11 +496,13 @@ getMemberId();
 }
 
 .product-sub-title {
+  font-size: 12px;
   margin-left: 18%;
 }
 .product-sub-title img {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
+  margin-right: 3px;
 }
 .headerTitle h6 {
   margin-bottom: 5%;
