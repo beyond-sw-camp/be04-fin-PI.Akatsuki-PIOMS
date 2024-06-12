@@ -1,13 +1,12 @@
 <template>
   <div class="container">
+    <div class="header">
+      <img src="@/assets/icon/smile.png" style="width: 18px" />&nbsp;
+      <span class="breadcrumb">가맹점 및 직원 관리 > 가맹점 및 점주 관리 > 점주 관리</span>
+    </div>
 
-    <div align="center"  style="padding-bottom: 30px;">
-      <div style="  max-width: 1440px;justify-content: center;align-items: center;"  >
-        <br>
-        <div style="float: left" ><img src="@/assets/icon/smile.png" style="width: 18px"/>&nbsp;
-          <span class="breadcrumb">가맹점 및 직원 관리 > 가맹점 및 점주 관리 > 점주 전체 조회</span>
-        </div>
-      </div>
+    <div class="product-sub-title"> * 조회할 상품의 조건을 선택 후
+      <img src="@/assets/icon/reset.png">초기화 또는<img src="@/assets/icon/search.png">검색을 눌러주세요.
     </div>
 
     <div class="filter-section">
@@ -15,47 +14,50 @@
         <tr>
           <td class="filter-label">키워드 검색</td>
           <td class="filter-input">
-            <input type="text" v-model="filterOwnerName" placeholder="점주명 검색" @keyup.enter="applyFilters" />
-          </td>
-          <td class="filter-label">가맹점명</td>
-          <td class="filter-input">
-            <input type="text" v-model="filterFranchiseName" placeholder="가맹점명 검색" @keyup.enter="applyFilters" />
+            <select v-model="keyword">
+              <option value="franchiseOwnerName">점주명</option>
+              <option value="franchiseName">가맹점명</option>
+            </select>
+            &nbsp;
+            <input type="text" placeholder="검색어를 입력해주세요" v-model="searchText" />
           </td>
         </tr>
         <tr>
           <td class="filter-label">상태</td>
-          <td colspan="3" class="filter-input">
+          <td class="filter-input">
             <label>
-              <input type="radio" value="" v-model="filterStatus" /> 전체
+              <input type="radio" value="all" v-model="status" /> 전체
             </label>
             &nbsp;
             <label>
-              <input type="radio" value="1" v-model="filterStatus" /> 활성화
+              <input type="radio" value="active" v-model="status" /> 활성화
             </label>
             &nbsp;
             <label>
-              <input type="radio" value="0" v-model="filterStatus" /> 비활성화
+              <input type="radio" value="inactive" v-model="status" /> 비활성화
             </label>
           </td>
         </tr>
       </table>
-    </div>
-    <div class="filter-buttons">
-      <button @click="resetFilters" class="reset-btn">
-        <img src="@/assets/icon/reset.png" alt="Reset" />
-      </button>
-      <button @click="applyFilters" class="search-btn">
-        <img src="@/assets/icon/search.png" alt="Search" />
-      </button>
+
+      <div class="filter-buttons">
+        <button @click="resetFilters" class="reset-btn">
+          <img src="@/assets/icon/reset.png" alt="Reset" />
+        </button>
+        <button @click="applyFilters" class="search-btn">
+          <img src="@/assets/icon/search.png" alt="Search" />
+        </button>
+      </div>
     </div>
 
-    <div align="center" style="padding-bottom: 10px;">
+    <div class="filter-buttons">
       <div class="post-btn" id="app">
         <button @click="showPostPopup = true" class="postBtn">
-          <img src="@/assets/icon/new%20Item.png" alt="postProduct">
+          <img src="@/assets/icon/점주등록.png" alt="postProduct">
         </button>
-        <ProductPostPopup v-if="showPostPopup" @close="showPostPopup = false"/>
-        <button @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
+        <button @click="downloadExcel" class="excelBtn">
+          <img src="@/assets/icon/excel.png" alt="excel">
+        </button>
       </div>
     </div>
 
@@ -91,7 +93,7 @@
           <td>{{ franchiseOwner.ownerPwdCheckCount }}</td>
           <td>{{ franchiseOwner.franchiseOwnerStatus ? '활성화' : '비활성화' }}</td>
           <td>
-            <button @click="showEdit(franchiseOwner)" class="editbutton">조회</button>
+            <button @click="showUpdate(franchiseOwner)" class="editbutton">조회</button>
           </td>
         </tr>
         </tbody>
@@ -103,61 +105,50 @@
       <span>{{ currentPage }} / {{ totalPages }}</span>
       <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
     </div>
-    <!-- Edit Component -->
-    <Edit v-if="editPopup" :franchiseOwnerCode="franchiseOwnerCode" :closeEdit="closeEdit" @refreshData="fetchFranchiseOwners"/>
+    <FranchiseOwnerPostPopup :isOpen="showPostPopup" @close="closePostPopup" @refresh="fetchFranchiseOwners" />
+    <FranchiseOwnerUpdatePopup :isOpen="showUpdatePopup" :franchiseOwnerCode="franchiseOwnerCode" @close="closeUpdatePopup" @refresh="fetchFranchiseOwners" />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
-import Edit from '@/components/franchise/member/FormEdit.vue';
-import ProductPostPopup from "@/components/admin/product/ProductPostPopup.vue";
+import FranchiseOwnerPostPopup from "@/components/franchise/member/FranchiseOwnerPostPopup.vue";
+import FranchiseOwnerUpdatePopup from "@/components/franchise/member/FranchiseOwnerUpdatePopup.vue";
 import axios from "axios";
 
 const store = useStore();
-const accessToken = store.state.accessToken;
 const franchiseOwners = ref([]);
 const filteredFranchiseOwners = ref([]);
-const filterStatus = ref('');
-const filterOwnerName = ref('');
-const filterFranchiseName = ref('');
+const keyword = ref('franchiseOwnerName');
+const searchText = ref('');
+const status = ref('all');
+const showPostPopup = ref(false);
+const showUpdatePopup = ref(false);
+const franchiseOwnerCode = ref(null);
 
 const currentPage = ref(1);
 const itemsPerPage = 15;
 
-const fetchFranchiseOwners = async () => {
-  try {
-    const accessToken = store.state.accessToken;
-    const userRole = store.state.userRole;
-    const userId = store.state.userCode;
-
-    const response = await fetch(`http://localhost:5000/admin/franchise/owner/list?adminCode=${userId}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch franchise owners');
-    }
-
-    const data = await response.json();
-    franchiseOwners.value = data || [];
-    franchiseOwners.value.sort((a, b) => new Date(b.franchiseOwnerEnrollDate) - new Date(a.franchiseOwnerEnrollDate));
-    applyFilters();
-  } catch (error) {
-    console.error('Failed to fetch franchise owners:', error);
-  }
+const showUpdate = (franchiseOwner) => {
+  showUpdatePopup.value = true;
+  franchiseOwnerCode.value = franchiseOwner.franchiseOwnerCode;
 };
+
+const closeUpdatePopup = () => {
+  showUpdatePopup.value = false;
+};
+
+const closePostPopup = () => {
+  showPostPopup.value = false;
+};
+
 const downloadExcel = () => {
   axios({
     url: 'http://localhost:5000/admin/exceldownload/frowner-excel',
     method: 'GET',
     headers: {
-      'Authorization': `Bearer ${accessToken}`,
+      'Authorization': `Bearer ${store.state.accessToken}`,
       'Content-Type': 'application/json',
     },
     responseType: 'blob',
@@ -165,28 +156,41 @@ const downloadExcel = () => {
     const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }));
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', 'FrOwnerList.xlsx');
+    link.setAttribute('download', 'frOwnersList.xlsx');
     document.body.appendChild(link);
     link.click();
   }).catch((error) => {
     console.error('EBad request:', error);
   });
 };
-const applyFilters = () => {
-  filteredFranchiseOwners.value = franchiseOwners.value.filter(owner => {
-    const matchesOwnerName = !filterOwnerName.value || owner.franchiseOwnerName.includes(filterOwnerName.value);
-    const matchesFranchiseName = !filterFranchiseName.value || owner.franchiseName.includes(filterFranchiseName.value);
-    const matchesStatus = filterStatus.value === '' || owner.franchiseOwnerStatus === (filterStatus.value === '1');
-    return matchesOwnerName && matchesFranchiseName && matchesStatus;
-  });
-};
 
-const resetFilters = () => {
-  filterStatus.value = '';
-  filterOwnerName.value = '';
-  filterFranchiseName.value = '';
-  applyFilters();
-  currentPage.value = 1;
+const fetchFranchiseOwners = async () => {
+  try {
+    const response = await fetch(`http://localhost:5000/admin/franchise/owner/list?adminCode=${store.state.userCode}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${store.state.accessToken}`,
+        'Content-Type': 'application/json'
+      },
+    });
+    const data = await response.json();
+    franchiseOwners.value = data.map(franchiseOwner => ({
+      franchiseOwnerCode: franchiseOwner.franchiseOwnerCode,
+      franchiseOwnerName: franchiseOwner.franchiseOwnerName,
+      franchiseName: franchiseOwner.franchiseName,
+      franchiseOwnerId: franchiseOwner.franchiseOwnerId,
+      franchiseOwnerEmail: franchiseOwner.franchiseOwnerEmail,
+      franchiseOwnerPhone: franchiseOwner.franchiseOwnerPhone,
+      franchiseOwnerEnrollDate: franchiseOwner.franchiseOwnerEnrollDate,
+      franchiseOwnerUpdateDate: franchiseOwner.franchiseOwnerUpdateDate,
+      franchiseOwnerDeleteDate: franchiseOwner.franchiseOwnerDeleteDate,
+      ownerPwdCheckCount: franchiseOwner.ownerPwdCheckCount,
+      franchiseOwnerStatus: franchiseOwner.franchiseOwnerStatus
+    }));
+    applyFilters();
+  } catch (error) {
+    console.error('Fetch error:', error);
+  }
 };
 
 const formatDate = (dateString) => {
@@ -202,6 +206,22 @@ const formatDate = (dateString) => {
     second: '2-digit',
     hour12: false
   });
+};
+
+const applyFilters = () => {
+  filteredFranchiseOwners.value = franchiseOwners.value.filter(franchiseOwner => {
+    const matchesKeyword = !searchText.value || franchiseOwner[keyword.value]?.includes(searchText.value);
+    const matchesStatus = status.value === 'all' || (status.value === 'active' ? franchiseOwner.franchiseOwnerStatus : !franchiseOwner.franchiseOwnerStatus);
+    return matchesKeyword && matchesStatus;
+  });
+  currentPage.value = 1;
+};
+
+const resetFilters = () => {
+  keyword.value = 'franchiseOwnerName';
+  searchText.value = '';
+  status.value = 'all';
+  applyFilters();
 };
 
 const paginatedFranchiseOwners = computed(() => {
@@ -229,18 +249,6 @@ const nextPage = () => {
 onMounted(() => {
   fetchFranchiseOwners();
 });
-
-const editPopup = ref(false);
-const franchiseOwnerCode = ref(null);
-
-const showEdit = (franchiseOwner) => {
-  editPopup.value = true;
-  franchiseOwnerCode.value = franchiseOwner.franchiseOwnerCode;
-};
-
-const closeEdit = () => {
-  editPopup.value = false;
-};
 </script>
 
 <style scoped>
@@ -249,8 +257,11 @@ const closeEdit = () => {
 }
 
 .header {
+  display: flex;
+  padding-left: 210px;
+  align-items: center;
   margin-bottom: 20px;
-  margin-left: 215px;
+  justify-content: flex-start;
 }
 
 .breadcrumb {
@@ -299,8 +310,8 @@ const closeEdit = () => {
   justify-content: center;
   margin-top: 10px;
   margin-bottom: 10px;
-
 }
+
 .reset-btn, .search-btn {
   background-color: #fff;
   color: black;
@@ -330,7 +341,6 @@ const closeEdit = () => {
 }
 
 .table th {
-
   font-weight: bold;
   color: #000;
   text-align: center;
@@ -377,10 +387,7 @@ const closeEdit = () => {
   margin: 0 10px;
   font-weight: bold;
 }
-.ExNregi {
-  margin-bottom: 20px;
-  margin-left: 205px;
-}
+
 .post-btn {
   display: flex;
   justify-content: space-between;
@@ -388,19 +395,24 @@ const closeEdit = () => {
   position: relative;
   width: 1440px;
 }
+
 .postBtn {
-  width: 100px;
-  height: 26px;
   border: none;
   background-color: white;
   cursor: pointer;
 }
+
 .excelBtn {
-  width: 100px;
-  height: 26px;
   border: none;
   background-color: white;
   cursor: pointer;
-  margin-right: 0.5%;
+}
+.product-sub-title {
+  display: flex;
+  padding-left: 210px;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 20px;
+  justify-content: flex-start;
 }
 </style>

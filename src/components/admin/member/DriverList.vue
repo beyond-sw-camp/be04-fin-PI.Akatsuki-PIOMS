@@ -1,13 +1,12 @@
 <template>
   <div class="container">
+    <div class="header">
+      <img src="@/assets/icon/Delivery.png" style="width: 18px" />&nbsp;
+      <span class="breadcrumb">배송 기사 관리 > 배송 기사 전체 조회 및 관리</span>
+    </div>
 
-    <div align="center"  style="padding-bottom: 30px;">
-      <div style="  max-width: 1440px;justify-content: center;align-items: center;"  >
-        <br>
-        <div style="float: left" ><img src="@/assets/icon/Delivery.png" style="width: 18px" />&nbsp;&nbsp;
-          <span class="breadcrumb">배송 기사 관리 > 배송 기사 전체 조회 및 관리</span>
-        </div>
-      </div>
+    <div class="product-sub-title"> * 조회할 상품의 조건을 선택 후
+      <img src="@/assets/icon/reset.png">초기화 또는<img src="@/assets/icon/search.png">검색을 눌러주세요.
     </div>
 
     <div class="filter-section">
@@ -48,10 +47,9 @@
 
     <div align="center" style="padding-bottom: 10px;">
       <div class="post-btn" id="app">
-        <button @click="showPostPopup = true" class="postBtn">
-          <img src="@/assets/icon/new%20Item.png" alt="postProduct">
+        <button @click="openPostPopup" class="postBtn">
+          <img src="@/assets/icon/배송기사등록.png" alt="postProduct">
         </button>
-        <ProductPostPopup v-if="showPostPopup" @close="showPostPopup = false"/>
         <button @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
       </div>
     </div>
@@ -90,7 +88,7 @@
             </ul>
           </td>
           <td>
-            <button @click="showEdit(driver)" class="editbutton">조회</button>
+            <button @click="openUpdatePopup(driver.driverCode)" class="editbutton">조회</button>
           </td>
         </tr>
         </tbody>
@@ -102,14 +100,17 @@
       <span>{{ currentPage }} / {{ totalPages }}</span>
       <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
     </div>
+
+    <DriverPostPopup :isOpen="showPostPopup" @close="closePostPopup" @refresh="fetchDrivers" />
+    <DriverUpdatePopup :isOpen="showUpdatePopup" :driverCode="selectedDriverCode" @close="closeUpdatePopup" @refresh="fetchDrivers" />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
-import ProductPostPopup from "@/components/admin/product/ProductPostPopup.vue";
-import axios from "axios";
+import DriverPostPopup from "@/components/driver/info/DriverPostPopup.vue";
+import DriverUpdatePopup from "@/components/driver/info/DriverUpdatePopup.vue";
 
 const store = useStore();
 const accessToken = store.state.accessToken;
@@ -117,13 +118,17 @@ const accessToken = store.state.accessToken;
 const drivers = ref([]);
 const filteredDrivers = ref([]);
 const filterDriverName = ref('');
-const status = ref('all'); // 추가된 상태 필터
+const showPostPopup = ref(false);
+const showUpdatePopup = ref(false);
+const status = ref('all');
+const selectedDriverCode = ref(null);
 
 const currentPage = ref(1);
 const itemsPerPage = 15;
 
 const fetchDrivers = async () => {
   try {
+    console.log('Fetching drivers...');
     const response = await fetch('http://localhost:5000/admin/driver/list', {
       method: 'GET',
       headers: {
@@ -133,49 +138,46 @@ const fetchDrivers = async () => {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to fetch delivery drivers');
+      throw new Error('Failed to fetch drivers');
     }
 
     const data = await response.json();
     drivers.value = data || [];
     applyFilters();
+    console.log('Drivers fetched successfully:', drivers.value);
   } catch (error) {
-    console.error('Failed to fetch delivery drivers:', error);
+    console.error('Failed to fetch drivers:', error);
   }
 };
-const downloadExcel = () => {
-  axios({
-    url: 'http://localhost:5000/admin/exceldownload/driver-excel',
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-    },
-    responseType: 'blob',
-  }).then((response) => {
-    const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }));
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', 'DriverList.xlsx');
-    document.body.appendChild(link);
-    link.click();
-  }).catch((error) => {
-    console.error('EBad request:', error);
-  });
-};
+
 const applyFilters = () => {
   filteredDrivers.value = drivers.value.filter(driver => {
     const matchesDriverName = !filterDriverName.value || driver.driverName.includes(filterDriverName.value);
     const matchesStatus = status.value === 'all' || (status.value === 'active' && driver.driverStatus) || (status.value === 'inactive' && !driver.driverStatus);
     return matchesDriverName && matchesStatus;
   });
+  currentPage.value = 1;
 };
 
 const resetFilters = () => {
   filterDriverName.value = '';
-  status.value = 'all'; // 상태 필터 초기화
+  status.value = 'all';
   applyFilters();
-  currentPage.value = 1;
+};
+
+const formatDate = (dateString) => {
+  if (!dateString) return '-';
+  const date = new Date(dateString);
+  if (isNaN(date)) return 'Invalid Date';
+  return date.toLocaleString('ko-KR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  });
 };
 
 const paginatedLists = computed(() => {
@@ -200,27 +202,59 @@ const nextPage = () => {
   }
 };
 
-const formatDate = (dateString) => {
-  if (!dateString) return '-';
-  const date = new Date(dateString);
-  if (isNaN(date)) return 'Invalid Date';
-  return date.toLocaleString('ko-KR', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false
-  });
+const downloadExcel = async () => {
+  try {
+    console.log('Downloading Excel...');
+    const response = await fetch('http://api.pioms.shop/admin/exceldownload/driver-excel', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', '배송기사리스트.xlsx');
+    document.body.appendChild(link);
+    link.click();
+    console.log('Excel downloaded successfully.');
+  } catch (error) {
+    console.error('Failed to download Excel:', error);
+  }
+};
+
+const openPostPopup = () => {
+  showPostPopup.value = true;
+  console.log('Post popup opened:', showPostPopup.value); // 디버깅 로그 추가
+};
+
+const closePostPopup = () => {
+  showPostPopup.value = false;
+  console.log('Post popup closed:', showPostPopup.value); // 디버깅 로그 추가
+};
+
+const openUpdatePopup = (driverCode) => {
+  selectedDriverCode.value = driverCode;
+  showUpdatePopup.value = true;
+  console.log('Update popup opened:', showUpdatePopup.value, 'for driver:', driverCode); // 디버깅 로그 추가
+};
+
+const closeUpdatePopup = () => {
+  showUpdatePopup.value = false;
+  selectedDriverCode.value = null;
+  console.log('Update popup closed:', showUpdatePopup.value); // 디버깅 로그 추가
 };
 
 const showEdit = (driver) => {
-  // Add your edit logic here
+  selectedDriverCode.value = driver.driverCode;
+  showUpdatePopup.value = true;
 };
 
 onMounted(() => {
   fetchDrivers();
+  console.log('Component mounted, fetchDrivers called.');
 });
 </script>
 
@@ -358,10 +392,7 @@ onMounted(() => {
   margin: 0 10px;
   font-weight: bold;
 }
-.ExNregi {
-  margin-bottom: 20px;
-  margin-left: 205px;
-}
+
 .post-btn {
   display: flex;
   justify-content: space-between;
@@ -369,6 +400,7 @@ onMounted(() => {
   position: relative;
   width: 1440px;
 }
+
 .postBtn {
   width: 100px;
   height: 26px;
@@ -376,6 +408,7 @@ onMounted(() => {
   background-color: white;
   cursor: pointer;
 }
+
 .excelBtn {
   width: 100px;
   height: 26px;
@@ -383,5 +416,14 @@ onMounted(() => {
   background-color: white;
   cursor: pointer;
   margin-right: 0.5%;
+}
+
+.product-sub-title {
+  display: flex;
+  padding-left: 210px;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 20px;
+  justify-content: flex-start;
 }
 </style>

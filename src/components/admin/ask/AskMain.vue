@@ -79,7 +79,7 @@
         </tr>
         </tbody>
       </table>
-    </div>
+  </div>
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage === 1">이전</button>
       <span>{{ currentPage }} / {{ totalPages }}</span>
