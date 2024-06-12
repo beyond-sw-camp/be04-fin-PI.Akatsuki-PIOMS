@@ -1,9 +1,13 @@
 <template>
 
   <div class="container">
-    <div class="header">
-      <img src="@/assets/icon/Delivery.png" style="width: 18px"/>&nbsp;
-      <span class="breadcrumb">가맹점 및 직원 관리 > 가맹점 및 점주 관리 > 가맹점 관리</span>
+    <div class="header" align="center"  style="padding-bottom: 30px;">
+      <div style="  max-width: 1440px;justify-content: center;align-items: center;"  >
+        <br>
+        <div style="float: left" ><img src="@/assets/icon/Delivery.png" style="width: 18px"/>&nbsp;
+          <span class="breadcrumb">배송 및 발주 관리 > 발주 관리 > 발주목록 조회 및 승인</span>
+        </div>
+      </div>
     </div>
 
     <div class="product-sub-title"> * 조회할 상품의 조건을 선택 후
@@ -90,7 +94,7 @@
             @dblclick="showDetailPopup(item)"
             @mouseenter="highlightRow(rowIndex)"
             @mouseleave="resetRowColor(rowIndex)"
-            class="allpost"
+            class="tr__bd"
         >
           <td class="num">{{ item.orderCode }}</td>
           <td>{{ item.franchiseName }}</td>
@@ -288,201 +292,210 @@ const resetRowColor = (index) => {
 
 
 <style scoped>
-  .container {
-    padding: 20px;
-  }
+.container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  .header {
-    display: flex;
-    padding-left: 210px;
-    align-items: center;
-    margin-bottom: 20px;
-    justify-content: flex-start;
-  }
+.header {
+  width: 100%;
+  max-width: 1440px;
+  text-align: center;
+  padding-bottom: 30px;
+}
 
-  .breadcrumb {
-    font-size: 16px;
-    color: #555;
-    font-weight: bold;
-  }
+.header-content {
+  display: flex;
+  align-items: center;
+}
 
-  .filter-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 20px;
-  }
+.header-icon {
+  width: 18px;
+}
 
-  .filter-table {
-    border-collapse: collapse;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 10px;
-    width: 100%;
-    max-width: 1440px;
-  }
+.breadcrumb {
+  font-size: 16px;
+  color: #555;
+  font-weight: bold;
+}
 
-  .filter-table td {
-    padding: 5px 10px;
-  }
+.product-sub-title {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 20px;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 1440px;
+  padding-left: 10px;
+}
 
-  .filter-label {
-    font-weight: bold;
-    text-align: center;
-    border: solid 1px #747474;
-    width: 120px;
-    background-color: #D9D9D9;
-  }
+.filter-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 1440px;
+}
 
-  .filter-input {
-    text-align: left;
-    border: solid 1px #747474;
-    padding: 5px;
-  }
+.filter-table {
+  border-collapse: collapse;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  width: 100%;
+}
 
-  .filter-buttons {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-    margin-bottom: 10px;
+.filter-table td {
+  padding: 5px 10px;
+}
 
-  }
-  .reset-btn, .search-btn {
-    background-color: #fff;
-    color: black;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    padding: 8px 16px;
-    font-size: 14px;
-    margin: 0 5px;
-  }
+.filter-label {
+  font-weight: bold;
+  text-align: center;
+  border: solid 1px #747474;
+  width: 120px;
+  background-color: #d9d9d9;
+}
 
-  .table-container {
-    width: 100%;
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: center;
-  }
+.filter-input {
+  text-align: left;
+  border: solid 1px #747474;
+  padding: 5px;
+}
 
-  .table {
-    width: 100%;
-    max-width: 1440px;
-    border-collapse: collapse;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-spacing: 0 10px;
-  }
+.filter-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  max-width: 1440px;
+}
 
-  .table th {
+.reset-btn,
+.search-btn {
+  background-color: #fff;
+  color: black;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 8px 16px;
+  font-size: 14px;
+  margin: 0 5px;
+}
 
-    font-weight: bold;
-    color: #000;
-    text-align: center;
-  }
+.table th {
+  font-weight: bold;
+  color: #000;
+  text-align: center;
+}
 
-  .table th,
-  .table td {
-    padding: 10px;
-    text-align: center;
-  }
+.table th,
+.table td {
+  padding: 10px;
+  text-align: center;
+}
 
-  .header1 {
-    background-color: #D9D9D9;
-    font-weight: bold;
-    height: 40px;
-    font-size: 14px;
-    text-align: center;
-  }
+.header1 {
+  background-color: #d9d9d9;
+  font-weight: bold;
+  height: 50px;
+  font-size: 14px;
+  text-align: center;
+}
 
-  .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
-    margin-bottom: 100px;
-  }
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 100px;
+}
 
-  .pagination button {
-    background-color: #fff;
-    color: black;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    cursor: pointer;
-    padding: 8px 16px;
-    font-size: 14px;
-    margin: 0 5px;
-  }
+.pagination button {
+  background-color: #fff;
+  color: black;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 8px 16px;
+  font-size: 14px;
+  margin: 0 5px;
+}
 
-  .pagination button:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
+.pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
 
-  .pagination span {
-    margin: 0 10px;
-    font-weight: bold;
-  }
+.pagination span {
+  margin: 0 10px;
+  font-weight: bold;
+}
 
-  .post-btn {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    width: 1440px;
-  }
+.post-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1440px;
+}
 
-  .postBtn {
-    border: none;
-    background-color: white;
-    cursor: pointer;
-  }
+.postBtn {
+  border: none;
+  background-color: white;
+  cursor: pointer;
+}
 
-  .excelBtn {
-    border: none;
-    background-color: white;
-    cursor: pointer;
-  }
+.excelBtn {
+  border: none;
+  background-color: white;
+  cursor: pointer;
+}
 
-  .product-sub-title {
-    display: flex;
-    padding-left: 210px;
-    align-items: center;
-    gap: 5px;
-    margin-bottom: 20px;
-    justify-content: flex-start;
-  }
+.tr__bd:hover {
+  background-color: #f2f2f2;
+}
 
+.tr__bd td {
+  border-bottom: 1px solid #ddd;
+  font-size: 12px;
+}
 
+.tr__bd:last-child td {
+  border-bottom: none;
+}
 
+.table-container {
+  width: 100%;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
 
-  .radio-group {
-    /* border: 2px solid #9d9d9d; */
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 16px;
-    border-radius: 5px;
-  }
+.table {
+  width: 100%;
+  max-width: 1440px;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-spacing: 0 10px;
+  table-layout: fixed; /* 고정된 레이아웃을 사용하여 셀 너비를 고정 */
+}
 
-  .radio-group .title {
-    margin-right: 20px;
-  }
-  .radio-group .left {
-    background-color: #d9d9d9;
-    padding: 10px ;
-    width: 100px ;
-    justify-content: center;
-  }
-
-  .radio-group label {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-    font-size: 16px;
-  }
+.table th, .table td {
+  padding: 10px;
+  text-align: center;
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  overflow: hidden;
+  text-overflow: ellipsis; /* 내용이 넘칠 때 "..." 표시 */
+}
 
   .condition-button {
     display: inline-block;
@@ -511,78 +524,4 @@ const resetRowColor = (index) => {
   .condition-button.inspection-completed {
     background-color: #45a049; /* Color for 검수완료 */
   }
-
-  /* 여기부턴 재현님꺼 */
-  .container {
-    position: relative;
-    /*min-height: 100vh; !* Ensure the container takes at least the full height of the viewport *!*/
-  }
-
-
-  .date-range span {
-    margin: 0 5px;
-  }
-
-  .action-buttons {
-    max-width: 1300px;
-    justify-content: center; /* 가운데 정렬 */
-    align-items: center;
-  }
-  .reset-btn{
-    background-color: #fff;
-    color: black;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    padding: 8px 8px;
-    font-size: 14px;
-    margin: 0 5px;
-  }
-
-  .search-btn {
-    background-color: #fff;
-    color: black;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    padding: 8px 8px;
-    font-size: 14px;
-    margin: 0 5px;
-    grid-column-start: 4;
-  }
-
-  .reset-btn:hover, .search-btn:hover {
-    background-color: #f0f0f0;
-  }
-  .create-btn {
-    background-color: #fff;
-    color: black;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    cursor: pointer;
-    padding: 8px 16px;
-    font-size: 14px;
-    //position: relative;
-    bottom: 3px; /* 원하는 위치로 이동 */
-    left: 546px ; /* 원하는 위치로 이동 */
-    grid-column-start:6 ;
-  }
-
-
-  .allpost {
-    text-align: center;
-    padding: 10px 0;
-    height: 30px;
-  }
-
-  .allpost .num {
-    width: 5%;
-  }
-
-  .allpost td {
-    font-size: 14px;
-
-  }
-
-
 </style>
