@@ -1,13 +1,12 @@
 <template>
   <div class="modal">
     <div class="modal-content">
-      <h3>대분류 카테고리 수정</h3>
+      <h3>대분류 카테고리 삭제</h3>
       <p>카테고리 코드: {{ currentFirstCode }}</p>
       <p>카테고리 이름: {{ currentFirstName}}</p>
-      <input type="text" v-bind:value="currentFirstName" v-on:input="updateFirstName= $event.target.value">
       <div class="button-container">
-        <button @click="saveCategoryFirst" class="update-button">수정</button>
-        <button @click="closePopup" class="close-button">취소</button>
+        <button @click="deleteCategoryFirst" class="confirm-button">삭제</button>
+        <button @click="closePopup" class="cancel-button">취소</button>
       </div>
     </div>
   </div>
@@ -16,7 +15,7 @@
 <script setup>
 import { defineProps, defineEmits, ref } from 'vue';
 import { useStore } from 'vuex';
-import CategoryList from "@/components/admin/Category/CategoryList.vue";
+import CategoryList from "@/components/admin/category/CategoryList.vue";
 import Swal from "sweetalert2";
 
 const store = useStore();
@@ -26,44 +25,51 @@ const props = defineProps({
   currentFirstCode: String,
   currentFirstName: String,
 });
-const updateFirstName = ref('');
+
 const emits = defineEmits(['close', 'update:currentFirstName']);
 
+const DeleteModalVisible = ref(false);
 
-const saveCategoryFirst = async () => {
-  if (!updateFirstName.value.trim()) {
-    await Swal.fire({
-      icon: 'warning',
-      title: '카테고리명 누락',
-      text: '카테고리명을 입력해주세요.',
-    });
-    return;
-  }
+const showDeleteModal = () => {
+  DeleteModalVisible.value = true;
+}
 
-  const requestData = {
-    categoryFirstName: updateFirstName.value
-  };
+const closeDeleteModal = () => {
+  DeleteModalVisible.value = false;
+}
 
-  console.log('Request Data:', requestData);
+const deleteCategoryFirst = async () => {
 
   try {
-    const response = await fetch(`http://localhost:5000/admin/category/first/update/${props.currentFirstCode}`, {
-      method: 'PUT',
+    const categorySecondResponse = await fetch(`http://localhost:5000/admin/category/second/list/detail/categoryfirst/${props.currentFirstCode}`, {
+      method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(requestData)
-    });
+    })
+    const categorySeconds = await categorySecondResponse.json();
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`카테고리 대분류 수정에 실패했습니다. 상태 코드: ${response.status}, 메시지: ${errorText}`);
+    if(categorySeconds.length > 0) {
+      await Swal.fire({
+        icon: 'success',
+        title: '대분류 카테고리 삭제 실패',
+        text: '카테고리를 삭제할 수 없습니다. 하위 카테고리가 존재합니다.',
+      });
+      return;
     }
+
+    const response = await fetch(`http://localhost:5000/admin/category/first/delete/${props.currentFirstCode}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
     await Swal.fire({
       icon: 'success',
-      title: '카테고리 수정 성공!',
-      text: '카테고리 대분류가 성공적으로 수정되었습니다.',
+      title: '카테고리 삭제 성공!',
+      text: '대분류 카테고리를 삭제하였습니다.',
     });
     location.reload(CategoryList);
     emits('close');
@@ -111,24 +117,23 @@ const closePopup = () => {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin-top: 4%;
 }
 
-.update-button,
-.close-button {
+.confirm-button,
+.cancel-button {
   cursor: pointer;
   padding: 5px 10px;
   border-radius: 3px;
   margin-right: 10px;
 }
 
-.update-button {
+.confirm-button {
   background-color: #344DAF;
   border: none;
   color: white;
 }
 
-.close-button {
+.cancel-button {
   background-color: #FF6285;
   border: none;
   color: white;

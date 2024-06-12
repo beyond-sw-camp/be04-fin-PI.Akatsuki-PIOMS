@@ -1,12 +1,16 @@
 <template xmlns="http://www.w3.org/1999/html">
-  <div align="center" >
-    <div class="headerTitle" align="left" style="width: 1440px;  margin-top: 1%">
-        <p class="product-title"><img class="Cloth" src="@/assets/icon/Cloth.png" style="width: 20px;height: 20px">상품 및 상품 카테고리 관리 > 상품 관리 > 상품 전체 조회 및 관리</p>
-    <h6 class="product-sub-title" style="margin-top: 1%; margin-bottom: 3px"> * 조회할 상품의 조건을 선택 후
-      <img src="@/assets/icon/reset.png">초기화 또는 <img src="@/assets/icon/search.png">검색을 눌러주세요.
-    </h6>
+  <div class="container">
+    <div class="header">
+      <img src="@/assets/icon/가맹점.png" style="width: 18px"/>&nbsp;
+      <span class="breadcrumb">상품 및 상품 카테고리 관리 > 상품 관리 > 상품 전체 조회 및 관리</span>
     </div>
+
+
+
+  <div class="product-sub-title"> * 조회할 상품의 조건을 선택 후
+    <img src="@/assets/icon/reset.png">초기화 또는<img src="@/assets/icon/search.png">검색을 눌러주세요.
   </div>
+
   <div>
     <div class="filter-section">
       <div>
@@ -16,18 +20,6 @@
           <td class="filter-label">상품명</td>
           <td class="filter-input">
             <input type="text" v-model="filterProductName" @keyup.enter="applyFilters" class="textInput" placeholder="상품명을 입력하세요."/>
-          </td>
-        </tr>
-        <tr>
-          <td class="filter-label">상품상태</td>
-          <td class="filter-input">
-            <select id="filterStatus" v-model="filterStatus" class="textInput">
-              <option hidden="hidden" value="">전체</option>
-              <option value="공급가능">공급가능</option>
-              <option value="일시제한">일시제한</option>
-              <option value="단종">단종</option>
-              <option value="품절">품절</option>
-            </select>
           </td>
           <td class="filter-label">상품노출상태</td>
           <td class="filter-input">
@@ -39,17 +31,14 @@
           </td>
         </tr>
         <tr>
-          <td class="filter-label">색상</td>
+          <td class="filter-label">상품상태</td>
           <td class="filter-input">
-            <select id="filterColor" v-model="filterColor" class="textInput">
+            <select id="filterStatus" v-model="filterStatus" class="textInput">
               <option hidden="hidden" value="">전체</option>
-              <option value="빨간색">빨간색</option>
-              <option value="주황색">주황색</option>
-              <option value="노란색">노란색</option>
-              <option value="초록색">초록색</option>
-              <option value="파란색">파란색</option>
-              <option value="남색">남색</option>
-              <option value="보라색">보라색</option>
+              <option value="공급가능">공급가능</option>
+              <option value="일시제한">일시제한</option>
+              <option value="단종">단종</option>
+              <option value="품절">품절</option>
             </select>
           </td>
           <td class="filter-label">사이즈</td>
@@ -65,8 +54,23 @@
           </td>
         </tr>
         <tr>
-          <td class="filter-label">카테고리<br>구분</td>
-          <td class="filter-input">
+          <td class="filter-label">색상</td>
+          <td class="filter-input" colspan="3">
+            <select id="filterColor" v-model="filterColor" class="textInput">
+              <option hidden="hidden" value="">전체</option>
+              <option value="빨간색">빨간색</option>
+              <option value="주황색">주황색</option>
+              <option value="노란색">노란색</option>
+              <option value="초록색">초록색</option>
+              <option value="파란색">파란색</option>
+              <option value="남색">남색</option>
+              <option value="보라색">보라색</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td class="filter-label">카테고리 구분</td>
+          <td class="filter-input" colspan="3">
             <select id="firstCategory" v-model="selectedFirstCategory" @change="fetchSecondCategories" class="categories">
               <option value="">대분류</option>
               <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">
@@ -166,6 +170,7 @@
                                            :currentProductName="currentProductName"
                                            :currentProductExposureStatus="currentProductExposureStatus"
                                            :closeDeletePopup="closeDeletePopup"/>
+  </div>
   </div>
 </template>
 
@@ -546,22 +551,6 @@ fetchThirdCategories();
   margin-top: 10px;
 }
 
-.postBtn {
-  width: 100px;
-  height: 26px;
-  border: none;
-  background-color: white;
-  cursor: pointer;
-}
-
-.excelBtn {
-  width: 100px;
-  height: 26px;
-  border: none;
-  background-color: white;
-  cursor: pointer;
-  margin-right: 0.5%;
-}
 
 .reset-btn, .search-btn {
   background-color: #fff;
@@ -573,20 +562,6 @@ fetchThirdCategories();
   font-size: 14px;
   margin: 0 5px;
 }
-
-.post-btn {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-  width: 1440px;
-}
-
-.ExNregi {
-  margin-bottom: 20px;
-  margin-left: 205px;
-}
-
 
 .reset-btn:hover, .search-btn:hover {
   background-color: #fff;
@@ -669,18 +644,6 @@ fetchThirdCategories();
   /* left: -60px; */
 }
 
-.product-sub-title img {
-  width: 20px;
-  height: 20px;
-}
-
-.product-sub-title {
-  font-size: 12px;
-  /* position: relative; */
-  /* left: -55px; */
-  margin: 0;
-}
-
 .headerTitle img {
   width: 10px;
   height: 10px;
@@ -702,7 +665,6 @@ fetchThirdCategories();
   align-items: center;
   margin-top: 10px;
   margin-bottom: 100px;
-  padding-bottom: 150px;
 }
 
 .pagination button {
@@ -753,5 +715,33 @@ fetchThirdCategories();
 
 .container {
   padding: 20px;
+}
+.post-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  width: 1440px;
+}
+
+.postBtn {
+  border: none;
+  background-color: white;
+  cursor: pointer;
+}
+
+.excelBtn {
+  border: none;
+  background-color: white;
+  cursor: pointer;
+}
+
+.product-sub-title {
+  display: flex;
+  padding-left: 210px;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 20px;
+  justify-content: flex-start;
 }
 </style>

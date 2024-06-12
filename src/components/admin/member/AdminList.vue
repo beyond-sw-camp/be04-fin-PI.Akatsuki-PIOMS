@@ -9,6 +9,10 @@
       </div>
     </div>
 
+    <div class="product-sub-title"> * 조회할 상품의 조건을 선택 후
+      <img src="@/assets/icon/reset.png">초기화 또는<img src="@/assets/icon/search.png">검색을 눌러주세요.
+    </div>
+
     <div class="filter-section">
       <table class="filter-table">
         <tr>
@@ -44,7 +48,7 @@
       </button>
     </div>
 
-    <div align="center" style="padding-bottom: 10px;">
+    <div class="filter-buttons">
       <div class="post-btn" id="app">
         <button @click="openPostPopup" class="postBtn">
           <img src="@/assets/icon/관리자등록.png" alt="postProduct">
@@ -388,13 +392,6 @@ onMounted(() => {
   font-weight: bold;
 }
 
-.ExNregi {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
 .post-btn {
   display: flex;
   justify-content: space-between;
@@ -404,19 +401,22 @@ onMounted(() => {
 }
 
 .postBtn {
-  width: 100px;
-  height: 26px;
   border: none;
   background-color: white;
   cursor: pointer;
 }
 
 .excelBtn {
-  width: 100px;
-  height: 26px;
   border: none;
   background-color: white;
   cursor: pointer;
-  margin-right: 0.5%;
+}
+.product-sub-title {
+  display: flex;
+  padding-left: 210px;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 20px;
+  justify-content: flex-start;
 }
 </style>

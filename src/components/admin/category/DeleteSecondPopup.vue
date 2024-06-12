@@ -1,11 +1,11 @@
 <template>
   <div class="modal" @click.self="closePopup">
     <div class="modal-content">
-      <h3>소분류 카테고리 삭제</h3>
-      <p>카테고리 코드: {{ currentThirdCode }}</p>
-      <p>카테고리 이름: {{ currentThirdName}}</p>
+      <h3>중분류 카테고리 삭제</h3>
+      <p>카테고리 코드: {{ currentSecondCode }}</p>
+      <p>카테고리 이름: {{ currentSecondName}}</p>
       <div class="button-container">
-        <button @click="deleteCategoryThird" class="confirm-button">삭제</button>
+        <button @click="deleteCategorySecond" class="confirm-button">삭제</button>
         <button @click="closePopup" class="cancel-button">취소</button>
       </div>
     </div>
@@ -13,42 +13,51 @@
 </template>
 
 <script setup>
-import {defineProps, defineEmits, ref} from 'vue';
+import { defineProps, defineEmits, ref } from 'vue';
 import { useStore } from 'vuex';
-import CategoryList from "@/components/admin/Category/CategoryList.vue";
+import CategoryList from "@/components/admin/category/CategoryList.vue";
 import Swal from "sweetalert2";
 
 const store = useStore();
 const accessToken = store.state.accessToken;
 
 const props = defineProps({
-  currentThirdCode: String,
-  currentThirdName: String,
+  currentSecondCode: String,
+  currentSecondName: String,
 });
-const emits = defineEmits(['close', 'update:currentThirdName']);
+const emits = defineEmits(['close', 'update:currentSecondName']);
 
-const deleteCategoryThird = async () => {
+const DeleteModalVisible = ref(false);
+
+const showDeleteModal = () => {
+  DeleteModalVisible.value = true;
+}
+
+const closeDeleteModal = () => {
+  DeleteModalVisible.value = false;
+}
+const deleteCategorySecond = async () => {
+
   try {
-    const productResponse = await fetch(`http://localhost:5000/admin/product/category/${props.currentThirdCode}`, {
+    const categoryThirdResponse = await fetch(`http://localhost:5000/admin/category/third/list/detail/categorysecond/${props.currentSecondCode}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
-    });
-    const products = await productResponse.json();
+    })
+    const categoryThirds = await categoryThirdResponse.json();
 
-    if(products.length > 0) {
+    if(categoryThirds.length > 0) {
       await Swal.fire({
         icon: 'success',
         title: '중분류 카테고리 삭제 실패',
-        text: '카테고리를 삭제할 수 없습니다. 해당 카테고리를 사용하는 제품이 존재합니다.',
+        text: '카테고리를 삭제할 수 없습니다. 하위 카테고리가 존재합니다.',
       });
       return;
     }
 
-
-    const response = await fetch(`http://localhost:5000/admin/category/third/delete/${props.currentThirdCode}`, {
+    const response = await fetch(`http://localhost:5000/admin/category/second/delete/${props.currentSecondCode}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -59,7 +68,7 @@ const deleteCategoryThird = async () => {
     await Swal.fire({
       icon: 'success',
       title: '카테고리 삭제 성공!',
-      text: '소분류 카테고리를 삭제하였습니다.',
+      text: '중분류 카테고리를 삭제하였습니다.',
     });
     location.reload(CategoryList);
     emits('close');

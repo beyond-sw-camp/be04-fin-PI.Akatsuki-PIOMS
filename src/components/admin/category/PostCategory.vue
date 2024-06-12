@@ -1,9 +1,10 @@
 <template>
-  <div align="center" >
-    <div class="headerTitle" align="left" style="width: 1440px;  margin-top: 1%">
-      <p class="product-title"><img class="Cloth" src="@/assets/icon/Cloth.png" style="width: 20px;height: 20px">상품 및 상품 카테고리 관리 > 상품 카테고리 관리 > 상품 카테고리 등록 관리</p>
+  <div class="container">
+
+    <div class="header">
+      <img src="@/assets/icon/Cloth.png" style="width: 18px"/>&nbsp;
+      <span class="breadcrumb">상품 및 상품 카테고리 관리 > 상품 관리 > 상품 전체 조회 및 관리</span>
     </div>
-  </div>
 
   <div class="category-container">
     <div class="category-select">
@@ -51,11 +52,12 @@
       </div>
     </div>
   </div>
+  </div>
 </template>
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
-import CategoryList from "@/components/admin/Category/CategoryList.vue";
+import CategoryList from "@/components/admin/category/CategoryList.vue";
 import Swal from "sweetalert2";
 
 const store = useStore();
@@ -432,8 +434,13 @@ onMounted(() => {
   border-radius: 4px;
 }
 .header {
-  margin-bottom: 30px;
-  margin-left: 215px;
-  margin-top: 20px;
+  display: flex;
+  padding-left: 210px;
+  align-items: center;
+  margin-bottom: 20px;
+  justify-content: flex-start;
+}
+.container {
+  padding: 20px;
 }
 </style>
