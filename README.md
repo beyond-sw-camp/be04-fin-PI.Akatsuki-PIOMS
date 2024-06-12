@@ -408,7 +408,7 @@ CREATE TABLE `log` (
 
 <details>
 <summary><h3>PIOMS API 명세서</h3></summary>
-
+<a href="http://api.pioms.shop/swagger-ui/index.html">🧾 PIOMS API 명세서</a>
 
 </details>
 </br>
