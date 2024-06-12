@@ -317,7 +317,7 @@ hr {
 #customer-orderCode,
 #customer-invoiceCode {
   display: inline-block;
-  margin-left: 10px; /* 텍스트 사이의 간격을 설정합니다 */
+  margin-left: 10px;
   text-align: center;
 }
 
