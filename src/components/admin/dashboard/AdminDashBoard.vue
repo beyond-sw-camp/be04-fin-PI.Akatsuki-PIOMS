@@ -270,7 +270,7 @@ const getDash = async () => {
     company.value = data.companyVO;
     exchanges.value = data.exchangeList;
     franchises.value = data.franchiseList;
-    notices.value = data.noticeList;
+    notices.value = data.noticeList.sort((a, b) => new Date(b.noticeEnrollDate) - new Date(a.noticeEnrollDate));
     orderStat.value = data.orderStat;
     products.value = data.products;
     isLoading.value = true;
