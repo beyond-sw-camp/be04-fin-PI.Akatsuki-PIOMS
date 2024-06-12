@@ -113,34 +113,6 @@ const breadcrumbs = [
   { label: '문의사항 조회 및 관리', link: null },
 ];
 
-const franchises = ref([]);
-
-const fetchFranchises = async () => {
-  try {
-    const accessToken = store.state.accessToken;
-    if (!accessToken) {
-      throw new Error('No access token found');
-    }
-
-    const response = await fetch('http://api.pioms.shop/api/franchises', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    franchises.value = data.franchises || [];
-  } catch (error) {
-    console.error('Failed to fetch franchises:', error);
-  }
-};
-
 const fetchAsks = async () => {
   try {
     const accessToken = store.state.accessToken;
@@ -228,7 +200,6 @@ const nextPage = () => {
 };
 onMounted(() => {
   fetchAsks();
-  fetchFranchises();
 });
 
 const registPopup = ref(false);
