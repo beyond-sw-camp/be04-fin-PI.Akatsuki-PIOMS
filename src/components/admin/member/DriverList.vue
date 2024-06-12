@@ -4,7 +4,7 @@
       <div style="max-width: 1440px;justify-content: center;align-items: center;"  >
         <br>
         <div style="float: left" ><img src="@/assets/icon/Delivery.png" style="width: 18px"/>&nbsp;
-          <span class="breadcrumb">가맹점 및 직원 관리 > 배송기사 관리 > 배송기사 전체조회</span>
+          <span class="breadcrumb">가맹점 및 직원 관리 > 배송기사 관리 > 배송기사 전체 조회</span>
         </div>
       </div>
     </div>
