@@ -73,12 +73,12 @@
 
 <script setup>
 import {ref} from 'vue';
-import CategoryFirstPopup from "@/components/admin/Category/CategoryFirstPopup.vue";
-import CategorySecondPopup from "@/components/admin/Category/CategorySecondPopup.vue";
-import CategoryThirdPopup from "@/components/admin/Category/CategoryThirdPopup.vue";
-import DeleteFirstPopup from "@/components/admin/Category/DeleteFirstPopup.vue";
-import DeleteSecondPopup from "@/components/admin/Category/DeleteSecondPopup.vue";
-import DeleteThirdPopup from "@/components/admin/Category/DeleteThirdPopup.vue";
+import CategoryFirstPopup from "@/components/admin/category/CategoryFirstPopup.vue";
+import CategorySecondPopup from "@/components/admin/category/CategorySecondPopup.vue";
+import CategoryThirdPopup from "@/components/admin/category/CategoryThirdPopup.vue";
+import DeleteFirstPopup from "@/components/admin/category/DeleteFirstPopup.vue";
+import DeleteSecondPopup from "@/components/admin/category/DeleteSecondPopup.vue";
+import DeleteThirdPopup from "@/components/admin/category/DeleteThirdPopup.vue";
 import { useStore } from 'vuex';
 const store = useStore();
 const accessToken = store.state.accessToken;

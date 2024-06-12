@@ -16,7 +16,7 @@
 <script setup>
 import { defineProps, defineEmits, ref } from 'vue';
 import { useStore } from 'vuex';
-import CategoryList from "@/components/admin/Category/CategoryList.vue";
+import CategoryList from "@/components/admin/category/CategoryList.vue";
 import Swal from "sweetalert2";
 
 const store = useStore();

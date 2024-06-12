@@ -19,12 +19,7 @@
           </td>
           <td class="filter-label">가맹점명</td>
           <td class="filter-input">
-            <select id="selectedFranchise" v-model="selectedFranchise" title="가맹점명 선택">
-              <option value="">가맹점명</option>
-              <option v-for="franchise in franchises" :key="franchise.code" :value="franchise.name">
-                {{ franchise.name }}
-              </option>
-            </select>
+            <input type="text" id="selectedFranchise" v-model="selectedFranchise" placeholder="가맹점명을 입력하세요" title="가맹점명 입력">
           </td>
         </tr>
         <tr>
@@ -118,19 +113,33 @@ const breadcrumbs = [
   { label: '문의사항 조회 및 관리', link: null },
 ];
 
-const franchises = ref([
-  { code: 1, name: 'PIOMS 신사점' },
-  { code: 2, name: 'PIOMS 강남점' },
-  { code: 3, name: 'PIOMS 더현대서울점' },
-  { code: 4, name: 'PIOMS 홍대점' },
-  { code: 5, name: 'PIOMS 성수점' },
-  { code: 6, name: 'PIOMS 논현점' },
-]);
+const franchises = ref([]);
 
-const refreshData = () => {
-  fetchAsks(); // 데이터를 새로고침
+const fetchFranchises = async () => {
+  try {
+    const accessToken = store.state.accessToken;
+    if (!accessToken) {
+      throw new Error('No access token found');
+    }
+
+    const response = await fetch('http://localhost:5000/api/franchises', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    franchises.value = data.franchises || [];
+  } catch (error) {
+    console.error('Failed to fetch franchises:', error);
+  }
 };
-
 
 const fetchAsks = async () => {
   try {
@@ -163,7 +172,7 @@ const fetchAsks = async () => {
 const applyFilters = () => {
   filteredAsks.value = asks.value.filter(ask => {
     const matchesStatus = filterStatus.value === '전체' || ask.askStatus === filterStatus.value;
-    const matchesFranchise = !selectedFranchise.value || ask.franchiseName === selectedFranchise.value; // 필터 조건 수정
+    const matchesFranchise = !selectedFranchise.value || ask.franchiseName.includes(selectedFranchise.value); // 필터 조건 수정
     const matchesStartDate = !startDate.value || new Date(ask.askEnrollDate[0], ask.askEnrollDate[1] - 1, ask.askEnrollDate[2]) >= new Date(startDate.value);
     const matchesEndDate = !endDate.value || new Date(ask.askEnrollDate[0], ask.askEnrollDate[1] - 1, ask.askEnrollDate[2]) <= new Date(endDate.value);
 
@@ -219,6 +228,7 @@ const nextPage = () => {
 };
 onMounted(() => {
   fetchAsks();
+  fetchFranchises();
 });
 
 const registPopup = ref(false);
@@ -243,8 +253,6 @@ const closeEdit = () => {
 }
 
 </script>
-
-
 <style scoped>
 .container {
   padding: 20px;
