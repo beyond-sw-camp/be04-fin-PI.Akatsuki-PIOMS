@@ -108,8 +108,10 @@ import { ref, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import Edit from '@/components/franchise/member/FormEdit.vue';
 import ProductPostPopup from "@/components/admin/product/ProductPostPopup.vue";
+import axios from "axios";
 
 const store = useStore();
+const accessToken = store.state.accessToken;
 const franchiseOwners = ref([]);
 const filteredFranchiseOwners = ref([]);
 const filterStatus = ref('');
@@ -145,7 +147,26 @@ const fetchFranchiseOwners = async () => {
     console.error('Failed to fetch franchise owners:', error);
   }
 };
-
+const downloadExcel = () => {
+  axios({
+    url: 'http://localhost:5000/admin/exceldownload/frowner-excel',
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    responseType: 'blob',
+  }).then((response) => {
+    const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'FrOwnerList.xlsx');
+    document.body.appendChild(link);
+    link.click();
+  }).catch((error) => {
+    console.error('EBad request:', error);
+  });
+};
 const applyFilters = () => {
   filteredFranchiseOwners.value = franchiseOwners.value.filter(owner => {
     const matchesOwnerName = !filterOwnerName.value || owner.franchiseOwnerName.includes(filterOwnerName.value);

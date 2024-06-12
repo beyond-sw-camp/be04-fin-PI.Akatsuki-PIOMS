@@ -104,6 +104,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import ProductPostPopup from "@/components/admin/product/ProductPostPopup.vue";
+import axios from "axios";
 
 const store = useStore();
 const accessToken = store.state.accessToken;
@@ -137,7 +138,26 @@ const fetchDrivers = async () => {
     console.error('Failed to fetch delivery drivers:', error);
   }
 };
-
+const downloadExcel = () => {
+  axios({
+    url: 'http://localhost:5000/admin/exceldownload/driver-excel',
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    responseType: 'blob',
+  }).then((response) => {
+    const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'DriverList.xlsx');
+    document.body.appendChild(link);
+    link.click();
+  }).catch((error) => {
+    console.error('EBad request:', error);
+  });
+};
 const applyFilters = () => {
   filteredDrivers.value = drivers.value.filter(driver => {
     const matchesDriverName = !filterDriverName.value || driver.driverName.includes(filterDriverName.value);
