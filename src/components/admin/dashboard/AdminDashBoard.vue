@@ -146,7 +146,7 @@
             <hr>
             <div class="franchise-list">
               <div v-for="(franchise, rowIndex) in paginatedLists2" :key="rowIndex" class="franchise-info">
-                <div class="franchise-row">
+                <div class="franchise-row" v-if="franchise.franchiseOwner != null">
                   <div>{{ franchise.franchiseName }}</div>
                   <div>{{ franchise.franchiseOwner.franchiseOwnerName }} 관리자님</div>
                 </div>
