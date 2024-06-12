@@ -108,7 +108,7 @@
           <td>{{ item.franchiseWarehouseTotal }}</td>
           <td>{{ item.franchiseWarehouseCount }}</td>
           <td>{{ item.franchiseWarehouseEnable }}</td>
-          <td>{{ item.product.categoryFirstName }} > {{ item.product.categoryFirstName }} > {{ item.product.categoryFirstName }}</td>
+          <td>{{ item.product.categoryFirstName }} > {{ item.product.categorySecondName }} > {{ item.product.categoryThirdName }}</td>
 
           <td v-if="item.franchiseWarehouseFavorite==true">O</td>
           <td v-else>X</td>
