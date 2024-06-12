@@ -1,14 +1,11 @@
 <template>
+  <div class="container">
 
-  <div align="center" >
-    <div class="headerTitle" align="left" style="width: 1440px;  margin-top: 1%">
-      <p class="product-title"><img class="Cloth" src="@/assets/icon/Cloth.png" style="width: 20px;height: 20px">상품 및 상품 카테고리 관리 > 상품 카테고리 관리 > 상품 카테고리 전체 조회</p>
-    </div>
+  <div class="header">
+    <img src="@/assets/icon/Cloth.png" style="width: 18px"/>&nbsp;
+    <span class="breadcrumb">상품 및 상품 카테고리 관리 > 상품 관리 > 상품 전체 조회 및 관리</span>
   </div>
 
-<!--  <div class="headerTitle" align="left" style="margin-left: 17%; margin-top: 1%">-->
-<!--    <p class="product-title"><img src="@/assets/icon/Cloth.png" style="width: 20px;height: 20px">상품 및 상품 카테고리 관리 > 상품 카테고리 관리 > 상품 카테고리 전체 조회 및 수정/삭제</p>-->
-<!--  </div>-->
   <div class="category-container">
     <div class="category-select">
       <div class="category-section">
@@ -71,16 +68,17 @@
     <DeleteSecondPopup v-if="deleteCategorySecondVisible" :currentSecondCode="currentSecondCode" :currentSecondName="currentSecondName" @close="deleteCategorySecondVisible = false"/>
     <DeleteThirdPopup v-if="deleteCategoryThirdVisible" :currentThirdCode="currentThirdCode" :currentThirdName="currentThirdName" @close="deleteCategoryThirdVisible = false"/>
   </div>
+  </div>
 </template>
 
 <script setup>
 import {ref} from 'vue';
-import CategoryFirstPopup from "@/components/admin/Category/CategoryFirstPopup.vue";
-import CategorySecondPopup from "@/components/admin/Category/CategorySecondPopup.vue";
-import CategoryThirdPopup from "@/components/admin/Category/CategoryThirdPopup.vue";
-import DeleteFirstPopup from "@/components/admin/Category/DeleteFirstPopup.vue";
-import DeleteSecondPopup from "@/components/admin/Category/DeleteSecondPopup.vue";
-import DeleteThirdPopup from "@/components/admin/Category/DeleteThirdPopup.vue";
+import CategoryFirstPopup from "@/components/admin/category/CategoryFirstPopup.vue";
+import CategorySecondPopup from "@/components/admin/category/CategorySecondPopup.vue";
+import CategoryThirdPopup from "@/components/admin/category/CategoryThirdPopup.vue";
+import DeleteFirstPopup from "@/components/admin/category/DeleteFirstPopup.vue";
+import DeleteSecondPopup from "@/components/admin/category/DeleteSecondPopup.vue";
+import DeleteThirdPopup from "@/components/admin/category/DeleteThirdPopup.vue";
 import { useStore } from 'vuex';
 const store = useStore();
 const accessToken = store.state.accessToken;
@@ -390,9 +388,14 @@ ul {
   background-color: #FF6285;
 }
 .header {
-  margin-bottom: 30px;
-  margin-left: 215px;
-  margin-top: 20px;
+  display: flex;
+  padding-left: 210px;
+  align-items: center;
+  margin-bottom: 20px;
+  justify-content: flex-start;
+}
+.container {
+  padding: 20px;
 }
 </style>
 

@@ -32,7 +32,7 @@
               <td class="label">점주코드</td>
               <td><input type="number" v-model="franchiseData.franchiseOwnerCode" /></td>
               <td class="label">배송기사 코드</td>
-              <td><input type="number" v-model="franchiseData.deliveryManCode" /></td>
+              <td><input type="number" v-model="franchiseData.driverCode" /></td>
             </tr>
           </table>
           <div class="answer-section">
