@@ -72,7 +72,7 @@ const adminInfo = ref({
 const registerAdmin = async () => {
   try {
     const accessToken = store.state.accessToken;
-    const response = await fetch('http://localhost:5000/admin/register', {
+    const response = await fetch('http://api.pioms.shop/admin/register', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
