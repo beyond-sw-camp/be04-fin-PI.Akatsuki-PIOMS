@@ -74,14 +74,14 @@
       <table class="table">
         <thead>
         <tr class="header1">
-          <th style="width: 5%"> 상품 코드</th>
+          <th style="width: 6%"> 상품 코드</th>
           <th> 상품 이름</th>
           <th> 색상</th>
           <th> 사이즈</th>
           <th> 상품상태</th>
           <th> 상품 누적량</th>
           <th> 상품 보유량</th>
-          <th> 상품 판매가능량</th>
+          <th style="width: 100px"> 상품 판매가능량</th>
           <th style="width: 25%">카테고리</th>
           <th style="width: 5%"> 즐겨찾기</th>
         </tr>
@@ -425,7 +425,7 @@ getMemberId();
 .table td {
   border: 0.5px solid #D9D9D9;
   padding: 8px;
-  width: 80px;
+  width: 90px;
   height: 10px;
   table-layout: fixed;
 }

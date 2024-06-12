@@ -2,12 +2,11 @@
   <div class="container">
     <!-- 상단 네비게이션 -->
     <div class="navigation">
-      <span>상품 및 재고 관리 &gt; 상품 관리 &gt; 즐겨찾기 상품 관리</span>
+      <img src="@/assets/icon/즐겨찾기.png" style="width: 20px; height: 20px; position: relative; top: 3px; margin-right: 10px;"><span>상품 및 재고 관리 &gt; 상품 관리 &gt; 즐겨찾기 상품 관리</span>
     </div>
 
     <!-- 상품 조회 결과 -->
     <div class="table-container">
-      <h3>상품 조회</h3>
       <table class="table">
         <thead>
         <tr class="header1">
@@ -45,10 +44,10 @@
     </div>
 
     <!-- 액션 버튼 섹션 -->
+  </div>
     <div class="action-buttons">
       <button @click="navigateToAddProduct" class="add-product-btn">상품 추가</button>
     </div>
-  </div>
 </template>
 
 <script setup>
@@ -116,16 +115,27 @@ fetchFavorites();
 
 <style scoped>
 .container {
+  width: 1440px;
   padding: 20px;
 }
 
 .navigation {
   margin-bottom: 20px;
   font-weight: bold;
+  font-size: 20px;
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 330px;
+  position: relative;
+  top: 2px;
 }
 
 .table-container {
+  position: relative;
+  top: 20px;
+  left: 320px;
   margin-bottom: 40px;
+  width: 1240px;
 }
 
 .table {
@@ -197,6 +207,10 @@ fetchFavorites();
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  position: absolute;
+  display: flex;
+  margin-right: 16.8%;
+  bottom: 580px;
 }
 
 .add-product-btn:hover {

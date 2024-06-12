@@ -2,10 +2,10 @@
   <div align="center" >
     <div class="headerTitle" align="left" style="width: 1200px;  margin-top: 1%">
       <p class="product-title">
-        <img class="Cloth" src="@/assets/icon/Cloth.png" style="width: 20px;height: 20px">창고 조회 및 재고 관리 > 창고 조회 > 본사 창고 조회
+        <img class="Cloth" src="@/assets/icon/Cloth.png" style="width: 25px; height: 25px; margin-right: 10px; position: relative; top: 3px;"/>창고 조회 및 재고 관리 > 창고 조회 > 본사 창고 조회
       </p>
       <h6 class="product-sub-title" style="margin-top: 1%; margin-bottom: 3px"> * 조회할 상품의 조건을 선택 후
-        <img src="@/assets/icon/reset.png">초기화 또는 <img src="@/assets/icon/search.png">검색을 눌러주세요.
+        <img style="width: 18px; height: 18px; margin-right: 3px;" src="@/assets/icon/reset.png">초기화 또는 <img  style="width: 18px; height: 18px; margin-right: 3px;" src="@/assets/icon/search.png">검색을 눌러주세요.
       </h6>
     </div>
   </div>
@@ -472,6 +472,7 @@ fetchSecondCategories();
 fetchThirdCategories();
 </script>
 <style scoped>
+
 .pagination button {
   border: none;
   border-radius: 10px;
@@ -671,8 +672,9 @@ fetchThirdCategories();
 
 }
 .product-sub-title img {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
+  margin-right: 3px;
 }
 .headerTitle img {
   width: 10px;
