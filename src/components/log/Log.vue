@@ -52,6 +52,7 @@
           </td>
         </tr>
       </table>
+    </div>
       <div class="filter-buttons">
         <button @click="resetFilters" class="reset-btn">
           <img src="@/assets/icon/reset.png" alt="Reset" />
@@ -60,7 +61,6 @@
           <img src="@/assets/icon/search.png" alt="Search" />
         </button>
       </div>
-    </div>
 
     <div class="filter-buttons">
       <div class="post-btn" id="app">
