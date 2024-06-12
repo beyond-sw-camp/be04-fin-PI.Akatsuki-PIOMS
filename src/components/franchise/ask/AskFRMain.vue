@@ -242,7 +242,15 @@ const refreshData = () => {
   position: relative;
   min-height: 100vh;
 }
+.product-sub-title {
+  margin: 0;
+  font-size: 12px;
 
+}
+.product-sub-title img {
+  width: 20px;
+  height: 20px;
+}
 .filter-section {
   display: flex;
   justify-content: center;
