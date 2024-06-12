@@ -9,37 +9,34 @@
       <div class="filter-container">
           <div class="radio-group">
             <div class="title"><label style="width:100px">검색 </label></div>
-            <input v-model="filter" placeholder="검색어를 입력하세요" @input="applyFilter" />
+            <input v-model="filter"  placeholder="검색어를 입력하세요" @input="applyFilter" @keydown.enter/>
+
           </div>
 
           <div class="radio-group">
             <div class="title"><label style="width:100px">상품상태</label></div>
 
-            <label>
-              전체 <input type="radio" value="" name="dateOrder" v-model="conditionFilter" @change="applyFilter" checked>
-            </label>
-            <label>
-              공급가능 <input type="radio" value="공급가능" name="dateOrder" v-model="conditionFilter" @change="applyFilter" >
-            </label>
-            <label>
-              일시제한 <input type="radio" value="일시제한" name="dateOrder" v-model="conditionFilter" @change="applyFilter" >
-            </label>
-            <label>
-              단종 <input type="radio" value="단종" name="dateOrder" v-model="conditionFilter" @change="applyFilter" >
-            </label>
-            <label>
-              품절 <input type="radio" value="품절" name="dateOrder" v-model="conditionFilter" @change="applyFilter">
-            </label>
+            <input type="radio" value="" name="dateOrder" v-model="conditionFilter" @change="applyFilter" checked>
+            <label> 전체 </label>
+            <input type="radio" value="공급가능" name="dateOrder" v-model="conditionFilter" @change="applyFilter" >
+            <label>공급가능</label>
+            <input type="radio" value="일시제한" name="dateOrder" v-model="conditionFilter" @change="applyFilter" >
+            <label>일시제한</label>
+            <input type="radio" value="단종" name="dateOrder" v-model="conditionFilter" @change="applyFilter" >
+            <label>단종</label>
+            <input type="radio" value="품절" name="dateOrder" v-model="conditionFilter" @change="applyFilter">
+            <label>품절</label>
+
           </div>
       </div>
 
       <div class="divvv-title">상품 리스트</div>
 
-      <div class="table-container">
+      <div class="table-container" style="max-height: 100px; max-height: 400px; /* 원하는 최대 높이를 설정하세요 */overflow-y: auto; overflow-x: auto;  ">
         <table class="table" style="">
             <thead>
               <tr class="header1">
-                <th>상품 코드</th><th>상품 이름</th><th>상품 가격</th><th>본사 수량</th><th>상품 상태</th><th>색상</th><th>상품 설명</th><th>카테고리(대)</th><th>카테고리(중)</th><th>카테고리(소)</th><th>성별</th>
+                <th>상품 코드</th><th>상품 이름</th><th>상품 가격</th><th>본사 수량</th><th>상품 상태</th><th>색상</th><th>상품 설명</th><th>카테고리(대)</th><th>카테고리(중)</th><th>카테고리(소)</th>
               </tr>
             </thead>
 
@@ -61,7 +58,6 @@
                 <td>{{ product.categoryFirstName }}</td>
                 <td>{{ product.categorySecondName }}</td>
                 <td>{{ product.categoryThirdName }}</td>
-                <td>{{ product.productGender }}</td>
               </tr>
             </tbody>
           </table>
@@ -84,7 +80,7 @@
           <tr v-for="(selectedProduct, index) in selectedProducts" :key="index"
             class="allpost"
           >
-            <td>{{ selectedProduct.productCode }}</td>
+            <td >{{ selectedProduct.productCode }}</td>
             <td>{{ selectedProduct.productName }}</td>
             <td>{{ selectedProduct.productCount }}</td>
             <td><input type="number" v-model="selectedProduct.quantity" min="1" @change="calculateTotalPrice" /></td>
@@ -93,9 +89,9 @@
         </table>
       </div >
         <p v-if="totalPrice > 0">총 가격: {{ totalPrice }}원</p>
-        <div style="display: flex; justify-content: right; gap:10px;">
-        <button style="float: right" class="cancel-btn" @click="exportOrder">발주신청하기</button>
-        <button style="float: right" class="cancel-btn" @click="showPopup" >돌아가기</button>
+      <div style="display: flex; justify-content: right; gap:10px;">
+        <button style="float: right" class="ho-btn" @click="exportOrder">발주신청하기</button>
+        <button style="float: right" class="ho-btn" @click="showPopup" >돌아가기</button>
       </div>
     </div>
   </div>
@@ -130,6 +126,7 @@
   const applyFilter = () => {
     if(conditionFilter.value == ""){
       filteredLists.value = products.value;
+      console.log(filteredLists.value);
       return;
     }
     filteredLists.value = products.value.filter((item) => {
@@ -239,6 +236,7 @@
       throw new Error("네트워크 오류 발생");
     }
     const result = await response.json();
+
     await Swal.fire({
       position: "center",
       icon: "success",
@@ -246,9 +244,9 @@
       showConfirmButton: false,
       timer: 1500
     });
-    props.showDetailPopup();
     location.reload(FranchiseOrderPage);
     props.showPopup();
+
   } catch (error) {
     await Swal.fire({
       position: "center",
@@ -257,7 +255,7 @@
       showConfirmButton: false,
       timer: 1500
     });
-    props.showDetailPopup();
+    props.showPopup();
     location.reload(FranchiseOrderPage);
     console.error("주문 오류 발생:", error);
   }
@@ -267,4 +265,6 @@
 <style scoped>
   @import "../../assets/css/popup.css" ;
   @import "../../assets/css/order.css" ;
+
+
 </style>

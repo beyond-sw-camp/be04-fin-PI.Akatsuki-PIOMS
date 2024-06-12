@@ -30,8 +30,8 @@
             </tr>
           </table>
           <div class="action-buttons">
-            <button @click="props.closeEdit" class="cancel-btn">취소</button>
             <button @click="submitUpdate" class="submit-btn">수정</button>
+            <button @click="props.closeEdit" class="cancel-btn">취소</button>
           </div>
         </div>
       </div>
@@ -107,7 +107,7 @@ const submitUpdate = async () => {
     return;
   }
   try {
-    const response = await fetch(`http://api.pioms.shop/franchise/update/${askCode}`, {
+    const response = await fetch(`http://api.pioms.shop/franchise/update/ask/${askCode}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

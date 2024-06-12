@@ -9,7 +9,7 @@
       </div>
       <div class="dictionary" @click="pdfDownload" style="cursor: pointer;">
         <img class="dictionary_icon" src="@/assets/icon/Dictionary.png" alt="Dictionary"/>
-        <button @click="pdfDownload">배송기사 매뉴얼</button>
+        <button class="pdfDownload" @click="pdfDownload">배송기사 매뉴얼</button>
       </div>
       <div>
         <button class="cta" @click="logout">
@@ -119,6 +119,15 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.pdfDownload {
+  font-weight: bold;
+  font-size: 12px;
+  border: none;
+  padding: 0;
+  margin-left: 5px;
+  background-color: #FFFFFF;
+}
+
 header {
   display: flex;
   justify-content: space-between;
@@ -137,7 +146,7 @@ header {
   width: 100px;
   height: 50px;
   position: relative;
-  bottom: 9px;
+  bottom: 2px;
   left: 7px;
 }
 .Delivery {
@@ -224,7 +233,8 @@ ctca:hover svg {
 }
 
 hr.hr1 {
-  padding: 0;
+  position: relative;
+  bottom: -5px;
   width: 100%;
   border: 0;
   height: 0;

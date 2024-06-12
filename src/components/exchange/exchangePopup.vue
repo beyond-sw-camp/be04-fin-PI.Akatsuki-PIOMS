@@ -35,7 +35,7 @@
           </table>
       </div>
         <br>
-          <div class="divvv-title" style="height: 30px;">선택된 상품 리스트 새 로 고 침 넣 자</div>
+          <div class="divvv-title" style="height: 30px;">선택된 상품 리스트</div>
           <div class="table-container">
             <table class="table">
               <thead>
@@ -67,8 +67,8 @@
           </div>
     </div>
       <div style="display: flex; justify-content: right; gap: 10px">
-        <button @click="exportExchange">반품신청</button>
-        <button class="close" @click="showPopup">돌아가기</button>
+        <button class="ho-btn" @click="exportExchange">반품신청</button>
+        <button class="ho-btn" @click="showPopup">돌아가기</button>
       </div>
       </div>
     </div>

@@ -1,16 +1,25 @@
 <template>
 
+  <div align="center"  style="padding-bottom: 30px;">
+    <div class="action-buttons"  >
+      <br>
+      <div style="float: left" ><img src="@/assets/icon/어드민.png" style="width: 18px"/>&nbsp;
+        <span class="breadcrumb">배송 및 발주 관리 > 발주 관리 > 발주 내역 및 조회 관리</span>
+      </div>
+    </div>
+  </div>
+
     <div class="filter-section">
       <table class="filter-table">
         <tr>
           <td class="filter-label">승인상태</td>
           <td class="filter-input">
             <div class="radio-group">
-              <label> 승인대기 <input type="radio" value="승인대기" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
-              <label> 발주승인 <input type="radio" value="승인완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
-              <label> 발주반려 <input type="radio" value="승인거부" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
-              <label> 검수대기 <input type="radio" value="검수대기" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
-              <label> 검수완료 <input type="radio" value="검수완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
+              <label><input type="radio" value="승인대기" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter">승인대기 </label>
+              <label><input type="radio" value="승인완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter">발주승인 </label>
+              <label><input type="radio" value="승인거부" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter">발주반려 </label>
+              <label><input type="radio" value="검수대기" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter">검수대기 </label>
+              <label><input type="radio" value="검수완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter">검수완료 </label>
             </div>
           </td>
 
@@ -20,24 +29,14 @@
           </td>
         </tr>
         <tr>
-          <td class="filter-label">가맹점명</td>
-          <td class="filter-input">
-            <input type="text" v-model="filterFranchiseName" />
-          </td>
-          <td class="filter-label">배송(송장)번호</td>
-          <td class="filter-input">
-            <input type="text" v-model="filterInvoiceCode" />
-          </td>
-        </tr>
-
-        <tr>
-          <td class="filter-label">점주명</td>
-          <td class="filter-input">
-            <input type="text" v-model="filterFranchiseOwnerName" />
-          </td>
           <td class="filter-label">주문(발주)일</td>
           <td class="filter-input">
             <input type="date" v-model="filterOrderDate" />
+          </td>
+
+          <td class="filter-label">배송(송장)번호</td>
+          <td class="filter-input">
+            <input type="text" v-model="filterInvoiceCode" />
           </td>
         </tr>
 
@@ -52,7 +51,9 @@
         <img src="@/assets/icon/search.png" alt="Search" />
       </button>
       <br>
-      <button class="create-btn" style="float: right" @click="showPopup" >발주하기</button>
+      <img src="@/assets/icon/excel.png" alt="excel" @click="downloadExcel" style="float:right;">
+
+      <button class="create-btn" style="float: left" @click="showPopup" >발주하기</button>
     </div>
       <br><br><br>
     </div>
@@ -153,6 +154,8 @@ const filterFranchiseOwnerName = ref('');
 const filterInvoiceCode = ref('');
 const filterOrderDate = ref('');
 
+
+
 const downloadExcel = () => {
   axios({
     url: 'http://api.pioms.shop/franchise/exceldownload/order-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
@@ -192,7 +195,6 @@ const getOrderList = async () => {
       credentials: 'include'
     });
     if(response.status == 204){
-      alert("발주 내역이 없습니다.")
       return;
     }
 

@@ -1,16 +1,29 @@
 <template>
+
+  <div class="container">
+    <div class="header">
+      <img src="@/assets/icon/Delivery.png" style="width: 18px"/>&nbsp;
+      <span class="breadcrumb">가맹점 및 직원 관리 > 가맹점 및 점주 관리 > 가맹점 관리</span>
+    </div>
+
+    <div class="product-sub-title"> * 조회할 상품의 조건을 선택 후
+      <img src="@/assets/icon/reset.png">초기화 또는<img src="@/assets/icon/search.png">검색을 눌러주세요.
+    </div>
+
   <div v-if="isLoading">
+
+
     <div class="filter-section">
       <table class="filter-table">
         <tr>
           <td class="filter-label">승인상태</td>
           <td class="filter-input">
             <div class="radio-group">
-              <label> 승인대기 <input type="radio" value="승인대기" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
-              <label> 발주승인 <input type="radio" value="승인완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
-              <label> 발주반려 <input type="radio" value="승인거부" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
-              <label> 검수대기 <input type="radio" value="검수대기" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
-              <label> 검수완료 <input type="radio" value="검수완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"></label>
+              <label> <input type="radio" value="승인대기" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"> 승인대기 </label>
+              <label> <input type="radio" value="승인완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"> 발주승인 </label>
+              <label> <input type="radio" value="승인거부" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"> 발주반려 </label>
+              <label> <input type="radio" value="검수대기" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"> 검수대기 </label>
+              <label> <input type="radio" value="검수완료" name="ConditionOrder" v-model="conditionFilter" @change="applyFilter"> 검수완료 </label>
             </div>
           </td>
 
@@ -42,18 +55,17 @@
         </tr>
 
       </table>
+
+      <div class="filter-buttons">
+        <button @click="resetFilters" class="reset-btn">
+          <img src="@/assets/icon/reset.png" alt="Reset" />
+        </button>
+        <button @click="applyFilter" class="search-btn">
+          <img src="@/assets/icon/search.png" alt="Search" />
+        </button>
+      </div>
     </div>
-  <div align="center">
-    <div class="action-buttons">
-      <button @click="resetFilters" class="reset-btn">
-        <img src="@/assets/icon/reset.png" alt="Reset" />
-      </button>
-      <button @click="applyFilter" class="search-btn">
-        <img src="@/assets/icon/search.png" alt="Search" />
-      </button>
-      <br><br><br>
-    </div>
-  </div>
+
     <OrderDetail
         v-if="createDetailPopup"
         :showDetailPopup="showDetailPopup"
@@ -113,11 +125,11 @@
   </div>
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage === 1">이전</button>
-      <span>페이지 {{ currentPage }} / {{ totalPages }}</span>
+      <span>{{ currentPage }} / {{ totalPages }}</span>
       <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
     </div>
   </div>
-
+  </div>
 </template>
 
 
@@ -156,25 +168,7 @@ const filterInvoiceCode = ref('');
 const filterOrderDate = ref('');
 
 const getOrderList = async () => {
-  let timerInterval;
-  Swal.fire({
-    title: "반품신청서 불러오는 중입니다...",
-    timer: 2000,
-    timerProgressBar: true,
-    didOpen: () => {
-      Swal.showLoading();
-      const timer = Swal.getPopup().querySelector("b");
-      timerInterval = setInterval(() => {
-      }, 100);
-    },
-    willClose: () => {
-      clearInterval(timerInterval);
-    }
-  }).then((result) => {
-    if (result.dismiss === Swal.DismissReason.timer) {
-      console.log("I was closed by the timer");
-    }
-  });
+
   try {
     const accessToken = store.state.accessToken;
     if (!accessToken) {
@@ -188,13 +182,12 @@ const getOrderList = async () => {
       },
       credentials: 'include'
     });
-
-
+    isLoading.value=true;
     if (!response.ok) {
       throw new Error('네트워크 오류 발생');
     }
-
     const data = await response.json();
+
     if (data.length > 0) {
       lists.value = data.map(({ ...rest }) => rest);
       filteredLists.value = lists.value;
@@ -202,24 +195,7 @@ const getOrderList = async () => {
       lists.value = [];
       filteredLists.value = [];
     }
-    isLoading.value=true;
-
-    await Swal.fire({
-      position: "center",
-      icon: "success",
-      title: "발주 목록 불러오기 성공.",
-      showConfirmButton: false,
-      timer: 1500
-    });
-
   } catch (error) {
-    await Swal.fire({
-      position: "center",
-      icon: "success",
-      title: "발주 목록 불러오기 실패.",
-      showConfirmButton: false,
-      timer: 1500
-    });
     console.error('오류 발생:', error);
   }
 };
@@ -312,6 +288,301 @@ const resetRowColor = (index) => {
 
 
 <style scoped>
-  @import "../../assets/css/order.css" ;
+  .container {
+    padding: 20px;
+  }
+
+  .header {
+    display: flex;
+    padding-left: 210px;
+    align-items: center;
+    margin-bottom: 20px;
+    justify-content: flex-start;
+  }
+
+  .breadcrumb {
+    font-size: 16px;
+    color: #555;
+    font-weight: bold;
+  }
+
+  .filter-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .filter-table {
+    border-collapse: collapse;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%;
+    max-width: 1440px;
+  }
+
+  .filter-table td {
+    padding: 5px 10px;
+  }
+
+  .filter-label {
+    font-weight: bold;
+    text-align: center;
+    border: solid 1px #747474;
+    width: 120px;
+    background-color: #D9D9D9;
+  }
+
+  .filter-input {
+    text-align: left;
+    border: solid 1px #747474;
+    padding: 5px;
+  }
+
+  .filter-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+  }
+  .reset-btn, .search-btn {
+    background-color: #fff;
+    color: black;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 8px 16px;
+    font-size: 14px;
+    margin: 0 5px;
+  }
+
+  .table-container {
+    width: 100%;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .table {
+    width: 100%;
+    max-width: 1440px;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-spacing: 0 10px;
+  }
+
+  .table th {
+
+    font-weight: bold;
+    color: #000;
+    text-align: center;
+  }
+
+  .table th,
+  .table td {
+    padding: 10px;
+    text-align: center;
+  }
+
+  .header1 {
+    background-color: #D9D9D9;
+    font-weight: bold;
+    height: 40px;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 100px;
+  }
+
+  .pagination button {
+    background-color: #fff;
+    color: black;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 8px 16px;
+    font-size: 14px;
+    margin: 0 5px;
+  }
+
+  .pagination button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .pagination span {
+    margin: 0 10px;
+    font-weight: bold;
+  }
+
+  .post-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    width: 1440px;
+  }
+
+  .postBtn {
+    border: none;
+    background-color: white;
+    cursor: pointer;
+  }
+
+  .excelBtn {
+    border: none;
+    background-color: white;
+    cursor: pointer;
+  }
+
+  .product-sub-title {
+    display: flex;
+    padding-left: 210px;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 20px;
+    justify-content: flex-start;
+  }
+
+
+
+
+  .radio-group {
+    /* border: 2px solid #9d9d9d; */
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 16px;
+    border-radius: 5px;
+  }
+
+  .radio-group .title {
+    margin-right: 20px;
+  }
+  .radio-group .left {
+    background-color: #d9d9d9;
+    padding: 10px ;
+    width: 100px ;
+    justify-content: center;
+  }
+
+  .radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 16px;
+  }
+
+  .condition-button {
+    display: inline-block;
+    padding: 2px 5px; /* 최소한의 패딩으로 글씨 영역만큼만 색이 적용되도록 합니다 */
+    border-radius: 3px;
+    color: #fff;
+    font-weight: bold;
+  }
+
+  .condition-button.pending {
+    background-color: #ffcc00; /* Color for 승인대기 */
+  }
+
+  .condition-button.approved {
+    background-color: #007bff; /* Color for 승인완료 */
+  }
+
+  .condition-button.rejected {
+    background-color: #ff6285; /* Color for 승인거절 */
+  }
+
+  .condition-button.inspection-pending {
+    background-color: #ffcc00; /* Color for 검수대기 */
+  }
+
+  .condition-button.inspection-completed {
+    background-color: #45a049; /* Color for 검수완료 */
+  }
+
+  /* 여기부턴 재현님꺼 */
+  .container {
+    position: relative;
+    /*min-height: 100vh; !* Ensure the container takes at least the full height of the viewport *!*/
+  }
+
+
+  .date-range span {
+    margin: 0 5px;
+  }
+
+  .action-buttons {
+    max-width: 1300px;
+    justify-content: center; /* 가운데 정렬 */
+    align-items: center;
+  }
+  .reset-btn{
+    background-color: #fff;
+    color: black;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 8px 8px;
+    font-size: 14px;
+    margin: 0 5px;
+  }
+
+  .search-btn {
+    background-color: #fff;
+    color: black;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 8px 8px;
+    font-size: 14px;
+    margin: 0 5px;
+    grid-column-start: 4;
+  }
+
+  .reset-btn:hover, .search-btn:hover {
+    background-color: #f0f0f0;
+  }
+  .create-btn {
+    background-color: #fff;
+    color: black;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 8px 16px;
+    font-size: 14px;
+    //position: relative;
+    bottom: 3px; /* 원하는 위치로 이동 */
+    left: 546px ; /* 원하는 위치로 이동 */
+    grid-column-start:6 ;
+  }
+
+
+  .allpost {
+    text-align: center;
+    padding: 10px 0;
+    height: 30px;
+  }
+
+  .allpost .num {
+    width: 5%;
+  }
+
+  .allpost td {
+    font-size: 14px;
+
+  }
+
 
 </style>

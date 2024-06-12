@@ -35,7 +35,7 @@
 
 
       <div class="divvv-title">상품 리스트</div>
-      <div class="table-container">
+      <div class="table-container" style="max-height: 100px; max-height: 400px; /* 원하는 최대 높이를 설정하세요 */overflow-y: auto; overflow-x: auto;  ">
         <table class="table">
             <thead>
               <tr class="header1">
@@ -69,7 +69,7 @@
 
         <div class="divvv-title" style="height: 30px;">선택된 상품 리스트</div>
 
-        <div class="table-container">
+        <div class="table-container" style=" max-height: 100px; max-height: 400px; /* 원하는 최대 높이를 설정하세요 */overflow-y: auto; overflow-x: auto;  ">
           <table class="table">
           <thead>
             <tr class="header1">
@@ -87,14 +87,14 @@
             <td>{{ selectedProduct.productName }}</td>
             <td>{{ selectedProduct.productCount }}</td>
             <td><input type="number" v-model="selectedProduct.quantity" min="1" @change="calculateTotalPrice" /></td>
-            <td><button class="cancel-btn" @click="removeProductFromList(index)">취소</button></td>
+            <td><button class="ho-btn" @click="removeProductFromList(index)">취소</button></td>
           </tr>
         </table>
       </div >
     <div class="action-buttons" >
         <p v-if="totalPrice > 0">총 가격: {{ totalPrice }}원</p>
-        <button class="cancel-btn" @click="exportOrder">수정하기</button>
-        <button class="cancel-btn" @click="props.clickUpdate" >돌아가기</button>
+        <button class="ho-btn" @click="exportOrder">수정하기</button>
+        <button class="ho-btn" @click="props.clickUpdate" >돌아가기</button>
       </div>
     </div>
   </div>
@@ -236,11 +236,10 @@
         });
 
       if (!response.ok) {
-        console.log('error');
+
         throw new Error("네트워크 오류 발생");
       }
 
-      const result = await response.json();
       await Swal.fire({
         position: "center",
         icon: "success",
@@ -252,6 +251,13 @@
 
 
     } catch (error) {
+      await Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "발주 수정 실패.",
+        showConfirmButton: false,
+        timer: 1500
+      });
       location.reload(FranchiseOrderPage);
     }
 

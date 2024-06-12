@@ -1,18 +1,26 @@
 <template>
 
   <div>
+    <div align="center"  style="padding-bottom: 30px;">
+      <div class="action-buttons"  >
+        <br>
+        <div style="float: left" ><img src="@/assets/icon/어드민.png" style="width: 18px"/>&nbsp;
+          <span class="breadcrumb">반품 및 교환 관리 > 반품 관리 > 반품 상품 조회</span>
+        </div>
+      </div>
+    </div>
     <div class="filter-section">
       <table class="filter-table">
         <tr>
           <td class="filter-label">반품상태</td>
           <td class="filter-input">
             <div class="radio-group">
-              <label> 반송신청 <input type="radio" value="반송신청" name="ConditionOrder" v-model="conditionFilter" ></label>
-              <label> 반송중 <input type="radio" value="반송중" name="ConditionOrder" v-model="conditionFilter" ></label>
-              <label> 처리완료 <input type="radio" value="처리완료" name="ConditionOrder" v-model="conditionFilter" ></label>
-              <label> 반환대기 <input type="radio" value="반환대기" name="ConditionOrder" v-model="conditionFilter" ></label>
-              <label> 반환중 <input type="radio" value="반환중" name="ConditionOrder" v-model="conditionFilter" ></label>
-              <label> 반환완료 <input type="radio" value="반환완료" name="ConditionOrder" v-model="conditionFilter" ></label>
+              <label><input type="radio" value="반송신청" name="ConditionOrder" v-model="conditionFilter" >반송신청  </label>
+              <label><input type="radio" value="반송중" name="ConditionOrder" v-model="conditionFilter" >반송중  </label>
+              <label><input type="radio" value="처리완료" name="ConditionOrder" v-model="conditionFilter" >처리완료  </label>
+              <label><input type="radio" value="반환대기" name="ConditionOrder" v-model="conditionFilter" >반환대기  </label>
+              <label><input type="radio" value="반환중" name="ConditionOrder" v-model="conditionFilter" >반환중  </label>
+              <label><input type="radio" value="반환완료" name="ConditionOrder" v-model="conditionFilter" >반환완료  </label>
             </div>
           </td>
         </tr>
@@ -41,7 +49,8 @@
           <img src="@/assets/icon/search.png" alt="Search" />
         </button>
         <br>
-        <input class="create-btn"  type="button" value="발주하기" @click="showPopup" style="cursor: pointer; float: right">
+        <input class="create-btn"  type="button" value="반품신청하기" @click="showPopup" style="cursor: pointer; float: left">
+        <button @click="downloadExcel" class="excelBtn" style="cursor: pointer; float: right"><img src="@/assets/icon/excel.png" alt="excel"></button>
         <br><br><br>
       </div>
     </div>
@@ -116,10 +125,11 @@
 import { ref, computed } from 'vue';
 import exchangePopup from './exchangePopup.vue';
 import ExchangeDetail from './FranchiseExchangeDetail.vue';
-import { useStore } from 'vuex'; // Vuex store 임포트
+import { useStore } from 'vuex';
+import axios from "axios"; // Vuex store 임포트
 const store = useStore(); // Vuex store 사용
 
-
+const accessToken = store.state.accessToken;
 const lists = ref([]);
 const startDate = ref('');
 const endDate = ref('');
@@ -169,7 +179,26 @@ const getExchangeList = async () => {
     console.error('오류 발생:', error);
   }
 };
-
+const downloadExcel = () => {
+  axios({
+    url: 'http://api.pioms.shop/franchise/exceldownload/exchange-excel',
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    responseType: 'blob',
+  }).then((response) => {
+    const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'ProductList.xlsx');
+    document.body.appendChild(link);
+    link.click();
+  }).catch((error) => {
+    console.error('EBad request:', error);
+  });
+};
 const resetFilters = () => {
   conditionFilter.value = "";
   filterExchangeCode.value = "";

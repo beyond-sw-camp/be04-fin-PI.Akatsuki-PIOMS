@@ -60,8 +60,8 @@
       </div>
       신청일자 : {{ item.exchangeDate }}
         <div class="action-buttons" >
-          <input class="cancel-btn" v-if="item.exchangeStatus=='반송신청'" type="button" value="삭제하기" @click="deleteExchange">
-          <input class="cancel-btn" type="button" value="돌아가기" @click="showDetailPopup">
+          <input class="ho-btn" v-if="item.exchangeStatus=='반송신청'" type="button" value="삭제하기" @click="deleteExchange">
+          <input class="ho-btn" type="button" value="돌아가기" @click="showDetailPopup">
         </div>
       <br>
     </div>
@@ -72,6 +72,8 @@
 import { ref } from "vue";
 import axios from 'axios';
 import FranchiseExchangePage from "./FranchiseExchangePage.vue";
+import Swal from "sweetalert2"; // Vuex store 임포트
+
 import { useStore } from 'vuex'; // Vuex store 임포트
 const store = useStore(); // Vuex store 사용
 
@@ -118,10 +120,25 @@ const deleteExchange = async () => {
       alert("서버 에러 발생 ");
       throw new Error('네트워크 오류 발생');
     }
-    alert("삭제되었습니다.");
+    await Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "삭제되었습니다.",
+        showConfirmButton: false,
+        timer: 1500
+      });
     location.reload(FranchiseExchangePage);
     props.showDetailPopup();
   } catch (error) {
+    await Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "잘못된 요청입니다.",
+        showConfirmButton: false,
+        timer: 1500
+      });
+      location.reload(FranchiseExchangePage);
+    props.showDetailPopup();
     console.error('오류 발생:', error);
   }
 };

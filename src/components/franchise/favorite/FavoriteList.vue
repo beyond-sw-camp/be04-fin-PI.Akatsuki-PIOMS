@@ -2,12 +2,11 @@
   <div class="container">
     <!-- 상단 네비게이션 -->
     <div class="navigation">
-      <span>상품 및 재고 관리 &gt; 상품 관리 &gt; 즐겨찾기 상품 관리</span>
+      <img src="@/assets/icon/즐겨찾기.png" style="width: 20px; height: 20px; position: relative; top: 3px; margin-right: 10px;"><span>상품 및 재고 관리 &gt; 상품 관리 &gt; 즐겨찾기 상품 관리</span>
     </div>
 
     <!-- 상품 조회 결과 -->
     <div class="table-container">
-      <h3>상품 조회</h3>
       <table class="table">
         <thead>
         <tr class="header1">
@@ -32,14 +31,12 @@
           <td>이미지</td>
           <td>{{ product.franchiseWarehouseTotal }}</td>
           <td>{{ product.franchiseWarehouseEnable }}</td>
-          <td :class="{'status-temporary': product.product.productStatus === '일시제한', 'status-available': product.product.productStatus === '공급가능'}">
-            {{ product.product.productStatus }}
-          </td>
+          <td>{{ product.product.productStatus }}</td>
           <td>{{ product.product.productColor }}</td>
           <td>{{ product.product.productSize }}</td>
-          <td>{{ product.product.categoryThird.categorySecond.categoryFirst.categoryFirstName }}</td>
-          <td>{{ product.product.categoryThird.categorySecond.categorySecondName }}</td>
-          <td>{{ product.product.categoryThird.categoryThirdName }}</td>
+          <td>{{ product.product.categoryFirstName }}</td>
+          <td>{{ product.product.categorySecondName }}</td>
+          <td>{{ product.product.categoryThirdName }}</td>
           <td><button @click="removeFavorite(product.franchiseWarehouseCode)">삭제</button></td>
         </tr>
         </tbody>
@@ -47,10 +44,10 @@
     </div>
 
     <!-- 액션 버튼 섹션 -->
+  </div>
     <div class="action-buttons">
       <button @click="navigateToAddProduct" class="add-product-btn">상품 추가</button>
     </div>
-  </div>
 </template>
 
 <script setup>
@@ -64,7 +61,7 @@ const favoriteProducts = ref([]);
 // Fetch favorite products
 const fetchFavorites = async () => {
   try {
-    const response = await fetch('http://api.pioms.shop/franchise/warehouse/favorites', {
+    const response = await fetch('http://api.pioms.shop/franchise/warehouse/favorites/by-owner', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -105,21 +102,40 @@ const navigateToAddProduct = () => {
   window.location.href = 'http://pioms.shop/franchise/favorite/register';
 };
 
+const getStatusClass = (status) => {
+  if (status === '공급가능') return 'status-available';
+  if (status === '일시제한') return 'status-temporary';
+  if (status === '단종') return 'status-discontinued';
+  if (status === '품절') return 'status-soldout';
+  return '';
+};
+
 fetchFavorites();
 </script>
 
 <style scoped>
 .container {
+  width: 1440px;
   padding: 20px;
 }
 
 .navigation {
   margin-bottom: 20px;
   font-weight: bold;
+  font-size: 20px;
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 330px;
+  position: relative;
+  top: 2px;
 }
 
 .table-container {
+  position: relative;
+  top: 20px;
+  left: 320px;
   margin-bottom: 40px;
+  width: 1240px;
 }
 
 .table {
@@ -138,12 +154,32 @@ fetchFavorites();
   background-color: #f0f0f0;
 }
 
-.status-temporary {
-  color: red;
+.status-available {
+  background-color: #4CAF50;
+  color: white;
+  padding: 5px;
+  border-radius: 4px;
 }
 
-.status-available {
-  color: blue;
+.status-temporary {
+  background-color: #FF9800;
+  color: white;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.status-discontinued {
+  background-color: #F44336;
+  color: white;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.status-soldout {
+  background-color: #9E9E9E;
+  color: white;
+  padding: 5px;
+  border-radius: 4px;
 }
 
 .button-as-text {
@@ -171,6 +207,10 @@ fetchFavorites();
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  position: absolute;
+  display: flex;
+  margin-right: 16.8%;
+  bottom: 580px;
 }
 
 .add-product-btn:hover {

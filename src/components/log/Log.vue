@@ -1,22 +1,33 @@
 <template>
   <div class="container">
-    <!-- 상단 네비게이션 -->
-    <Breadcrumb :crumbs="breadcrumbs" />
+    <div class="header">
+      <img src="@/assets/icon/이력관리.png" style="width: 18px"/>&nbsp;
+      <span class="breadcrumb">이력 관리 > 전체 이력 관리</span>
+    </div>
 
-    <!-- 필터 섹션 -->
+    <div class="product-sub-title"> * 조회할 상품의 조건을 선택 후
+      <img src="@/assets/icon/reset.png">초기화 또는<img src="@/assets/icon/search.png">검색을 눌러주세요.
+    </div>
+
     <div class="filter-section">
       <table class="filter-table">
         <tr>
           <td class="filter-label">이력조건</td>
           <td class="filter-input">
-            <div class="checkbox-group">
-              <label><input type="checkbox" value="Company" v-model="filterConditions" /> 본사 정보</label>
-              <label><input type="checkbox" value="Admin" v-model="filterConditions" /> 본사 관리자</label>
-              <label><input type="checkbox" value="Franchise" v-model="filterConditions" /> 가맹점</label>
-              <label><input type="checkbox" value="FranchiseOwner" v-model="filterConditions" /> 가맹점주</label>
-              <label><input type="checkbox" value="Product" v-model="filterConditions" /> 상품</label>
-              <label><input type="checkbox" value="Category" v-model="filterConditions" /> 상품 카테고리</label>
-              <label><input type="checkbox" value="Login" v-model="filterConditions" /> 로그인 정보</label>
+            <div class="radio-group">
+              <label><input type="radio" name="filterConditions" value="" v-model="filterCondition"/> 전체</label>
+              <label><input type="radio" name="filterConditions" value="Company" v-model="filterCondition"/> 본사
+                정보</label>
+              <label><input type="radio" name="filterConditions" value="Admin" v-model="filterCondition"/> 본사
+                관리자</label>
+              <label><input type="radio" name="filterConditions" value="Franchise" v-model="filterCondition"/>
+                가맹점</label>
+              <label><input type="radio" name="filterConditions" value="FranchiseOwner" v-model="filterCondition"/> 가맹점주</label>
+              <label><input type="radio" name="filterConditions" value="Product" v-model="filterCondition"/> 상품</label>
+              <label><input type="radio" name="filterConditions" value="Category" v-model="filterCondition"/> 상품
+                카테고리</label>
+              <label><input type="radio" name="filterConditions" value="Login" v-model="filterCondition"/> 로그인
+                정보</label>
             </div>
           </td>
         </tr>
@@ -28,6 +39,7 @@
               <option value="등록">등록</option>
               <option value="수정">수정</option>
               <option value="삭제">삭제</option>
+              <option value="로그인">로그인</option>
             </select>
           </td>
         </tr>
@@ -41,25 +53,25 @@
         </tr>
       </table>
     </div>
-
-    <!-- 액션 버튼 섹션 -->
-    <div align="center">
-      <div class="action-buttons">
+      <div class="filter-buttons">
         <button @click="resetFilters" class="reset-btn">
           <img src="@/assets/icon/reset.png" alt="Reset" />
         </button>
         <button @click="applyFilters" class="search-btn">
           <img src="@/assets/icon/search.png" alt="Search" />
         </button>
-        <br>
-        <div>
-          <button style="float:right;" @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
-        </div>
+      </div>
 
+    <div class="filter-buttons">
+      <div class="post-btn" id="app">
+        <button class="postBtn">
+        </button>
+        <button @click="downloadExcel" class="excelBtn">
+          <img src="@/assets/icon/excel.png" alt="excel">
+        </button>
       </div>
     </div>
-    <div class="post-btn">
-    </div>
+
     <!-- 이력 조회 결과 -->
     <div class="table-container">
       <table class="table">
@@ -105,16 +117,17 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import Breadcrumb from '@/components/amdin/ask/Breadcrumb.vue'; // Breadcrumb 컴포넌트 임포트
-import { useStore } from 'vuex';
+import {ref, computed, onMounted} from 'vue';
+import Breadcrumb from '@/components/admin/ask/Breadcrumb.vue'; // Breadcrumb 컴포넌트 임포트
+import {useStore} from 'vuex';
 import axios from "axios";
+
 const store = useStore();
 const accessToken = store.state.accessToken;
 
 const histories = ref([]);
 const filteredHistories = ref([]);
-const filterConditions = ref([]);
+const filterCondition = ref('');
 const filterStatus = ref('전체');
 const startDate = ref('');
 const endDate = ref('');
@@ -126,6 +139,7 @@ const breadcrumbs = [
   {label: '통계 및 이력 관리', link: null},
   {label: '이력 관리', link: null},
 ];
+
 const downloadExcel = () => {
   axios({
     url: 'http://api.pioms.shop/admin/exceldownload/log-excel', // 백엔드 엑셀 다운로드 API 엔드포인트
@@ -136,16 +150,17 @@ const downloadExcel = () => {
     },
     responseType: 'blob', // 서버에서 반환되는 데이터의 형식을 명시
   }).then((response) => {
-    const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }));
+    const url = window.URL.createObjectURL(new Blob([response.data], {type: response.headers['content-type']}));
     const link = document.createElement('a');
     link.href = url;
     link.setAttribute('download', 'LogList.xlsx'); // 원하는 파일 이름 설정
     document.body.appendChild(link);
     link.click();
   }).catch((error) => {
-    console.error('EBad request:', error);
+    console.error('Bad request:', error);
   });
 };
+
 const fetchHistories = async () => {
   try {
     const response = await fetch('http://api.pioms.shop/admin/log', {
@@ -159,7 +174,10 @@ const fetchHistories = async () => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
+    // 변경일 기준으로 최신순 정렬
+    data.sort((a, b) => new Date(b.logDate) - new Date(a.logDate));
     histories.value = data || [];
+    histories.value.sort((a, b) => new Date(b.logDate) - new Date(a.logDate)); // 날짜 최신순 정렬
     filteredHistories.value = histories.value;
     applyFilters();
   } catch (error) {
@@ -169,12 +187,9 @@ const fetchHistories = async () => {
 
 const applyFilters = () => {
   filteredHistories.value = histories.value.filter(history => {
-    const matchesCondition = filterConditions.value.length === 0 ||
-        filterConditions.value.includes(history.logTarget) ||
-        (filterConditions.value.includes("Category") &&
-            (history.logTarget === "CategoryFirst" || history.logTarget === "CategorySecond" || history.logTarget === "CategoryThird"));
+    const matchesCondition = !filterCondition.value || history.logTarget === filterCondition.value || (filterCondition.value === "Category" && (history.logTarget === "CategoryFirst" || history.logTarget === "CategorySecond" || history.logTarget === "CategoryThird"));
     const matchesStatus = filterStatus.value === '전체' || history.logStatus === filterStatus.value;
-    const historyDate = new Date(history.logDate[0], history.logDate[1] - 1, history.logDate[2]);
+    const historyDate = new Date(history.logDate);
     const matchesStartDate = !startDate.value || historyDate >= new Date(startDate.value);
     const matchesEndDate = !endDate.value || historyDate <= new Date(endDate.value);
 
@@ -183,7 +198,7 @@ const applyFilters = () => {
 };
 
 const resetFilters = () => {
-  filterConditions.value = [];
+  filterCondition.value = '';
   filterStatus.value = '전체';
   startDate.value = '';
   endDate.value = '';
@@ -246,22 +261,28 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.excelBtn {
-  width: 100px;
-  height: 26px;
-  border: none;
-  background-color: white;
-  padding-bottom: 36px;
-  padding-left: initial;
-  cursor: pointer;
-}
 .container {
   padding: 20px;
 }
 
+.header {
+  display: flex;
+  padding-left: 210px;
+  align-items: center;
+  margin-bottom: 20px;
+  justify-content: flex-start;
+}
+
+.breadcrumb {
+  font-size: 16px;
+  color: #555;
+  font-weight: bold;
+}
+
 .filter-section {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   margin-bottom: 20px;
 }
 
@@ -271,7 +292,8 @@ onMounted(() => {
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 10px;
-  width: 1300px;
+  width: 100%;
+  max-width: 1440px;
 }
 
 .filter-table td {
@@ -281,49 +303,33 @@ onMounted(() => {
 .filter-label {
   font-weight: bold;
   text-align: center;
-  width: 100px;
+  border: solid 1px #747474;
+  width: 120px;
   background-color: #D9D9D9;
 }
 
 .filter-input {
   text-align: left;
-  border: 1px solid lightgray;
+  border: solid 1px #747474;
+  padding: 5px;
 }
 
-.checkbox-group {
+.filter-buttons {
   display: flex;
-  flex-wrap: wrap;
-}
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
 
-.checkbox-group label {
-  margin-right: 10px;
-  white-space: nowrap;
 }
-
-.date-range span {
-  margin: 0 5px;
-}
-
-.action-buttons {
-  max-width: 1300px;
-  justify-content: center; /* 가운데 정렬 */
-  //margin-bottom: 20px;
-  align-items: center;
-}
-
 .reset-btn, .search-btn {
   background-color: #fff;
   color: black;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  padding: 8px 8px;
+  padding: 8px 16px;
   font-size: 14px;
   margin: 0 5px;
-}
-
-.reset-btn:hover, .search-btn:hover {
-  background-color: #f0f0f0;
 }
 
 .table-container {
@@ -334,16 +340,17 @@ onMounted(() => {
 }
 
 .table {
-  width: 1300px;
-  max-width: 1300px;
+  width: 100%;
+  max-width: 1440px;
   border-collapse: collapse;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-spacing: 0 10px;
+  border-spacing: 0 10px
 }
 
 .table th {
+
   font-weight: bold;
   color: #000;
   text-align: center;
@@ -351,25 +358,16 @@ onMounted(() => {
 
 .table th,
 .table td {
-  width: 150px; /* 모든 열의 기본 크기를 고정 */
-}
-
-.table .historyContent {
-  cursor: pointer;
-  width: 200px; /* 이력내용 칸의 크기를 고정 */
+  padding: 10px;
+  text-align: center;
 }
 
 .header1 {
   background-color: #D9D9D9;
   font-weight: bold;
-  height: 50px;
-  font-size: 12px;
+  height: 40px;
+  font-size: 14px;
   text-align: center;
-}
-
-.allpost {
-  text-align: center;
-  padding: 10px 0;
 }
 
 .pagination {
@@ -377,6 +375,7 @@ onMounted(() => {
   justify-content: center;
   align-items: center;
   margin-top: 10px;
+  margin-bottom: 100px;
 }
 
 .pagination button {
@@ -400,61 +399,32 @@ onMounted(() => {
   font-weight: bold;
 }
 
-/* 팝업 스타일 */
-.popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+.post-btn {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  z-index: 999;
-}
-
-.popup-content {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 40%;
-  height: 28%;
-  overflow-y: auto;
-  text-align: center;
-  padding-top: 10px;
-}
-
-
-.popup-text {
-  font-size: 20px;
-  white-space: pre-wrap;
-  padding-top: 30px;
-}
-
-.popup-content button {
   position: relative;
-  top: 60px;
-  align-content: center;
-  background-color: #f44336;
-  color: white;
+  width: 1440px;
+}
+
+.postBtn {
   border: none;
-  border-radius: 4px;
+  background-color: white;
   cursor: pointer;
-  padding: 15px;
 }
 
-.table td {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-width: 19ch;
-  max-width: 19ch; /* 최대 25글자까지 표시 */
-  cursor: default;
+.excelBtn {
+  border: none;
+  background-color: white;
+  cursor: pointer;
 }
 
-.table .historyContent {
-  cursor: pointer;
+.product-sub-title {
+  display: flex;
+  padding-left: 210px;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 20px;
+  justify-content: flex-start;
 }
 </style>

@@ -3,11 +3,13 @@
     <div class="main-content">
       <div class="top-row">
         <div class="section order-status">
-            <router-link to="/franchise/order/list" class="order-link">내 발주 현황</router-link>
+          <router-link to="/franchise/order/list" class="order-link">
+            <img src="@/assets/icon/List.png" class="icon" alt="Order Icon">내 발주 현황
+          </router-link>
           <hr class="section-divider" />
           <div class="status-boxes">
             <div class="status-box">
-              <div class = labelbox>
+              <div class="labelbox">
                 <div class="status-label1 status-label-pending">승인 완료</div>
               </div>
               <div class="status-count-box">
@@ -15,7 +17,7 @@
               </div>
             </div>
             <div class="status-box">
-              <div class = labelbox>
+              <div class="labelbox">
                 <div class="status-label2 status-label-accepted">검수 대기</div>
               </div>
               <div class="status-count-box">
@@ -23,7 +25,7 @@
               </div>
             </div>
             <div class="status-box">
-              <div class = labelbox>
+              <div class="labelbox">
                 <div class="status-label3 status-label-denied">검수 완료</div>
               </div>
               <div class="status-count-box">
@@ -33,7 +35,9 @@
           </div>
         </div>
         <div class="section inventory-alert">
-          <router-link to="/franchise/warehouse" class="warehouse-link">재고 알림</router-link>
+          <router-link to="/franchise/warehouse/list" class="warehouse-link">
+            <img src="@/assets/icon/부족한재고.png" class="icon" alt="Warehouse Icon">재고 알림
+          </router-link>
           <hr class="section-divider" />
           <ul class="list">
             <li v-for="item in paginatedLowStockItems" :key="item.franchiseWarehouseCode" class="list-item">
@@ -52,11 +56,13 @@
       </div>
       <div class="bottom-row">
         <div class="section notice-list">
-          <router-link to="/franchise/notice/list" class="notice-link">공지사항 리스트</router-link>
+          <router-link to="/franchise/notice/list" class="notice-link">
+            <img src="@/assets/icon/공지사항.png" class="icon" alt="Notice Icon">공지사항 리스트
+          </router-link>
           <ul class="list">
             <li v-for="item in paginatedNotices" :key="item.noticeCode" class="list-item">
               <div class="notice-title">{{ truncateTitle(item.noticeTitle) }}</div>
-              <div>{{ formatNoticeDate(item.noticeEnrollDate) }}</div>
+              <div class="notice-date">{{ formatNoticeDate(item.noticeEnrollDate) }}</div>
             </li>
           </ul>
           <div class="pagination">
@@ -65,7 +71,9 @@
           </div>
         </div>
         <div class="section inquiry-list">
-          <router-link to="/franchise/ask" class="inquiry-link">문의사항 리스트</router-link>
+          <router-link to="/franchise/ask/list" class="inquiry-link">
+            <img src="@/assets/icon/문의사항.png" class="ask-icon" alt="Ask Icon">문의사항 리스트
+          </router-link>
           <ul class="list">
             <li v-for="item in paginatedAsks" :key="item.askCode" class="list-item">
               <div class="title">{{ truncateTitle(item.askTitle) }}</div>
@@ -83,7 +91,9 @@
           </div>
         </div>
         <div class="section favorite-products">
-          <router-link to="/franchise/favorite/list" class="favorite-link">즐겨찾기 상품 목록</router-link>
+          <router-link to="/franchise/favorite/list" class="favorite-link">
+            <img src="@/assets/icon/즐겨찾기.png" class="icon" alt="Favorite Icon">즐겨찾기 상품 목록
+          </router-link>
           <ul class="list">
             <li v-for="item in paginatedFavorites" :key="item.franchiseWarehouseCode" class="list-item">
               <div>{{ item.product.productName }}</div>
@@ -103,6 +113,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
+import Swal from "sweetalert2";
 
 const store = useStore();
 const accessToken = store.state.accessToken;
@@ -119,6 +130,26 @@ const favoritesCurrentPage = ref(1);
 const lowStockCurrentPage = ref(1);
 const itemsPerPage = 6;
 const lowStockItemsPerPage = 3;
+let timerInterval;
+
+Swal.fire({
+  title: "대시보드를 불러오는 중입니다...",
+  timer: 1000,
+  timerProgressBar: true,
+  didOpen: () => {
+    Swal.showLoading();
+    const timer = Swal.getPopup().querySelector("b");
+    timerInterval = setInterval(() => {
+    }, 100);
+  },
+  willClose: () => {
+    clearInterval(timerInterval);
+  }
+}).then((result) => {
+  if (result.dismiss === Swal.DismissReason.timer) {
+    console.log("I was closed by the timer");
+  }
+});
 
 const fetchDashboardData = async () => {
   try {
@@ -285,6 +316,13 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.ask-icon {
+  position: relative;
+  top: 2px;
+  width: 28px;
+  height: 23px;
+}
+
 body {
   overflow-x: hidden;
 }
@@ -295,6 +333,7 @@ body {
   width: 100%;
   padding: 20px;
   box-sizing: border-box;
+  padding-bottom: 150px;
 }
 
 .main-content {
@@ -332,6 +371,11 @@ body {
   flex: 1;
   max-width: 20%;
 }
+.notice-date {
+  position: relative;
+  top: 20px;
+  padding-top: 5px;
+}
 
 .status-boxes {
   display: flex;
@@ -344,6 +388,8 @@ body {
   flex: 1;
   border: 11px solid white;
   border-radius: 10px;
+  position: relative;
+  bottom: 10px;
 }
 
 .status-count-box {
@@ -356,8 +402,9 @@ body {
   display: flex;
   font-size: 24px;
   font-weight: bold;
-  background-color: #d9d9d9;
-  height: 70px;
+  background-color: #F3F3F3;
+  height: 120px;
+  width: 140px;
   justify-content: center;
   align-items: center;
   border-radius: 10px;
@@ -365,7 +412,7 @@ body {
 
 .status-label1,
 .status-label2,
-.status-label3{
+.status-label3 {
   margin-top: 10px;
   font-size: 16px;
   font-weight: bold;
@@ -373,14 +420,14 @@ body {
   color: white;
 }
 
-.labelbox{
+.labelbox {
   display: flex;
   border: 11px solid white;
   align-items: baseline;
   justify-content: center;
 }
 
-.status-label1{
+.status-label1 {
   height: 32px;
   width: 100px;
   background-color: #394CA9;
@@ -388,7 +435,7 @@ body {
   align-items: center;
 }
 
-.status-label2{
+.status-label2 {
   height: 32px;
   width: 100px;
   background-color: #FC6F86;
@@ -396,7 +443,7 @@ body {
   align-items: center;
 }
 
-.status-label3{
+.status-label3 {
   height: 32px;
   width: 100px;
   background-color: #FFCD4B;
@@ -414,7 +461,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 9px;
   border-bottom: 1px solid #ddd;
   padding-bottom: 10px;
   overflow: hidden;
@@ -422,7 +469,8 @@ body {
 }
 
 .notice-list .list-item {
-  margin-bottom: 30px;
+  margin-bottom: 16px;
+  padding-bottom: 23px;
 }
 
 .notice-title {
@@ -436,10 +484,9 @@ body {
 }
 
 .notice-link,
-.inquiry-link,
 .favorite-link,
 .order-link,
-.warehouse-link{
+.warehouse-link {
   display: block;
   font-size: 18px;
   font-weight: bold;
@@ -448,20 +495,39 @@ body {
   margin-bottom: 15px;
 }
 
+.inquiry-link {
+  display: flex;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
+  margin-bottom: 11px;
+}
+
+.notice-link{
+  margin-bottom: 20px;
+  //padding:10px;
+}
+
 .notice-link:hover,
 .inquiry-link:hover,
 .favorite-link:hover,
 .order-link:hover,
-warehouse-link:hover{
+.warehouse-link:hover {
   color: #000;
 }
 
 .title {
+  color: #444444;
+  font-weight: bold;
+  font-size: 15px;
   flex: 1;
   margin-right: 10px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  position: relative;
+  top: -5px;
 }
 
 .status-container {
@@ -471,12 +537,15 @@ warehouse-link:hover{
 }
 
 .status {
+  position: relative;
+  right: -30px;
   background-color: #f8d7da;
-  color: #721c24;
+  color: #FFFFFF;
   padding: 3px 10px;
   border-radius: 5px;
   font-size: 12px;
   margin-bottom: 5px;
+  font-weight: bold;
 }
 
 .status-pending {
@@ -490,6 +559,8 @@ warehouse-link:hover{
 .date {
   font-size: 12px;
   color: #666;
+  position: relative;
+  top: 8px;
 }
 
 .pagination {
@@ -536,8 +607,11 @@ warehouse-link:hover{
 }
 
 .icon {
-  width: 16px;
+  width: 18px;
   margin-right: 5px;
+  position: relative;
+  top: 2px;
+  height: 18px;
 }
 
 .unit {

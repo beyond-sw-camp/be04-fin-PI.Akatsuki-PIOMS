@@ -1,53 +1,50 @@
 <template>
- <div class = "delivery-list-box">
-     <div class="delivery-count">
-       <img class = "list" src="@/assets/icon/List.png"/>
-        배송 현황
-     </div>
-     <p class="week">(단위: 금일)</p>
-   <hr class="hr1"/>
-    <div class="delivery-status">
-       <div class="before">
-         배송전
+  <div style="justify-content: center; align-items: center;
+   display: flex;">
+  <div style=" display: flex;" >
+   <div >
+    <div class = "delivery-list-box">
+       <div class="delivery-count">
+         <img class = "list" src="@/assets/icon/List.png"/>
+          배송 현황
        </div>
-       <div class="ing">
-         배송중
-       </div>
-       <div class="after">
-         배송완료
-       </div>
-    </div>
-      <div class="delivery-status-box">
-        <div class="before-div">{{ beforeDiv }}</div>
-        <div class="ing-div">{{ ingDiv }}</div>
-        <div class="after-div">{{afterDiv}}</div>
+       <p class="week">(단위: 금일)</p>
+     <hr class="hr1"/>
+      <div class="delivery-status">
+         <div class="before">
+           배송전
+         </div>
+         <div class="ing">
+           배송중
+         </div>
+         <div class="after">
+           배송완료
+         </div>
       </div>
- </div>
+        <div class="delivery-status-box">
+          <div class="before-div">{{ beforeDiv }}</div>
+          <div class="ing-div">{{ ingDiv }}</div>
+          <div class="after-div">{{afterDiv}}</div>
+        </div>
+   </div>
 
 
-  <div class = "notice-list">
-    <div>
-        <img class = "notice" src="@/assets/icon/speaker.png"/>
-        공지사항 리스트
-        <hr class="hr1-1"/>
-      <ul class="data-table">
-          <li v-for="(notice, index) in sortedNotices" :key="index" class="notice-item" @click="openPopup(notice)">
-            <span class="title">{{ notice.noticeTitle }}</span>
-            <span class="date">{{ notice.noticeEnrollDate }}</span>
-            <hr class ="hr3"/>
-          </li>
-      </ul>
+    <div class = "notice-list">
+      <div>
+          <img class = "notice" src="@/assets/icon/speaker.png"/>
+          공지사항 리스트
+          <hr class="hr1-1"/>
+        <ul class="data-table">
+            <li v-for="(notice, index) in sortedNotices" :key="index" class="notice-item" @click="openPopup(notice)">
+              <span class="title">{{ notice.noticeTitle }}</span>
+              <span class="date">{{ notice.noticeEnrollDate }}</span>
+              <hr class ="hr3"/>
+            </li>
+        </ul>
+      </div>
     </div>
-  </div>
+   </div>
 
-  <!-- 공지사항 항목 팝업 -->
-  <div v-if="showPopup" class="popup">
-    <div class="popup-content">
-      <span class="close-btn" @click="closePopup">x</span>
-      <h2>{{ selectedNotice.noticeTitle }}</h2>
-      <p>{{ selectedNotice.noticeContent }}</p>
-    </div>
-  </div>
 
 <!-- 여기서부터 배송 항목 조회 -->
   <div class="my-delivery-list">
@@ -91,28 +88,36 @@
             <th class="owner">점주명</th>
           </tr>
           </thead>
-          <tbody>
+          <tbody class="invoiceList">
           <tr v-for="(order, index) in filteredOrders" :key="order.orderCode">
             <td>{{ index + 1 }}</td>
             <td>{{ order.orderCode }}</td>
             <td class="invoice" @click="openInvoicePopup(order)">{{ order.invoiceCode }}</td>
             <td>{{ order.franchiseAddress }}</td>
-            <td style="cursor: pointer" @click="openStatusPopup(order)">{{ order.deliveryStatus }}</td>
+            <td :class="getStatusClass(order.deliveryStatus)" style="cursor: pointer" @click="handleStatusClick(order)">{{ order.deliveryStatus }}</td>
             <td>{{ order.franchiseOwnerName }}</td>
           </tr>
           </tbody>
         </table>
       </div>
     </div>
+  </div>
+  </div>
+  </div>
 
+    <!-- 공지사항 항목 팝업 -->
+    <div v-if="showPopup" class="popup">
+      <div class="popup-content">
+        <span class="close-btn" @click="closePopup">x</span>
+        <h2>{{ selectedNotice.noticeTitle }}</h2>
+        <p>{{ selectedNotice.noticeContent }}</p>
+      </div>
+    </div>
     <!-- 송장 팝업 -->
-    <Invoice v-if="showInvoicePopup" :invoice="selectedInvoice" @close="closeInvoicePopup" />
+<!--    <Invoice v-if="showInvoicePopup" :invoice="selectedInvoice" @click.self="closeInvoicePopup" />-->
 
     <div v-if="showInvoicePopup" class="popup">
-      <div>
-        <span class="invoice-close-btn" @click="closeInvoicePopup">x</span>
-        <Invoice :invoice="selectedInvoice" />
-      </div>
+        <Invoice :invoice="selectedInvoice" @close="closeInvoicePopup"/>
     </div>
 
 
@@ -124,7 +129,7 @@
         @close="closeStatusPopup"
     />
 
-  </div>
+
 </template>
 
 <script setup>
@@ -132,6 +137,7 @@ import { computed, onMounted, ref } from "vue";
 import { useStore } from 'vuex';
 import Invoice from "@/components/driver/Invoice.vue";
 import DriverDashboardStatusPopup from "@/components/driver/DriverDashboardStatusPopup.vue";
+import Swal from "sweetalert2";
 
 const store = useStore();
 const accessToken = store.state.accessToken;
@@ -139,11 +145,23 @@ const accessToken = store.state.accessToken;
 const lists = ref([]);
 const showStatusPopup = ref(false);
 const showInvoicePopup = ref(false);
-const selectedInvoice = ref('');
+const selectedInvoice = ref(null);
 const deliveryStatus = ref('');
 
 const beforeDiv = ref();
-const driverCode = 8;
+const driverCode = 1;
+
+const handleStatusClick = async (order) => {
+  if (order.deliveryStatus === '배송완료') {
+    await Swal.fire({
+      icon: 'error',
+      title: '상태 수정 불가',
+      text: '이미 배송완료된 항목입니다.',
+    });
+  } else {
+    openStatusPopup(order);
+  }
+}
 
 const openInvoicePopup = (order) => {
   selectedInvoice.value = order;
@@ -173,6 +191,7 @@ const getCountBeforeDelivery = async () => {
         'Authorization': `Bearer ${accessToken}`,
       },
     });
+
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -333,6 +352,17 @@ const getDriverDashBoard = async () => {
   } catch (error) {
     console.error('오류 발생:', error);
   }
+}
+
+const getStatusClass = (status) => {
+  if (status === '배송전') {
+    return 'status-before';
+  } else if (status === '배송중') {
+    return 'status-in-progress';
+  } else if (status === '배송완료') {
+    return 'status-complete';
+  }
+  return '';
 };
 
 const currentPage = ref(1);
@@ -349,36 +379,69 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.getStatusClass {
+  height: 10px;
+}
+
+.delivery-table .status-before {
+  background-color: #FFCD4B; /* 배송 전 */
+}
+
+.delivery-table .status-in-progress {
+  background-color: #344DAF; /* 배송 중 */
+}
+
+.delivery-table .status-complete {
+  background-color: #B9B9B9; /* 배송 완료 */
+}
+
+.status-complete,
+.status-in-progress,
+.status-before {
+  margin: 5px;
+  width: 50px;
+  border-radius: 10px;
+  color: #FFFFFF;
+}
+
+.invoiceList {
+  height: 30px;
+}
+
+
  /* 큰 박스 단위들 */
+.delivery {
+  position: relative;
+  top:-40px;
+}
+
 .delivery-list-box {
-  margin-top: 42px !important;
   width: 500px;
-  height: 300px;
+  height: 23%;
 }
 
 .notice-list {
-  margin-top: 28px !important;
+  //margin-top: 28px !important;
   width: 500px;
-  height: 530px;
-  max-height: 500px;
+  height: 47%;
+  //max-height: 700px;
   overflow-y: auto;
 }
 
 .my-delivery-list {
   border: 1px solid #d9d9d9;
-  margin-top: 0 !important;
   width: 750px;
-  height: 870px;
-  display: flex;
-  position: absolute;
-  top: 100px;
-  right: 80px;
+
+  //max-height: 50%;
+  //min-height: 50%;
+  height: 820px;
   overflow-y: auto;
+  //padding-bottom: 150px;
 }
 
 .delivery-list-box,
 .notice-list {
-  margin-left: 250px !important;
+  //margin-left: 250px !important;
 }
 
  .delivery-list-box,
@@ -420,7 +483,8 @@ onMounted(() => {
   margin: 0;
   position: relative;
   bottom: 10px;
-  color: #d9d9d9;
+  color: #8f8f8f;
+  font-size: 14px;
 }
 
 .delivery-count {
@@ -435,20 +499,22 @@ onMounted(() => {
 .before,
 .ing,
 .after {
+  display: flex;
   position: relative;
+  left: 4px;
   top: -45px;
   color: #444444;
 }
 .before-div,
 .ing-div,
 .after-div {
+  background-color: #d9d9d9;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 5px;
-  border: 2px solid #d9d9d9;
   padding: 20px;
-  width: 60px;
+  width: 70px;
   height: 60px;
 }
 
@@ -612,8 +678,7 @@ hr.hr2 {
  }
 
  /* 리셋, 검색 버튼 */
- .btn-reset,
- .btn-search {
+ .btn-reset {
    border: none;
    background-color: #ffffff;
    cursor: pointer;
@@ -623,8 +688,7 @@ hr.hr2 {
    justify-content: center;
    padding-top: 40px;
  }
- .reset-icon,
- .search-icon {
+ .reset-icon {
    width: 30px !important;
    height: 30px !important;
  }
@@ -647,7 +711,7 @@ hr.hr2 {
  }
  .delivery-table td {
    text-align: center;
-   height: 40px;
+   height: 30px;
  }
 
  .no {
@@ -676,8 +740,8 @@ hr.hr2 {
 
  .invoice-close-btn {
    position: fixed !important;
-   top: 100px !important;
-   right: 450px !important;
+   top: 150px !important;
+   right: 550px !important;
    cursor: pointer !important;
    font-size: 20px;
    color: #444444;

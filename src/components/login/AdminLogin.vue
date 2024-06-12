@@ -57,7 +57,6 @@ const login = async () => {
       console.log('로그인 성공, 응답 헤더:', response.headers);
 
       const accessToken = response.headers.get('Authorization')?.substring(7).trim();
-      localStorage.setItem('accessToken', accessToken);
       console.log('추출한 accessToken:', accessToken);
 
       if (accessToken) {
@@ -95,12 +94,12 @@ const login = async () => {
 };
 </script>
 
+
 <style scoped>
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
 
 
 .login-container {
-  height: 90vh;
   display: flex;
   flex-direction: column;
   align-items: center;

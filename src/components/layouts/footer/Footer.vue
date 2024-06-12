@@ -17,16 +17,11 @@ html, body, #app {
 
 .footer {
   width: 100%;
-  height: 30px;
   background-color: #ffffff;
-  padding-top: 15px;
-  z-index: 10000;
-  //position: fixed;
-  bottom: 20px;
 }
 
 .page-content {
-  max-width: 1920px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 0 10px;
 }

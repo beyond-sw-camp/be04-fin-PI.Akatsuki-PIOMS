@@ -1,7 +1,15 @@
 <template>
   <div class = "main">
-
+    <div align="center"  style="padding-bottom: 30px;">
+      <div style="  max-width: 1250px;justify-content: center;align-items: center;"  >
+        <br>
+        <div style="float: left" ><img src="@/assets/icon/smile.png" style="width: 18px"/>&nbsp;
+          <span class="breadcrumb">공지 및 문의 관리 > 공지 관리 > 공지사항 조회 및 관리</span>
+        </div>
+      </div>
+    </div>
     <br/>
+\
     <div align="center">
       <table class="read-filter">
         <tr>
@@ -254,7 +262,7 @@ onMounted(() => {
   border: 1px solid #D9D9D9;
   border-radius: 5px;
   padding: 10px;
-  width: 1300px;
+  width: 1250px;
 }
 
 .read-filter td {
@@ -318,10 +326,20 @@ onMounted(() => {
 .table-container {
   width: 100%;
   margin-bottom: 10px;
+
   display: flex;
   justify-content: center;
 }
 
+.table{
+  width: 1250px;
+  max-width: 1300px;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-spacing: 0 10px;
+}
 
 
 
@@ -472,4 +490,16 @@ notice-form {
   background-color: #ffffff;
 }
 
+.headerTitle img {
+  width: 10px;
+  height: 10px;
+}
+.headerTitle p {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.pagination{
+  padding-bottom: 150px;
+}
 </style>
