@@ -1,10 +1,15 @@
 <template>
-
   <div class="container">
-    <div class="header">
-      <img src="@/assets/icon/Delivery.png" style="width: 18px"/>&nbsp;
-      <span class="breadcrumb">배송관리 > 배송상태 조회 및 관리</span>
+
+    <div class="header" align="center"  style="padding-bottom: 30px;">
+      <div style="  max-width: 1440px;justify-content: center;align-items: center;"  >
+        <br>
+        <div style="float: left" ><img src="@/assets/icon/Delivery.png" style="width: 18px"/>&nbsp;
+          <span class="breadcrumb">배송 및 발주 관리 > 배송 관리 > 배송상태 조회 및 관리</span>
+        </div>
+      </div>
     </div>
+
 
     <div class="product-sub-title"> * 조회할 상품의 조건을 선택 후
       <img src="@/assets/icon/reset.png">초기화 또는<img src="@/assets/icon/search.png">검색을 눌러주세요.
@@ -41,9 +46,9 @@
       <table class="table">
         <thead>
           <tr class="header1">
-            <th>송장번호</th>
-            <th>발주코드</th>
-            <th>상품리스트</th>
+            <th width="5%">송장번호</th>
+            <th width="5%">발주코드</th>
+            <th width="65%">상품리스트</th>
             <th>발주예정일</th>
             <th>발주상태</th>
           </tr>
@@ -54,7 +59,7 @@
               @dblclick="showDetailPopup(item)"
               @mouseenter="highlightRow(rowIndex)"
               @mouseleave="resetRowColor(rowIndex)"
-              class="allpost"
+              class="tr__bd"
           >
             <td class="num">{{ item.invoiceCode }}</td>
             <td>{{ item.orderCode }}</td>
@@ -64,9 +69,9 @@
               </a>
             </td>
             <td>{{ item.invoiceDate }}</td>
-            <td v-if="item.deliveryStatus=='배송전'" style="width: 5%; padding:5px;" > <div style=" background-color: green; border-radius: 5px; ;color: aliceblue; font-weight: bold;"> {{ item.deliveryStatus }} </div></td>
-            <td v-if="item.deliveryStatus=='배송중'" style="width: 5%; padding:5px;"><div style=" background-color: pink; border-radius: 5px; ;color: aliceblue; font-weight: bold;"> {{ item.deliveryStatus }} </div></td>
-            <td v-if="item.deliveryStatus=='배송완료'" style="width: 5%; padding:5px;"><div style=" background-color: hotpink; border-radius: 5px; ;color: aliceblue; font-weight: bold;"> {{ item.deliveryStatus }} </div></td>
+            <td v-if="item.deliveryStatus=='배송전'" style="width: 5%; padding:5px;" > <div class="condition-button" style=" background-color: green; border-radius: 5px; ;color: aliceblue; font-weight: bold;"> {{ item.deliveryStatus }} </div></td>
+            <td v-if="item.deliveryStatus=='배송중'" style="width: 5%; padding:5px;"><div class="condition-button" style=" background-color: pink; border-radius: 5px; ;color: aliceblue; font-weight: bold;"> {{ item.deliveryStatus }} </div></td>
+            <td v-if="item.deliveryStatus=='배송완료'" style="width: 5%; padding:5px;"><div class="condition-button" style=" background-color: hotpink; border-radius: 5px; ;color: aliceblue; font-weight: bold;"> {{ item.deliveryStatus }} </div></td>
 
           </tr>
         </tbody>
@@ -221,14 +226,25 @@ const resetRowColor = (index) => {
 <style scoped>
 .container {
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .header {
+  width: 100%;
+  max-width: 1440px;
+  text-align: center;
+  padding-bottom: 30px;
+}
+
+.header-content {
   display: flex;
-  padding-left: 210px;
   align-items: center;
-  margin-bottom: 20px;
-  justify-content: flex-start;
+}
+
+.header-icon {
+  width: 18px;
 }
 
 .breadcrumb {
@@ -237,11 +253,24 @@ const resetRowColor = (index) => {
   font-weight: bold;
 }
 
+.product-sub-title {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 20px;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 1440px;
+  padding-left: 10px;
+}
+
 .filter-section {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 20px;
+  width: 100%;
+  max-width: 1440px;
 }
 
 .filter-table {
@@ -251,7 +280,6 @@ const resetRowColor = (index) => {
   border-radius: 5px;
   padding: 10px;
   width: 100%;
-  max-width: 1440px;
 }
 
 .filter-table td {
@@ -263,7 +291,7 @@ const resetRowColor = (index) => {
   text-align: center;
   border: solid 1px #747474;
   width: 120px;
-  background-color: #D9D9D9;
+  background-color: #d9d9d9;
 }
 
 .filter-input {
@@ -277,9 +305,12 @@ const resetRowColor = (index) => {
   justify-content: center;
   margin-top: 10px;
   margin-bottom: 10px;
-
+  width: 100%;
+  max-width: 1440px;
 }
-.reset-btn, .search-btn {
+
+.reset-btn,
+.search-btn {
   background-color: #fff;
   color: black;
   border: none;
@@ -290,25 +321,7 @@ const resetRowColor = (index) => {
   margin: 0 5px;
 }
 
-.table-container {
-  width: 100%;
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: center;
-}
-
-.table {
-  width: 100%;
-  max-width: 1440px;
-  border-collapse: collapse;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-spacing: 0 10px;
-}
-
 .table th {
-
   font-weight: bold;
   color: #000;
   text-align: center;
@@ -321,9 +334,9 @@ const resetRowColor = (index) => {
 }
 
 .header1 {
-  background-color: #D9D9D9;
+  background-color: #d9d9d9;
   font-weight: bold;
-  height: 40px;
+  height: 50px;
   font-size: 14px;
   text-align: center;
 }
@@ -361,8 +374,8 @@ const resetRowColor = (index) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: relative;
-  width: 1440px;
+  width: 100%;
+  max-width: 1440px;
 }
 
 .postBtn {
@@ -377,13 +390,50 @@ const resetRowColor = (index) => {
   cursor: pointer;
 }
 
-.product-sub-title {
-  display: flex;
-  padding-left: 210px;
-  align-items: center;
-  gap: 5px;
-  margin-bottom: 20px;
-  justify-content: flex-start;
+.tr__bd:hover {
+  background-color: #f2f2f2;
 }
 
+.tr__bd td {
+  border-bottom: 1px solid #ddd;
+  font-size: 12px;
+}
+
+.tr__bd:last-child td {
+  border-bottom: none;
+}
+
+.table-container {
+  width: 100%;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.table {
+  width: 100%;
+  max-width: 1440px;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-spacing: 0 10px;
+  table-layout: fixed; /* 고정된 레이아웃을 사용하여 셀 너비를 고정 */
+}
+
+.table th, .table td {
+  padding: 10px;
+  text-align: center;
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  overflow: hidden;
+  text-overflow: ellipsis; /* 내용이 넘칠 때 "..." 표시 */
+}
+
+.condition-button {
+  display: inline-block;
+  padding: 2px 5px; /* 최소한의 패딩으로 글씨 영역만큼만 색이 적용되도록 합니다 */
+  border-radius: 3px;
+  color: #fff;
+  font-weight: bold;
+}
 </style>

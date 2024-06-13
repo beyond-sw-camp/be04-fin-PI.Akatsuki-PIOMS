@@ -64,6 +64,7 @@ onMounted(async () => {
   position: absolute;
   top: -106px;
   width: 100%;
+  z-index: 10;
 }
 
 .fb__content {
@@ -88,5 +89,6 @@ onMounted(async () => {
   line-height: 52px;
   border-top: 1px solid #d7d7d7;
   box-sizing: border-box;
+  z-index: 10;
 }
 </style>

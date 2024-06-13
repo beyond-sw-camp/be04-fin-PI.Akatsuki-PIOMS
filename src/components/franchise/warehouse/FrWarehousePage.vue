@@ -119,7 +119,7 @@
       </table>
     </div>
   </div>
-  
+
   <div class="pagination">
     <button @click="prevPage" :disabled="currentPage === 1">이전</button>
     <span> {{currentPage}} / {{totalPages}} </span>
@@ -331,7 +331,7 @@ getMemberId();
   justify-content: center;
   align-items: center;
   margin-top: 10px;
-  padding-bottom: 150px;
+  padding-bottom: 100px;
 }
 
 .pagination button {

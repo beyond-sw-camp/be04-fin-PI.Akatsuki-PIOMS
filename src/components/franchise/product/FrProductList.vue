@@ -426,11 +426,10 @@ fetchThirdCategories();
 
 .pagination {
   margin-top: 10px;
-  margin-bottom: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-bottom: 150px;
+  padding-bottom: 100px;
 }
 
 .pagination button {
@@ -592,7 +591,6 @@ fetchThirdCategories();
   justify-content: center;
   align-items: center;
   margin-top: 10px;
-  margin-bottom: 100px;
 }
 
 .pagination button {
