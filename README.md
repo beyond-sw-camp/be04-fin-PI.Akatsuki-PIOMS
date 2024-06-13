@@ -167,7 +167,7 @@
 		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/af8e2db4-0aa5-46c8-81e4-1bc9e74e4249">
 	</details>
 	<details>
-		<summary><h3>이력 관리 및 엑셀셀</h3></summary>
+		<summary><h3>이력 관리 및 엑셀</h3></summary>
 		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/c5a2afbd-e8de-4f41-8f8f-c17537f9e9a9">
 	</details>
 	<details>
@@ -212,6 +212,7 @@
 	</details>
 	<details>
 		<summary><h3>발주 및 교환/반품 로직</h3></summary>
+		<a href="https://drive.google.com/file/d/1S7Jm9BMUoFEdaWrncx0FM2tUZZRQ3Wx8/view?usp=sharing">로직 영상
 	</details>
 	<details>
 		<summary><h3></h3></summary>
