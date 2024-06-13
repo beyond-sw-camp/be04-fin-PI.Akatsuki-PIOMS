@@ -108,7 +108,7 @@
     </div>
     <!-- 송장 팝업 -->
 <!--    <Invoice v-if="showInvoicePopup" :invoice="selectedInvoice" @click.self="closeInvoicePopup" />-->
-    <div v-if="showInvoicePopup" class="popup">
+    <div v-if="showInvoicePopup">
         <Invoice v-if="showInvoicePopup" :invoice="selectedInvoice" @close="closeInvoicePopup"/>
     </div>
 
