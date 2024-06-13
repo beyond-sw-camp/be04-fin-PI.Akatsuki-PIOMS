@@ -101,25 +101,25 @@
 ## 🏷️ PIOMS 프로젝트 문서
 
 <details>
-<summary><h3>📁 PIOMS ERD</h3></summary>
-	
-![스크린샷 2024-06-13 오후 12 22 46](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/a3c1296b-118b-479b-be25-0c84c89bfdb0)
-</details>
-
-<details>
 <summary><h3>📁 PIOMS 요구사항 명세서</h3></summary>
 
-[PICommerce 문서화.xlsx - 요구사항 명세서.pdf](https://github.com/user-attachments/files/15813217/PICommerce.xlsx.-.pdf)
+
 </details>
 <details>
 <summary><h3>📁 PIOMS 기능 정의서</h3></summary>
+	
+![image (3)](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/ad4434b1-1c5f-4abf-a54a-4531d444e7e6)
+![image (4)](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/b6c4f1dc-6a6c-43ce-8bdb-b3f0be2448a8)
+![image (5)](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/40d3423f-fabe-4a82-b4dc-b72032042be7)
+![image (6)](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/87365849-f983-4c3a-9743-2ca02d4a1932)
+![image (7)](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/67ff4e9f-4eb2-4485-abb1-18c02809b058)
 
-[PICommerce 문서화.xlsx - 기능정의서.pdf](https://github.com/user-attachments/files/15813229/PICommerce.xlsx.-.pdf)
+
 </details>
 <details>
 <summary><h3>📁 PIOMS PIOMS 테의블 정의서</h3></summary>
 
-[PICommerce 문서화.xlsx - 테이블 정의서.pdf](https://github.com/user-attachments/files/15813237/PICommerce.xlsx.-.pdf)
+
 </details>
 
 <details>
@@ -131,13 +131,25 @@
 <details>
 <summary><h3>📁 PIOMS I.A 구조도</h3></summary>
 
-[PICommerce 문서화.xlsx - IA.pdf](https://github.com/user-attachments/files/15813242/PICommerce.xlsx.-.IA.pdf)
+
 </details>
 
 <details>
 <summary><h3>📁 PIOMS 단위 테스트</h3></summary>
 
-[PICommerce 문서화.xlsx - 단위 테스트.pdf](https://github.com/user-attachments/files/15813261/PICommerce.xlsx.-.pdf)
+
+</details>
+
+<details>
+<summary><h3>📁 PIOMS UI/UX 테스트</h3></summary>
+
+
+</details>
+
+<details>
+<summary><h3>📁 PIOMS 통합 테스트</h3></summary>
+
+시연영상 붙일 예정
 </details>
 
 <details>
