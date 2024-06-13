@@ -29,12 +29,6 @@
   <div class="fb__header-btn">
     <nav class="header_rootAdmin">
       <ul class="nav_header">
-        <!-- 아이콘 문제있어서 일단 보류 -->
-        <!-- <li>
-          <a href="/admin/home" class="flex items-center">
-            <img src="@/assets/icon/dashboard.png" alt="Dashboard" />
-          </a>
-        </li> -->
         <li>
           <a  class="label">가맹점 및 직원 관리</a>
           <div class="submenu_box" style="height: 340px">
