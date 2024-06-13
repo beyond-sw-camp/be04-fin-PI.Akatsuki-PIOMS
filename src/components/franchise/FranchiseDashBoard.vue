@@ -168,7 +168,7 @@ const fetchDashboardData = async () => {
     asks.value = data.askList.asks;
     favorites.value = data.favoriteList;
     orderStat.value = data.orderStat;
-    lowStockItems.value = data.filter(item => item.franchiseWarehouseEnable < 10);
+    // lowStockItems.value = data.filter(item => item.franchiseWarehouseEnable < 10);
   } catch (error) {
     console.error('Failed to fetch dashboard data:', error);
   }

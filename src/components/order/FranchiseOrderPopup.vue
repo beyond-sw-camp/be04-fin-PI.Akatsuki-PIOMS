@@ -9,7 +9,7 @@
       <div class="filter-container">
           <div class="radio-group">
             <div class="title"><label style="width:100px">검색 </label></div>
-            <input v-model="filter"  placeholder="검색어를 입력하세요" @input="applyFilter" @keydown.enter/>
+            <input v-model="filter"  placeholder="검색어를 입력하세요" @input="applyFilter" @keyup.enter="applyFilter"/>
 
           </div>
 
@@ -124,10 +124,13 @@
   const filteredLists = ref([]);
 
   const applyFilter = () => {
-    if(conditionFilter.value == ""){
-      filteredLists.value = products.value;
-      console.log(filteredLists.value);
-      return;
+    if(conditionFilter.value === ""){
+      filteredLists.value = products.value.filter((item) => {
+        const matchesFilter = filter.value
+            ? item.productName.toLowerCase().includes(filter.value.toLowerCase())
+            : true;
+        return matchesFilter;
+      });
     }
     filteredLists.value = products.value.filter((item) => {
       const matchesFilter = filter.value
