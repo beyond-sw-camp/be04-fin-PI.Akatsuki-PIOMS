@@ -165,7 +165,26 @@
 
 <details>
 <summary><h3>📁 PIOMS 통합 테스트</h3></summary>
-
+	<details>
+                <summary><h3>문의사항 로직</h3></summary>
+                <img src="https://github.com/PI-Akatsuki/PIOMS.FE/assets/101622086/44fcaea5-bf35-478f-9eb0-bf799589c512">
+        </details>	
+	<details>
+		<summary><h3>관리자 매뉴얼 PDF 다운로드</h3></summary>
+		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/cd1b4b6c-495a-453c-a767-40b7987f44e9">
+	</details>
+	<details>
+		<summary><h3>배송 및 발주관리</h3></summary>
+		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/fffd06ce-91f4-4eb9-936f-cde9065e1da9">
+	</details>
+	<details>
+		<summary><h3>송장 인쇄</h3></summary>
+		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/af8e2db4-0aa5-46c8-81e4-1bc9e74e4249">
+	</details>
+	<details>
+		<summary><h3>이력 관리</h3></summary>
+		<img src="https://github.com/PI-Akatsuki/PIOMS.FE/assets/101622086/c7401642-57e9-42d5-bbcf-3ba100c368a0">
+	</details>
 시연영상 붙일 예정
 </details>
 
