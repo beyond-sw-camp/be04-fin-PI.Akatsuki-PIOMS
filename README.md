@@ -4,23 +4,24 @@
 </div>
 
 <div align="center">
-  
-![PIOMS_로고](https://github.com/PI-Akatsuki/PIOMS.BE/assets/149561287/c0713139-cfce-460a-b1f1-2de9b46452c1)
+
 </div>
+
+![스크린샷 2024-06-13 오전 11 17 56](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/0d682877-e707-4b12-b929-f03e844ec007)
 
 <div align="right">
 
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fbeyond-sw-camp%2Fbe04-4th-PI-MoodHolic.git&count_bg=%23006EFF&title_bg=%23767676&icon=keybase.svg&icon_color=%23E7E7E7&title=Today&edge_flat=false)](https://hits.seeyoufarm.com)
 </div>
 
-<h1 align="left">👥 Members</h1>
+<h2 align="left">👥 Members</h2>
 
 |<img src="https://avatars.githubusercontent.com/u/81796274?v=4" width="170" height="160"/>|<img src="https://avatars.githubusercontent.com/u/122339395?v=4" width="170" height="160"/>|<img src="https://avatars.githubusercontent.com/u/101622086?v=4" width="170" height="160"/>|<img src="https://avatars.githubusercontent.com/u/149561287?v=4" width="170" height="160"/>|<img src="https://avatars.githubusercontent.com/u/22255663?v=4" width="170" height="160"/>|
 |:-:|:-:|:-:|:-:|:-:|
 |[@jaehyeon-SMU](https://github.com/jaehyeon-SMU)|악덕<br/>[@Virtue14](https://github.com/Virtue14)|신동호<br/>[@letsplaycoding](https://github.com/letsplaycoding)|[@Bodrami](https://github.com/Bodrami)|hyunwoo<br/>[@daersh](https://github.com/daersh)|
 
 </br>
-<h1 align="left">🛠️ Technology Stack</h1>
+<h2 align="left">🛠️ Technology Stack</h2>
 <div align="left">
 <details>
 <summary><h3>기술 스택</h3></summary>
@@ -50,9 +51,9 @@
 ### ⚙️ Production
 <img src="https://img.shields.io/badge/Apache Tomcat-F8DC75?style=for-thebadge&logo=Apache Tomcat&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/NPM-CB3837?style=for-thebadge&logo=NPM&logoColor=white" /> &nbsp;&nbsp;  <img src="https://img.shields.io/badge/Ubuntu-E95420?style=for-thebadge&logo=Ubuntu&logoColor=white" />
 </details>
-</div></br>
+</div></br></br>
 
-## 🌅 추진 계획
+## 🏷️ 추진 계획
 
 ### 🗓 Table 추진체계
 
@@ -65,64 +66,61 @@
 
 - 작업 수행공간: 서울 동작구 보라매로 87 SFC빌딩 3F 1강의실, 원격 소통(Discord 및 slack)
 
-<br/>
+<br/></br>
 
-## 🌅 New Technology
+## 🏷️ New Technology
 * 엑셀 다운로드 기능 구현
 * PDF 파일 다운로드 기능 구현
 * window로 영역 인쇄 기능 구현
 
-</br>
+</br></br>
 
-## 🌅 PIOMS System Architecture
+## 🏷️ 일정관리 (Sprint Kanban)
 
-![스크린샷 2024-06-11 오전 11 14 35](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/e77e5637-c377-46bd-ad7b-d3570fbf7c80)
-
-
-</br>
-
-## 🌅 일정관리 (Sprint Kanban)
-
-### ⏰ Plan Sprint Kanban
+#### ⏰ Plan Sprint Kanban
 <details>
-<summary><h3>PIOMS 기획(WBS)</h3></summary>
+<summary><h4>PIOMS 기획(WBS)</h4></summary>
 	
 ![스크린샷 2024-06-11 오후 4 31 24](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/ea8d2483-2bf9-46bf-8fb1-e7bd557acf15)
 </details>
 
-### ⏰ Back-end Sprint Kanban
+#### ⏰ Back-end Sprint Kanban
 <details>
-<summary><h3>1주차 - 6주차</h3></summary>
+<summary><h4>1주차 - 6주차</h4></summary>
 
 ![스크린샷 2024-06-11 오후 4 33 57](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/ba8f9ffe-74aa-4f3c-89c1-27fa7af63b28)
 </details>
 
-### ⏰ Front-end Sprint Kanban
+#### ⏰ Front-end Sprint Kanban
 <details>
-<summary><h3>1주차 - 4주차</h3></summary>
+<summary><h4>1주차 - 4주차</h4></summary>
 
 ![스크린샷 2024-06-11 오후 4 34 39](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/6351f643-c66a-4c05-b1d5-107e93b77a5f)
 </details>
-</br>
+</br></br>
 
-## 🌅 PIOMS 기획 문서
-
-<details>
+## 🏷️ PIOMS 프로젝트 문서
 <summary><h3>문서화 모음</h3></summary>
+
 <h3><a href="https://docs.google.com/spreadsheets/d/1P_TPNzrnce8OEkxFjxr9hyelmVbRY5yJ/edit?usp=sharing&ouid=104324075889250636464&rtpof=true&sd=true"/>📁 PIOMS 요구사항 정의서</h3>
 
 <h3><a href="https://docs.google.com/spreadsheets/d/1P_TPNzrnce8OEkxFjxr9hyelmVbRY5yJ/edit?usp=sharing&ouid=104324075889250636464&rtpof=true&sd=true"/>📁 PIOMS 기능 정의서</h3>
 
 <h3><a href="https://docs.google.com/spreadsheets/d/1P_TPNzrnce8OEkxFjxr9hyelmVbRY5yJ/edit?usp=sharing&ouid=104324075889250636464&rtpof=true&sd=true"/>📁 PIOMS 테의블 정의서</h3>
 
+<h3><a href="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/e77e5637-c377-46bd-ad7b-d3570fbf7c80"/>📁 PIOMS System Architecture</h3>
+
 <h3><a href="https://docs.google.com/spreadsheets/d/1P_TPNzrnce8OEkxFjxr9hyelmVbRY5yJ/edit?usp=sharing&ouid=104324075889250636464&rtpof=true&sd=true"/>📁 PIOMS I.A 구조도</h3>
 
 <h3><a href="https://docs.google.com/spreadsheets/d/1P_TPNzrnce8OEkxFjxr9hyelmVbRY5yJ/edit?usp=sharing&ouid=104324075889250636464&rtpof=true&sd=true"/>📁 PIOMS 단위 테스트</h3>
- 
-</details>
+
+<h3><a href="http://api.pioms.shop/swagger-ui/index.html"/>📁 PIOMS API 명세서</h3>
+
 </br>
 
-## 🌅 Wire Frame
+## 🏷️ PIOMS 프론트 화면 설계
+
+#### 🖥 Wire Frame
 <details>
 <summary><h3>PIOMS Wire Frame</h3></summary>
 
@@ -130,7 +128,7 @@
 </details>
 </br>
 
-## 🌅 PIOMS Story Board 
+#### 🖥 PIOMS Story Board 
 
 <details>
 <summary><h3>root 대시보드</h3></summary>
@@ -163,7 +161,7 @@
 </details>
 </br>
 
-## 🌅 DB Modeling (ERD, DDL)
+## 🏷️ DB Modeling (ERD, DDL)
 
 <details>
 <summary><h3>PIOMS DB 모델링</h3></summary>
@@ -386,7 +384,7 @@ CREATE TABLE `log` (
 </details>
 </br>
 
-## 🌅 논리 & 물리 Modeling
+## 🏷️ 논리 & 물리 Modeling
 <details>
 <summary><h3>논리 Modeling</h3></summary>
 
@@ -400,15 +398,6 @@ CREATE TABLE `log` (
 
 ![image](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/824ef096-05f8-48a6-ac6e-2e6edfde07ce)
 
-
-</details>
-</br>
-
-## 🌅 API 명세서
-
-<details>
-<summary><h3>PIOMS API 명세서</h3></summary>
-<a href="http://api.pioms.shop/swagger-ui/index.html">🧾 PIOMS API 명세서</a>
 
 </details>
 </br>
