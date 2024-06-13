@@ -449,7 +449,7 @@ fetchThirdCategories();
   border-radius: 5px;
   padding: 10px;
   width: 100%;
-  max-width: 1440px;
+  min-width: 1440px;
 }
 
 .filter-table td {
