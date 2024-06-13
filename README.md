@@ -185,9 +185,16 @@
 ![½ºÅ©¸°¼¦ 2024-06-13 110554](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/ef1c9d4f-d1ac-47ab-8441-d8900983e4b7)
 
 </details>
-
 <details>
 <summary><h4>📍 배송기사</h4></summary>
+
+![스크린샷 2024-06-13 112125](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/db11cd56-e8da-4766-aa3e-dd81e99704b1)
+![스크린샷 2024-06-13 111127](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/3f8a34da-9ed4-47d4-8a73-8e8519c2e317)
+![스크린샷 2024-06-13 110832](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/a8eede75-2c2f-4406-ba9f-43d77f8c2a31)
+![스크린샷 2024-06-13 110714](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/d830cb16-4f87-4faf-8701-f7ff56918123)
+</details>
+<details>
+<summary><h4>📍 공통</h4></summary>
 
 ![½÷ֵ©¸°¼¦ 2024-06-13 112037](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/f1c4c6d5-ab10-47dd-88cd-ec5b8fee512d)
 ![½÷ֵ©¸°¼¦ 2024-06-13 111021](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/90c14ede-8d51-40b2-9daa-a13cc4a2ef29)
@@ -197,7 +204,7 @@
 
 ## 🏷️ PIOMS 프론트 화면 설계
 <details>
-<summary><h3>🖥 Wire Frame Wire Frame</h3></summary>
+<summary><h3>🖥 Wire Frame</h3></summary>
 
 ![스크린샷 2024-06-11 오후 4 18 58](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/ec84c390-3974-49a2-8a02-9872f5874fd7)
 </details>
@@ -237,10 +244,8 @@
 </br>
 
 ## 🏷️ DB Modeling
-
-<h3>🗂️ DDL</h3>
 <details>
-<summary>PIOMS DDL 구문</summary>
+<summary><h3>🗂️ DDL 구문</h3></summary>
 
 ```sql
 CREATE TABLE `product` (
@@ -452,21 +457,17 @@ CREATE TABLE `log` (
 
 ```
 </details>
-
-<h3>🗂️ 논리 & 물리 Modeling</h3>
 <details>
-<summary><h3>논리 Modeling</h3></summary>
+<summary><h3>🗂️ 논리 & 물리 Modeling</h3></summary>
+
+<h3>논리 Modeling</h3>
 
 ![image](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/8655c8f2-2a69-4082-aba2-d4c563536f41)
 
-
-</details>
-
-<details>
-<summary><h3>물리 Modeling</h3></summary>
+<h3>물리 Modeling</h3>
 
 ![image](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/824ef096-05f8-48a6-ac6e-2e6edfde07ce)
-</details>
+
 </details>
 </br>
 
