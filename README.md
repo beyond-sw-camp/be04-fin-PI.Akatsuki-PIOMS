@@ -200,7 +200,7 @@
 	</details>
 	<details>
 		<summary><h3>가맹점 관리</h3></summary>
-		<img src="">
+		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/56974f81-3c0d-4e92-992b-3e92c9a70aa2">
 	</details>
 	<details>
 		<summary><h3>관리자 관리</h3></summary>
