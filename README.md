@@ -1,3 +1,5 @@
+
+https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/16e03f5f-0cf3-4fec-8579-45dd041c2a4e
 <div align="center">
 	
 <h2>📋 공급망관리를 위한 주문관리 시스템 📋</h2>
@@ -159,53 +161,71 @@
 <details>
 <summary><h3>📁 PIOMS 통합 테스트</h3></summary>
 	<details>
-                <summary><h3>문의사항 로직</h3></summary>
-                <img src="https://github.com/PI-Akatsuki/PIOMS.FE/assets/101622086/44fcaea5-bf35-478f-9eb0-bf799589c512">
-        </details>	
-	<details>
 		<summary><h3>관리자 매뉴얼 PDF 다운로드</h3></summary>
 		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/cd1b4b6c-495a-453c-a767-40b7987f44e9">
-	</details>
-	<details>
-		<summary><h3>배송 및 발주관리</h3></summary>
-		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/fffd06ce-91f4-4eb9-936f-cde9065e1da9">
 	</details>
 	<details>
 		<summary><h3>송장 인쇄</h3></summary>
 		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/af8e2db4-0aa5-46c8-81e4-1bc9e74e4249">
 	</details>
 	<details>
-		<summary><h3>이력 관리</h3></summary>
-		<img src="https://github.com/PI-Akatsuki/PIOMS.FE/assets/101622086/c7401642-57e9-42d5-bbcf-3ba100c368a0">
+		<summary><h3>이력 관리 및 엑셀셀</h3></summary>
+		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/c5a2afbd-e8de-4f41-8f8f-c17537f9e9a9">
 	</details>
 	<details>
 		<summary><h3>즐겨찾기</h3></summary>
 		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/f19a5a76-f1ff-43b1-8cde-8e7384e95342">
 	</details>
 	<details>
-		<summary><h3>점주관리</h3></summary>
-		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/677068fd-c999-46f1-93c0-3ae2c524d004">
-	</details>
-	<details>
-		<summary><h3>가맹점 관리</h3></summary>
-	</details>
-	<details>
-		<summary><h3>배송기사 관리</h3></summary>
-	</details>
-	<details>
-		<summary><h3>관리자 관리</h3></summary>
-	</details>
-	<details>
 		<summary><h3>로그인</h3></summary>
 		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/2e007740-3a3f-4b98-bc53-f25830a7450e">
+	</details>
+	<details>
+                <summary><h3>문의사항 관리</h3></summary>
+                <img src="https://github.com/PI-Akatsuki/PIOMS.FE/assets/101622086/44fcaea5-bf35-478f-9eb0-bf799589c512">
+        </details>	
+	<details>
+		<summary><h3>공지사항 관리</h3></summary>
+		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/b73d9f3d-9180-4ad6-a5d5-4a1681a1c237">
 	</details>
 	<details>
 		<summary><h3>상품 관리</h3></summary>
 		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/88e742c2-8d8d-41b0-b1fd-201984e8ce92">
 	</details>
 	<details>
-		<summary><h3>카테고리 관리</h3></summary>
-		
+		<summary><h3>상품 카테고리 관리</h3></summary>
+		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/40bbb3fb-5eb8-47a9-8eea-6454e530929e">
+	</details>
+	<details>
+		<summary><h3>점주관리</h3></summary>
+		<img src="">
+	</details>
+	<details>
+		<summary><h3>가맹점 관리</h3></summary>
+		<img src="">
+	</details>
+	<details>
+		<summary><h3>배송기사 관리</h3></summary>
+		<img src="">
+	</details>
+	<details>
+		<summary><h3>관리자 관리</h3></summary>
+		<img src="">
+	</details>
+	<details>
+		<summary><h3>발주 및 교환/반품 로직</h3></summary>
+	</details>
+	<details>
+		<summary><h3></h3></summary>
+		<img src="">
+	</details>
+	<details>
+		<summary><h3></h3></summary>
+		<img src="">
+	</details>
+	<details>
+		<summary><h3></h3></summary>
+		<img src="">
 	</details>
 </details>
 
