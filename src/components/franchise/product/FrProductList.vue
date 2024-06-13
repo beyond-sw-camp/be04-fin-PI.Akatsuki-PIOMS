@@ -92,7 +92,6 @@
 
     <div align="center" >
       <div class="post-btn" id="app">
-        <ProductPostPopup v-if="showPostPopup" @close="showPostPopup = false" />
         <button @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
       </div>
     </div>
@@ -105,7 +104,6 @@
         </tr>
         </thead>
         <tbody>
-<!--          @click="showDetailPopup(item.productCode,item.productName,item.productCount,item.productPrice,item.productStatus,item.productColor,item.productSize,item.categoryFirstName,item.categorySecondName,item.categoryThirdName,item.productContent)"-->
         <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost"
             :id="'row-' + rowIndex">
           <td class="table-td">{{ rowIndex + 1 }}</td>
@@ -129,19 +127,6 @@
         </tbody>
       </table>
     </div>
-
-<!--    <ProductDetailPopup v-if="detailPopup" :currentProductCode="currentProductCode"-->
-<!--                        :currentProductName="currentProductName"-->
-<!--                        :currentProductCount="currentProductCount"-->
-<!--                        :currentProductPrice="currentProductPrice"-->
-<!--                        :currentProductStatus="currentProductStatus"-->
-<!--                        :currentProductColor="currentProductColor"-->
-<!--                        :currentProductSize="currentProductSize"-->
-<!--                        :currentCategoryFirstName="currentCategoryFirstName"-->
-<!--                        :currentCategorySecondName="currentCategorySecondName"-->
-<!--                        :currentCategoryThirdName="currentCategoryThirdName"-->
-<!--                        :currentProductContent="currentProductContent"-->
-<!--                        :closeEdit="closePopup"/>-->
   </div>
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage === 1">이전</button>
@@ -155,8 +140,6 @@
 import {ref, computed} from 'vue';
 import axios from "axios";
 import { useStore } from 'vuex';
-import ProductPostPopup from "@/components/admin/product/ProductPostPopup.vue";
-// import ProductDetailPopup from "@/components/franchise/product/ProductDetailPopup.vue";
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -204,59 +187,6 @@ const currentCategorySecondName = ref('');
 const currentCategoryThirdName = ref('');
 const currentProductContent = ref('');
 
-const detailPopup = ref(false);
-
-const showDetailPopup = (productCode, productName, productCount, productPrice, productStatus, productColor, productSize,
-                         categoryFirstName, categorySecondName, categoryThirdName, productContent) => {
-  detailPopup.value = !detailPopup.value;
-  setCurrentProductCode(productCode);
-  setCurrentProductName(productName);
-  setCurrentProductCount(productCount);
-  setCurrentProductPrice(productPrice);
-  setCurrentProductStatus(productStatus);
-  setCurrentProductColor(productColor);
-  setCurrentProductSize(productSize);
-  setCurrentCategoryFirstName(categoryFirstName);
-  setCurrentCategorySecondName(categorySecondName);
-  setCurrentCategoryThirdName(categoryThirdName);
-  setCurrentProductContent(productContent);
-}
-const closePopup = () => {
-  detailPopup.value = !detailPopup.value;
-}
-const setCurrentProductCode = (productCode) => {
-  currentProductCode.value = productCode;
-};
-const setCurrentProductName = (productName) => {
-  currentProductName.value = productName;
-}
-const setCurrentProductCount = (productCount) => {
-  currentProductCount.value = productCount;
-}
-const setCurrentProductPrice = (productPrice) => {
-  currentProductPrice.value = productPrice;
-}
-const setCurrentProductStatus = (productStatus) => {
-  currentProductStatus.value = productStatus;
-}
-const setCurrentProductColor = (productColor) => {
-  currentProductColor.value = productColor;
-}
-const setCurrentProductSize = (productSize) => {
-  currentProductSize.value = productSize;
-}
-const setCurrentProductContent = (productContent) => {
-  currentProductContent.value = productContent;
-}
-const setCurrentCategoryFirstName = (categoryFirstName) => {
-  currentCategoryFirstName.value = categoryFirstName;
-}
-const setCurrentCategorySecondName = (categorySecondName) => {
-  currentCategorySecondName.value = categorySecondName;
-}
-const setCurrentCategoryThirdName = (categoryThirdName) => {
-  currentCategoryThirdName.value = categoryThirdName;
-}
 const getProductImageUrl = (productCode) => {
   return productImages.value[productCode] || 'path/to/default-image.jpg';
 };
