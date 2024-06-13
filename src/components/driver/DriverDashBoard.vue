@@ -107,8 +107,8 @@
       </div>
     </div>
     <!-- 송장 팝업 -->
-<!--      <Invoice v-if="showInvoicePopup" :invoice="selectedInvoice" @click.self="closeInvoicePopup" />-->
-    <div v-if="showInvoicePopup">
+<!--    <Invoice v-if="showInvoicePopup" :invoice="selectedInvoice" @click.self="closeInvoicePopup" />-->
+    <div v-if="showInvoicePopup" class="popup">
         <Invoice v-if="showInvoicePopup" :invoice="selectedInvoice" @close="closeInvoicePopup"/>
     </div>
 
@@ -599,11 +599,13 @@ hr.hr2 {
    left: 0;
    width: 100%;
    height: 100%;
+   background: rgba(0, 0, 0, 0.5);
    display: flex;
    justify-content: center;
    align-items: center;
    z-index: 1000;
  }
+
 
  .popup-content {
    background: #fff;
