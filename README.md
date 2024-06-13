@@ -185,6 +185,10 @@
 		<summary><h3>이력 관리</h3></summary>
 		<img src="https://github.com/PI-Akatsuki/PIOMS.FE/assets/101622086/c7401642-57e9-42d5-bbcf-3ba100c368a0">
 	</details>
+	<details>
+		<summary><h3>즐겨찾기</h3></summary>
+		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/f19a5a76-f1ff-43b1-8cde-8e7384e95342">
+	</details>
 시연영상 붙일 예정
 </details>
 
