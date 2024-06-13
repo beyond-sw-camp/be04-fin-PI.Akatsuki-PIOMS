@@ -421,4 +421,14 @@ onMounted(() => {
   background-color: #d9d9d9;
   margin: 0;
 }
+
+.info-row:last-child {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  font-size: 14px;
+  overflow: auto;
+  height: auto;
+}
 </style>
