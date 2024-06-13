@@ -196,7 +196,7 @@
 	</details>
 	<details>
 		<summary><h3>점주관리</h3></summary>
-		<img src="">
+		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/31858721-ba3d-47e2-bdc5-726a42309b5a">
 	</details>
 	<details>
 		<summary><h3>가맹점 관리</h3></summary>
