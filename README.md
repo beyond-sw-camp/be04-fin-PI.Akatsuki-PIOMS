@@ -203,12 +203,12 @@
 		<img src="">
 	</details>
 	<details>
-		<summary><h3>배송기사 관리</h3></summary>
-		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/502cff8c-cbe6-455d-a8df-3d41a2aa8eb2">
-	</details>
-	<details>
 		<summary><h3>관리자 관리</h3></summary>
 		<img src="">
+	</details>
+	<details>
+		<summary><h3>배송기사 관리</h3></summary>
+		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/502cff8c-cbe6-455d-a8df-3d41a2aa8eb2">
 	</details>
 	<details>
 		<summary><h3>발주 및 교환/반품 로직</h3></summary>
