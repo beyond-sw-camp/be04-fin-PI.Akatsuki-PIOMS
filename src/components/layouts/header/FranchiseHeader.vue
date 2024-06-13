@@ -75,9 +75,9 @@
           <div class="submenu_box" style="height: 200px">
             <ul class="submenu">
               <li>
-                <a class="depth1" style="cursor: default"><h4 id="depth1_title">공지사항 관리</h4></a>
+                <a class="depth1" style="cursor: default"><h4 id="depth1_title">공지사항</h4></a>
                 <ul class="submenu_sub">
-                  <li><router-link to="/franchise/notice/list" class="depth2">공지사항 처리</router-link></li>
+                  <li><router-link to="/franchise/notice/list" class="depth2">공지사항 목록</router-link></li>
                 </ul>
                 <hr class="hr3" />
               </li>
