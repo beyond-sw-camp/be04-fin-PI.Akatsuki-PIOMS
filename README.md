@@ -1,5 +1,3 @@
-
-https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/9efe45de-45c3-4907-b6d7-e1926c33f39b
 <div align="center">
 	
 <h2>📋 공급망관리를 위한 주문관리 시스템 📋</h2>
