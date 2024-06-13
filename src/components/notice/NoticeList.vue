@@ -67,7 +67,7 @@
 />
 
 <!-- 오버레이 -->
-<div v-if="isRegisterFormVisible || isEditFormVisible" class="overlay" @click="closeOverlay">
+<div v-if="isRegisterFormVisible && isEditFormVisible" class="overlay">
 
 </div>
 
@@ -268,7 +268,6 @@ const toggleRegisterForm = () => {
 const toggleEditForm = () => {
   isEditFormVisible.value = !isEditFormVisible.value;
 };
-
 
 const closeOverlay = () => {
   isRegisterFormVisible.value = false;

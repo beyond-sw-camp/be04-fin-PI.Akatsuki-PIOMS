@@ -109,8 +109,7 @@ const getDetailInvoice = async () => {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-
-
+    
     const data = await response.text(); // JSON 파싱 이전에 문자열로 받음
     console.log('Fetched invoice details', data); // 콘솔에 데이터 구조 출력
     invoice.value = data.invoice;
