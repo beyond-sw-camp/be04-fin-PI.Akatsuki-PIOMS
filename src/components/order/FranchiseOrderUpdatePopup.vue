@@ -92,7 +92,7 @@
         </table>
       </div >
     <div class="action-buttons" >
-        <p v-if="totalPrice > 0">총 가격: {{ totalPrice }}원</p>
+        <p v-if="totalPrice > 0">총 가격: {{ totalPrice.toLocaleString() }}원</p>
         <button class="ho-btn" @click="exportOrder">수정하기</button>
         <button class="ho-btn" @click="props.clickUpdate" >돌아가기</button>
       </div>

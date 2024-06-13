@@ -184,7 +184,7 @@ const getNotice = async () => {
 
     const data = await response.json();
     if (data.length > 0) {
-      lists.value = data;
+      lists.value = data.sort((a, b) => new Date(b.noticeEnrollDate) - new Date(a.noticeEnrollDate));
       filteredLists.value = lists.value;
     } else {
       lists.value = [];
