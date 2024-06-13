@@ -146,7 +146,7 @@
             <hr>
             <div class="franchise-list">
               <div v-for="(franchise, rowIndex) in paginatedLists2" :key="rowIndex" class="franchise-info">
-                <div class="franchise-row">
+                <div class="franchise-row" v-if="franchise.franchiseOwner != null">
                   <div>{{ franchise.franchiseName }}</div>
                   <div>{{ franchise.franchiseOwner.franchiseOwnerName }} 관리자님</div>
                 </div>
@@ -270,7 +270,7 @@ const getDash = async () => {
     company.value = data.companyVO;
     exchanges.value = data.exchangeList;
     franchises.value = data.franchiseList;
-    notices.value = data.noticeList;
+    notices.value = data.noticeList.sort((a, b) => new Date(b.noticeEnrollDate) - new Date(a.noticeEnrollDate));
     orderStat.value = data.orderStat;
     products.value = data.products;
     isLoading.value = true;

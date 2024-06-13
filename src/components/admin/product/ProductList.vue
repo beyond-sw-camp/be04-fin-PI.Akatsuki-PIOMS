@@ -1,15 +1,18 @@
 <template xmlns="http://www.w3.org/1999/html">
   <div class="container">
-    <div class="header">
-      <img src="@/assets/icon/가맹점.png" style="width: 18px"/>&nbsp;
-      <span class="breadcrumb">상품 및 상품 카테고리 관리 > 상품 관리 > 상품 전체 조회 및 관리</span>
+
+    <div class="header" align="center"  style="padding-bottom: 30px;">
+      <div style="  max-width: 1440px;justify-content: center;align-items: center;"  >
+        <br>
+        <div style="float: left" ><img src="@/assets/icon/Cloth.png" style="width: 18px"/>&nbsp;
+          <span class="breadcrumb">상품 및 상품 카테고리 관리 > 상품 관리 > 상품 전체 조회 및 관리</span>
+        </div>
+      </div>
     </div>
 
-
-
-  <div class="product-sub-title"> * 조회할 상품의 조건을 선택 후
-    <img src="@/assets/icon/reset.png">초기화 또는<img src="@/assets/icon/search.png">검색을 눌러주세요.
-  </div>
+    <div class="product-sub-title"> * 조회할 상품의 조건을 선택 후
+      <img src="@/assets/icon/reset.png">초기화 또는<img src="@/assets/icon/search.png">검색을 눌러주세요.
+    </div>
 
   <div>
     <div class="filter-section">
@@ -93,6 +96,10 @@
         </tr>
       </table>
     </div>
+
+
+
+
     <div class="action-buttons">
       <button @click="resetFilters" class="reset-btn">
         <img src="@/assets/icon/reset.png" alt="Reset" />
@@ -101,7 +108,8 @@
         <img src="@/assets/icon/search.png" alt="Search" />
       </button>
     </div>
-    <div align="center" >
+
+    <div class="filter-buttons">
       <div class="post-btn" id="app">
         <button @click="showPostPopup = true" class="postBtn">
           <img src="@/assets/icon/new%20Item.png" alt="postProduct">
@@ -110,6 +118,8 @@
         <button @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
       </div>
     </div>
+
+
     <div class="table-container">
       <table class="table">
         <thead>
@@ -118,7 +128,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost"
+        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="tr__bd"
             :id=" 'row-' + rowIndex">
           <td class="table-td">{{ rowIndex + 1 }}</td>
           <td v-for="(header, colIndex) in headers.slice(1)" :key="colIndex" class="table-td">
@@ -605,19 +615,19 @@ fetchThirdCategories();
   text-align: center;
 }
 
-.allpost {
-  text-align: center;
-  padding: 10px 0;
-}
-
-.allpost:hover {
+.tr__bd:hover {
   background-color: #f2f2f2;
 }
 
-.allpost td {
-  border-right: 1px solid #ddd;
+.tr__bd td {
+  border-bottom: 1px solid #ddd;
   font-size: 12px;
 }
+
+.tr__bd:last-child td {
+  border-bottom: none;
+}
+
 
 .button-as-text {
   background: none;
@@ -637,26 +647,6 @@ fetchThirdCategories();
 
 .categories {
   border: 1px solid rgba(217, 217, 217, 0.7);
-}
-
-.product-title {
-  /* position: relative; */
-  /* left: -60px; */
-}
-
-.headerTitle img {
-  width: 10px;
-  height: 10px;
-}
-
-.headerTitle p {
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.headerTitle h3,
-.headerTitle h6 {
-  margin: 0
 }
 
 .pagination {
@@ -709,13 +699,19 @@ fetchThirdCategories();
 }
 
 .header {
-  margin-bottom: 20px;
-  margin-left: 215px;
+  width: 100%;
+  max-width: 1440px;
+  text-align: center;
+  padding-bottom: 30px;
 }
 
 .container {
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
+
 .post-btn {
   display: flex;
   justify-content: space-between;
@@ -738,10 +734,26 @@ fetchThirdCategories();
 
 .product-sub-title {
   display: flex;
-  padding-left: 210px;
   align-items: center;
   gap: 5px;
   margin-bottom: 20px;
   justify-content: flex-start;
+  width: 100%;
+  max-width: 1440px;
+  padding-left: 10px;
+}
+
+.breadcrumb {
+  font-size: 16px;
+  color: #555;
+  font-weight: bold;
+}
+.filter-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  max-width: 1440px;
 }
 </style>

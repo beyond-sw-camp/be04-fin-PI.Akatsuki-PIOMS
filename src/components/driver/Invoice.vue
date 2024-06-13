@@ -109,8 +109,7 @@ const getDetailInvoice = async () => {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-
-
+    
     const data = await response.text(); // JSON 파싱 이전에 문자열로 받음
     console.log('Fetched invoice details', data); // 콘솔에 데이터 구조 출력
     invoice.value = data.invoice;
@@ -317,7 +316,7 @@ hr {
 #customer-orderCode,
 #customer-invoiceCode {
   display: inline-block;
-  margin-left: 10px; /* 텍스트 사이의 간격을 설정합니다 */
+  margin-left: 10px;
   text-align: center;
 }
 

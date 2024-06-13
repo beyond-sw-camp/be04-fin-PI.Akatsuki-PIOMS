@@ -1,8 +1,12 @@
 <template>
   <div class="container">
-    <div class="header">
-      <img src="@/assets/icon/이력관리.png" style="width: 18px"/>&nbsp;
-      <span class="breadcrumb">이력 관리 > 전체 이력 관리</span>
+    <div class="header" align="center"  style="padding-bottom: 30px;">
+      <div style="  max-width: 1440px;justify-content: center;align-items: center;"  >
+        <br>
+        <div style="float: left" ><img src="@/assets/icon/이력관리.png" style="width: 18px"/>&nbsp;
+          <span class="breadcrumb">이력 관리 > 전체 이력 관리</span>
+        </div>
+      </div>
     </div>
 
     <div class="product-sub-title"> * 조회할 상품의 조건을 선택 후
@@ -77,16 +81,16 @@
       <table class="table">
         <thead>
         <tr class="header1">
-          <th>No</th>
-          <th>이력변경자</th>
+          <th width="4%">No</th>
+          <th width="10%">이력변경자</th>
           <th>이력내용</th>
-          <th>변경일</th>
-          <th>이력상태</th>
-          <th>이력대상</th>
+          <th width="10%">변경일</th>
+          <th width="10%">이력상태</th>
+          <th width="10%">이력대상</th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(history, index) in paginatedHistories" :key="history.logCode" class="allpost">
+        <tr v-for="(history, index) in paginatedHistories" :key="history.logCode" class="tr__bd">
           <td>{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
           <td>{{ history.logChanger }}</td>
           <td @dblclick="showPopup(history.logContent)">{{ history.logContent }}</td>
@@ -263,14 +267,25 @@ onMounted(() => {
 <style scoped>
 .container {
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .header {
+  width: 100%;
+  max-width: 1440px;
+  text-align: center;
+  padding-bottom: 30px;
+}
+
+.header-content {
   display: flex;
-  padding-left: 210px;
   align-items: center;
-  margin-bottom: 20px;
-  justify-content: flex-start;
+}
+
+.header-icon {
+  width: 18px;
 }
 
 .breadcrumb {
@@ -279,11 +294,24 @@ onMounted(() => {
   font-weight: bold;
 }
 
+.product-sub-title {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 20px;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 1440px;
+  padding-left: 10px;
+}
+
 .filter-section {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 20px;
+  width: 100%;
+  max-width: 1440px;
 }
 
 .filter-table {
@@ -293,7 +321,6 @@ onMounted(() => {
   border-radius: 5px;
   padding: 10px;
   width: 100%;
-  max-width: 1440px;
 }
 
 .filter-table td {
@@ -305,7 +332,7 @@ onMounted(() => {
   text-align: center;
   border: solid 1px #747474;
   width: 120px;
-  background-color: #D9D9D9;
+  background-color: #d9d9d9;
 }
 
 .filter-input {
@@ -319,9 +346,12 @@ onMounted(() => {
   justify-content: center;
   margin-top: 10px;
   margin-bottom: 10px;
-
+  width: 100%;
+  max-width: 1440px;
 }
-.reset-btn, .search-btn {
+
+.reset-btn,
+.search-btn {
   background-color: #fff;
   color: black;
   border: none;
@@ -332,25 +362,7 @@ onMounted(() => {
   margin: 0 5px;
 }
 
-.table-container {
-  width: 100%;
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: center;
-}
-
-.table {
-  width: 100%;
-  max-width: 1440px;
-  border-collapse: collapse;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-spacing: 0 10px
-}
-
 .table th {
-
   font-weight: bold;
   color: #000;
   text-align: center;
@@ -363,9 +375,9 @@ onMounted(() => {
 }
 
 .header1 {
-  background-color: #D9D9D9;
+  background-color: #d9d9d9;
   font-weight: bold;
-  height: 40px;
+  height: 50px;
   font-size: 14px;
   text-align: center;
 }
@@ -403,8 +415,8 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: relative;
-  width: 1440px;
+  width: 100%;
+  max-width: 1440px;
 }
 
 .postBtn {
@@ -419,12 +431,65 @@ onMounted(() => {
   cursor: pointer;
 }
 
-.product-sub-title {
-  display: flex;
-  padding-left: 210px;
-  align-items: center;
-  gap: 5px;
+.tr__bd:hover {
+  background-color: #f2f2f2;
+}
+
+.tr__bd td {
+  border-bottom: 1px solid #ddd;
+  font-size: 12px;
+}
+
+.tr__bd:last-child td {
+  border-bottom: none;
+}
+
+.table-container {
+  width: 100%;
   margin-bottom: 20px;
-  justify-content: flex-start;
+  display: flex;
+  justify-content: center;
+}
+
+.table {
+  width: 100%;
+  max-width: 1440px;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-spacing: 0 10px;
+  table-layout: fixed; /* 고정된 레이아웃을 사용하여 셀 너비를 고정 */
+}
+
+.table th, .table td {
+  padding: 10px;
+  text-align: center;
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  overflow: hidden;
+  text-overflow: ellipsis; /* 내용이 넘칠 때 "..." 표시 */
+}
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* 팝업 오버레이의 z-index 설정 */
+}
+
+.popup-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.popup-text {
+  white-space: pre-wrap;
 }
 </style>

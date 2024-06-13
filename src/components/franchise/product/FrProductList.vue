@@ -1,15 +1,15 @@
 <template>
-  <div align="center" >
-    <div class="headerTitle" align="left" style="width: 1200px;  margin-top: 1%">
-      <p class="product-title">
-        <img class="Cloth" src="@/assets/icon/Cloth.png" style="width: 25px; height: 25px; margin-right: 10px; position: relative; top: 3px;"/>창고 조회 및 재고 관리 > 창고 조회 > 본사 창고 조회
-      </p>
-      <h6 class="product-sub-title" style="margin-top: 1%; margin-bottom: 3px"> * 조회할 상품의 조건을 선택 후
-        <img style="width: 18px; height: 18px; margin-right: 3px;" src="@/assets/icon/reset.png">초기화 또는 <img  style="width: 18px; height: 18px; margin-right: 3px;" src="@/assets/icon/search.png">검색을 눌러주세요.
-      </h6>
+  <div class="container">
+    <div class="header">
+      <img src="@/assets/icon/가맹점.png" style="width: 18px"/>&nbsp;
+      <span class="breadcrumb">창고 조회 및 재고 관리 > 창고 조회 > 본사 창고 조회</span>
     </div>
-  </div>
-  <div align="center" >
+    <div class="product-sub-title"> * 조회할 상품의 조건을 선택 후
+      <img src="@/assets/icon/reset.png">초기화 또는<img src="@/assets/icon/search.png">검색을 눌러주세요.
+    </div>
+
+
+  <div>
     <div class="filter-section">
       <div>
       </div>
@@ -57,8 +57,8 @@
           </td>
         </tr>
         <tr>
-          <td class="filter-label">카테고리<br>구분</td>
-          <td class="filter-input">
+          <td class="filter-label">카테고리 구분</td>
+          <td class="filter-input" colspan="3">
             <select id="firstCategory" v-model="selectedFirstCategory" @change="fetchSecondCategories" class="categories">
               <option value="">대분류</option>
               <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">
@@ -89,11 +89,13 @@
         <img src="@/assets/icon/search.png" alt="Search" />
       </button>
     </div>
-    <div class="post-btn" id="app">
-      <button @click="downloadExcel" class="excelBtn">
-        <img src="@/assets/icon/excel.png" alt="excel">
-      </button>
+
+    <div align="center" >
+      <div class="post-btn" id="app">
+        <button @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
+      </div>
     </div>
+
     <div class="table-container">
       <table class="table">
         <thead>
@@ -102,7 +104,6 @@
         </tr>
         </thead>
         <tbody>
-<!--          @click="showDetailPopup(item.productCode,item.productName,item.productCount,item.productPrice,item.productStatus,item.productColor,item.productSize,item.categoryFirstName,item.categorySecondName,item.categoryThirdName,item.productContent)"-->
         <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost"
             :id="'row-' + rowIndex">
           <td class="table-td">{{ rowIndex + 1 }}</td>
@@ -126,23 +127,12 @@
         </tbody>
       </table>
     </div>
+  </div>
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage === 1">이전</button>
       <span> {{currentPage}} / {{totalPages}} </span>
       <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
     </div>
-<!--    <ProductDetailPopup v-if="detailPopup" :currentProductCode="currentProductCode"-->
-<!--                        :currentProductName="currentProductName"-->
-<!--                        :currentProductCount="currentProductCount"-->
-<!--                        :currentProductPrice="currentProductPrice"-->
-<!--                        :currentProductStatus="currentProductStatus"-->
-<!--                        :currentProductColor="currentProductColor"-->
-<!--                        :currentProductSize="currentProductSize"-->
-<!--                        :currentCategoryFirstName="currentCategoryFirstName"-->
-<!--                        :currentCategorySecondName="currentCategorySecondName"-->
-<!--                        :currentCategoryThirdName="currentCategoryThirdName"-->
-<!--                        :currentProductContent="currentProductContent"-->
-<!--                        :closeEdit="closePopup"/>-->
   </div>
 </template>
 
@@ -150,7 +140,6 @@
 import {ref, computed} from 'vue';
 import axios from "axios";
 import { useStore } from 'vuex';
-// import ProductDetailPopup from "@/components/franchise/product/ProductDetailPopup.vue";
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -198,59 +187,6 @@ const currentCategorySecondName = ref('');
 const currentCategoryThirdName = ref('');
 const currentProductContent = ref('');
 
-const detailPopup = ref(false);
-
-const showDetailPopup = (productCode, productName, productCount, productPrice, productStatus, productColor, productSize,
-                         categoryFirstName, categorySecondName, categoryThirdName, productContent) => {
-  detailPopup.value = !detailPopup.value;
-  setCurrentProductCode(productCode);
-  setCurrentProductName(productName);
-  setCurrentProductCount(productCount);
-  setCurrentProductPrice(productPrice);
-  setCurrentProductStatus(productStatus);
-  setCurrentProductColor(productColor);
-  setCurrentProductSize(productSize);
-  setCurrentCategoryFirstName(categoryFirstName);
-  setCurrentCategorySecondName(categorySecondName);
-  setCurrentCategoryThirdName(categoryThirdName);
-  setCurrentProductContent(productContent);
-}
-const closePopup = () => {
-  detailPopup.value = !detailPopup.value;
-}
-const setCurrentProductCode = (productCode) => {
-  currentProductCode.value = productCode;
-};
-const setCurrentProductName = (productName) => {
-  currentProductName.value = productName;
-}
-const setCurrentProductCount = (productCount) => {
-  currentProductCount.value = productCount;
-}
-const setCurrentProductPrice = (productPrice) => {
-  currentProductPrice.value = productPrice;
-}
-const setCurrentProductStatus = (productStatus) => {
-  currentProductStatus.value = productStatus;
-}
-const setCurrentProductColor = (productColor) => {
-  currentProductColor.value = productColor;
-}
-const setCurrentProductSize = (productSize) => {
-  currentProductSize.value = productSize;
-}
-const setCurrentProductContent = (productContent) => {
-  currentProductContent.value = productContent;
-}
-const setCurrentCategoryFirstName = (categoryFirstName) => {
-  currentCategoryFirstName.value = categoryFirstName;
-}
-const setCurrentCategorySecondName = (categorySecondName) => {
-  currentCategorySecondName.value = categorySecondName;
-}
-const setCurrentCategoryThirdName = (categoryThirdName) => {
-  currentCategoryThirdName.value = categoryThirdName;
-}
 const getProductImageUrl = (productCode) => {
   return productImages.value[productCode] || 'path/to/default-image.jpg';
 };
@@ -414,9 +350,9 @@ const getMemberId = async () => {
         productStatus: product.productStatus,
         productColor: product.productColor,
         productSize: product.productSize,
-        categoryFirstName: product.categoryFirstCode,
-        categorySecondName: product.categorySecondCode,
-        categoryThirdName: product.categoryThirdCode,
+        categoryFirstName: product.categoryFirstName,
+        categorySecondName: product.categorySecondName,
+        categoryThirdName: product.categoryThirdName,
       };
     });
 
@@ -472,45 +408,28 @@ fetchSecondCategories();
 fetchThirdCategories();
 </script>
 <style scoped>
+.Cloth {
+  margin-right: 5px;
+  position: relative;
+  top: 2px
+}
 
-.pagination button {
-  border: none;
-  border-radius: 10px;
-  width: 75px;
-}
-.status-available {
-  align-content: center;
-  background-color: #FFCD4B;
-  border-radius: 8px;
-  color: #FFFFFF;
-  font-weight: bold;
-  height: 25px;
-  font-size: 14px;
-}
-.status-unavailable {
-  align-content: center;
-  background-color: #FF6285;
-  border-radius: 8px;
-  color: #FFFFFF;
-  font-weight: bold;
-  height: 25px;
-  font-size: 14px;
-}
 .product-img {
   width: 30px;
   height: 30px;
   transition: transform 0.5s ease;
 }
+
 .product-img:hover {
   transform: scale(3.3);
 }
 
 .pagination {
   margin-top: 10px;
-  margin-bottom: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-bottom: 100px;
 }
 
 .pagination button {
@@ -520,8 +439,9 @@ fetchThirdCategories();
 }
 .filter-section {
   display: flex;
-  justify-content: center;
-  margin: 0;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 .filter-table {
@@ -530,7 +450,8 @@ fetchThirdCategories();
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 10px;
-  width: 1200px;
+  width: 100%;
+  max-width: 1440px;
 }
 
 .filter-table td {
@@ -540,17 +461,15 @@ fetchThirdCategories();
 .filter-label {
   font-weight: bold;
   text-align: center;
-  font-size: 12px;
-  width: 100px;
+  border: solid 1px #747474;
+  width: 120px;
   background-color: #D9D9D9;
-  border: 1px solid #ddd;
 }
 
 .filter-input {
-  width: 500px;
   text-align: left;
-  border: 1px solid lightgray;
-  border-right: none;
+  border: solid 1px #747474;
+  padding: 5px;
 }
 
 .action-buttons {
@@ -559,14 +478,6 @@ fetchThirdCategories();
   margin-top: 10px;
 }
 
-.excelBtn {
-  width: 100px;
-  height: 26px;
-  border: none;
-  background-color: white;
-  cursor: pointer;
-  margin-right: 0.5%;
-}
 
 .reset-btn, .search-btn {
   background-color: #fff;
@@ -578,14 +489,6 @@ fetchThirdCategories();
   font-size: 14px;
   margin: 0 5px;
 }
-.post-btn {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  position: absolute;
-  left: 15.5%;
-  width: 1210px;
-}
 
 .reset-btn:hover, .search-btn:hover {
   background-color: #fff;
@@ -593,58 +496,45 @@ fetchThirdCategories();
 
 .table-container {
   width: 100%;
-  margin-top: 40px;
   margin-bottom: 20px;
   display: flex;
   justify-content: center;
 }
 
 .table {
-  width: 1200px;
-  max-width: 1200px;
+  width: 100%;
+  max-width: 1440px;
   border-collapse: collapse;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-spacing: 0 10px;
-  table-layout: fixed;
 }
 
 .table th {
   font-weight: bold;
   color: #000;
-  width: 100%;
-  height: 10px;
-  table-layout: fixed;
+  text-align: center;
 }
 
 .table th,
 .table td {
-  border: 0.5px solid #D9D9D9;
-  padding: 8px;
-  width: 80px;
-  height: 10px;
-  table-layout: fixed;
+  padding: 10px;
+  text-align: center;
 }
+
 
 .header1 {
   background-color: #D9D9D9;
   font-weight: bold;
   height: 50px;
-  font-size: 12px;
-  text-align: center;
-  width: 5%;
-}
-
-.header1 th{
-  font-size: 15px;
+  font-size: 14px;
   text-align: center;
 }
 
 .allpost {
   text-align: center;
   padding: 10px 0;
-  width: 5%;
 }
 
 .allpost:hover {
@@ -656,36 +546,128 @@ fetchThirdCategories();
   font-size: 12px;
 }
 
+.button-as-text {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  text-align: left;
+}
+
 .textInput {
   border: 1px solid rgba(217, 217, 217, 0.7);
 }
+
 .categories {
   border: 1px solid rgba(217, 217, 217, 0.7);
 }
+
 .product-title {
-  //margin-left: 18%;
+  /* position: relative; */
+  /* left: -60px; */
 }
 
-.product-sub-title {
-  margin: 0;
-  font-size: 12px;
-
-}
-.product-sub-title img {
-  width: 18px;
-  height: 18px;
-  margin-right: 3px;
-}
 .headerTitle img {
   width: 10px;
   height: 10px;
 }
+
 .headerTitle p {
   font-size: 20px;
   font-weight: bold;
 }
+
 .headerTitle h3,
 .headerTitle h6 {
   margin: 0
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.pagination button {
+  background-color: #fff;
+  color: black;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 8px 16px;
+  font-size: 14px;
+  margin: 0 5px;
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pagination span {
+  margin: 0 10px;
+  font-weight: bold;
+}
+
+.status-available {
+  align-content: center;
+  background-color: #FFCD4B;
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-weight: bold;
+  height: 25px;
+  font-size: 14px;
+}
+
+.status-unavailable {
+  align-content: center;
+  background-color: #FF6285;
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-weight: bold;
+  height: 25px;
+  font-size: 14px;
+}
+
+.header {
+  margin-bottom: 20px;
+  margin-left: 215px;
+}
+
+.container {
+  padding: 20px;
+}
+.post-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  width: 1440px;
+}
+
+.postBtn {
+  border: none;
+  background-color: white;
+  cursor: pointer;
+}
+
+.excelBtn {
+  border: none;
+  background-color: white;
+  cursor: pointer;
+}
+
+.product-sub-title {
+  display: flex;
+  padding-left: 210px;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 20px;
+  justify-content: flex-start;
 }
 </style>

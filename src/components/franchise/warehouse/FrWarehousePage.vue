@@ -1,15 +1,16 @@
 <template>
-  <div align="center" >
-    <div class="headerTitle" align="left" style="width: 1200px;  margin-top: 1%">
-      <p class="product-title">
-        <img class="Cloth" src="@/assets/icon/Cloth.png">창고 조회 및 재고 관리 > 창고 조회 > 가맹 창고 조회
-      </p>
-      <h6 class="product-sub-title" style="margin-top: 1%; margin-bottom: 3px"> * 조회할 상품의 조건을 선택 후
-        <img src="@/assets/icon/reset.png">초기화 또는 <img src="@/assets/icon/search.png">검색을 눌러주세요.
-      </h6>
+  <div class="container">
+    <div class="header">
+      <img src="@/assets/icon/가맹점.png" style="width: 18px"/>&nbsp;
+      <span class="breadcrumb">창고 조회 및 재고 관리 > 창고 조회 > 가맹 창고 조회</span>
     </div>
-  </div>
-  <div>
+
+
+    <div class="product-sub-title"> * 조회할 상품의 조건을 선택 후
+      <img src="@/assets/icon/reset.png">초기화 또는<img src="@/assets/icon/search.png">검색을 눌러주세요.
+    </div>
+
+
     <div class="filter-section">
       <div>
       </div>
@@ -58,7 +59,9 @@
         </tr>
 
       </table>
+
     </div>
+
     <div class="action-buttons">
       <button @click="resetFilters" class="reset-btn">
         <img src="@/assets/icon/reset.png" alt="Reset" />
@@ -67,9 +70,17 @@
         <img src="@/assets/icon/search.png" alt="Search" />
       </button>
     </div>
-    <div class="post-btn" id="app">
-      <button @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
+
+    <div class="filter-buttons">
+      <div class="post-btn" id="app">
+        <button class="postBtn">
+        </button>
+        <button @click="downloadExcel" class="excelBtn">
+          <img src="@/assets/icon/excel.png" alt="excel">
+        </button>
+      </div>
     </div>
+
     <div class="table-container">
       <table class="table">
         <thead>
@@ -97,7 +108,7 @@
           <td>{{ item.franchiseWarehouseTotal }}</td>
           <td>{{ item.franchiseWarehouseCount }}</td>
           <td>{{ item.franchiseWarehouseEnable }}</td>
-          <td>{{ item.product.categoryFirstName }} > {{ item.product.categoryFirstName }} > {{ item.product.categoryFirstName }}</td>
+          <td>{{ item.product.categoryFirstName }} > {{ item.product.categorySecondName }} > {{ item.product.categoryThirdName }}</td>
 
           <td v-if="item.franchiseWarehouseFavorite==true">O</td>
           <td v-else>X</td>
@@ -107,11 +118,12 @@
         </tbody>
       </table>
     </div>
-    <div class="pagination">
-      <button @click="prevPage" :disabled="currentPage === 1">이전</button>
-      <span> {{currentPage}} / {{totalPages}} </span>
-      <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
-    </div>
+  </div>
+
+  <div class="pagination">
+    <button @click="prevPage" :disabled="currentPage === 1">이전</button>
+    <span> {{currentPage}} / {{totalPages}} </span>
+    <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
   </div>
 </template>
 
@@ -298,22 +310,28 @@ getMemberId();
 </script>
 
 <style scoped>
+.Cloth {
+  margin-right: 5px;
+  position: relative;
+  top: 2px
+}
 
 .product-img {
   width: 30px;
   height: 30px;
   transition: transform 0.5s ease;
 }
+
 .product-img:hover {
   transform: scale(3.3);
 }
 
 .pagination {
-  margin-top: 10px;
-  margin-bottom: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 10px;
+  padding-bottom: 100px;
 }
 
 .pagination button {
@@ -323,8 +341,9 @@ getMemberId();
 }
 .filter-section {
   display: flex;
-  justify-content: center;
-  margin: 0;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 .filter-table {
@@ -333,7 +352,8 @@ getMemberId();
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 10px;
-  width: 1200px;
+  width: 100%;
+  max-width: 1440px;
 }
 
 .filter-table td {
@@ -343,17 +363,15 @@ getMemberId();
 .filter-label {
   font-weight: bold;
   text-align: center;
-  font-size: 12px;
-  width: 100px;
+  border: solid 1px #747474;
+  width: 120px;
   background-color: #D9D9D9;
-  border: 1px solid #ddd;
 }
 
 .filter-input {
-  width: 500px;
   text-align: left;
-  border: 1px solid lightgray;
-  border-right: none;
+  border: solid 1px #747474;
+  padding: 5px;
 }
 
 .action-buttons {
@@ -362,14 +380,6 @@ getMemberId();
   margin-top: 10px;
 }
 
-.excelBtn {
-  width: 100px;
-  height: 26px;
-  border: none;
-  background-color: white;
-  cursor: pointer;
-  margin-right: 0.5%;
-}
 
 .reset-btn, .search-btn {
   background-color: #fff;
@@ -381,14 +391,6 @@ getMemberId();
   font-size: 14px;
   margin: 0 5px;
 }
-.post-btn {
-  display: flex;
-  justify-content: flex-end; /* 양 끝에 정렬 */
-  align-items: center; /* 수직 가운데 정렬 */
-  position: absolute; /* 절대 위치 설정 */
-  left: 15.5%; /* 좌측 정렬 */
-  width: 1210px;
-}
 
 .reset-btn:hover, .search-btn:hover {
   background-color: #fff;
@@ -396,58 +398,45 @@ getMemberId();
 
 .table-container {
   width: 100%;
-  margin-top: 40px;
   margin-bottom: 20px;
   display: flex;
   justify-content: center;
 }
 
 .table {
-  width: 1200px;
-  max-width: 1200px;
+  width: 100%;
+  max-width: 1440px;
   border-collapse: collapse;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-spacing: 0 10px;
-  table-layout: fixed;
 }
 
 .table th {
   font-weight: bold;
   color: #000;
-  width: 100%;
-  height: 10px;
-  table-layout: fixed;
+  text-align: center;
 }
 
 .table th,
 .table td {
-  border: 0.5px solid #D9D9D9;
-  padding: 8px;
-  width: 90px;
-  height: 10px;
-  table-layout: fixed;
+  padding: 10px;
+  text-align: center;
 }
+
 
 .header1 {
   background-color: #D9D9D9;
   font-weight: bold;
   height: 50px;
-  font-size: 12px;
-  text-align: center;
-  width: 5%;
-}
-
-.header1 th{
-  font-size: 15px;
+  font-size: 14px;
   text-align: center;
 }
 
 .allpost {
   text-align: center;
   padding: 10px 0;
-  width: 5%;
 }
 
 .allpost:hover {
@@ -468,48 +457,125 @@ getMemberId();
   font: inherit;
   cursor: pointer;
   outline: inherit;
-  text-align: left; /* 텍스트 정렬을 위해 필요시 사용 */
+  text-align: left;
 }
+
 .textInput {
   border: 1px solid rgba(217, 217, 217, 0.7);
 }
+
 .categories {
   border: 1px solid rgba(217, 217, 217, 0.7);
 }
+
 .product-title {
-  //margin-left: 18%;
+  /* position: relative; */
+  /* left: -60px; */
 }
+
 .headerTitle img {
-  width: 22px;
-  height: 22px;
-  position: relative;
-  top: 2px;
-  margin-right: 10px;
+  width: 10px;
+  height: 10px;
 }
+
 .headerTitle p {
   font-size: 20px;
   font-weight: bold;
 }
+
 .headerTitle h3,
 .headerTitle h6 {
   margin: 0
 }
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 100px;
+}
+
+.pagination button {
+  background-color: #fff;
+  color: black;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 8px 16px;
+  font-size: 14px;
+  margin: 0 5px;
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pagination span {
+  margin: 0 10px;
+  font-weight: bold;
+}
+
+.status-available {
+  align-content: center;
+  background-color: #FFCD4B;
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-weight: bold;
+  height: 25px;
+  font-size: 14px;
+}
+
+.status-unavailable {
+  align-content: center;
+  background-color: #FF6285;
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-weight: bold;
+  height: 25px;
+  font-size: 14px;
+}
+
+.header {
+  margin-bottom: 20px;
+  margin-left: 215px;
+}
+
+.container {
+  padding: 20px;
+}
+.post-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  width: 1440px;
+}
+
+.postBtn {
+  border: none;
+  background-color: white;
+  cursor: pointer;
+}
+
+.excelBtn {
+  border: none;
+  background-color: white;
+  cursor: pointer;
+}
+.filter-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 .product-sub-title {
-  font-size: 12px;
-  margin-left: 18%;
+  display: flex;
+  padding-left: 210px;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 20px;
+  justify-content: flex-start;
 }
-.product-sub-title img {
-  width: 18px;
-  height: 18px;
-  margin-right: 3px;
-}
-.headerTitle h6 {
-  margin-bottom: 5%;
-}
-.headerTitle h3,
-.headerTitle h6 {
-  margin: 0
-}
-
 </style>

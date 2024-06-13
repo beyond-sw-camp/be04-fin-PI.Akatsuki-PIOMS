@@ -1,8 +1,13 @@
 <template>
   <div class="container">
-    <div class="header">
-      <img src="@/assets/icon/공지사항.png" style="width: 18px"/>&nbsp;
-      <span class="breadcrumb">공지 및 문의 관리 > 공지 관리 > 공지사항 조회 및 관리</span>
+
+    <div class="header" align="center"  style="padding-bottom: 30px;">
+      <div style="  max-width: 1440px;justify-content: center;align-items: center;"  >
+        <br>
+        <div style="float: left" ><img src="@/assets/icon/공지사항.png" style="width: 18px"/>&nbsp;
+          <span class="breadcrumb">공지 및 문의 관리 > 공지 관리 > 공지사항 조회 및 관리</span>
+        </div>
+      </div>
     </div>
 
     <div class="product-sub-title"> * 조회할 상품의 조건을 선택 후
@@ -67,7 +72,7 @@
 />
 
 <!-- 오버레이 -->
-<div v-if="isRegisterFormVisible || isEditFormVisible" class="overlay" @click="closeOverlay">
+<div v-if="isRegisterFormVisible && isEditFormVisible" class="overlay">
 
 </div>
 
@@ -76,17 +81,17 @@
   <table class="table">
     <thead>
     <tr class="header1">
-      <td>No</td>
-      <td>제목</td>
+      <td width="4%">No</td>
+      <td width="25%">제목</td>
       <td>내용</td>
-      <td>등록일</td>
-      <td>관리</td>
+      <td width="10%">등록일</td>
+      <td width="10%">관리</td>
     </tr>
     </thead>
     <tbody>
     <tr v-for="(item, index) in paginatedLists" :key="item.noticeCode"
         :id="'row-' + rowIndex"
-        class="allpost"
+        class="tr__bd"
     >
       <td class="num">{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
       <td class="title" style="width: 20%" @click="showDetailsNoticePopup(item)">{{ item.noticeTitle }}</td>
@@ -179,7 +184,7 @@ const getNotice = async () => {
 
     const data = await response.json();
     if (data.length > 0) {
-      lists.value = data;
+      lists.value = data.sort((a, b) => new Date(b.noticeEnrollDate) - new Date(a.noticeEnrollDate));
       filteredLists.value = lists.value;
     } else {
       lists.value = [];
@@ -268,7 +273,6 @@ const toggleRegisterForm = () => {
 const toggleEditForm = () => {
   isEditFormVisible.value = !isEditFormVisible.value;
 };
-
 
 const closeOverlay = () => {
   isRegisterFormVisible.value = false;
@@ -368,14 +372,25 @@ onMounted(() => {
 
 .container {
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .header {
+  width: 100%;
+  max-width: 1440px;
+  text-align: center;
+  padding-bottom: 30px;
+}
+
+.header-content {
   display: flex;
-  padding-left: 210px;
   align-items: center;
-  margin-bottom: 20px;
-  justify-content: flex-start;
+}
+
+.header-icon {
+  width: 18px;
 }
 
 .breadcrumb {
@@ -384,11 +399,24 @@ onMounted(() => {
   font-weight: bold;
 }
 
+.product-sub-title {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 20px;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 1440px;
+  padding-left: 10px;
+}
+
 .filter-section {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 20px;
+  width: 100%;
+  max-width: 1440px;
 }
 
 .filter-table {
@@ -398,7 +426,6 @@ onMounted(() => {
   border-radius: 5px;
   padding: 10px;
   width: 100%;
-  max-width: 1440px;
 }
 
 .filter-table td {
@@ -410,7 +437,7 @@ onMounted(() => {
   text-align: center;
   border: solid 1px #747474;
   width: 120px;
-  background-color: #D9D9D9;
+  background-color: #d9d9d9;
 }
 
 .filter-input {
@@ -424,9 +451,12 @@ onMounted(() => {
   justify-content: center;
   margin-top: 10px;
   margin-bottom: 10px;
-
+  width: 100%;
+  max-width: 1440px;
 }
-.reset-btn, .search-btn {
+
+.reset-btn,
+.search-btn {
   background-color: #fff;
   color: black;
   border: none;
@@ -437,25 +467,7 @@ onMounted(() => {
   margin: 0 5px;
 }
 
-.table-container {
-  width: 100%;
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: center;
-}
-
-.table {
-  width: 100%;
-  max-width: 1440px;
-  border-collapse: collapse;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-spacing: 0 10px;
-}
-
 .table th {
-
   font-weight: bold;
   color: #000;
   text-align: center;
@@ -468,9 +480,9 @@ onMounted(() => {
 }
 
 .header1 {
-  background-color: #D9D9D9;
+  background-color: #d9d9d9;
   font-weight: bold;
-  height: 40px;
+  height: 50px;
   font-size: 14px;
   text-align: center;
 }
@@ -508,8 +520,8 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: relative;
-  width: 1440px;
+  width: 100%;
+  max-width: 1440px;
 }
 
 .postBtn {
@@ -522,6 +534,45 @@ onMounted(() => {
   border: none;
   background-color: white;
   cursor: pointer;
+}
+
+.tr__bd:hover {
+  background-color: #f2f2f2;
+}
+
+.tr__bd td {
+  border-bottom: 1px solid #ddd;
+  font-size: 12px;
+}
+
+.tr__bd:last-child td {
+  border-bottom: none;
+}
+
+.table-container {
+  width: 100%;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.table {
+  width: 100%;
+  max-width: 1440px;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-spacing: 0 10px;
+  table-layout: fixed; /* 고정된 레이아웃을 사용하여 셀 너비를 고정 */
+}
+
+.table th, .table td {
+  padding: 10px;
+  text-align: center;
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  overflow: hidden;
+  text-overflow: ellipsis; /* 내용이 넘칠 때 "..." 표시 */
 }
 
 .product-sub-title {
@@ -570,6 +621,7 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
 notice-form {

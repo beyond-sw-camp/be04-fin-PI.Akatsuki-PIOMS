@@ -164,7 +164,7 @@ const fetchDashboardData = async () => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    notices.value = data.noticeList;
+    notices.value = data.noticeList.sort((a, b) => new Date(b.noticeEnrollDate) - new Date(a.noticeEnrollDate));
     asks.value = data.askList.asks;
     favorites.value = data.favoriteList;
     orderStat.value = data.orderStat;
@@ -308,6 +308,7 @@ const formatNoticeDate = (dateString) => {
     day: '2-digit',
   });
 };
+
 
 onMounted(() => {
   fetchProducts();

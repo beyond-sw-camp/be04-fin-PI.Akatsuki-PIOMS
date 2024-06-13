@@ -97,6 +97,7 @@ const resetRowColor = (index) => {
 
 const store = useStore();
 const accessToken = store.state.accessToken;
+
 const lists = ref([]);
 const headers = ref([
   { label: 'No' },
@@ -125,7 +126,7 @@ const getNotice = async () => {
 
     const data = await response.json();
     if (data.length > 0) {
-      lists.value = data;
+      lists.value = data.sort((a, b) => new Date(b.noticeEnrollDate) - new Date(a.noticeEnrollDate));
       filteredLists.value = lists.value;
     } else {
       lists.value = [];
@@ -136,6 +137,7 @@ const getNotice = async () => {
   }
 };
 
+      // lists.value = noticeList.sort((a, b) => new Date(b.noticeEnrollDate) - new Date(a.noticeEnrollDate));
 const filterType = ref('');
 const filterText = ref('');
 const startDate = ref('');
@@ -198,12 +200,6 @@ const closeDetailsPopup = () => {
 };
 
 const viewPopup = ref(false);
-
-const sortedNotices = computed(() => {
-  return notices.value.slice().sort((a, b) => {
-    return new Date(b.noticeEnrollDate) - new Date(a.noticeEnrollDate);
-  });
-});
 
 onMounted(() => {
   getNotice();
