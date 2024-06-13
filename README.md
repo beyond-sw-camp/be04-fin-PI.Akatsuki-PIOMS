@@ -99,72 +99,100 @@
 </br></br>
 
 ## 🏷️ PIOMS 프로젝트 문서
-<h3><a href="https://docs.google.com/spreadsheets/d/1P_TPNzrnce8OEkxFjxr9hyelmVbRY5yJ/edit?usp=sharing&ouid=104324075889250636464&rtpof=true&sd=true"/>📁 PIOMS 요구사항 정의서</h3>
 
-<h3><a href="https://docs.google.com/spreadsheets/d/1P_TPNzrnce8OEkxFjxr9hyelmVbRY5yJ/edit?usp=sharing&ouid=104324075889250636464&rtpof=true&sd=true"/>📁 PIOMS 기능 정의서</h3>
+<details>
+<summary><h3>📁 PIOMS ERD</h3></summary>
+	
+![스크린샷 2024-06-13 오후 12 22 46](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/a3c1296b-118b-479b-be25-0c84c89bfdb0)
+</details>
 
-<h3><a href="https://docs.google.com/spreadsheets/d/1P_TPNzrnce8OEkxFjxr9hyelmVbRY5yJ/edit?usp=sharing&ouid=104324075889250636464&rtpof=true&sd=true"/>📁 PIOMS 테의블 정의서</h3>
+<details>
+<summary><h3>📁 PIOMS 요구사항 명세서</h3></summary>
 
-<h3><a href="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/e77e5637-c377-46bd-ad7b-d3570fbf7c80"/>📁 PIOMS System Architecture</h3>
+[PICommerce 문서화.xlsx - 요구사항 명세서.pdf](https://github.com/user-attachments/files/15813217/PICommerce.xlsx.-.pdf)
+</details>
+<details>
+<summary><h3>📁 PIOMS 기능 정의서</h3></summary>
 
-<h3><a href="https://docs.google.com/spreadsheets/d/1P_TPNzrnce8OEkxFjxr9hyelmVbRY5yJ/edit?usp=sharing&ouid=104324075889250636464&rtpof=true&sd=true"/>📁 PIOMS I.A 구조도</h3>
+[PICommerce 문서화.xlsx - 기능정의서.pdf](https://github.com/user-attachments/files/15813229/PICommerce.xlsx.-.pdf)
+</details>
+<details>
+<summary><h3>📁 PIOMS PIOMS 테의블 정의서</h3></summary>
 
-<h3><a href="https://docs.google.com/spreadsheets/d/1P_TPNzrnce8OEkxFjxr9hyelmVbRY5yJ/edit?usp=sharing&ouid=104324075889250636464&rtpof=true&sd=true"/>📁 PIOMS 단위 테스트</h3>
+[PICommerce 문서화.xlsx - 테이블 정의서.pdf](https://github.com/user-attachments/files/15813237/PICommerce.xlsx.-.pdf)
+</details>
 
-<h3><a href="http://api.pioms.shop/swagger-ui/index.html"/>📁 PIOMS API 명세서</h3>
+<details>
+<summary><h3>📁 PIOMS System Architecture</h3></summary>
+
+![스크린샷 2024-06-13 오후 12 17 12](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/c380a6da-6f4b-4b67-8a08-98e5d21af923)
+</details>
+
+<details>
+<summary><h3>📁 PIOMS I.A 구조도</h3></summary>
+
+[PICommerce 문서화.xlsx - IA.pdf](https://github.com/user-attachments/files/15813242/PICommerce.xlsx.-.IA.pdf)
+</details>
+
+<details>
+<summary><h3>📁 PIOMS 단위 테스트</h3></summary>
+
+[PICommerce 문서화.xlsx - 단위 테스트.pdf](https://github.com/user-attachments/files/15813261/PICommerce.xlsx.-.pdf)
+</details>
+
+<details>
+<summary><h3>📁 PIOMS API 명세서</h3></summary>
 <details>
 <summary><h4>📍 관리자</h4></summary>
-	
-![―šÅĐļ°žĶ 2024-06-13 110754](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/38cec2a0-c797-4e92-8099-7476852059be)
-![―šÅĐļ°žĶ 2024-06-13 110737](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/733fff98-6438-4d9b-ab68-600d024b9255)
-![―šÅĐļ°žĶ 2024-06-13 110725](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/881ffc85-2a4e-4a46-9f89-77c669a974b4)
-![―šÅĐļ°žĶ 2024-06-13 110714](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/012d2e46-2927-4763-8ee8-5c465153957d)
-![―šÅĐļ°žĶ 2024-06-13 110704](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/7faf848f-fd48-44ab-bc00-facaa853853d)
-![―šÅĐļ°žĶ 2024-06-13 110655](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/e43d8075-b41a-4bb6-a060-1fcb0706005e)
-![―šÅĐļ°žĶ 2024-06-13 110646](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/c77b2b61-413a-479a-bbe9-66064a0406aa)
-![―šÅĐļ°žĶ 2024-06-13 110636](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/5f1c3950-f661-415b-93e8-fbbb738b36a8)
-![―šÅĐļ°žĶ 2024-06-13 110626](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/fe318036-9ae9-4758-9a5e-0c14fb7fdfb2)
-![―šÅĐļ°žĶ 2024-06-13 110614](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/e8ee8512-ae59-4643-a327-a96ff74c3754)
-![―šÅĐļ°žĶ 2024-06-13 110603](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/ce802d66-973f-4b2e-aa74-da203351d904)
-![―šÅĐļ°žĶ 2024-06-13 110554](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/37667c51-5c99-4b14-aabc-a2c8bf9b3155)
-![―šÅĐļ°žĶ 2024-06-13 110540](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/9bddfc99-049d-4493-aab9-7fce88ffd794)
-![―šÅĐļ°žĶ 2024-06-13 110311](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/e3b50c37-b84b-4c99-a318-deccf9682139)
+
+![―šÅĐļ°žĶ 2024-06-13 112006](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/4f59a377-6064-410c-9563-9d0822717b38)
+![―šÅĐļ°žĶ 2024-06-13 111216](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/2de92940-fac7-40a1-b76f-3ea3a04e2aff)
+![―šÅĐļ°žĶ 2024-06-13 111151](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/a33e377d-70a1-42cf-852e-a5a5fb0099ab)
+![―šÅĐļ°žĶ 2024-06-13 111143](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/b95e57a7-65a1-485c-90ed-326efb4a20fd)
+![―šÅĐļ°žĶ 2024-06-13 111135](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/4eafeec0-4607-496f-a008-8b9256361e26)
+![―šÅĐļ°žĶ 2024-06-13 110905](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/044e5f8e-f194-45b7-b3f9-a839c6dfcc83)
+![―šÅĐļ°žĶ 2024-06-13 110856](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/76bf386a-0f65-405e-b319-e2c2efe003e6)
+![―šÅĐļ°žĶ 2024-06-13 110848](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/b998a43c-8f6f-42a0-b30e-9db133372a3f)
+![―šÅĐļ°žĶ 2024-06-13 110840](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/8b47ce5a-b906-4b09-9a77-1d22db61423b)
+![―šÅĐļ°žĶ 2024-06-13 110754](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/1f3cfa15-ffa4-4d87-b691-97bc3609eac5)
+![―šÅĐļ°žĶ 2024-06-13 110737](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/ef12469a-11af-44d5-9ee1-6add890dee87)
+![―šÅĐļ°žĶ 2024-06-13 110704](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/70f56f07-e3e5-4b5c-8f00-07da02d59646)
+![―šÅĐļ°žĶ 2024-06-13 110646](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/803086f8-78c6-40a5-a5f6-70d778884f72)
+![―šÅĐļ°žĶ 2024-06-13 110636](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/5f936bd4-b803-4e9b-bebc-9d47a251e6f1)
+![―šÅĐļ°žĶ 2024-06-13 110626](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/348ce830-acbd-488e-910c-d132636f2262)
+![―šÅĐļ°žĶ 2024-06-13 110614](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/c26ecf61-0252-40ed-bf2b-6b2cd722dadb)
+![―šÅĐļ°žĶ 2024-06-13 110540](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/e5b0830e-841b-412c-a895-41fe3142195e)
+![―šÅĐļ°žĶ 2024-06-13 110311](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/18ed9792-4977-490f-b0b7-862970d216e3)
 </details>
 
 <details>
 <summary><h4>📍 점주</h4></summary>
-	
-![―šÅĐļ°žĶ 2024-06-13 111108](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/72606cd7-75be-45fb-9a50-0bea2b179db9)
-![―šÅĐļ°žĶ 2024-06-13 111058](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/690a61f4-02dc-414d-847d-c211e8dc4d75)
-![―šÅĐļ°žĶ 2024-06-13 111039](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/fe3d7e20-2397-48ea-903b-a4d819858b66)
-![―šÅĐļ°žĶ 2024-06-13 111030](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/319b4d18-bbc5-45c4-9930-d556771c60e8)
-![―šÅĐļ°žĶ 2024-06-13 111021](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/468ae446-ed8c-40f8-9dda-61fa729570c7)
-![―šÅĐļ°žĶ 2024-06-13 111011](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/80318f93-99cd-4f0f-8d0f-53b3e5301287)
-![―šÅĐļ°žĶ 2024-06-13 110937](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/b07a975b-e5c9-4438-9d8f-6a86c1c49d18)
-![―šÅĐļ°žĶ 2024-06-13 110929](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/6178bd0d-fbbb-459d-ba81-2aa17443d1b1)
-![―šÅĐļ°žĶ 2024-06-13 110922](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/32eb007f-5009-4154-a928-f1b284137cbb)
-![―šÅĐļ°žĶ 2024-06-13 110905](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/999bbb9a-9bf0-41d0-aa5b-f47862a77f89)
-![―šÅĐļ°žĶ 2024-06-13 110856](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/8ae6385b-4adc-4077-ac88-e9f1210385b8)
-![―šÅĐļ°žĶ 2024-06-13 110848](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/e2fd4884-9bae-4a0e-adfe-a633509b4477)
-![―šÅĐļ°žĶ 2024-06-13 110840](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/a397cc5d-1d93-4ab7-8fcd-1b424b9623dc)
-![―šÅĐļ°žĶ 2024-06-13 110832](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/f180666a-f541-4ea3-b4aa-168d06441975)
-![―šÅĐļ°žĶ 2024-06-13 110822](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/ec58d58e-8a78-4f51-86e5-2c44dc602c39)
-![―šÅĐļ°žĶ 2024-06-13 110813](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/236a4fd8-624f-45dd-bed3-5395f71f981c)
-![―šÅĐļ°žĶ 2024-06-13 110804](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/de17d527-6f8a-4c57-bc35-071c28d1e4d0)
+
+![½ºÅ©¸°¼¦ 2024-06-13 111108](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/7ec20ddf-aacf-4545-92c3-c5c787cc43c5)
+![½ºÅ©¸°¼¦ 2024-06-13 111058](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/f8c21f8a-6d2a-4c27-b231-f0ce0619b8a9)
+![½ºÅ©¸°¼¦ 2024-06-13 111039](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/e958036f-5fd4-41c1-a5da-53a8ec817687)
+![½ºÅ©¸°¼¦ 2024-06-13 111030](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/30e33121-58c5-4e2b-87f0-836bfd90c917)
+![½ºÅ©¸°¼¦ 2024-06-13 111011](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/cc44088b-a4ff-49ea-97d4-1f0d6164a97a)
+![½ºÅ©¸°¼¦ 2024-06-13 110937](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/a7a6d57a-26ae-4122-9ff0-edd039e9cdd7)
+![½ºÅ©¸°¼¦ 2024-06-13 110929](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/b9f7f1d1-781e-41e2-842e-c42282c7aef8)
+![½ºÅ©¸°¼¦ 2024-06-13 110922](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/0d623f69-e83b-4b87-9465-70a2f7d0a5da)
+![½ºÅ©¸°¼¦ 2024-06-13 110822](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/54d589b6-580e-4528-be11-355e0a6b8a57)
+![½ºÅ©¸°¼¦ 2024-06-13 110813](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/ec0856d2-76f3-4c6b-92df-5b67b195da15)
+![½ºÅ©¸°¼¦ 2024-06-13 110804](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/79d92724-3d0a-4578-8761-66ed993a06d2)
+![½ºÅ©¸°¼¦ 2024-06-13 110725](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/688c3891-19f8-48bc-b332-1fb89c38c4d4)
+![½ºÅ©¸°¼¦ 2024-06-13 110655](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/369cae3f-5152-4fe1-8376-d29579d7257b)
+![½ºÅ©¸°¼¦ 2024-06-13 110603](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/be21f642-9fae-43d3-8f15-646b7a98b163)
+![½ºÅ©¸°¼¦ 2024-06-13 110554](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/ef1c9d4f-d1ac-47ab-8441-d8900983e4b7)
+
 </details>
 
 <details>
 <summary><h4>📍 배송기사</h4></summary>
-	
-![―šÅĐļ°žĶ 2024-06-13 112125](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/a7dc0dec-2b06-4a7d-a51d-6c756a91ab13)
-![―šÅĐļ°žĶ 2024-06-13 112037](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/c2b1f8dc-463b-48c9-a2e3-f91bbd0c0b49)
-![―šÅĐļ°žĶ 2024-06-13 112006](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/9e6e7532-d962-433a-8973-25ccecf03885)
-![―šÅĐļ°žĶ 2024-06-13 111216](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/9e07e946-9769-413e-a255-e042d58c3633)
-![―šÅĐļ°žĶ 2024-06-13 111151](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/cf6b27bc-137c-4c0c-8fc1-3eb35f26e3bb)
-![―šÅĐļ°žĶ 2024-06-13 111143](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/ad49c2aa-6f4d-4134-b7bc-f6e9998081da)
-![―šÅĐļ°žĶ 2024-06-13 111135](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/b05b7745-fe0b-4de3-9a9d-b896e1296e32)
-</details>
 
+![½÷ֵ©¸°¼¦ 2024-06-13 112037](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/f1c4c6d5-ab10-47dd-88cd-ec5b8fee512d)
+![½÷ֵ©¸°¼¦ 2024-06-13 111021](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/90c14ede-8d51-40b2-9daa-a13cc4a2ef29)
+</details>
+</details>
 </br>
 
 ## 🏷️ PIOMS 프론트 화면 설계
@@ -208,11 +236,7 @@
 </details>
 </br>
 
-## 🏷️ DB Modeling (ERD, DDL)
-
-<details>
-<summary><h3>PIOMS DB 모델링</h3></summary>
-<h3><a href="https://www.erdcloud.com/d/Q3aGbnzvroEFB6MfR"/>🗂️ PIOMS ERD 설계</h3>
+## 🏷️ DB Modeling
 
 <h3>🗂️ DDL</h3>
 <details>
@@ -442,8 +466,6 @@ CREATE TABLE `log` (
 <summary><h3>물리 Modeling</h3></summary>
 
 ![image](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/824ef096-05f8-48a6-ac6e-2e6edfde07ce)
-
-
 </details>
 </details>
 </br>
