@@ -483,6 +483,7 @@ onMounted(() => {
 }
 
 .popup-content {
+  width: 500px;
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
