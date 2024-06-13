@@ -1,96 +1,110 @@
 <template>
   <div class="container">
-    <div class="header">
-      <img src="@/assets/icon/가맹점.png" style="width: 18px"/>&nbsp;
-      <span class="breadcrumb">창고 조회 및 재고 관리 > 창고 조회 > 본사 창고 조회</span>
+
+    <div class="header" align="center" style="padding-bottom: 30px;">
+      <div style="  max-width: 1440px;justify-content: center;align-items: center;">
+        <br>
+        <div style="float: left"><img src="@/assets/icon/가맹점.png" style="width: 18px"/>&nbsp;
+          <span class="breadcrumb">창고 조회 및 재고 관리 > 창고 조회 > 본사 창고 조회</span>
+        </div>
+      </div>
     </div>
+
     <div class="product-sub-title"> * 조회할 상품의 조건을 선택 후
       <img src="@/assets/icon/reset.png">초기화 또는<img src="@/assets/icon/search.png">검색을 눌러주세요.
     </div>
 
 
-  <div>
-    <div class="filter-section">
-      <div>
+    <div>
+      <div class="filter-section">
+        <table class="filter-table">
+          <tr>
+            <td class="filter-label">상품명</td>
+            <td class="filter-input">
+              <input type="text" v-model="filterProductName" @keyup.enter="applyFilters" class="textInput"
+                     placeholder="상품명을 입력하세요."/>
+            </td>
+            <td class="filter-label">상품상태</td>
+            <td class="filter-input">
+              <select id="filterStatus" v-model="filterStatus" class="textInput">
+                <option hidden="hidden" value="">전체</option>
+                <option value="공급가능">공급가능</option>
+                <option value="일시제한">일시제한</option>
+                <option value="단종">단종</option>
+                <option value="품절">품절</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td class="filter-label">색상</td>
+            <td class="filter-input">
+              <select id="filterColor" v-model="filterColor" class="textInput">
+                <option hidden="hidden" value="">전체</option>
+                <option value="빨간색">빨간색</option>
+                <option value="주황색">주황색</option>
+                <option value="노란색">노란색</option>
+                <option value="초록색">초록색</option>
+                <option value="파란색">파란색</option>
+                <option value="남색">남색</option>
+                <option value="보라색">보라색</option>
+              </select>
+            </td>
+            <td class="filter-label">사이즈</td>
+            <td class="filter-input">
+              <select id="filterSize" v-model="filterSize" class="textInput">
+                <option hidden="hidden" value="">전체</option>
+                <option value="90">90</option>
+                <option value="95">95</option>
+                <option value="100">100</option>
+                <option value="105">105</option>
+                <option value="110">110</option>
+              </select>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="filter-label">카테고리 구분</td>
+            <td class="filter-input" colspan="3">
+              <select id="firstCategory" v-model="selectedFirstCategory" @change="fetchSecondCategories"
+                      class="categories">
+                <option value="">대분류</option>
+                <option v-for="category in firstCategories" :key="category.categoryFirstCode"
+                        :value="category.categoryFirstCode">
+                  {{ category.categoryFirstName }}
+                </option>
+              </select>
+              <select class="categories" id="secondCategory" v-model="selectedSecondCategory"
+                      @change="fetchThirdCategories">
+                <option value="">중분류</option>
+                <option v-for="category in secondCategories" :key="category.categorySecondCode"
+                        :value="category.categorySecondCode">
+                  {{ category.categorySecondName }}
+                </option>
+              </select>
+              <select class="categories" id="thirdCategory" v-model="selectedThirdCategory">
+                <option value="">소분류</option>
+                <option v-for="category in thirdCategories" :key="category.categoryThirdCode"
+                        :value="category.categoryThirdCode">
+                  {{ category.categoryThirdName }}
+                </option>
+              </select>
+            </td>
+          </tr>
+
+        </table>
       </div>
-      <table class="filter-table">
-        <tr>
-          <td class="filter-label">상품명</td>
-          <td class="filter-input">
-            <input type="text" v-model="filterProductName" @keyup.enter="applyFilters" class="textInput" placeholder="상품명을 입력하세요."/>
-          </td>
-          <td class="filter-label">상품상태</td>
-          <td class="filter-input">
-            <select id="filterStatus" v-model="filterStatus" class="textInput">
-              <option hidden="hidden" value="">전체</option>
-              <option value="공급가능">공급가능</option>
-              <option value="일시제한">일시제한</option>
-              <option value="단종">단종</option>
-              <option value="품절">품절</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td class="filter-label">색상</td>
-          <td class="filter-input">
-            <select id="filterColor" v-model="filterColor" class="textInput">
-              <option hidden="hidden" value="">전체</option>
-              <option value="빨간색">빨간색</option>
-              <option value="주황색">주황색</option>
-              <option value="노란색">노란색</option>
-              <option value="초록색">초록색</option>
-              <option value="파란색">파란색</option>
-              <option value="남색">남색</option>
-              <option value="보라색">보라색</option>
-            </select>
-          </td>
-          <td class="filter-label">사이즈</td>
-          <td class="filter-input">
-            <select id="filterSize" v-model="filterSize" class="textInput">
-              <option hidden="hidden" value="">전체</option>
-              <option value="90">90</option>
-              <option value="95">95</option>
-              <option value="100">100</option>
-              <option value="105">105</option>
-              <option value="110">110</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td class="filter-label">카테고리 구분</td>
-          <td class="filter-input" colspan="3">
-            <select id="firstCategory" v-model="selectedFirstCategory" @change="fetchSecondCategories" class="categories">
-              <option value="">대분류</option>
-              <option v-for="category in firstCategories" :key="category.categoryFirstCode" :value="category.categoryFirstCode">
-                {{ category.categoryFirstName }}
-              </option>
-            </select>
-            <select class="categories" id="secondCategory" v-model="selectedSecondCategory" @change="fetchThirdCategories">
-              <option value="">중분류</option>
-              <option v-for="category in secondCategories" :key="category.categorySecondCode" :value="category.categorySecondCode">
-                {{ category.categorySecondName }}
-              </option>
-            </select>
-            <select class="categories" id="thirdCategory" v-model="selectedThirdCategory">
-              <option value="">소분류</option>
-              <option v-for="category in thirdCategories" :key="category.categoryThirdCode" :value="category.categoryThirdCode">
-                {{ category.categoryThirdName }}
-              </option>
-            </select>
-          </td>
-        </tr>
-      </table>
     </div>
+
     <div class="action-buttons">
       <button @click="resetFilters" class="reset-btn">
-        <img src="@/assets/icon/reset.png" alt="Reset" />
+        <img src="@/assets/icon/reset.png" alt="Reset"/>
       </button>
       <button @click="applyFilters" class="search-btn">
-        <img src="@/assets/icon/search.png" alt="Search" />
+        <img src="@/assets/icon/search.png" alt="Search"/>
       </button>
     </div>
 
-    <div align="center" >
+    <div align="center">
       <div class="post-btn" id="app">
         <button @click="downloadExcel" class="excelBtn"><img src="@/assets/icon/excel.png" alt="excel"></button>
       </div>
@@ -100,11 +114,11 @@
       <table class="table">
         <thead>
         <tr class="header1">
-          <th v-for="(header, index) in headers" :key="index">{{header.label}}</th>
+          <th v-for="(header, index) in headers" :key="index">{{ header.label }}</th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="allpost"
+        <tr v-for="(item, rowIndex) in paginatedLists" :key="rowIndex" class="tr__bd"
             :id="'row-' + rowIndex">
           <td class="table-td">{{ rowIndex + 1 }}</td>
           <td v-for="(header, colIndex) in headers.slice(1)" :key="colIndex" class="table-td">
@@ -112,7 +126,8 @@
               <img :src="getProductImageUrl(item.productCode)" class="product-img"/>
             </template>
             <template v-else-if="header.key === 'productStatus'">
-              <div :class="{'status-available': item.productStatus === '공급가능', 'status-unavailable': item.productStatus !== '공급가능'}">
+              <div
+                  :class="{'status-available': item.productStatus === '공급가능', 'status-unavailable': item.productStatus !== '공급가능'}">
                 {{ item.productStatus }}
               </div>
             </template>
@@ -127,10 +142,10 @@
         </tbody>
       </table>
     </div>
-  </div>
+
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage === 1">이전</button>
-      <span> {{currentPage}} / {{totalPages}} </span>
+      <span> {{ currentPage }} / {{ totalPages }} </span>
       <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
     </div>
   </div>
@@ -139,24 +154,25 @@
 <script setup>
 import {ref, computed} from 'vue';
 import axios from "axios";
-import { useStore } from 'vuex';
+import {useStore} from 'vuex';
+
 const store = useStore();
 const accessToken = store.state.accessToken;
 
 const lists = ref([]);
 const headers = ref([
-  { key: 'index', label: '번호'},
-  { key: 'productName', label: '상품명'},
-  { key: 'imgUrl', label: '상품 이미지'},
-  { key: 'franchiseWarehouseCount', label: '보유량'},
-  { key: 'franchiseWarehouseEnable', label: '판매가능 재고량'},
-  { key: 'productNoticeCount', label: '알림 기준 수량'},
-  { key: 'productStatus', label: '상품 상태'},
-  { key: 'productColor', label: '색상'},
-  { key: 'productSize', label: '사이즈'},
-  { key: 'categoryFirstName', label: '카테고리 대분류'},
-  { key: 'categorySecondName', label: '카테고리 중분류'},
-  { key: 'categoryThirdName', label: '카테고리 소분류'},
+  {key: 'index', label: '번호'},
+  {key: 'productName', label: '상품명'},
+  {key: 'imgUrl', label: '상품 이미지'},
+  {key: 'franchiseWarehouseCount', label: '보유량'},
+  {key: 'franchiseWarehouseEnable', label: '판매가능 재고량'},
+  {key: 'productNoticeCount', label: '알림 기준 수량'},
+  {key: 'productStatus', label: '상품 상태'},
+  {key: 'productColor', label: '색상'},
+  {key: 'productSize', label: '사이즈'},
+  {key: 'categoryFirstName', label: '카테고리 대분류'},
+  {key: 'categorySecondName', label: '카테고리 중분류'},
+  {key: 'categoryThirdName', label: '카테고리 소분류'},
 ]);
 
 const filteredLists = ref([]);
@@ -200,7 +216,7 @@ const fetchProductImages = async () => {
         'Content-Type': 'application/json',
       },
     });
-    if(!response.ok) {
+    if (!response.ok) {
       throw new Error('이미지를 불러오지 못했습니다.');
     }
     const productImagesData = await response.json();
@@ -371,7 +387,7 @@ const downloadExcel = () => {
     },
     responseType: 'blob',
   }).then((response) => {
-    const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }));
+    const url = window.URL.createObjectURL(new Blob([response.data], {type: response.headers['content-type']}));
     const link = document.createElement('a');
     link.href = url;
     link.setAttribute('download', 'productList.xlsx');
@@ -408,11 +424,6 @@ fetchSecondCategories();
 fetchThirdCategories();
 </script>
 <style scoped>
-.Cloth {
-  margin-right: 5px;
-  position: relative;
-  top: 2px
-}
 
 .product-img {
   width: 30px;
@@ -424,19 +435,6 @@ fetchThirdCategories();
   transform: scale(3.3);
 }
 
-.pagination {
-  margin-top: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-bottom: 100px;
-}
-
-.pagination button {
-  border: none;
-  border-radius: 10px;
-  width: 75px;
-}
 .filter-section {
   display: flex;
   flex-direction: column;
@@ -532,19 +530,19 @@ fetchThirdCategories();
   text-align: center;
 }
 
-.allpost {
-  text-align: center;
-  padding: 10px 0;
-}
-
-.allpost:hover {
+.tr__bd:hover {
   background-color: #f2f2f2;
 }
 
-.allpost td {
-  border-right: 1px solid #ddd;
+.tr__bd td {
+  border-bottom: 1px solid #ddd;
   font-size: 12px;
 }
+
+.tr__bd:last-child td {
+  border-bottom: none;
+}
+
 
 .button-as-text {
   background: none;
@@ -566,31 +564,12 @@ fetchThirdCategories();
   border: 1px solid rgba(217, 217, 217, 0.7);
 }
 
-.product-title {
-  /* position: relative; */
-  /* left: -60px; */
-}
-
-.headerTitle img {
-  width: 10px;
-  height: 10px;
-}
-
-.headerTitle p {
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.headerTitle h3,
-.headerTitle h6 {
-  margin: 0
-}
-
 .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 10px;
+  margin-bottom: 100px;
 }
 
 .pagination button {
@@ -635,13 +614,19 @@ fetchThirdCategories();
 }
 
 .header {
-  margin-bottom: 20px;
-  margin-left: 215px;
+  width: 100%;
+  max-width: 1440px;
+  text-align: center;
+  padding-bottom: 30px;
 }
 
 .container {
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
+
 .post-btn {
   display: flex;
   justify-content: space-between;
@@ -664,10 +649,27 @@ fetchThirdCategories();
 
 .product-sub-title {
   display: flex;
-  padding-left: 210px;
   align-items: center;
   gap: 5px;
   margin-bottom: 20px;
   justify-content: flex-start;
+  width: 100%;
+  max-width: 1440px;
+  padding-left: 10px;
+}
+
+.breadcrumb {
+  font-size: 16px;
+  color: #555;
+  font-weight: bold;
+}
+
+.filter-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  max-width: 1440px;
 }
 </style>

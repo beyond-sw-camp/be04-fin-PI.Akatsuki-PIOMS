@@ -30,7 +30,7 @@
         </tr>
         <tr>
           <td class="filter-label">등록일</td>
-          <td colspan="3" class="filter-date">
+          <td colspan="3" class="filter-input">
             <input type="date" id="startDate" v-model="startDate" placeholder="시작 날짜 선택" title="시작 날짜 선택" />
             &nbsp;&nbsp;<span>~</span>&nbsp;
             <input type="date" id="endDate" v-model="endDate" placeholder="종료 날짜 선택" title="종료 날짜 선택" />
@@ -433,6 +433,10 @@ onMounted(() => {
 }
 
 .filter-label {
+  border: solid 1px #747474;
+}
+
+.filter-label {
   font-weight: bold;
   text-align: center;
   border: solid 1px #747474;
@@ -577,7 +581,6 @@ onMounted(() => {
 
 .product-sub-title {
   display: flex;
-  padding-left: 210px;
   align-items: center;
   gap: 5px;
   margin-bottom: 20px;
