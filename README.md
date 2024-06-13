@@ -1,3 +1,5 @@
+
+https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/9efe45de-45c3-4907-b6d7-e1926c33f39b
 <div align="center">
 	
 <h2>📋 공급망관리를 위한 주문관리 시스템 📋</h2>
@@ -188,7 +190,7 @@
 	</details>
 	<details>
 		<summary><h3>상품 관리</h3></summary>
-		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/88e742c2-8d8d-41b0-b1fd-201984e8ce92">
+		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/16199532-010d-41b4-8f96-4246258db72d">
 	</details>
 	<details>
 		<summary><h3>상품 카테고리 관리</h3></summary>
@@ -204,7 +206,7 @@
 	</details>
 	<details>
 		<summary><h3>배송기사 관리</h3></summary>
-		<img src="">
+		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/502cff8c-cbe6-455d-a8df-3d41a2aa8eb2">
 	</details>
 	<details>
 		<summary><h3>관리자 관리</h3></summary>
@@ -213,18 +215,6 @@
 	<details>
 		<summary><h3>발주 및 교환/반품 로직</h3></summary>
 		<a href="https://drive.google.com/file/d/1S7Jm9BMUoFEdaWrncx0FM2tUZZRQ3Wx8/view?usp=sharing">로직 영상
-	</details>
-	<details>
-		<summary><h3></h3></summary>
-		<img src="">
-	</details>
-	<details>
-		<summary><h3></h3></summary>
-		<img src="">
-	</details>
-	<details>
-		<summary><h3></h3></summary>
-		<img src="">
 	</details>
 </details>
 
