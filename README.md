@@ -206,7 +206,6 @@
 		<summary><h3>관리자 관리</h3></summary>
 		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/5d82ea69-2079-410c-bfe5-cc0fcaddf0fe">
 	</details>
-
 	<details>
 		<summary><h3>배송기사 관리</h3></summary>
 		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/502cff8c-cbe6-455d-a8df-3d41a2aa8eb2">
