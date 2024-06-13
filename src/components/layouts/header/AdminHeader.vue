@@ -139,7 +139,7 @@
           </div>
         </li>
         <li v-if="isRoot==true">
-          <a href="/admin/log/list" class="label">이력 관리</a>
+          <a  class="label">이력 관리</a>
           <div class="submenu_box" style="height: 100px">
             <ul class="submenu">
               <li>

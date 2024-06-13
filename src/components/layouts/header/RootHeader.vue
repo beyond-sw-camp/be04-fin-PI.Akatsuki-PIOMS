@@ -36,7 +36,7 @@
           </a>
         </li> -->
         <li>
-          <a href="/admin/franchise/list" class="label">가맹점 및 직원 관리</a>
+          <a  class="label">가맹점 및 직원 관리</a>
           <div class="submenu_box" style="height: 340px">
             <ul class="submenu">
               <li>
@@ -63,7 +63,7 @@
           </div>
         </li>
         <li>
-          <a href="#" class="label">상품 및 상품 카테고리 관리</a>
+          <a  class="label">상품 및 상품 카테고리 관리</a>
           <div class="submenu_box" style="height: 240px">
             <ul class="submenu">
               <li>
@@ -84,7 +84,7 @@
           </div>
         </li>
         <li>
-          <a href="#" class="label">배송 및 발주 관리</a>
+          <a  class="label">배송 및 발주 관리</a>
           <div class="submenu_box" style="height: 200px">
             <ul class="submenu">
               <li>
@@ -104,7 +104,7 @@
           </div>
         </li>
         <li>
-          <a href="#" class="label">반품 및 교환 관리</a>
+          <a  class="label">반품 및 교환 관리</a>
           <div class="submenu_box" style="height: 100px">
             <ul class="submenu">
               <li>
@@ -117,7 +117,7 @@
           </div>
         </li>
         <li>
-          <a href="#" class="label">공지 및 문의 관리</a>
+          <a  class="label">공지 및 문의 관리</a>
           <div class="submenu_box" style="height: 200px">
             <ul class="submenu">
               <li>
@@ -137,7 +137,7 @@
           </div>
         </li>
         <li>
-          <a href="/admin/log/list" class="label">이력 관리</a>
+          <a  class="label">이력 관리</a>
           <div class="submenu_box" style="height: 100px">
             <ul class="submenu">
               <li>

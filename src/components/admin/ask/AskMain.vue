@@ -84,7 +84,7 @@
         </tr>
         </tbody>
       </table>
-  </div>
+    </div>
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage === 1">이전</button>
       <span>{{ currentPage }} / {{ totalPages }}</span>
@@ -170,6 +170,9 @@ const formatDate = (dateString) => {
   if (!dateString) return '-';
   const date = new Date(dateString);
   if (isNaN(date)) return 'Invalid Date';
+
+  date.setHours(date.getHours() + 9);
+
   return date.toLocaleString('ko-KR', {
     year: 'numeric',
     month: '2-digit',
@@ -315,8 +318,7 @@ const closeEdit = () => {
   max-width: 1440px;
 }
 
-.reset-btn,
-.search-btn {
+.reset-btn, .search-btn {
   background-color: #fff;
   color: black;
   border: none;
@@ -434,6 +436,7 @@ const closeEdit = () => {
   overflow: hidden;
   text-overflow: ellipsis; /* 내용이 넘칠 때 "..." 표시 */
 }
+
 .editbutton {
   background-color: #ffcc00;
   border: none;

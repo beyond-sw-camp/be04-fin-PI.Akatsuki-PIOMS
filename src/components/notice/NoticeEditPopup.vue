@@ -1,18 +1,17 @@
 <template>
   <div class="notice-form" v-if="notice">
-
     <div class="title">
       공지사항 수정
     </div>
     <div style="padding: 20px">
       <form @submit.prevent="submitForm">
         <div class="form-group">
-          <label for="noticeTitle">제목</label><br><br>
+          <label for="noticeTitle" style="font-weight: bold">제목</label><br><br>
           <input class="input-title" type="text" id="noticeTitle" v-model="notice.noticeTitle" required>
         </div>
         <br>
         <div class="form-group">
-          <label for="noticeContent">내용</label><br><br>
+          <label for="noticeContent" style="font-weight: bold">내용</label><br><br>
           <textarea class="text-area" id="noticeContent" v-model="notice.noticeContent" required></textarea>
         </div>
         <div style="  float: right;" >
@@ -82,29 +81,23 @@ const closeForm = () => {
 
 .input-title{
   width: 100%;
-  border: 2px solid black;
+  border: 1px solid #444444;
 }
 
 .title {
   background-color: #d9d9d9;
   font-size: 20px;
-  font-weight: 500;
+  font-weight: bold;
   padding: 10px;
   padding-left: 20px;
   border-radius: 10px;
 }
-.register {
-  margin: 0;
-  margin-bottom: 10px;
-  font-size: 20px;
 
-}
 .notice-form {
   background: #ffffff;
-  //padding: 0px 10px 10px 10px;
   border-radius: 10px;
   border-color: #d9d9d9;
-  border: 5px;
+  border: 1px solid;
   max-width: 500px;
   width: 100%;
   position: fixed;
@@ -122,18 +115,19 @@ const closeForm = () => {
   cursor: pointer;
 }
 .regist-btn {
-  background: #9a9a9a;
+  background: #FC6F86;
   color: white;
   border: none;
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
+  margin-right: 10px;
 }
 .text-area{
   width: 100%;
   height: 200px;
-  border: 2px solid black;
-
+  border: 1px solid #444444;
+  resize: none;
 }
 
 </style>
