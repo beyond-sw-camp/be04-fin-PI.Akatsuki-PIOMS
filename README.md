@@ -19,7 +19,10 @@
 |<img src="https://avatars.githubusercontent.com/u/81796274?v=4" width="170" height="160"/>|<img src="https://avatars.githubusercontent.com/u/122339395?v=4" width="170" height="160"/>|<img src="https://avatars.githubusercontent.com/u/101622086?v=4" width="170" height="160"/>|<img src="https://avatars.githubusercontent.com/u/149561287?v=4" width="170" height="160"/>|<img src="https://avatars.githubusercontent.com/u/22255663?v=4" width="170" height="160"/>|
 |:-:|:-:|:-:|:-:|:-:|
 |[@jaehyeon-SMU](https://github.com/jaehyeon-SMU)|악덕<br/>[@Virtue14](https://github.com/Virtue14)|신동호<br/>[@letsplaycoding](https://github.com/letsplaycoding)|[@Bodrami](https://github.com/Bodrami)|hyunwoo<br/>[@daersh](https://github.com/daersh)|
-
+<br>
+<div align="center">
+<a href="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/wiki"/>Here's our Wiki!!
+</div>
 </br>
 <h2 align="left">🛠️ Technology Stack</h2>
 <div align="left">
