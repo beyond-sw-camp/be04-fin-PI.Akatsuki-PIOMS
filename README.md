@@ -73,13 +73,6 @@
 
 <br/></br>
 
-## 🏷️ New Technology
-* 엑셀 다운로드 기능 구현
-* PDF 파일 다운로드 기능 구현
-* window로 영역 인쇄 기능 구현
-
-</br></br>
-
 ## 🏷️ 일정관리 (Sprint Kanban)
 <details>
 <summary><h3>⏰ PIOMS 기획(WBS)</h3></summary>
@@ -189,7 +182,31 @@
 		<summary><h3>즐겨찾기</h3></summary>
 		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/f19a5a76-f1ff-43b1-8cde-8e7384e95342">
 	</details>
-시연영상 붙일 예정
+	<details>
+		<summary><h3>점주관리</h3></summary>
+		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/677068fd-c999-46f1-93c0-3ae2c524d004">
+	</details>
+	<details>
+		<summary><h3>가맹점 관리</h3></summary>
+	</details>
+	<details>
+		<summary><h3>배송기사 관리</h3></summary>
+	</details>
+	<details>
+		<summary><h3>관리자 관리</h3></summary>
+	</details>
+	<details>
+		<summary><h3>로그인</h3></summary>
+		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/2e007740-3a3f-4b98-bc53-f25830a7450e">
+	</details>
+	<details>
+		<summary><h3>상품 관리</h3></summary>
+		<img src="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/88e742c2-8d8d-41b0-b1fd-201984e8ce92">
+	</details>
+	<details>
+		<summary><h3>카테고리 관리</h3></summary>
+		
+	</details>
 </details>
 
 <details>
