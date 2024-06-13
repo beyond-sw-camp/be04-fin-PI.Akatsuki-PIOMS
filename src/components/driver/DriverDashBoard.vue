@@ -107,7 +107,7 @@
       </div>
     </div>
     <!-- 송장 팝업 -->
-<!--    <Invoice v-if="showInvoicePopup" :invoice="selectedInvoice" @click.self="closeInvoicePopup" />-->
+      <Invoice v-if="showInvoicePopup" :invoice="selectedInvoice" @click.self="closeInvoicePopup" />
     <div v-if="showInvoicePopup" class="popup">
         <Invoice v-if="showInvoicePopup" :invoice="selectedInvoice" @close="closeInvoicePopup"/>
     </div>
@@ -594,15 +594,14 @@ hr.hr2 {
 
  /* 공지사항 항목 팝업 스타일 */
  .popup {
-   display: flex;
-   justify-content: center;
-   align-items: center;
    position: fixed;
    top: 0;
    left: 0;
    width: 100%;
    height: 100%;
-   background: rgba(0, 0, 0, 0.5);
+   display: flex;
+   justify-content: center;
+   align-items: center;
    z-index: 1000;
  }
 
