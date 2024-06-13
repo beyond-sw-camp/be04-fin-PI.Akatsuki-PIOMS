@@ -1,24 +1,33 @@
 <template>
   <div class="container">
-    <div class="header">
-      <img src="@/assets/icon/가맹점.png" style="width: 18px"/>&nbsp;
-      <span class="breadcrumb">창고 조회 및 재고 관리 > 창고 조회 > 가맹 창고 조회</span>
+    <div class="header" align="center" style="padding-bottom: 30px;">
+      <div style="max-width: 1440px; justify-content: center; align-items: center;">
+        <br>
+        <div style="float: left">
+          <img src="@/assets/icon/가맹점.png" style="width: 18px" />&nbsp;
+          <span class="breadcrumb">창고 조회 및 재고 관리 > 창고 조회 > 가맹 창고 조회</span>
+        </div>
+      </div>
     </div>
 
-
-    <div class="product-sub-title"> * 조회할 상품의 조건을 선택 후
-      <img src="@/assets/icon/reset.png">초기화 또는<img src="@/assets/icon/search.png">검색을 눌러주세요.
+    <div class="product-sub-title">
+      * 조회할 상품의 조건을 선택 후
+      <img src="@/assets/icon/reset.png" /> 초기화 또는
+      <img src="@/assets/icon/search.png" /> 검색을 눌러주세요.
     </div>
-
 
     <div class="filter-section">
-      <div>
-      </div>
       <table class="filter-table">
         <tr>
           <td class="filter-label">상품명</td>
           <td class="filter-input">
-            <input type="text" v-model="filterProductName" @keyup.enter="applyFilters" class="textInput" placeholder="상품명을 입력하세요."/>
+            <input
+                type="text"
+                v-model="filterProductName"
+                @keyup.enter="applyFilters"
+                class="textInput"
+                placeholder="상품명을 입력하세요."
+            />
           </td>
           <td class="filter-label">상품상태</td>
           <td class="filter-input">
@@ -31,6 +40,7 @@
             </select>
           </td>
         </tr>
+
         <tr>
           <td class="filter-label">색상</td>
           <td class="filter-input">
@@ -57,12 +67,10 @@
             </select>
           </td>
         </tr>
-
       </table>
-
     </div>
 
-    <div class="action-buttons">
+    <div class="filter-buttons">
       <button @click="resetFilters" class="reset-btn">
         <img src="@/assets/icon/reset.png" alt="Reset" />
       </button>
@@ -73,10 +81,9 @@
 
     <div class="filter-buttons">
       <div class="post-btn" id="app">
-        <button class="postBtn">
-        </button>
+        <button class="postBtn"></button>
         <button @click="downloadExcel" class="excelBtn">
-          <img src="@/assets/icon/excel.png" alt="excel">
+          <img src="@/assets/icon/excel.png" alt="excel" />
         </button>
       </div>
     </div>
@@ -85,21 +92,26 @@
       <table class="table">
         <thead>
         <tr class="header1">
-          <th style="width: 6%"> 상품 코드</th>
-          <th> 상품 이름</th>
-          <th> 색상</th>
-          <th> 사이즈</th>
-          <th> 상품상태</th>
-          <th> 상품 누적량</th>
-          <th> 상품 보유량</th>
-          <th style="width: 100px"> 상품 판매가능량</th>
+          <th style="width: 6%">상품 코드</th>
+          <th>상품 이름</th>
+          <th>색상</th>
+          <th>사이즈</th>
+          <th>상품상태</th>
+          <th>상품 누적량</th>
+          <th>상품 보유량</th>
+          <th style="width: 100px">상품 판매가능량</th>
           <th style="width: 25%">카테고리</th>
-          <th style="width: 5%"> 즐겨찾기</th>
+          <th style="width: 5%">즐겨찾기</th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(item, rowIndex) in filteredLists" :key="rowIndex" class="allpost" :id="'row-' + rowIndex"
-            @click="showDetailPopup(item.productCode,item.productName,item.productCount,item.productPrice,item.productStatus,item.productColor,item.productSize,item.categoryFirstName,item.categorySecondName,item.categoryThirdName,item.productContent)">
+        <tr
+            v-for="(item, rowIndex) in filteredLists"
+            :key="rowIndex"
+            class="tr__bd"
+            :id="'row-' + rowIndex"
+            @click="showDetailPopup(item.productCode, item.productName, item.productCount, item.productPrice, item.productStatus, item.productColor, item.productSize, item.categoryFirstName, item.categorySecondName, item.categoryThirdName, item.productContent)"
+        >
           <td>{{ item.product.productCode }}</td>
           <td>{{ item.product.productName }}</td>
           <td>{{ item.product.productColor }}</td>
@@ -109,28 +121,26 @@
           <td>{{ item.franchiseWarehouseCount }}</td>
           <td>{{ item.franchiseWarehouseEnable }}</td>
           <td>{{ item.product.categoryFirstName }} > {{ item.product.categorySecondName }} > {{ item.product.categoryThirdName }}</td>
-
-          <td v-if="item.franchiseWarehouseFavorite==true">O</td>
+          <td v-if="item.franchiseWarehouseFavorite">O</td>
           <td v-else>X</td>
-
         </tr>
-
         </tbody>
       </table>
     </div>
-  </div>
 
-  <div class="pagination">
-    <button @click="prevPage" :disabled="currentPage === 1">이전</button>
-    <span> {{currentPage}} / {{totalPages}} </span>
-    <button @click="nextPage" :disabled="currentPage ===totalPages">다음</button>
+    <div class="pagination">
+      <button @click="prevPage" :disabled="currentPage === 1">이전</button>
+      <span>{{ currentPage }} / {{ totalPages }}</span>
+      <button @click="nextPage" :disabled="currentPage === totalPages">다음</button>
+    </div>
   </div>
 </template>
 
 <script setup>
 import {ref, computed, onMounted, watchEffect} from 'vue';
 import axios from "axios";
-import { useStore } from 'vuex';
+import {useStore} from 'vuex';
+
 const store = useStore();
 const accessToken = store.state.accessToken;
 
@@ -231,7 +241,7 @@ const applyFilters = () => {
     const matchesStatus = !filterStatus.value || list.product.productStatus === filterStatus.value;
     const matchesColor = !filterColor.value || list.product.productColor === filterColor.value;
     const matchesSize = !filterSize.value || list.product.productSize === parseInt(filterSize.value, 10);
-    return matchesExposureStatus && matchesProductName && matchesStatus && matchesColor && matchesSize ;
+    return matchesExposureStatus && matchesProductName && matchesStatus && matchesColor && matchesSize;
   });
 };
 const resetFilters = () => {
@@ -248,22 +258,22 @@ const resetFilters = () => {
 
 const getMemberId = async () => {
 
-    // FranchiseWarehouse 데이터 가져오기
-    const franchiseWarehouseResponse = await fetch('http://api.pioms.shop/franchise/warehouse/list', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-    });
-    if (!franchiseWarehouseResponse.ok) {
-      throw new Error('프랜차이즈 웨어하우스 정보를 가져오는 중 오류 발생');
-    }
-    const franchiseWarehouseData = await franchiseWarehouseResponse.json();
-    // 각 제품에 대한 FranchiseWarehouse 정보를 추가하여 목록 완성
-    lists.value = franchiseWarehouseData;
-    filteredLists.value = lists.value;
-    console.log(lists.value);
+  // FranchiseWarehouse 데이터 가져오기
+  const franchiseWarehouseResponse = await fetch('http://api.pioms.shop/franchise/warehouse/list', {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  if (!franchiseWarehouseResponse.ok) {
+    throw new Error('프랜차이즈 웨어하우스 정보를 가져오는 중 오류 발생');
+  }
+  const franchiseWarehouseData = await franchiseWarehouseResponse.json();
+  // 각 제품에 대한 FranchiseWarehouse 정보를 추가하여 목록 완성
+  lists.value = franchiseWarehouseData;
+  filteredLists.value = lists.value;
+  console.log(lists.value);
 };
 
 const downloadExcel = () => {
@@ -276,7 +286,7 @@ const downloadExcel = () => {
     },
     responseType: 'blob', // 서버에서 반환되는 데이터의 형식을 명시
   }).then((response) => {
-    const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }));
+    const url = window.URL.createObjectURL(new Blob([response.data], {type: response.headers['content-type']}));
     const link = document.createElement('a');
     link.href = url;
     link.setAttribute('download', 'productList.xlsx'); // 원하는 파일 이름 설정
@@ -310,40 +320,53 @@ getMemberId();
 </script>
 
 <style scoped>
-.Cloth {
-  margin-right: 5px;
-  position: relative;
-  top: 2px
-}
-
-.product-img {
-  width: 30px;
-  height: 30px;
-  transition: transform 0.5s ease;
-}
-
-.product-img:hover {
-  transform: scale(3.3);
-}
-
-.pagination {
+.container {
+  padding: 20px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  margin-top: 10px;
-  padding-bottom: 100px;
 }
 
-.pagination button {
-  border: none;
-  border-radius: 10px;
-  width: 75px;
+.header {
+  width: 100%;
+  max-width: 1440px;
+  text-align: center;
+  padding-bottom: 30px;
 }
+
+.header-content {
+  display: flex;
+  align-items: center;
+}
+
+.header-icon {
+  width: 18px;
+}
+
+.breadcrumb {
+  font-size: 16px;
+  color: #555;
+  font-weight: bold;
+}
+
+.product-sub-title {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 20px;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 1440px;
+  padding-left: 10px;
+}
+
 .filter-section {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 20px;
+  width: 100%;
+  max-width: 1440px;
 }
 
 .filter-table {
@@ -353,7 +376,6 @@ getMemberId();
   border-radius: 5px;
   padding: 10px;
   width: 100%;
-  max-width: 1440px;
 }
 
 .filter-table td {
@@ -365,7 +387,7 @@ getMemberId();
   text-align: center;
   border: solid 1px #747474;
   width: 120px;
-  background-color: #D9D9D9;
+  background-color: #d9d9d9;
 }
 
 .filter-input {
@@ -374,43 +396,25 @@ getMemberId();
   padding: 5px;
 }
 
-.action-buttons {
+.filter-buttons {
   display: flex;
   justify-content: center;
   margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  max-width: 1440px;
 }
 
-
-.reset-btn, .search-btn {
+.reset-btn,
+.search-btn {
   background-color: #fff;
-  color: white;
+  color: black;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  padding: 8px 8px;
+  padding: 8px 16px;
   font-size: 14px;
   margin: 0 5px;
-}
-
-.reset-btn:hover, .search-btn:hover {
-  background-color: #fff;
-}
-
-.table-container {
-  width: 100%;
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: center;
-}
-
-.table {
-  width: 100%;
-  max-width: 1440px;
-  border-collapse: collapse;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-spacing: 0 10px;
 }
 
 .table th {
@@ -425,67 +429,12 @@ getMemberId();
   text-align: center;
 }
 
-
 .header1 {
-  background-color: #D9D9D9;
+  background-color: #d9d9d9;
   font-weight: bold;
   height: 50px;
   font-size: 14px;
   text-align: center;
-}
-
-.allpost {
-  text-align: center;
-  padding: 10px 0;
-}
-
-.allpost:hover {
-  background-color: #f2f2f2;
-}
-
-.allpost td {
-  border-right: 1px solid #ddd;
-  font-size: 12px;
-}
-
-.button-as-text {
-  background: none;
-  border: none;
-  padding: 0;
-  margin: 0;
-  color: inherit;
-  font: inherit;
-  cursor: pointer;
-  outline: inherit;
-  text-align: left;
-}
-
-.textInput {
-  border: 1px solid rgba(217, 217, 217, 0.7);
-}
-
-.categories {
-  border: 1px solid rgba(217, 217, 217, 0.7);
-}
-
-.product-title {
-  /* position: relative; */
-  /* left: -60px; */
-}
-
-.headerTitle img {
-  width: 10px;
-  height: 10px;
-}
-
-.headerTitle p {
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.headerTitle h3,
-.headerTitle h6 {
-  margin: 0
 }
 
 .pagination {
@@ -517,40 +466,12 @@ getMemberId();
   font-weight: bold;
 }
 
-.status-available {
-  align-content: center;
-  background-color: #FFCD4B;
-  border-radius: 8px;
-  color: #FFFFFF;
-  font-weight: bold;
-  height: 25px;
-  font-size: 14px;
-}
-
-.status-unavailable {
-  align-content: center;
-  background-color: #FF6285;
-  border-radius: 8px;
-  color: #FFFFFF;
-  font-weight: bold;
-  height: 25px;
-  font-size: 14px;
-}
-
-.header {
-  margin-bottom: 20px;
-  margin-left: 215px;
-}
-
-.container {
-  padding: 20px;
-}
 .post-btn {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: relative;
-  width: 1440px;
+  width: 100%;
+  max-width: 1440px;
 }
 
 .postBtn {
@@ -564,18 +485,43 @@ getMemberId();
   background-color: white;
   cursor: pointer;
 }
-.filter-buttons {
+
+.tr__bd:hover {
+  background-color: #f2f2f2;
+}
+
+.tr__bd td {
+  border-bottom: 1px solid #ddd;
+  font-size: 12px;
+}
+
+.tr__bd:last-child td {
+  border-bottom: none;
+}
+
+.table-container {
+  width: 100%;
+  margin-bottom: 20px;
   display: flex;
   justify-content: center;
-  margin-top: 10px;
-  margin-bottom: 10px;
 }
-.product-sub-title {
-  display: flex;
-  padding-left: 210px;
-  align-items: center;
-  gap: 5px;
-  margin-bottom: 20px;
-  justify-content: flex-start;
+
+.table {
+  width: 100%;
+  max-width: 1440px;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-spacing: 0 10px;
+  table-layout: fixed; /* 고정된 레이아웃을 사용하여 셀 너비를 고정 */
+}
+
+.table th, .table td {
+  padding: 10px;
+  text-align: center;
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  overflow: hidden;
+  text-overflow: ellipsis; /* 내용이 넘칠 때 "..." 표시 */
 }
 </style>
