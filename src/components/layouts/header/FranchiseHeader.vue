@@ -51,7 +51,7 @@
           </div>
         </li>
         <li>
-          <a href="#" class="label">발주 및 교환 관리</a>
+          <a class="label">발주 및 교환 관리</a>
           <div class="submenu_box" style="height: 200px">
             <ul class="submenu">
               <li>
@@ -71,7 +71,7 @@
           </div>
         </li>
         <li>
-          <a href="#" class="label">공지 및 문의 관리</a>
+          <a class="label">공지 및 문의 관리</a>
           <div class="submenu_box" style="height: 200px">
             <ul class="submenu">
               <li>
