@@ -109,7 +109,7 @@ const getDetailInvoice = async () => {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     const data = await response.text(); // JSON 파싱 이전에 문자열로 받음
     console.log('Fetched invoice details', data); // 콘솔에 데이터 구조 출력
     invoice.value = data.invoice;
@@ -178,12 +178,13 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 2%); /* 팝업 외부를 어둡게 표시 */
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Ensure it is on top */
+  z-index: 999;
 }
+
 
 .invoice-container {
   width: 800px;
@@ -198,7 +199,6 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 1000; /* Ensure it is on top */
 }
 
 header {

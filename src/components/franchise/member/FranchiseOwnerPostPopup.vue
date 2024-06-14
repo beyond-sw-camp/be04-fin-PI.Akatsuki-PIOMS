@@ -13,32 +13,35 @@
       <section class="info-section">
         <div class="info-row">
           <label class="info-label" for="ownerName">점주명</label>
-          <input type="text" v-model="ownerInfo.ownerName" id="ownerName" class="info-value input-field" />
+          <input type="text" v-model="ownerInfo.franchiseOwnerName" id="ownerName" class="info-value input-field" />
         </div>
         <hr class="separator" />
         <div class="info-row">
           <label class="info-label" for="ownerId">ID</label>
-          <input type="text" v-model="ownerInfo.ownerId" id="ownerId" class="info-value input-field" />
+          <input type="text" v-model="ownerInfo.franchiseOwnerId" id="ownerId" class="info-value input-field" />
         </div>
         <hr class="separator" />
         <div class="info-row">
           <label class="info-label" for="ownerPwd">PWD</label>
-          <input type="password" v-model="ownerInfo.ownerPwd" id="ownerPwd" class="info-value input-field" />
+          <input type="password" v-model="ownerInfo.franchiseOwnerPwd" id="ownerPwd" class="info-value input-field" />
         </div>
         <hr class="separator" />
         <div class="info-row">
           <label class="info-label" for="ownerPhone">전화번호</label>
-          <input type="text" v-model="ownerInfo.ownerPhone" id="ownerPhone" class="info-value input-field" />
+          <input type="text" v-model="ownerInfo.franchiseOwnerPhone" id="ownerPhone" class="info-value input-field" />
         </div>
         <hr class="separator" />
         <div class="info-row">
           <label class="info-label" for="ownerEmail">이메일</label>
-          <input type="email" v-model="ownerInfo.ownerEmail" id="ownerEmail" class="info-value input-field" />
+          <input type="email" v-model="ownerInfo.franchiseOwnerEmail" id="ownerEmail" class="info-value input-field" />
         </div>
         <hr class="separator" />
         <div class="info-row">
-          <label class="info-label" for="ownerFranchiseName">가맹점명</label>
-          <input type="text" v-model="ownerInfo.ownerFranchiseName" id="ownerFranchiseName" class="info-value input-field" />
+          <label class="info-label" for="ownerStatus">상태</label>
+          <select v-model="ownerInfo.franchiseOwnerStatus" id="ownerStatus" class="info-value input-field">
+            <option :value="true">활성화</option>
+            <option :value="false">비활성화</option>
+          </select>
         </div>
       </section>
     </section>
@@ -58,17 +61,33 @@ const emit = defineEmits(['close', 'refresh']);
 
 const store = useStore();
 const ownerInfo = ref({
-  ownerName: '',
-  ownerId: '',
-  ownerPwd: '',
-  ownerPhone: '',
-  ownerEmail: '',
-  ownerFranchiseName: '',
+  franchiseOwnerName: '',
+  franchiseOwnerId: '',
+  franchiseOwnerPwd: '',
+  franchiseOwnerPhone: '',
+  franchiseOwnerEmail: '',
+  franchiseOwnerEnrollDate: '',
+  franchiseOwnerUpdateDate: '',
+  franchiseOwnerStatus: true,  // 기본값 설정
+  ownerPwdCheckCount: 0,       // 기본값 설정
+  franchiseRole: 'ROLE_OWNER'  // 기본값 설정
 });
 
 const registerOwner = async () => {
   try {
     const accessToken = store.state.accessToken;
+    if (!accessToken) {
+      throw new Error("유효한 액세스 토큰이 없습니다.");
+    }
+
+    // 등록일 및 수정일 설정
+    const now = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    ownerInfo.value.franchiseOwnerEnrollDate = now;
+    ownerInfo.value.franchiseOwnerUpdateDate = now;
+
+    // 데이터가 올바르게 구성되어 있는지 로그로 확인합니다.
+    console.log("Registering owner with info:", ownerInfo.value);
+
     const response = await fetch('http://api.pioms.shop/admin/franchise/owner/register', {
       method: 'POST',
       headers: {
@@ -77,10 +96,12 @@ const registerOwner = async () => {
       },
       body: JSON.stringify(ownerInfo.value),
     });
+
     const text = await response.text();
     if (!response.ok) {
       throw new Error(text);
     }
+
     Swal.fire({
       icon: 'success',
       title: '등록 완료',

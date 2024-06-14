@@ -483,13 +483,21 @@ onMounted(() => {
 }
 
 .popup-content {
+  width:500px;
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
 }
 
 .popup-text {
   white-space: pre-wrap;
+  margin-bottom: 20px;
+}
+
+.popup-content button {
+  align-self: center;
 }
 </style>

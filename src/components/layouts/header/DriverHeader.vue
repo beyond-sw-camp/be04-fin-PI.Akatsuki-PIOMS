@@ -1,18 +1,17 @@
 <template>
-  <!-- 배송기사 header -->
   <header class="header">
-    <img class="logo" src="@/assets/icon/PIOMS_로고.png" alt="Logo"/>
+    <img class="logo" src="@/assets/icon/PIOMS_로고.png" alt="Logo" />
     <section class="header_info">
-      <div class="Delivery">
-        <img class="Delivery_icon" src="@/assets/icon/Delivery.png" alt="Delivery"/>
+      <div class="Delivery" @click="openModal" style="cursor: pointer">
+        <img class="Delivery_icon" src="@/assets/icon/Delivery.png" alt="Delivery" />
         <h5><u>{{ username }}</u>님 정보</h5>
       </div>
       <div class="dictionary" @click="pdfDownload" style="cursor: pointer;">
-        <img class="dictionary_icon" src="@/assets/icon/Dictionary.png" alt="Dictionary"/>
-        <button class="pdfDownload" @click="pdfDownload">배송기사 매뉴얼</button>
+        <img class="dictionary_icon" src="@/assets/icon/Dictionary.png" alt="Dictionary" />
+        <button class="pdfDownload" style="cursor: pointer" @click="pdfDownload">배송기사 매뉴얼</button>
       </div>
       <div>
-        <button class="cta" @click="logout">
+        <button class="cta" @click="confirmLogout">
           <span>Logout</span>
           <svg width="15px" height="10px" viewBox="0 0 13 10">
             <path d="M1,5 L11,5"></path>
@@ -22,19 +21,22 @@
       </div>
     </section>
   </header>
-  <hr class="hr1"/>
+  <hr class="hr1" />
+  <DriverInfoPopup v-if="isModalOpen" @close="closeModal" />
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { jwtDecode } from 'jwt-decode';
+import Swal from 'sweetalert2';
+import DriverInfoPopup from "@/components/driver/info/DriverInfoPopup.vue";
 
 const store = useStore();
-const accessToken = store.state.accessToken;
 const router = useRouter();
 const username = ref('');
+const isModalOpen = ref(false);
 
 const fetchUsernameFromToken = () => {
   const token = store.state.accessToken;
@@ -44,13 +46,12 @@ const fetchUsernameFromToken = () => {
   }
 };
 
-
 const pdfDownload = async () => {
   try {
     const response = await fetch('http://api.pioms.shop/driver/pdfdownload/driver-pdf', {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${accessToken}`,
+        'Authorization': `Bearer ${store.state.accessToken}`,
         'Content-Type': 'application/json',
       },
     });
@@ -76,45 +77,49 @@ const pdfDownload = async () => {
 const logout = async () => {
   try {
     await store.dispatch('logout');
-    await router.push('/');
+    Swal.fire({
+      icon: 'success',
+      title: '로그아웃이 정상적으로 완료되었습니다.',
+      confirmButtonText: '확인'
+    }).then(() => {
+      router.push('/');
+    });
   } catch (error) {
     console.error('로그아웃 오류:', error);
   }
 };
 
+const confirmLogout = async () => {
+  Swal.fire({
+    icon: 'warning',
+    title: '로그아웃 하시겠습니까?',
+    showCancelButton: true,
+    confirmButtonText: '예',
+    cancelButtonText: '아니오'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      logout();
+    }
+  });
+};
+
+const openModal = () => {
+  console.log(`${username.value}님이 정보 팝업을 열었습니다.`);
+  store.commit('setModalOpen', true); // 모달 열기 상태를 Vuex에 저장
+};
+
+const closeModal = () => {
+  store.commit('setModalOpen', false); // 모달 닫기 상태를 Vuex에 저장
+};
+
+watch(() => store.state.isModalOpen, (newValue) => {
+  isModalOpen.value = newValue;
+  console.log(`isModalOpen state changed to: ${newValue}`);
+});
+
 onMounted(() => {
   store.dispatch('initializeAuth');
   fetchUsernameFromToken();
-
-  const labels = document.querySelectorAll('.label');
-  let hideTimeout;
-
-  labels.forEach(label => {
-    const submenu = label.nextElementSibling;
-
-    label.addEventListener('mouseenter', () => {
-      clearTimeout(hideTimeout);
-      if (submenu) submenu.style.display = 'block';
-    });
-
-    label.addEventListener('mouseleave', () => {
-      hideTimeout = setTimeout(() => {
-        if (!submenu.matches(':hover')) submenu.style.display = 'none';
-      }, 300);
-    });
-
-    if (submenu) {
-      submenu.addEventListener('mouseenter', () => {
-        clearTimeout(hideTimeout);
-      });
-
-      submenu.addEventListener('mouseleave', () => {
-        hideTimeout = setTimeout(() => {
-          submenu.style.display = 'none';
-        }, 300);
-      });
-    }
-  });
 });
 </script>
 
@@ -134,6 +139,7 @@ header {
   width: 100%;
   height: 35px;
 }
+
 .header_info {
   display: flex;
   justify-content: center;
@@ -142,6 +148,7 @@ header {
   top: 0;
   right: 0;
 }
+
 .logo {
   width: 100px;
   height: 50px;
@@ -149,6 +156,7 @@ header {
   bottom: 2px;
   left: 7px;
 }
+
 .Delivery {
   display: flex;
   align-items: center;
@@ -156,11 +164,13 @@ header {
   width: 150px;
   height: 50px;
 }
+
 .Delivery_icon {
   width: 20px;
   height: 18px;
   margin-right: 5px;
 }
+
 .dictionary {
   display: flex;
   align-items: center;
@@ -168,12 +178,14 @@ header {
   height: 50px;
   margin-right: 15px;
 }
+
 .dictionary_icon {
   margin-left: 1px;
   margin-right: 2px;
   width: 17px;
   height: 17px;
 }
+
 .cta {
   position: relative;
   margin-right: 5px;
@@ -224,7 +236,7 @@ header {
   background: #FFCD4B;
 }
 
-ctca:hover svg {
+.cta:hover svg {
   transform: translateX(0);
 }
 
@@ -240,99 +252,4 @@ hr.hr1 {
   height: 0;
   border-top: 0.5px solid #B9B9B9;
 }
-
-hr.hr2 {
-  padding: 0;
-  width: 100%;
-  height: 0;
-  border-top: 0.5px solid #B9B9B9;
-  margin: 25px;
-  position: relative;
-}
-hr.hr3 {
-  padding: 0;
-  margin: 5px 0px 0px 0px;
-  width: 190px;
-  border: 0;
-  height: 0;
-  border-top: 0.5px solid #B9B9B9;
-}
-
-.header_rootAdmin {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  height: 20px;
-  position: relative;
-  top: 10px;
-}
-
-.dashboard {
-  width: 25px;
-  height: 25px;
-  position: relative;
-  left: 7px;
-  top: 0;
-}
-
-.label {
-  width: 170px;
-  height: 9px;
-  justify-content: center;
-  font-size: 16px;
-  font-weight: bold;
-  color: #444444;
-  line-height: 10px;
-  display: inline; /* 리스트 아이템을 인라인으로 표시 */
-  position: relative;
-  top: -1px;
-}
-
-.label_box.show {
-  display: block; /* 보이도록 변경 */
-}
-
-.nav_header .label li a {
-  display: inline;
-  color: #444444;
-  margin-right: 60px;
-  text-align: center;
-  padding: 10px 20px;
-  text-decoration: none;
-}
-.nav_header {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  display: flex; /* 수평으로 맞추기 */
-  justify-content: space-between;
-}
-.nav_header > il {
-  position: relative;
-}
-.label:hover {
-  position: relative;
-  top: -1px;
-  background-color: #D9D9D9;
-  border-radius: 10px;
-}
-.dashboard:hover {
-  position: relative;
-  top: -10px;
-  background-color: #D9D9D9;
-  border-radius: 10px;
-}
-.nav_header li a {
-  display: flex;
-  color: #444444;
-  text-align: center;
-  padding: 10px 20px;
-  text-decoration: none;
-  justify-content: space-evenly;
-}
-.dashboard,
-.label {
-  margin-right: 100px;
-}
-
 </style>

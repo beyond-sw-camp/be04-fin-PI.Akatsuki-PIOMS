@@ -107,10 +107,7 @@
       </div>
     </div>
     <!-- 송장 팝업 -->
-<!--    <Invoice v-if="showInvoicePopup" :invoice="selectedInvoice" @click.self="closeInvoicePopup" />-->
-    <div v-if="showInvoicePopup" class="popup">
-        <Invoice v-if="showInvoicePopup" :invoice="selectedInvoice" @close="closeInvoicePopup"/>
-    </div>
+      <Invoice v-if="showInvoicePopup" :invoice="selectedInvoice" @close="closeInvoicePopup"/>
 
 
     <!-- 배송 상태 수정 팝업 -->
@@ -603,7 +600,7 @@ hr.hr2 {
    width: 100%;
    height: 100%;
    background: rgba(0, 0, 0, 0.5);
-   z-index: 9999;
+   z-index: 999;
  }
 
  .popup-content {
@@ -730,13 +727,4 @@ hr.hr2 {
   text-decoration: underline #444444;
 }
 
- .invoice-close-btn {
-   position: fixed !important;
-   top: 150px !important;
-   right: 550px !important;
-   cursor: pointer !important;
-   font-size: 20px;
-   color: #444444;
-   z-index: 9999;
- }
 </style>
