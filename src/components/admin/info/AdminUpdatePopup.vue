@@ -85,11 +85,16 @@ const props = defineProps({
 
 const store = useStore();
 const adminInfo = ref({
-  franchises: [], // 초기값을 빈 배열로 설정
+  adminName: '',
+  adminId: '',
+  adminPwd: '',
+  adminPhone: '',
+  adminEmail: '',
+  adminStatus: true,
+  franchises: [],
 });
 const franchiseSearchText = ref('');
 const franchises = ref([]);
-const isPopupOpen = ref(props.isOpen);
 
 const fetchAdminInfo = async () => {
   try {
@@ -105,24 +110,14 @@ const fetchAdminInfo = async () => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    console.log('Admin info fetched:', data);
-
-    // 프랜차이즈 이름 목록을 프랜차이즈 객체 목록으로 변환
-    const franchiseObjects = data.franchiseNames.map((name, index) => {
-      const franchise = franchises.value.find(fr => fr.franchiseName === name);
-      return {
-        franchiseCode: franchise ? franchise.franchiseCode : index + 1,
-        franchiseName: name,
-      };
-    });
-
     adminInfo.value = {
       ...data,
-      franchises: franchiseObjects || [], // 실제 프랜차이즈 목록을 그대로 사용
+      adminStatus: data.adminStatus,
+      franchises: data.franchiseNames.map((name, index) => ({
+        franchiseCode: index + 1, // 코드가 없으면 인덱스 + 1로 설정
+        franchiseName: name,
+      })),
     };
-
-    console.log('Updated adminInfo:', adminInfo.value);
-    fetchFranchises();
   } catch (error) {
     console.error('Error fetching admin info:', error);
   }
@@ -135,14 +130,13 @@ const fetchFranchises = async () => {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
     });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    console.log('Franchises fetched:', data);
     franchises.value = data.map(franchise => ({
       franchiseCode: franchise.franchiseCode,
       franchiseName: franchise.franchiseName,
@@ -158,7 +152,6 @@ const searchAndAddFranchise = async () => {
       franchise.franchiseCode.toString() === query || franchise.franchiseName.toLowerCase() === query
   );
   if (foundFranchise) {
-    console.log('Adding franchise:', foundFranchise);
     await addFranchise(foundFranchise);
   } else {
     Swal.fire({
@@ -173,7 +166,7 @@ const searchAndAddFranchise = async () => {
 const addFranchise = async (franchise) => {
   try {
     const accessToken = store.state.accessToken;
-    const response = await fetch(`http://api.pioms.shop/admin/add-franchise/${adminInfo.value.adminCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/add-franchise/${props.adminCode}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -185,7 +178,7 @@ const addFranchise = async (franchise) => {
       const text = await response.text();
       throw new Error(text);
     }
-    await fetchAdminInfo(); // 추가 후 최신 데이터를 불러오기 위해 fetchAdminInfo 호출
+    await fetchAdminInfo();
     Swal.fire({
       icon: 'success',
       title: '가맹점 추가 완료',
@@ -203,21 +196,20 @@ const addFranchise = async (franchise) => {
 
 const removeFranchise = async (franchiseCode) => {
   try {
-    console.log('Removing franchise code:', franchiseCode);
     const accessToken = store.state.accessToken;
-    const response = await fetch(`http://api.pioms.shop/admin/remove-franchise/${adminInfo.value.adminCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/remove-franchise/${props.adminCode}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ franchiseCode: franchiseCode }), // franchiseCode를 전달
+      body: JSON.stringify({ franchiseCode: franchiseCode }),
     });
     if (!response.ok) {
       const text = await response.text();
       throw new Error(text);
     }
-    await fetchAdminInfo(); // 제거 후 최신 데이터를 불러오기 위해 fetchAdminInfo 호출
+    await fetchAdminInfo();
     Swal.fire({
       icon: 'success',
       title: '가맹점 제거 완료',
@@ -236,7 +228,7 @@ const removeFranchise = async (franchiseCode) => {
 const updateAdminInfo = async () => {
   try {
     const accessToken = store.state.accessToken;
-    const response = await fetch(`http://api.pioms.shop/admin/update/${adminInfo.value.adminCode}`, {
+    const response = await fetch(`http://api.pioms.shop/admin/update/${props.adminCode}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -313,6 +305,7 @@ onMounted(() => {
   }
 });
 </script>
+
 
 <style scoped>
 .popup-overlay {

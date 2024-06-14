@@ -107,7 +107,7 @@
       </div>
     </div>
     <!-- 송장 팝업 -->
-      <Invoice v-if="showInvoicePopup" :invoice="selectedInvoice" @close="closeInvoicePopup"/>
+  <Invoice v-if="showInvoicePopup" :invoice="selectedInvoice" @close="closeInvoicePopup"/>
 
 
     <!-- 배송 상태 수정 팝업 -->
