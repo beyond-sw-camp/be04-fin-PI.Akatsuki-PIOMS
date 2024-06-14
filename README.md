@@ -85,12 +85,14 @@
 <details>
 <summary><h3>⏰ Back-end Sprint Kanban(1주차 - 6주차)</h3></summary>
 
-![스크린샷 2024-06-11 오후 4 33 57](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/ba8f9ffe-74aa-4f3c-89c1-27fa7af63b28)
+![image](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/51303a83-3bea-4a03-ac99-b195b5d4a9df)
+
 </details>
 <details>
 <summary><h3>⏰ Front-end Sprint Kanban(1주차 - 4주차)</h3></summary>
 
-![스크린샷 2024-06-11 오후 4 34 39](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/6351f643-c66a-4c05-b1d5-107e93b77a5f)
+![image](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/94eb7e8e-a578-48c9-af68-370c138fc494)
+
 </details>
 </br></br>
 
