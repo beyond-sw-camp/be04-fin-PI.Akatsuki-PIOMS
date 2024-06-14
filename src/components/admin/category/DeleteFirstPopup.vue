@@ -52,7 +52,7 @@ const deleteCategoryFirst = async () => {
 
     if(categorySeconds.length > 0) {
       await Swal.fire({
-        icon: 'success',
+        icon: 'warning',
         title: '대분류 카테고리 삭제 실패',
         text: '카테고리를 삭제할 수 없습니다. 하위 카테고리가 존재합니다.',
       });
