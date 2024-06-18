@@ -23,7 +23,7 @@
 <div align="center">
 <a href="https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/wiki"/>Here's our Wiki!!
 </div>
-</br>
+<br>
 <h2 align="left">🛠️ Technology Stack</h2>
 <div align="left">
 <details>
@@ -59,7 +59,7 @@
 <summary><h3>⚙️ Production</h3></summary>	
 <img src="https://img.shields.io/badge/Apache Tomcat-F8DC75?style=for-thebadge&logo=Apache Tomcat&logoColor=white" /> &nbsp;&nbsp; <img src="https://img.shields.io/badge/NPM-CB3837?style=for-thebadge&logo=NPM&logoColor=white" /> &nbsp;&nbsp;  <img src="https://img.shields.io/badge/Ubuntu-E95420?style=for-thebadge&logo=Ubuntu&logoColor=white" />
 </details>
-</div></br></br>
+</div><br><br>
 
 ## 🏷️ 추진 계획
 
@@ -74,7 +74,7 @@
 
 - 작업 수행공간: 서울 동작구 보라매로 87 SFC빌딩 3F 1강의실, 원격 소통(Discord 및 slack)
 
-<br/></br>
+<br/><br>
 
 ## 🏷️ 일정관리 (Sprint Kanban)
 <details>
@@ -94,7 +94,7 @@
 ![image](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/101622086/94eb7e8e-a578-48c9-af68-370c138fc494)
 
 </details>
-</br></br>
+<br><br>
 
 ## 🏷️ PIOMS 프로젝트 문서
 
@@ -281,7 +281,7 @@
 ![½÷ֵ©¸°¼¦ 2024-06-13 111021](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/90c14ede-8d51-40b2-9daa-a13cc4a2ef29)
 </details>
 </details>
-</br>
+<br>
 
 ## 🏷️ PIOMS 프론트 화면 설계
 <details>
@@ -322,7 +322,7 @@
 ![스크린샷 2024-06-11 오후 4 15 51](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/d92e5408-801b-448a-8f97-c625f25263a4)
 </details>
 </details>
-</br>
+<br>
 
 ## 🏷️ DB Modeling
 <details>
@@ -550,7 +550,7 @@ CREATE TABLE `log` (
 ![image](https://github.com/beyond-sw-camp/be04-fin-PI.Akatsuki-PIOMS/assets/149561287/824ef096-05f8-48a6-ac6e-2e6edfde07ce)
 
 </details>
-</br>
+<br>
 
 ## 🌅 추후 고도화 기능
 
