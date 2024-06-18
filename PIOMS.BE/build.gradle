@@ -1,0 +1,95 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.5'
+    id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'com.akatsuki.pioms'
+version = '0.0.1-SNAPSHOT'
+
+jar {
+    enabled = false
+}
+
+java {
+    sourceCompatibility = '17'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // JPA Data
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    testImplementation 'com.github.fppt:jedis-mock:0.1.22'
+    implementation 'redis.clients:jedis:4.2.3'
+
+    // Web
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // Spring Security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
+
+    // ModelMapper
+    implementation 'org.modelmapper:modelmapper:2.4.4'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // Devtools
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // MariaDB Driver
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+    // Swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
+
+    // JWT 0.11.5
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    // Excel POI
+    implementation 'org.apache.poi:poi:5.2.5'
+    implementation 'org.apache.poi:poi-ooxml:5.2.5'
+
+    // JUnit
+    testImplementation("org.junit.vintage:junit-vintage-engine") {
+        exclude group: "org.hamcrest", module: "hamcrest-core"
+    }
+
+    // PDF
+    implementation 'org.apache.pdfbox:pdfbox:2.0.24'
+
+    // S3
+    implementation 'software.amazon.awssdk:s3:2.17.89'
+
+    // H2 Database - 테스트용
+    runtimeOnly 'com.h2database:h2'
+
+
+    // actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    systemProperty 'spring.profiles.active', 'test'
+}

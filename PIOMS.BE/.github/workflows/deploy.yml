@@ -1,0 +1,314 @@
+name: PIOMSBE
+
+permissions:
+  contents: read
+  pull-requests: write
+
+on:
+  push:
+    branches: ["main", "develop"]
+  pull_request:
+    branches: ["main", "develop"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+        shell: bash
+
+      - name: Install envsubst
+        run: sudo apt-get install -y gettext
+
+      - name: Create application.yml.template
+        run: |
+          mkdir -p src/main/resources
+          cat > src/main/resources/application.yml.template <<EOL
+          server:
+            port: 5000
+            tomcat:
+              uri-encoding: UTF-8
+
+          spring:
+            application:
+              name: pioms
+            main:
+              allow-bean-definition-overriding: true
+            jwt:
+              secret: \${SPRING_JWT_SECRET}
+            cloud:
+              aws:
+                s3:
+                  bucket: \${SPRING_CLOUD_AWS_S3_BUCKET}
+                  region: \${SPRING_CLOUD_AWS_S3_REGION}
+                  access-key: \${AWS_ACCESS_KEY_ID}
+                  secret-key: \${AWS_SECRET_ACCESS_KEY}
+            jpa:
+              show-sql: false
+              database: mysql
+              properties:
+                hibernate:
+                  jdbc:
+                    time_zone: Asia/Seoul
+              database-platform: org.hibernate.dialect.MySQL8Dialect
+              generate-ddl: false
+              default_batch_fetch_size: 1000
+
+            datasource:
+              driver-class-name: org.mariadb.jdbc.Driver
+              url: jdbc:mariadb://\${RDS_HOSTNAME}:\${RDS_PORT}/\${RDS_DB_NAME}?serverTimezone=Asia/Seoul
+              username: \${RDS_USERNAME}
+              password: \${RDS_PASSWORD}
+            cache:
+              type: redis
+            data:
+              redis:
+                host: \${REDIS_HOST}
+                port: \${REDIS_PORT}
+                password: \${REDIS_PWD}
+          kakao:
+            api:
+              url: \${KAKAO_URL}
+              key: \${KAKAO_KEY}
+              user_id: \${KAKAO_USER_ID}
+              sender: \${KAKAO_SENDER}
+              client_secret: \${KAKAO_CLIENT_SECRET}
+              token: \${KAKAO_TOKEN}
+          logging:
+            level:
+              root: INFO
+              org.springframework.web: DEBUG
+              org.hibernate: ERROR
+          
+          management:
+            endpoint:
+              metrics:
+                enabled: true
+              prometheus:
+                enabled: true
+          
+            endpoints:
+              web:
+                exposure:
+                  include: health, info, metrics, prometheus
+          
+            metrics:
+              tags:
+                application: pioms
+          EOL
+
+      - name: Create application-test.yml.template
+        run: |
+          mkdir -p src/test/resources
+          cat > src/test/resources/application-test.yml.template <<EOL
+          server:
+            port: 5000
+            tomcat:
+              uri-encoding: UTF-8
+
+          spring:
+            cloud:
+              aws:
+                s3:
+                  bucket: \${SPRING_CLOUD_AWS_S3_BUCKET}
+                  region: \${SPRING_CLOUD_AWS_S3_REGION}
+                  access-key: \${AWS_ACCESS_KEY_ID}
+                  secret-key: \${AWS_SECRET_ACCESS_KEY}
+
+            application:
+              name: pioms-test
+            main:
+              allow-bean-definition-overriding: true
+            jwt:
+              secret: \${SPRING_JWT_SECRET}
+            jpa:
+              show-sql: true
+              hibernate:
+                ddl-auto: create-drop
+              database-platform: org.hibernate.dialect.H2Dialect
+
+            datasource:
+              driver-class-name: org.h2.Driver
+              url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+              username: sa
+              password:
+            cache:
+              type: redis
+            data:
+              redis:
+                host: localhost
+                port: 6379
+
+          kakao:
+            api:
+              url: \${KAKAO_URL}
+              key: \$${KAKAO_KEY}
+              user_id: \{KAKAO_USER_ID}
+              sender: \${KAKAO_SENDER}
+              client_secret: \${KAKAO_CLIENT_SECRET}
+              token: \${KAKAO_TOKEN}
+
+          logging:
+            level:
+              root: INFO
+              org.springframework.web: DEBUG
+              org.hibernate: ERROR
+          EOL
+
+      - name: Set Yaml
+        run: |
+          envsubst < src/main/resources/application.yml.template > src/main/resources/application.yml
+          envsubst < src/test/resources/application-test.yml.template > src/test/resources/application-test.yml
+          cat src/main/resources/application.yml
+          cat src/test/resources/application-test.yml
+        env:
+          RDS_HOSTNAME: ${{ secrets.RDS_HOSTNAME }}
+          RDS_PORT: ${{ secrets.RDS_PORT }}
+          RDS_DB_NAME: ${{ secrets.RDS_DB_NAME }}
+          RDS_USERNAME: ${{ secrets.RDS_USERNAME }}
+          RDS_PASSWORD: ${{ secrets.RDS_PASSWORD }}
+          SPRING_CLOUD_AWS_S3_BUCKET: ${{ secrets.SPRING_CLOUD_AWS_S3_BUCKET }}
+          SPRING_CLOUD_AWS_S3_REGION: ${{ secrets.SPRING_CLOUD_AWS_S3_REGION }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          SPRING_JWT_SECRET: ${{ secrets.SPRING_JWT_SECRET }}
+          REDIS_HOST: ${{ secrets.REDIS_HOST }}
+          REDIS_PORT: ${{ secrets.REDIS_PORT }}
+          REDIS_PWD: ${{ secrets.REDIS_PWD }}
+          KAKAO_URL: ${{ secrets.KAKAO_URL }}
+          KAKAO_KEY: ${{ secrets.KAKAO_KEY }}
+          KAKAO_USER_ID: ${{ secrets.KAKAO_USER_ID }}
+          KAKAO_SENDER: ${{ secrets.KAKAO_SENDER }}
+          KAKAO_CLIENT_SECRET: ${{ secrets.KAKAO_CLIENT_SECRET }}
+          KAKAO_TOKEN: ${{ secrets.KAKAO_TOKEN }}
+
+      - name: Check for Tests
+        run: |
+          if git diff --name-only HEAD^ HEAD | grep -qvE '(\.xml$|\.yml$|config/)'; then
+            if [ -z "$(find src/test -name '*ServiceTest.java')" ]; then
+              echo "No ServiceTest found, failing the build."
+              exit 1
+            fi
+          else
+            echo "Only configuration files changed, skipping test check."
+          fi
+
+      - name: Build with Gradle
+        run: ./gradlew clean build
+        shell: bash
+
+      - name: Get current time
+        uses: 1466587594/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYY-MM-DDTHH-mm-ss
+          utcOffset: "+09:00"
+
+      - name: Show Current Time
+        run: echo "CurrentTime=${{steps.current-time.outputs.formattedTime}}"
+        shell: bash
+
+      - name: Generate deployment package
+        run: |
+          mkdir -p deploy
+          JAR_FILE=$(ls build/libs/*.jar | head -n 1)
+          if [ -f "$JAR_FILE" ]; then
+            cp "$JAR_FILE" deploy/application.jar
+          else
+            echo "JAR file not found!"
+            exit 1
+          fi
+          
+          if [ -f Procfile ]; then
+            cp Procfile deploy/Procfile
+          else
+            echo "Procfile not found!"
+            exit 1
+          fi
+          
+          if [ -d .ebextensions ]; then
+            cp -r .ebextensions deploy/.ebextensions
+          else
+            echo ".ebextensions directory not found!"
+            exit 1
+          fi
+          
+          if [ -d .platform ]; then
+            cp -r .platform deploy/.platform
+          else
+            echo ".platform directory not found!"
+            exit 1
+          fi
+          
+          cd deploy && zip -r deploy.zip .
+        shell: bash
+
+      - name: Upload application version to S3
+        run: |
+          aws s3 cp deploy/deploy.zip s3://elasticbeanstalk-ap-northeast-2-730335325274/deploy/deploy.zip
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-northeast-2
+
+      - name: Create new Elastic Beanstalk application version
+        run: |
+          aws elasticbeanstalk create-application-version \
+            --application-name PIOMSBE \
+            --version-label github-action-${{steps.current-time.outputs.formattedTime}} \
+            --source-bundle S3Bucket=elasticbeanstalk-ap-northeast-2-730335325274,S3Key=deploy/deploy.zip
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-northeast-2
+
+      - name: Update Elastic Beanstalk environment
+        run: |
+          aws elasticbeanstalk update-environment \
+            --environment-name PIOMSBE-env \
+            --version-label github-action-${{steps.current-time.outputs.formattedTime}}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-northeast-2
+
+  check-comments:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install GitHub CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gh jq
+
+      - name: Check Pull Request Comments
+        id: pr-comments
+        run: |
+          PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+          COMMENTS=$(gh pr view $PR_NUMBER --json comments --jq '.comments')
+          
+          # Extract unique user logins from comments
+          UNIQUE_USERS=$(echo "$COMMENTS" | jq -r 'map(.author.login) | unique | length')
+          
+          if [ $UNIQUE_USERS -lt 2 ]; then
+            echo "Not enough unique users ($UNIQUE_USERS) in the pull request comments. At least 2 unique users are required."
+            exit 1
+          else
+            echo "Sufficient unique users ($UNIQUE_USERS) in the pull request comments."
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
