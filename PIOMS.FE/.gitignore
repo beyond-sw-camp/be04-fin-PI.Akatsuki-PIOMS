@@ -1,0 +1,22 @@
+# .gitignore 파일에서 'dist' 항목 제거
+# 기존 .gitignore 내용에서 dist 항목 삭제
+node_modules
+.DS_Store
+dist-ssr
+coverage
+*.local
+
+/cypress/videos/
+/cypress/screenshots/
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+*.tsbuildinfo
